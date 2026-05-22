@@ -1,0 +1,541 @@
+{%- liquid
+  assign fontsize_text = block.settings.fontsize_text
+  assign fontsize_text_mb = block.settings.fontsize_text_mb
+  assign color_title = block.settings.color_title
+
+  assign title_layout = block.settings.title_layout | default: 'title_only'
+  assign show_share_icon = false
+
+  assign share_btn_size = block.settings.share_btn_size | default: 34
+  assign share_icon_size = block.settings.share_icon_size | default: 18
+  assign share_icon_svg = block.settings.share_icon_svg
+
+  comment
+    Share UI mode:
+    - strip  => show the compact popover strip
+    - native => use navigator.share() (fallback to copy on desktop)
+    - off    => hide share icon entirely
+  endcomment
+  assign share_ui_mode = block.settings.share_ui_mode | default: 'strip'
+
+  assign share_strip_icon_size = block.settings.share_strip_icon_size | default: 18
+
+  assign icon_copy_img = block.settings.share_icon_copy_img
+  assign icon_whatsapp_img = block.settings.share_icon_whatsapp_img
+  assign icon_email_img = block.settings.share_icon_email_img
+  assign icon_sms_img = block.settings.share_icon_sms_img
+  assign icon_more_img = block.settings.share_icon_more_img
+
+  if title_layout == 'title_share'
+    assign show_share_icon = true
+  endif
+  if check_show_share == '3'
+    assign show_share_icon = true
+  endif
+
+  if share_ui_mode == 'off'
+    assign show_share_icon = false
+  endif
+
+  assign share_strip_position = block.settings.share_strip_position | default: 'below'
+  assign share_strip_item_size = block.settings.share_strip_item_size | default: 34
+  assign share_strip_gap = block.settings.share_strip_gap | default: 8
+  assign share_strip_pad_x = block.settings.share_strip_pad_x | default: 10
+  assign share_strip_pad_y = block.settings.share_strip_pad_y | default: 8
+  assign share_strip_radius = block.settings.share_strip_radius | default: 999
+  assign share_strip_bg = block.settings.share_strip_bg | default: '#ffffff'
+  assign share_strip_border = block.settings.share_strip_border | default: 'rgba(0,0,0,0.10)'
+  assign share_strip_shadow = block.settings.share_strip_shadow | default: 16
+
+  assign share_whatsapp_mode = block.settings.share_whatsapp_mode | default: 'url_only'
+  assign share_copy_toast = block.settings.share_copy_toast | default: 'Link copied!'
+  assign share_enable_more = block.settings.share_enable_more
+
+  assign icon_copy_svg = block.settings.share_icon_copy_svg
+  assign icon_whatsapp_svg = block.settings.share_icon_whatsapp_svg
+  assign icon_email_svg = block.settings.share_icon_email_svg
+  assign icon_sms_svg = block.settings.share_icon_sms_svg
+  assign icon_more_svg = block.settings.share_icon_more_svg
+-%}
+
+<div class="productView-titleRow{% if show_share_icon %} has-share{% endif %}">
+  <h1
+    class="productView-title"
+    style="--color-title: {{ color_title }};--fontsize-text: {{ fontsize_text | append: 'px' }};--fontsize-mb-text: {{ fontsize_text_mb | append: 'px' }};"
+  >
+    <span>{{ product.title | escape }}</span>
+  </h1>
+
+  {%- if show_share_icon -%}
+    <div class="lag-shareAnchor" data-lag-share-anchor>
+      <button
+        type="button"
+        class="productView-shareIcon"
+        data-lag-share-btn
+        data-share-title="{{ product.title | escape }}"
+        data-share-url="{{ shop.url }}{{ product.url }}"
+        data-product-id="{{ product.id }}"
+        data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+        data-customer-id="{% if customer %}{{ customer.id }}{% endif %}"
+        data-customer-email-hash="{% if customer and customer.email != blank %}{{ customer.email | sha256 }}{% endif %}"
+        data-customer-phone-hash="{% if customer and customer.phone != blank %}{{ customer.phone | sha256 }}{% endif %}"
+        data-whatsapp-mode="{{ share_whatsapp_mode }}"
+        data-share-ui="{{ share_ui_mode }}"
+        aria-label="Share"
+        aria-expanded="false"
+        style="--share-icon-size: {{ share_icon_size | append: 'px' }}; --share-btn-size: {{ share_btn_size | append: 'px' }};"
+      >
+        <span class="productView-shareIconSvg" aria-hidden="true">
+          {%- if share_icon_svg != blank -%}
+            {{ share_icon_svg }}
+          {%- else -%}
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+              <path d="M36 5c-3.85 0-7 3.15-7 7 0 .59.2 1.11.34 1.65l-11.99 6c-1.29-1.58-3.17-2.65-5.35-2.65-3.85 0-7 3.15-7 7s3.15 7 7 7c2.18 0 4.06-1.07 5.35-2.65l11.99 6c-.14.54-.34 1.06-.34 1.65 0 3.85 3.15 7 7 7s7-3.15 7-7-3.15-7-7-7c-2.18 0-4.06 1.07-5.35 2.65l-11.99-6c.14-.54.34-1.06.34-1.65s-.2-1.11-.34-1.65l11.99-6C31.94 17.93 33.82 19 36 19c3.85 0 7-3.15 7-7s-3.15-7-7-7zm0 3c2.23 0 4 1.77 4 4s-1.77 4-4 4-4-1.77-4-4 1.77-4 4-4zM12 20c2.23 0 4 1.77 4 4s-1.77 4-4 4-4-1.77-4-4 1.77-4 4-4zm24 12c2.23 0 4 1.77 4 4s-1.77 4-4 4-4-1.77-4-4 1.77-4 4-4z"/>
+            </svg>
+          {%- endif -%}
+        </span>
+      </button>
+
+      {%- if share_ui_mode == 'strip' -%}
+        <div
+          class="lag-sharePopover{% if share_strip_position == 'above' %} is-top{% endif %}"
+          data-lag-share-popover
+          hidden
+          aria-hidden="true"
+          style="
+            --lag-strip-item: {{ share_strip_item_size | append: 'px' }};
+            --lag-strip-gap: {{ share_strip_gap | append: 'px' }};
+            --lag-strip-pad-x: {{ share_strip_pad_x | append: 'px' }};
+            --lag-strip-pad-y: {{ share_strip_pad_y | append: 'px' }};
+            --lag-strip-radius: {{ share_strip_radius | append: 'px' }};
+            --lag-strip-bg: {{ share_strip_bg }};
+            --lag-strip-border: {{ share_strip_border }};
+            --lag-strip-shadow: {{ share_strip_shadow }};
+            --lag-icon-size: {{ share_strip_icon_size | append: 'px' }};
+          "
+        >
+          <div class="lag-shareRow" role="menu" aria-label="Share options">
+            <button type="button" class="lag-shareItem" data-lag-share-channel="copy" role="menuitem" aria-label="Copy link">
+              <span class="lag-shareItemIcon" aria-hidden="true">
+                {%- if icon_copy_img != blank -%}
+                  <img src="{{ icon_copy_img | image_url: width: 64 }}" alt="" loading="lazy" width="{{ share_strip_icon_size }}" height="{{ share_strip_icon_size }}">
+                {%- elsif icon_copy_svg != blank -%}
+                  {{ icon_copy_svg }}
+                {%- else -%}🔗{%- endif -%}
+              </span>
+            </button>
+
+            <a class="lag-shareItem" data-lag-share-channel="whatsapp" role="menuitem" aria-label="WhatsApp" href="#" rel="noopener" target="_blank">
+              <span class="lag-shareItemIcon" aria-hidden="true">
+                {%- if icon_whatsapp_img != blank -%}
+                  <img src="{{ icon_whatsapp_img | image_url: width: 64 }}" alt="" loading="lazy" width="{{ share_strip_icon_size }}" height="{{ share_strip_icon_size }}">
+                {%- elsif icon_whatsapp_svg != blank -%}
+                  {{ icon_whatsapp_svg }}
+                {%- else -%}💬{%- endif -%}
+              </span>
+            </a>
+
+            <a class="lag-shareItem" data-lag-share-channel="email" role="menuitem" aria-label="Email" href="#">
+              <span class="lag-shareItemIcon" aria-hidden="true">
+                {%- if icon_email_img != blank -%}
+                  <img src="{{ icon_email_img | image_url: width: 64 }}" alt="" loading="lazy" width="{{ share_strip_icon_size }}" height="{{ share_strip_icon_size }}">
+                {%- elsif icon_email_svg != blank -%}
+                  {{ icon_email_svg }}
+                {%- else -%}✉️{%- endif -%}
+              </span>
+            </a>
+
+            <a class="lag-shareItem" data-lag-share-channel="sms" role="menuitem" aria-label="SMS" href="#">
+              <span class="lag-shareItemIcon" aria-hidden="true">
+                {%- if icon_sms_img != blank -%}
+                  <img src="{{ icon_sms_img | image_url: width: 64 }}" alt="" loading="lazy" width="{{ share_strip_icon_size }}" height="{{ share_strip_icon_size }}">
+                {%- elsif icon_sms_svg != blank -%}
+                  {{ icon_sms_svg }}
+                {%- else -%}📩{%- endif -%}
+              </span>
+            </a>
+
+            {%- if share_enable_more -%}
+              <button type="button" class="lag-shareItem" data-lag-share-channel="more" role="menuitem" aria-label="More">
+                <span class="lag-shareItemIcon" aria-hidden="true">
+                  {%- if icon_more_img != blank -%}
+                    <img src="{{ icon_more_img | image_url: width: 64 }}" alt="" loading="lazy" width="{{ share_strip_icon_size }}" height="{{ share_strip_icon_size }}">
+                  {%- elsif icon_more_svg != blank -%}
+                    {{ icon_more_svg }}
+                  {%- else -%}⋯{%- endif -%}
+                </span>
+              </button>
+            {%- endif -%}
+          </div>
+
+          <div class="lag-shareToast" data-lag-share-toast hidden>{{ share_copy_toast }}</div>
+        </div>
+      {%- else -%}
+        <div class="lag-nativeToast" data-lag-native-toast hidden>{{ share_copy_toast }}</div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</div>
+
+<style>
+  .productView-titleRow{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .productView-titleRow.has-share .productView-title{ flex:1 1 auto; min-width:0; }
+
+  .productView-shareIcon{
+    flex:0 0 auto;
+    width:var(--share-btn-size,34px);
+    height:var(--share-btn-size,34px);
+    border-radius:999px;
+    border:1px solid rgba(0,0,0,0.14);
+    background:transparent;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    color:var(--color-title,#111);
+    padding:0;
+    line-height:0;
+  }
+  .productView-shareIconSvg{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:var(--share-icon-size,18px);
+    height:var(--share-icon-size,18px);
+  }
+  .productView-shareIconSvg svg{ width:100%; height:100%; display:block; overflow:visible; }
+
+  .lag-shareAnchor{ position:relative; display:inline-flex; align-items:center; }
+
+  .lag-sharePopover{
+    position:absolute;
+    right:0;
+    top:calc(100% + 8px);
+    z-index:9999;
+    background:var(--lag-strip-bg,#fff);
+    border:1px solid var(--lag-strip-border,rgba(0,0,0,.10));
+    border-radius:var(--lag-strip-radius,999px);
+    box-shadow:0 10px var(--lag-strip-shadow,16px) rgba(0,0,0,.16);
+    padding:var(--lag-strip-pad-y,8px) var(--lag-strip-pad-x,10px);
+    white-space:nowrap;
+  }
+  .lag-sharePopover[hidden]{ display:none; }
+  .lag-sharePopover.is-top{ top:auto; bottom:calc(100% + 8px); }
+
+  .lag-shareRow{ display:inline-flex; align-items:center; gap:var(--lag-strip-gap,8px); }
+
+  .lag-shareItem{
+    width:var(--lag-strip-item,34px);
+    height:var(--lag-strip-item,34px);
+    border-radius:999px;
+    border:0;
+    background:rgba(0,0,0,.04);
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    color:inherit;
+    cursor:pointer;
+    user-select:none;
+    padding:0;
+  }
+  .lag-shareItem:hover{ background:rgba(0,0,0,.07); }
+  .lag-shareItem:active{ transform:translateY(1px); }
+
+  .lag-shareItemIcon{
+    display:inline-flex;
+    width:var(--lag-icon-size,18px);
+    height:var(--lag-icon-size,18px);
+    align-items:center;
+    justify-content:center;
+  }
+  .lag-shareItemIcon img,
+  .lag-shareItemIcon svg{
+    width:100%;
+    height:100%;
+    display:block;
+    object-fit:contain;
+  }
+
+  .lag-shareToast{
+    margin-top:6px;
+    padding:6px 10px;
+    border-radius:999px;
+    background:rgba(0,0,0,.06);
+    font-size:12px;
+    font-weight:600;
+    text-align:center;
+  }
+
+  @media (max-width: 420px){
+    .lag-sharePopover{
+      max-width:min(260px, calc(100vw - 24px));
+      overflow-x:auto;
+      -webkit-overflow-scrolling:touch;
+    }
+  }
+
+  .lag-nativeToast{
+    position:absolute;
+    right:0;
+    top:calc(100% + 8px);
+    z-index:9999;
+    padding:8px 10px;
+    border-radius:999px;
+    background:rgba(0,0,0,.08);
+    font-size:12px;
+    font-weight:600;
+    white-space:nowrap;
+  }
+  .lag-nativeToast[hidden]{ display:none; }
+</style>
+
+<script>
+(function () {
+  if (window.__lagShareInit) return;
+  window.__lagShareInit = true;
+
+  var LAG_API_BASE = 'https://lagorii-tracking-service-psf43m5w6a-uc.a.run.app';
+
+  var CHARS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  function shortToken(len) {
+    len = len || 12;
+    try {
+      var arr = new Uint8Array(len);
+      crypto.getRandomValues(arr);
+      var out = '';
+      for (var i=0;i<len;i++) out += CHARS[arr[i] % CHARS.length];
+      return out;
+    } catch(e) {
+      return (Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2)).slice(0,len);
+    }
+  }
+
+  function getCookie(name) {
+    var m = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/([.$?*|{}()[\]\\/+^])/g,'\\$1') + '=([^;]*)'));
+    return m ? decodeURIComponent(m[1]) : '';
+  }
+  function setCookie(name, value, days) {
+    var d = new Date();
+    d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+    document.cookie = name + '=' + encodeURIComponent(value) + '; path=/; expires=' + d.toUTCString() + '; SameSite=Lax';
+  }
+  function getVid() {
+    var vid = getCookie('lag_vid');
+    if (!vid) { vid = shortToken(18); setCookie('lag_vid', vid, 365); }
+    return vid;
+  }
+  function getSid() {
+    var sid = getCookie('lag_sid');
+    if (!sid) sid = shortToken(18);
+    setCookie('lag_sid', sid, 0.0208);
+    return sid;
+  }
+
+  function track(eventName, detail) {
+    detail = detail || {};
+    detail.ts = Date.now();
+    window.dispatchEvent(new CustomEvent('lag:' + eventName, { detail: detail }));
+    if (window.dataLayer && typeof window.dataLayer.push === 'function') {
+      window.dataLayer.push(Object.assign({ event: 'lag_' + eventName }, detail));
+    }
+  }
+
+  async function apiPost(path, payload) {
+    try {
+      // If backend not set yet, just no-op
+      if (!LAG_API_BASE || LAG_API_BASE.indexOf('YOUR_DOMAIN_HERE') >= 0) return null;
+
+      var res = await fetch(LAG_API_BASE + path, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        keepalive: true
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return await res.json();
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function buildShareUrl(baseUrl, token) {
+    try {
+      var u = new URL(baseUrl, window.location.origin);
+      ['ls','lr','lt','lp','lv','s'].forEach(function(k){ u.searchParams.delete(k); });
+      u.searchParams.set('s', token);
+      return u.toString();
+    } catch (e) {
+      var join = baseUrl.indexOf('?') >= 0 ? '&' : '?';
+      return baseUrl + join + 's=' + encodeURIComponent(token);
+    }
+  }
+
+  function closePopover(anchor) {
+    var pop = anchor.querySelector('[data-lag-share-popover]');
+    var btn = anchor.querySelector('[data-lag-share-btn]');
+    if (pop) { pop.hidden = true; pop.setAttribute('aria-hidden','true'); }
+    if (btn) btn.setAttribute('aria-expanded','false');
+  }
+  function closeAll() {
+    document.querySelectorAll('[data-lag-share-anchor]').forEach(function(a){ closePopover(a); });
+  }
+
+  // Receiver-side arrival
+  (function shareArrival(){
+    var sp = new URLSearchParams(window.location.search);
+    var s = sp.get('s');
+    if (!s) return;
+
+    setCookie('lag_share_s', s, 7);
+
+    var already = getCookie('lag_seen_' + s);
+    if (already) return;
+    setCookie('lag_seen_' + s, '1', 7);
+
+    track('share_arrival', { s: s, landing_url: window.location.href, lag_vid: getVid(), lag_sid: getSid() });
+
+    apiPost('/share/event', {
+      event: 'share_arrival',
+      s: s,
+      landing_url: window.location.href,
+      receiver_vid: getVid(),
+      receiver_sid: getSid(),
+      ts: Date.now()
+    });
+  })();
+
+  document.addEventListener('click', async function(e){
+    var btn = e.target.closest('[data-lag-share-btn]');
+    var channelEl = e.target.closest('[data-lag-share-channel]');
+    var insideAnchor = e.target.closest('[data-lag-share-anchor]');
+
+    if (!btn && !channelEl && !insideAnchor) { closeAll(); return; }
+
+    if (btn) {
+      e.preventDefault();
+
+      var anchor = btn.closest('[data-lag-share-anchor]');
+      if (!anchor) return;
+
+      var mode = (btn.getAttribute('data-share-ui') || 'strip').toLowerCase();
+      var title = btn.getAttribute('data-share-title') || document.title;
+      var baseUrl = btn.getAttribute('data-share-url') || window.location.href;
+
+      var customerId = btn.getAttribute('data-customer-id') || '';
+      var senderRef = customerId ? customerId : getVid();
+      var senderRefType = customerId ? 'customer' : 'visitor';
+
+      // Ask server to create token (optional), else fallback to local
+      var resp = await apiPost('/share/create', {
+        type: 'product',
+        base_url: baseUrl,
+        title: title,
+        product_id: btn.getAttribute('data-product-id') || '',
+        variant_id: btn.getAttribute('data-variant-id') || '',
+        sender_ref: senderRef,
+        sender_ref_type: senderRefType,
+        customer_id: customerId,
+        customer_email_hash: btn.getAttribute('data-customer-email-hash') || '',
+        customer_phone_hash: btn.getAttribute('data-customer-phone-hash') || '',
+        sender_vid: getVid(),
+        sender_sid: getSid(),
+        ts: Date.now()
+      });
+
+      var token = (resp && resp.s) ? resp.s : shortToken(12);
+      var shareUrl = (resp && resp.share_url) ? resp.share_url : buildShareUrl(baseUrl, token);
+
+      anchor.dataset.lagShareUrl = shareUrl;
+      anchor.dataset.lagShareToken = token;
+      anchor.dataset.lagShareTitle = title;
+
+      track('share_token_created', { s: token, sender_ref: senderRef, sender_ref_type: senderRefType, product_id: btn.getAttribute('data-product-id') || '', variant_id: btn.getAttribute('data-variant-id') || '' });
+
+      // Native share mode
+      if (mode === 'native') {
+        var nativeToast = anchor.querySelector('[data-lag-native-toast]');
+        try {
+          if (navigator.share) {
+            await navigator.share({ title: title, text: title, url: shareUrl });
+            track('native_share', { s: token });
+            apiPost('/share/event', { event:'native_share', s: token, ts: Date.now() });
+          } else {
+            if (navigator.clipboard && navigator.clipboard.writeText) await navigator.clipboard.writeText(shareUrl);
+            else window.prompt('Copy this link:', shareUrl);
+            if (nativeToast) { nativeToast.hidden = false; setTimeout(function(){ nativeToast.hidden = true; }, 900); }
+            track('native_fallback_copy', { s: token });
+            apiPost('/share/event', { event:'native_fallback_copy', s: token, ts: Date.now() });
+          }
+        } catch(_) {}
+        closeAll();
+        return;
+      }
+
+      // Strip mode
+      var pop = anchor.querySelector('[data-lag-share-popover]');
+      if (!pop) return;
+
+      if (!pop.hidden) { closePopover(anchor); return; }
+      closeAll();
+
+      var waMode = (btn.getAttribute('data-whatsapp-mode') || 'url_only').toLowerCase();
+      var waText = (waMode === 'title_and_url') ? (title + ' — ' + shareUrl) : shareUrl;
+
+      var links = {
+        whatsapp: 'https://wa.me/?text=' + encodeURIComponent(waText),
+        email: 'mailto:?subject=' + encodeURIComponent(title) + '&body=' + encodeURIComponent(shareUrl),
+        sms: 'sms:?&body=' + encodeURIComponent(shareUrl)
+      };
+
+      pop.querySelectorAll('[data-lag-share-channel]').forEach(function(el){
+        var ch = el.getAttribute('data-lag-share-channel');
+        if (links[ch] && el.tagName === 'A') el.setAttribute('href', links[ch]);
+      });
+
+      pop.hidden = false;
+      pop.setAttribute('aria-hidden','false');
+      btn.setAttribute('aria-expanded','true');
+
+      track('overlay_open', { s: token, ui_mode: 'strip' });
+      apiPost('/share/event', { event:'overlay_open', s: token, ui_mode:'strip', ts: Date.now() });
+      return;
+    }
+
+    if (channelEl) {
+      var anchor2 = channelEl.closest('[data-lag-share-anchor]');
+      if (!anchor2) return;
+
+      var channel = channelEl.getAttribute('data-lag-share-channel');
+      var token2 = anchor2.dataset.lagShareToken || '';
+      var shareUrl2 = anchor2.dataset.lagShareUrl || window.location.href;
+      var toast = anchor2.querySelector('[data-lag-share-toast]');
+
+      if (channel === 'copy') {
+        e.preventDefault();
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) await navigator.clipboard.writeText(shareUrl2);
+          else window.prompt('Copy this link:', shareUrl2);
+          if (toast) { toast.hidden = false; setTimeout(function(){ toast.hidden = true; }, 900); }
+          track('copy_success', { s: token2 });
+          apiPost('/share/event', { event:'copy_success', s: token2, ts: Date.now() });
+        } catch(_) {
+          track('copy_failed', { s: token2 });
+          apiPost('/share/event', { event:'copy_failed', s: token2, ts: Date.now() });
+        }
+        closePopover(anchor2);
+        return;
+      }
+
+      track('channel_click', { s: token2, channel: channel });
+      apiPost('/share/event', { event:'channel_click', s: token2, channel: channel, ts: Date.now() });
+      closePopover(anchor2);
+      return;
+    }
+  }, { passive: false });
+
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeAll(); });
+  window.addEventListener('scroll', closeAll, { passive: true });
+  window.addEventListener('resize', closeAll, { passive: true });
+})();
+</script>

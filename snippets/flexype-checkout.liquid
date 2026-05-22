@@ -1,0 +1,54 @@
+
+<script>
+  let buyNowButtonHtml = '<button class="flexy-checkout-btn" name="flexype-checkout">Checkout</button>';
+  let isButtonAdded = false;
+  let parsedCheckoutButton = new DOMParser().parseFromString(buyNowButtonHtml, 'text/html').querySelector('button.flexy-checkout-btn');
+  const htmlNode = document.querySelector('html');
+  
+  // Options for the observer (which mutations to observe)
+  const observerOptions = { attributes: true, childList: true, subtree: true };
+  
+  // Callback function to execute when mutations are observed
+  const mutationCallback = (mutationList, observer) => {
+    for (const mutation of mutationList) {
+      let mainContainer = document.querySelector('.qikify-stickycart-v2');
+      let targetElement = document.querySelector('.qsc2-drawer-footer__checkout');
+      if (mainContainer && targetElement && !isButtonAdded && !document.querySelector('button.flexy-checkout-btn')) {
+        isButtonAdded = true;
+        targetElement.appendChild(parsedCheckoutButton.cloneNode(true));
+      }
+    }
+  };
+  
+  const mutationObserver = new MutationObserver(mutationCallback);
+  mutationObserver.observe(htmlNode, observerOptions);
+
+</script>
+
+<style>
+  .qsc2-checkout-button {
+    display: none !important;
+  }
+  
+  .flexy-checkout-btn {
+    outline: 0;
+    border: 0;
+    height: var(--qsc2-checkout-btn-size);
+    font-size: var(--qsc2-checkout-btn-font-size);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: var(--qsc2-btn-size);
+    border-radius: var(--qsc2-btn-radius);
+    padding: 0 25px 1px;
+    cursor: pointer;
+    background-color: var(--qsc2-btn-bg);
+    color: var(--qsc2-btn-color);
+    font-size: var(--qsc2-btn-font-size);
+    font-weight: var(--qsc2-btn-font-weight, "");
+    text-transform: var(--qsc2-btn-text-transform, "");
+    transition: transform .15s cubic-bezier(.39,.575,.565,1);
+  }
+</style>

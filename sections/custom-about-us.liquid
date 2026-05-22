@@ -1,0 +1,596 @@
+{% comment %} About — Suite (Minimal, Brand Aligned) + Solid Banner + 2-up Values {% endcomment %}
+<section id="about-suite-{{ section.id }}" class="about-suite">
+  <style>
+    {{ section.settings.heading_font | font_face: font_display: 'swap' }}
+    {{ section.settings.body_font    | font_face: font_display: 'swap' }}
+
+    #about-suite-{{ section.id }}{
+      --brand: {{ section.settings.brand_color }};
+      --ink: {{ section.settings.text_color }};
+      --muted: {{ section.settings.muted_color }};
+      --bg: {{ section.settings.bg_color }};
+      --w: min({{ section.settings.max_width }}px, 94vw);
+
+      /* separate desktop/mobile paddings */
+      --py-d: {{ section.settings.section_padding_desktop }}px;
+      --px-d: {{ section.settings.section_padding_x_desktop }}px;
+      --py-m: {{ section.settings.section_padding_mobile }}px;
+      --px-m: {{ section.settings.section_padding_x_mobile }}px;
+
+      --gap: {{ section.settings.block_gap }}px;
+      --radius: {{ section.settings.radius }}px;
+
+      /* Banner Solid responsive variables (mobile first) */
+      --bs-pad: {{ section.settings.bs_pad_mobile }}px;
+      --bs-img-max-w: {{ section.settings.bs_img_max_w_mobile }}px;
+      --bs-img-max-h: {{ section.settings.bs_img_max_h_mobile }}px;
+
+      color: var(--ink);
+      background: var(--bg);
+      font-family: {{ section.settings.body_font.family }}, system-ui, -apple-system, "Segoe UI", Inter, Roboto, Arial, sans-serif;
+      font-size: {{ section.settings.base_font_size }}px;
+      line-height: {{ section.settings.line_height }};
+    }
+    /* Tablet overrides */
+    @media (min-width: 600px){
+      #about-suite-{{ section.id }}{
+        --bs-pad: {{ section.settings.bs_pad_tablet }}px;
+        --bs-img-max-w: {{ section.settings.bs_img_max_w_tablet }}px;
+        --bs-img-max-h: {{ section.settings.bs_img_max_h_tablet }}px;
+      }
+    }
+    /* Desktop overrides */
+    @media (min-width: 900px){
+      #about-suite-{{ section.id }}{
+        --bs-pad: {{ section.settings.bs_pad_desktop }}px;
+        --bs-img-max-w: {{ section.settings.bs_img_max_w_desktop }}px;
+        --bs-img-max-h: {{ section.settings.bs_img_max_h_desktop }}px;
+      }
+    }
+
+    #about-suite-{{ section.id }} .wrap{max-width:var(--w);margin-inline:auto}
+    #about-suite-{{ section.id }} .band{padding-block:var(--py-d)}
+    #about-suite-{{ section.id }} .wrap.pad{padding-inline:var(--px-d)}
+    @media (max-width: 899px){
+      #about-suite-{{ section.id }} .band{padding-block:var(--py-m)}
+      #about-suite-{{ section.id }} .wrap.pad{padding-inline:var(--px-m)}
+    }
+
+    #about-suite-{{ section.id }} .stack{display:grid;gap:var(--gap)}
+    #about-suite-{{ section.id }} h1,h2,h3{
+      margin:0 0 10px;
+      font-family: {{ section.settings.heading_font.family }}, {{ section.settings.body_font.family }}, sans-serif;
+      letter-spacing: {{ section.settings.heading_letter_spacing }}em;
+    }
+    #about-suite-{{ section.id }} h1{font-size:clamp(28px,6vw,{{ section.settings.h1_size }}px);line-height:1.12}
+    #about-suite-{{ section.id }} h2{font-size:clamp(22px,4.5vw,{{ section.settings.h2_size }}px);line-height:1.2}
+    #about-suite-{{ section.id }} h3{font-size:clamp(18px,3.5vw,{{ section.settings.h3_size }}px);line-height:1.25}
+    #about-suite-{{ section.id }} .muted{color:var(--muted)}
+    #about-suite-{{ section.id }} .lead{font-size:1.05em}
+
+    /* Cards */
+    #about-suite-{{ section.id }} .card{
+      border:1px solid {{ section.settings.card_border }};
+      border-radius:var(--radius);
+      background: {{ section.settings.card_bg }};
+      padding: {{ section.settings.card_pad }}px;
+    }
+
+    /* Banner (image background) */
+    #about-suite-{{ section.id }} .banner{
+      position:relative;border-radius:var(--radius);overflow:hidden;isolation:isolate;
+      margin-inline: calc(50% - 50vw); width: 100vw;
+      color: {{ section.settings.banner_text_color }};
+    }
+    #about-suite-{{ section.id }} .banner__img{display:block;width:100%;height:auto;filter: {{ section.settings.banner_bg_filter }};}
+    #about-suite-{{ section.id }} .banner__overlay{position:absolute;inset:0;background: {{ section.settings.banner_overlay_color }};opacity: {{ section.settings.banner_overlay_opacity | divided_by: 100.0 }};z-index:0;}
+    #about-suite-{{ section.id }} .banner__inner{position:absolute;inset:0;z-index:1;display:grid;align-content:center;padding: clamp(24px,6vw,56px);}
+    #about-suite-{{ section.id }} .banner--left   .banner__inner{ justify-items:start;  text-align:left; }
+    #about-suite-{{ section.id }} .banner--center .banner__inner{ justify-items:center; text-align:center; }
+    #about-suite-{{ section.id }} .banner--right  .banner__inner{ justify-items:end;   text-align:right; }
+
+    /* === Banner Solid (always inline text + image) === */
+    #about-suite-{{ section.id }} .banner-solid{
+      border-radius:var(--radius);overflow:hidden;
+      color: var(--ink);
+    }
+    #about-suite-{{ section.id }} .banner-solid__inner{
+      display:grid;
+      grid-auto-flow:column;
+      grid-template-columns: 1fr;               /* default: text only */
+      gap: clamp(16px, 4vw, 28px);
+      align-items:center;
+      padding: var(--bs-pad);                   /* responsive pad */
+    }
+    /* if image exists: force two columns at every breakpoint (inline always) */
+    #about-suite-{{ section.id }} .banner-solid--hasimg .banner-solid__inner{
+      grid-template-columns: 1fr auto;
+    }
+    /* content alignment */
+    #about-suite-{{ section.id }} .banner-solid--left  .banner-solid__content{ text-align:left; }
+    #about-suite-{{ section.id }} .banner-solid--center .banner-solid__content{ text-align:center; }
+    #about-suite-{{ section.id }} .banner-solid--right .banner-solid__content{ text-align:right; }
+
+    /* optional: swap to image-left when requested */
+    #about-suite-{{ section.id }} .banner-solid--img-left .banner-solid__img-wrap{order:-1}
+
+    #about-suite-{{ section.id }} .banner-solid__img-wrap{
+      justify-self:center;
+      max-width: var(--bs-img-max-w);
+    }
+    #about-suite-{{ section.id }} .banner-solid__img{
+      display:block;
+      width:auto; height:auto;
+      max-width:100%;
+      max-height: var(--bs-img-max-h);
+      object-fit: contain;
+      border-radius: {{ section.settings.bs_img_radius }}px;
+    }
+
+    /* About split */
+    #about-suite-{{ section.id }} .split{display:grid;gap:{{ section.settings.split_gap }}px;align-items:center}
+    #about-suite-{{ section.id }} .split__img{border-radius:var(--radius);overflow:hidden}
+    #about-suite-{{ section.id }} .split__img img{display:block;width:100%;height:auto;object-fit:contain}
+    @media (min-width: 900px){
+      #about-suite-{{ section.id }} .split__img img{height:{{ section.settings.split_img_h }}px;object-fit:{{ section.settings.split_img_fit }}}
+      #about-suite-{{ section.id }} .split{grid-template-columns:minmax(0, {{ section.settings.split_text_col }}fr) minmax(0, {{ section.settings.split_image_col }}fr)}
+    }
+    #about-suite-{{ section.id }} .split__text{text-align:left}
+    #about-suite-{{ section.id }} .split--center .split__text{text-align:center;margin-inline:auto;max-width: 720px}
+    @media (max-width: 899px){
+      #about-suite-{{ section.id }} .split{grid-template-columns:1fr}
+      #about-suite-{{ section.id }} .split__img{order:-1}
+    }
+
+    /* Mission + Vision */
+    #about-suite-{{ section.id }} .mv{display:grid;gap:{{ section.settings.mv_gap }}px}
+    @media (min-width: 900px){ #about-suite-{{ section.id }} .mv{grid-template-columns:1fr 1fr} }
+
+    /* VALUES — 2 per row, no carousel */
+    #about-suite-{{ section.id }} .values{
+      display:grid;gap: {{ section.settings.values_gap }}px;
+      grid-template-columns: repeat({{ section.settings.values_cols_mobile }}, 1fr);
+      align-items:stretch;
+    }
+    @media (min-width: 900px){
+      #about-suite-{{ section.id }} .values{
+        grid-template-columns: repeat({{ section.settings.values_cols_desktop }}, 1fr);
+      }
+    }
+    #about-suite-{{ section.id }} .val{
+      display:flex;flex-direction:column;justify-content:flex-start;
+      border:1px solid {{ section.settings.card_border }};border-radius:var(--radius);background:#fff;
+      padding: {{ section.settings.values_pad_desktop }}px;min-height: {{ section.settings.values_min_h_desktop }}px;
+    }
+    @media (max-width: 899px){
+      #about-suite-{{ section.id }} .val{
+        padding: {{ section.settings.values_pad_mobile }}px;min-height: {{ section.settings.values_min_h_mobile }}px;
+      }
+    }
+
+    /* Circle number badge for Values */
+    #about-suite-{{ section.id }}{ --pill: 44px; }
+    #about-suite-{{ section.id }} .val__pill{
+      display:inline-grid;place-items:center;width:var(--pill);height:var(--pill);
+      border-radius:50%;background:var(--brand);color:#fff;font-weight:700;line-height:1;padding:0;margin:0 0 12px;font-size:.95em;
+    }
+
+    /* Hide Values short description on phones */
+    @media (max-width: 899px){
+      #about-suite-{{ section.id }} .values .val > p.muted{ display:none; }
+    }
+
+    /* Timeline */
+    #about-suite-{{ section.id }} .timeline{position:relative;padding-left:22px}
+    #about-suite-{{ section.id }} .timeline:before{content:"";position:absolute;left:8px;top:0;bottom:0;width:2px;background:{{ section.settings.timeline_line }}}
+    #about-suite-{{ section.id }} .t-item{position:relative;margin-bottom:{{ section.settings.timeline_gap }}px}
+    #about-suite-{{ section.id }} .t-item:before{content:"";position:absolute;left:-2px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--brand)}
+    #about-suite-{{ section.id }} .t-title{font-weight:700}
+
+    /* Team */
+    #about-suite-{{ section.id }} .team{display:grid;gap:{{ section.settings.team_gap }}px}
+    @media (min-width: 760px){ #about-suite-{{ section.id }} .team{grid-template-columns:repeat({{ section.settings.team_cols_desktop }},1fr)} }
+    #about-suite-{{ section.id }} .member{border:1px solid {{ section.settings.card_border }};border-radius:var(--radius);overflow:hidden;background:#fff;text-align:center;padding-bottom:14px}
+    #about-suite-{{ section.id }} .member img{display:block;width:100%;height:{{ section.settings.team_img_h }}px;object-fit:cover}
+    #about-suite-{{ section.id }} .member .name{font-weight:700;margin-top:10px}
+    #about-suite-{{ section.id }} .member .role{color:var(--muted);font-size:.95em}
+
+    /* Careers */
+    #about-suite-{{ section.id }} .cta{display:grid;place-items:center;text-align:center;border-radius:var(--radius);padding:{{ section.settings.cta_pad }}px;background:{{ section.settings.cta_bg }};border:1px solid {{ section.settings.card_border }}}
+    #about-suite-{{ section.id }} .btn{display:inline-flex;gap:8px;align-items:center;justify-content:center;padding:10px 16px;border-radius:999px;text-decoration:none;border:1px solid transparent}
+    #about-suite-{{ section.settings.section_id }} .btn--brand{background:var(--brand);color:#fff}
+    #about-suite-{{ section.id }} .btn--ghost{background:#fff;color:var(--ink);border-color:#eee}
+  </style>
+
+  <div class="wrap band pad stack">
+    {% for block in section.blocks %}
+      {% case block.type %}
+
+        {% when 'banner' %}
+        {% assign bg = block.settings.bg_image %}
+        <div class="banner banner--{{ section.settings.banner_text_align }}" {{ block.shopify_attributes }}>
+          {% if bg != blank %}
+            <img class="banner__img"
+                 src="{{ bg | image_url: width: 2400 }}"
+                 width="{{ bg.width }}"
+                 height="{{ bg.height }}"
+                 alt="{{ block.settings.heading | default: 'Banner' | escape }}">
+            <div class="banner__overlay"></div>
+          {% endif %}
+          <div class="banner__inner">
+            {% if block.settings.kicker != blank %}<p class="muted">{{ block.settings.kicker }}</p>{% endif %}
+            {% if block.settings.heading != blank %}<h1>{{ block.settings.heading }}</h1>{% endif %}
+            {% if block.settings.subheading != blank %}<p class="lead">{{ block.settings.subheading }}</p>{% endif %}
+            {% if block.settings.btn_label != blank and block.settings.btn_link != blank %}
+              <a class="btn {% if block.settings.btn_style == 'solid' %}btn--brand{% else %}btn--ghost{% endif %}" href="{{ block.settings.btn_link }}">{{ block.settings.btn_label }}</a>
+            {% endif %}
+          </div>
+        </div>
+
+        {% when 'banner_solid' %}
+        {% assign bg_mode = block.settings.bg_mode %}
+        {% capture bg_css %}
+          {% if bg_mode == 'solid' %}
+            background: {{ block.settings.bg_color }};
+          {% else %}
+            background: linear-gradient({{ block.settings.grad_angle }}deg, {{ block.settings.grad_from }}, {{ block.settings.grad_to }});
+          {% endif %}
+        {% endcapture %}
+        <section class="banner-solid {% if block.settings.side_image != blank %}banner-solid--hasimg{% endif %} banner-solid--{{ block.settings.content_align }} {% if block.settings.image_position == 'left' %}banner-solid--img-left{% endif %}"
+                 style="{{ bg_css | strip }}" {{ block.shopify_attributes }}>
+          <div class="banner-solid__inner">
+            <div class="banner-solid__content">
+              {% if block.settings.kicker != blank %}<p class="muted">{{ block.settings.kicker }}</p>{% endif %}
+              {% if block.settings.heading != blank %}<h2 style="color:{{ block.settings.text_color }}">{{ block.settings.heading }}</h2>{% endif %}
+              {% if block.settings.subheading != blank %}<p class="lead" style="color:{{ block.settings.text_color }}">{{ block.settings.subheading }}</p>{% endif %}
+              {% if block.settings.btn_label != blank and block.settings.btn_link != blank %}
+                <a class="btn {% if block.settings.btn_style == 'solid' %}btn--brand{% else %}btn--ghost{% endif %}" href="{{ block.settings.btn_link }}">{{ block.settings.btn_label }}</a>
+              {% endif %}
+            </div>
+            {% if block.settings.side_image != blank %}
+              <div class="banner-solid__img-wrap">
+                <img class="banner-solid__img" src="{{ block.settings.side_image | image_url: width: 1600 }}" alt="{{ block.settings.side_image_alt | escape }}">
+              </div>
+            {% endif %}
+          </div>
+        </section>
+
+        {% when 'about' %}
+        <div class="split {% if block.settings.image == blank %}split--center{% endif %}" {{ block.shopify_attributes }}>
+          <div class="split__text" style="text-align: {{ block.settings.text_align }};">
+            {% if block.settings.kicker != blank %}<p class="muted">{{ block.settings.kicker }}</p>{% endif %}
+            {% if block.settings.heading != blank %}<h2>{{ block.settings.heading }}</h2>{% endif %}
+            {% if block.settings.body != blank %}
+              <div class="rte" style="font-size: {{ block.settings.p_size }}px; line-height: {{ block.settings.p_leading }};">
+                {{ block.settings.body }}
+              </div>
+            {% endif %}
+          </div>
+          {% if block.settings.image != blank %}
+          <div class="split__img">
+            <img src="{{ block.settings.image | image_url: width: 1400 }}" alt="{{ block.settings.image_alt | escape }}">
+          </div>
+          {% endif %}
+        </div>
+
+        {% when 'mission_vision' %}
+        <div class="mv" {{ block.shopify_attributes }}>
+          <div class="card">
+            {% if block.settings.mission_title != blank %}<h3>{{ block.settings.mission_title }}</h3>{% endif %}
+            {% if block.settings.mission_text != blank %}<div class="rte">{{ block.settings.mission_text }}</div>{% endif %}
+          </div>
+          <div class="card">
+            {% if block.settings.vision_title != blank %}<h3>{{ block.settings.vision_title }}</h3>{% endif %}
+            {% if block.settings.vision_text != blank %}<div class="rte">{{ block.settings.vision_text }}</div>{% endif %}
+          </div>
+        </div>
+
+        {% when 'values' %}
+        {% assign items = section.blocks | where: 'type', 'value_item' %}
+        {% if block.settings.heading != blank %}<h2>{{ block.settings.heading }}</h2>{% endif %}
+        <div class="values" id="values-{{ section.id }}">
+          {% for it in items %}
+            <div class="val">
+              {% if it.settings.pill != blank %}<span class="val__pill">{{ it.settings.pill }}</span>{% endif %}
+              {% if it.settings.title != blank %}<div class="t">{{ it.settings.title }}</div>{% endif %}
+              {% if it.settings.text != blank %}<p class="muted" style="margin-top:6px">{{ it.settings.text }}</p>{% endif %}
+            </div>
+          {% endfor %}
+        </div>
+
+        {% when 'timeline' %}
+        {% assign mils = section.blocks | where: 'type', 'milestone' %}
+        {% if block.settings.heading != blank %}<h2>{{ block.settings.heading }}</h2>{% endif %}
+        <div class="timeline">
+          {% for m in mils %}
+            <div class="t-item">
+              {% if m.settings.year != blank %}<div class="t-title">{{ m.settings.year }} — {{ m.settings.title }}</div>
+              {% else %}{% if m.settings.title != blank %}<div class="t-title">{{ m.settings.title }}</div>{% endif %}{% endif %}
+              {% if m.settings.text != blank %}<div class="muted">{{ m.settings.text }}</div>{% endif %}
+            </div>
+          {% endfor %}
+        </div>
+
+        {% when 'team' %}
+        {% assign people = section.blocks | where: 'type', 'team_member' %}
+        {% if block.settings.heading != blank %}<h2>{{ block.settings.heading }}</h2>{% endif %}
+        <div class="team">
+          {% for p in people %}
+            <div class="member">
+              {% if p.settings.photo != blank %}<img src="{{ p.settings.photo | image_url: width: 1200 }}" alt="{{ p.settings.name | escape }}">{% endif %}
+              {% if p.settings.name != blank %}<div class="name">{{ p.settings.name }}</div>{% endif %}
+              {% if p.settings.role != blank %}<div class="role">{{ p.settings.role }}</div>{% endif %}
+              {% if p.settings.link_label != blank and p.settings.link_url != blank %}
+                <div style="margin-top:8px">
+                  <a class="btn btn--ghost" href="{{ p.settings.link_url }}">{{ p.settings.link_label }}</a>
+                </div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+
+        {% when 'careers' %}
+        <div class="cta">
+          {% if block.settings.heading != blank %}<h2>{{ block.settings.heading }}</h2>{% endif %}
+          {% if block.settings.text != blank %}<p class="muted" style="max-width:720px">{{ block.settings.text }}</p>{% endif %}
+          {% if block.settings.btn_label != blank and block.settings.btn_link != blank %}
+            <a class="btn btn--brand" href="{{ block.settings.btn_link }}">{{ block.settings.btn_label }}</a>
+          {% endif %}
+        </div>
+
+      {% endcase %}
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About — Suite (Minimal)",
+  "settings": [
+    { "type": "font_picker", "id": "heading_font", "label": "Heading font", "default": "poppins_n7" },
+    { "type": "font_picker", "id": "body_font", "label": "Body font", "default": "inter_n4" },
+
+    { "type": "range", "id": "base_font_size", "label": "Base font size (px)", "min": 12, "max": 20, "step": 1, "default": 16 },
+    { "type": "range", "id": "h1_size", "label": "H1 size (px)", "min": 28, "max": 64, "step": 1, "default": 44 },
+    { "type": "range", "id": "h2_size", "label": "H2 size (px)", "min": 20, "max": 48, "step": 1, "default": 32 },
+    { "type": "range", "id": "h3_size", "label": "H3 size (px)", "min": 16, "max": 36, "step": 1, "default": 22 },
+    { "type": "range", "id": "heading_letter_spacing", "label": "Heading letter-spacing (em)", "min": -0.1, "max": 0.2, "step": 0.1, "default": 0.0 },
+    { "type": "text", "id": "line_height", "label": "Body line-height", "default": "1.7" },
+
+    { "type": "range", "id": "max_width", "label": "Max content width (px)", "min": 800, "max": 1440, "step": 10, "default": 1120 },
+
+    /* Section padding */
+    { "type": "header", "content": "Section padding" },
+    { "type": "range", "id": "section_padding_desktop", "label": "Vertical (desktop, px)", "min": 16, "max": 160, "step": 2, "default": 56 },
+    { "type": "range", "id": "section_padding_x_desktop", "label": "Horizontal (desktop, px)", "min": 0, "max": 80, "step": 2, "default": 24 },
+    { "type": "range", "id": "section_padding_mobile", "label": "Vertical (mobile, px)", "min": 12, "max": 120, "step": 2, "default": 36 },
+    { "type": "range", "id": "section_padding_x_mobile", "label": "Horizontal (mobile, px)", "min": 0, "max": 40, "step": 2, "default": 16 },
+
+    { "type": "range", "id": "block_gap", "label": "Gap between blocks (px)", "min": 8, "max": 60, "step": 2, "default": 28 },
+
+    { "type": "color", "id": "brand_color", "label": "Brand color", "default": "#E87529" },
+    { "type": "color", "id": "text_color", "label": "Primary text", "default": "#1a1a1a" },
+    { "type": "color", "id": "muted_color", "label": "Muted text", "default": "#6B7280" },
+    { "type": "color", "id": "bg_color", "label": "Section background", "default": "#ffffff" },
+
+    { "type": "range", "id": "radius", "label": "Corner radius (px)", "min": 0, "max": 40, "step": 1, "default": 16 },
+
+    { "type": "color", "id": "card_bg", "label": "Card background", "default": "#ffffff" },
+    { "type": "color", "id": "card_border", "label": "Card border", "default": "#EEEEEE" },
+    { "type": "range", "id": "card_pad", "label": "Card padding (px)", "min": 12, "max": 48, "step": 2, "default": 24 },
+
+    { "type": "range", "id": "split_gap", "label": "About: gap between text & image (px)", "min": 8, "max": 60, "step": 2, "default": 32 },
+    { "type": "range", "id": "split_text_col", "label": "About: text column (desktop, fr)", "min": 1, "max": 4, "step": 1, "default": 1 },
+    { "type": "range", "id": "split_image_col", "label": "About: image column (desktop, fr)", "min": 1, "max": 4, "step": 1, "default": 1 },
+    { "type": "range", "id": "split_img_h", "label": "About: image height (px, desktop)", "min": 200, "max": 640, "step": 10, "default": 380 },
+    { "type": "select", "id": "split_img_fit", "label": "About: image object-fit (desktop)", "default": "cover", "options": [
+      { "label": "Cover", "value": "cover" }, { "label": "Contain", "value": "contain" }, { "label": "Fill", "value": "fill" }, { "label": "Scale-down", "value": "scale-down" }
+    ]},
+
+    { "type": "range", "id": "mv_gap", "label": "Mission/Vision: gap (px)", "min": 8, "max": 60, "step": 2, "default": 28 },
+
+    /* Values layout */
+    { "type": "header", "content": "Values layout" },
+    { "type": "range", "id": "values_cols_desktop", "label": "Columns (desktop)", "min": 1, "max": 4, "step": 1, "default": 2 },
+    { "type": "range", "id": "values_cols_mobile", "label": "Columns (mobile)", "min": 1, "max": 3, "step": 1, "default": 2 },
+    { "type": "range", "id": "values_gap", "label": "Gap (px)", "min": 6, "max": 36, "step": 2, "default": 20 },
+    { "type": "range", "id": "values_pad_desktop", "label": "Card padding (desktop, px)", "min": 8, "max": 40, "step": 2, "default": 18 },
+    { "type": "range", "id": "values_pad_mobile",  "label": "Card padding (mobile, px)",  "min": 6, "max": 32, "step": 2, "default": 14 },
+    { "type": "range", "id": "values_min_h_desktop", "label": "Min height (desktop, px)", "min": 0, "max": 260, "step": 10, "default": 140 },
+    { "type": "range", "id": "values_min_h_mobile",  "label": "Min height (mobile, px)",  "min": 0, "max": 220, "step": 10, "default": 120 },
+
+    { "type": "color", "id": "timeline_line", "label": "Timeline line color", "default": "#EEEEEE" },
+    { "type": "range", "id": "timeline_gap", "label": "Timeline: item gap (px)", "min": 10, "max": 60, "step": 2, "default": 20 },
+
+    { "type": "range", "id": "team_cols_desktop", "label": "Team: columns (desktop)", "min": 1, "max": 4, "step": 1, "default": 3 },
+    { "type": "range", "id": "team_gap", "label": "Team: gap (px)", "min": 8, "max": 60, "step": 2, "default": 24 },
+    { "type": "range", "id": "team_img_h", "label": "Team: image height (px)", "min": 160, "max": 480, "step": 10, "default": 260 },
+
+    /* Image banner options */
+    { "type": "range", "id": "banner_min_h", "label": "Banner min height (px)", "min": 240, "max": 720, "step": 10, "default": 420 },
+    { "type": "select", "id": "banner_text_align", "label": "Image banner text align", "default": "center", "options": [
+      { "label": "Left", "value": "left" }, { "label": "Center", "value": "center" }, { "label": "Right", "value": "right" }
+    ]},
+    { "type": "color", "id": "banner_text_color", "label": "Image banner text color", "default": "#ffffff" },
+    { "type": "text", "id": "banner_bg_filter", "label": "Image banner bg CSS filter", "default": "none" },
+    { "type": "color", "id": "banner_overlay_color", "label": "Image banner overlay color", "default": "#000000" },
+    { "type": "range", "id": "banner_overlay_opacity", "label": "Image banner overlay opacity (%)", "min": 0, "max": 90, "step": 5, "default": 40 },
+
+    /* Banner Solid defaults + responsive controls */
+    { "type": "header", "content": "Banner Solid defaults" },
+    { "type": "range", "id": "bs_text_col", "label": "Text column (desktop, fr)", "min": 1, "max": 4, "step": 1, "default": 1 },
+    { "type": "range", "id": "bs_img_col", "label": "Image column (desktop, fr)", "min": 1, "max": 4, "step": 1, "default": 1 },
+    { "type": "range", "id": "bs_img_radius", "label": "Side image radius (px)", "min": 0, "max": 40, "step": 1, "default": 12 },
+
+    { "type": "header", "content": "Banner Solid padding" },
+    { "type": "range", "id": "bs_pad_desktop", "label": "Padding (desktop, px)", "min": 8, "max": 96, "step": 2, "default": 32 },
+    { "type": "range", "id": "bs_pad_tablet",  "label": "Padding (tablet, px)",  "min": 8, "max": 96, "step": 2, "default": 36 },
+    { "type": "range", "id": "bs_pad_mobile",  "label": "Padding (mobile, px)",  "min": 8, "max": 96, "step": 2, "default": 28 },
+
+    { "type": "header", "content": "Banner Solid image sizing" },
+    { "type": "range", "id": "bs_img_max_w_desktop", "label": "Max width (desktop, px)", "min": 160, "max": 1200, "step": 20, "default": 520 },
+    { "type": "range", "id": "bs_img_max_h_desktop", "label": "Max height (desktop, px)", "min": 100, "max": 800, "step": 10, "default": 360 },
+    { "type": "range", "id": "bs_img_max_w_tablet",  "label": "Max width (tablet, px)",  "min": 140, "max": 900,  "step": 10, "default": 440 },
+    { "type": "range", "id": "bs_img_max_h_tablet",  "label": "Max height (tablet, px)", "min": 100, "max": 700,  "step": 10, "default": 320 },
+    { "type": "range", "id": "bs_img_max_w_mobile",  "label": "Max width (mobile, px)",  "min": 120, "max": 640,  "step": 10, "default": 280 },
+    { "type": "range", "id": "bs_img_max_h_mobile",  "label": "Max height (mobile, px)", "min": 100, "max": 520,  "step": 10, "default": 220 }
+  ],
+  "blocks": [
+    {
+      "type": "banner",
+      "name": "Banner (image background)",
+      "settings": [
+        { "type": "image_picker", "id": "bg_image", "label": "Background image" },
+        { "type": "text", "id": "kicker", "label": "Kicker" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "About Us" },
+        { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "Tell your brand story in a clean hero." },
+        { "type": "select", "id": "btn_style", "label": "Button style", "default": "solid", "options": [
+          { "label": "Solid (brand)", "value": "solid" }, { "label": "Ghost", "value": "ghost" }
+        ]},
+        { "type": "text", "id": "btn_label", "label": "Button label" },
+        { "type": "url", "id": "btn_link", "label": "Button link" }
+      ]
+    },
+    {
+      "type": "banner_solid",
+      "name": "Banner (solid)",
+      "settings": [
+        { "type": "select", "id": "bg_mode", "label": "Background mode", "default": "solid", "options": [
+          { "label": "Solid color", "value": "solid" },
+          { "label": "Gradient", "value": "gradient" }
+        ]},
+        { "type": "color", "id": "bg_color", "label": "Solid color", "default": "#FFF3EA" },
+        { "type": "color", "id": "grad_from", "label": "Gradient from", "default": "#FFF3EA" },
+        { "type": "color", "id": "grad_to", "label": "Gradient to", "default": "#FFE0CC" },
+        { "type": "range", "id": "grad_angle", "label": "Gradient angle (deg)", "min": 0, "max": 360, "step": 5, "default": 90 },
+
+        { "type": "text", "id": "kicker", "label": "Kicker" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "About Us" },
+        { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "Minimal, elegant and brand-aligned." },
+        { "type": "color", "id": "text_color", "label": "Text color", "default": "#1a1a1a" },
+
+        { "type": "image_picker", "id": "side_image", "label": "Optional side image" },
+        { "type": "text", "id": "side_image_alt", "label": "Side image alt", "default": "About banner image" },
+        { "type": "select", "id": "image_position", "label": "Image position (desktop)", "default": "right", "options": [
+          { "label": "Left", "value": "left" }, { "label": "Right", "value": "right" }
+        ]},
+        { "type": "select", "id": "content_align", "label": "Content align", "default": "left", "options": [
+          { "label": "Left", "value": "left" }, { "label": "Center", "value": "center" }, { "label": "Right", "value": "right" }
+        ]},
+
+        { "type": "select", "id": "btn_style", "label": "Button style", "default": "solid", "options": [
+          { "label": "Solid (brand)", "value": "solid" }, { "label": "Ghost", "value": "ghost" }
+        ]},
+        { "type": "text", "id": "btn_label", "label": "Button label" },
+        { "type": "url", "id": "btn_link", "label": "Button link" }
+      ]
+    },
+    {
+      "type": "about",
+      "name": "About (text + image)",
+      "settings": [
+        { "type": "text", "id": "kicker", "label": "Kicker" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Who we are" },
+        { "type": "richtext", "id": "body", "label": "Body", "default": "<p>Short and sweet description about your brand—minimal, warm, and clear.</p>" },
+        { "type": "image_picker", "id": "image", "label": "Right image (optional)" },
+        { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "About image" },
+        { "type": "select", "id": "text_align", "label": "Paragraph alignment", "default": "left",
+          "options": [ { "label": "Left", "value": "left" }, { "label": "Center", "value": "center" }, { "label": "Right", "value": "right" }, { "label": "Justify", "value": "justify" } ] },
+        { "type": "range", "id": "p_size", "label": "Paragraph size (px)", "min": 12, "max": 22, "step": 1, "default": 16 },
+        { "type": "text", "id": "p_leading", "label": "Paragraph line-height", "default": "1.7" }
+      ]
+    },
+    {
+      "type": "mission_vision",
+      "name": "Mission + Vision",
+      "settings": [
+        { "type": "text", "id": "mission_title", "label": "Mission title", "default": "Our Mission" },
+        { "type": "richtext", "id": "mission_text", "label": "Mission text", "default": "<p>Say what you do for people—clearly and kindly.</p>" },
+        { "type": "text", "id": "vision_title", "label": "Vision title", "default": "Our Vision" },
+        { "type": "richtext", "id": "vision_text", "label": "Vision text", "default": "<p>Say where you're going, and why it matters.</p>" }
+      ]
+    },
+    {
+      "type": "values",
+      "name": "Values (wrapper)",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Our Values" }
+      ]
+    },
+    {
+      "type": "value_item",
+      "name": "Value item",
+      "settings": [
+        { "type": "text", "id": "pill", "label": "Badge (optional)", "default": "Value" },
+        { "type": "text", "id": "title", "label": "Title", "default": "We keep it simple" },
+        { "type": "textarea", "id": "text", "label": "Short description", "default": "Clarity over clutter, always." }
+      ]
+    },
+    {
+      "type": "timeline",
+      "name": "Timeline (wrapper)",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Our Journey" }
+      ]
+    },
+    {
+      "type": "milestone",
+      "name": "Milestone",
+      "settings": [
+        { "type": "text", "id": "year", "label": "Year", "default": "2020" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Started up" },
+        { "type": "textarea", "id": "text", "label": "Description", "default": "Where it all began." }
+      ]
+    },
+    {
+      "type": "team",
+      "name": "Team (wrapper)",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Meet the Team" }
+      ]
+    },
+    {
+      "type": "team_member",
+      "name": "Team member",
+      "settings": [
+        { "type": "image_picker", "id": "photo", "label": "Photo" },
+        { "type": "text", "id": "name", "label": "Name", "default": "Alex Doe" },
+        { "type": "text", "id": "role", "label": "Role", "default": "Founder" },
+        { "type": "text", "id": "link_label", "label": "Link label" },
+        { "type": "url", "id": "link_url", "label": "Link URL" }
+      ]
+    },
+    {
+      "type": "careers",
+      "name": "Careers",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Careers" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "We’re always looking for warm, curious people. Come build with us." },
+        { "type": "text", "id": "btn_label", "label": "Button label", "default": "View Open Roles" },
+        { "type": "url", "id": "btn_link", "label": "Button link" },
+        { "type": "color", "id": "cta_bg", "label": "Careers background", "default": "#FFF8F2" },
+        { "type": "range", "id": "cta_pad", "label": "Careers padding (px)", "min": 16, "max": 96, "step": 2, "default": 36 }
+      ]
+    }
+  ],
+  "max_blocks": 60,
+  "presets": [
+    {
+      "name": "About — Suite (Minimal)",
+      "blocks": [
+        { "type": "banner_solid", "settings": { "bg_mode": "gradient", "heading": "About Us", "subheading": "Simple. Warm. Human." } },
+        { "type": "about" },
+        { "type": "mission_vision" },
+        { "type": "values" },
+        { "type": "value_item", "settings": { "pill": "01", "title": "Comfort first", "text": "We design for everyday ease." } },
+        { "type": "value_item", "settings": { "pill": "02", "title": "Quality only", "text": "Materials that last and feel good." } },
+        { "type": "timeline" },
+        { "type": "milestone", "settings": { "year": "2020", "title": "Founded", "text": "A tiny team with a big smile." } },
+        { "type": "team" },
+        { "type": "team_member", "settings": { "name": "Alex Doe", "role": "Founder" } },
+        { "type": "careers" }
+      ]
+    }
+  ]
+}
+{% endschema %}

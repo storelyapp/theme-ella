@@ -1,0 +1,10 @@
+{%- comment -%}
+  Quick Bag (PC02 Age modal)
+
+  Start-small duplicate approach:
+  - For now this simply renders the existing Halo quick view markup.
+  - We can safely diverge from halo-quick-view later (layout tweaks, removing
+    elements, etc.) without touching the original.
+{%- endcomment -%}
+
+{% render 'halo-quick-view', product: product %}

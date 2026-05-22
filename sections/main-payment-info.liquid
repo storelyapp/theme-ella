@@ -1,0 +1,842 @@
+{% comment %}
+  Lagorii — Payment Information (minimal tabs) — v2
+  Fixes:
+  - Reliable tab JS (scoped to section.id)
+  - Mobile tabs at top (horizontal scroll), proper padding
+  - Compact “Supported by” bullet-style list at bottom
+  - Safe ALT text & Shopify schema compatibility (no url defaults)
+{% endcomment %}
+
+<section id="lg-pay-{{ section.id }}" class="lg-pay"
+  data-brand="{{ section.settings.brand_color | default: '#E87529' }}"
+  data-density="{{ section.settings.cards_density }}"
+  data-cpr="{{ section.settings.cards_per_row_desktop }}">
+  <div class="lg-pay__wrap page-width">
+    <aside class="lg-pay__aside" aria-label="Payments and Invoices">
+      <p class="lg-pay__aside-eyebrow">{{ section.settings.menu_label }}</p>
+
+    <!-- Desktop/Tablet vertical nav -->
+    <nav class="lg-pay__nav lg-pay__nav--vertical" role="tablist" aria-orientation="vertical">
+    <button class="lg-pay__tab is-active" role="tab" aria-selected="true" aria-controls="tab-methods-{{ section.id }}" id="btn-methods-{{ section.id }}">
+        {{ section.settings.label_methods }}
+    </button>
+    <button class="lg-pay__tab" role="tab" aria-selected="false" aria-controls="tab-security-{{ section.id }}" id="btn-security-{{ section.id }}">
+        {{ section.settings.label_security }}
+    </button>
+    <button class="lg-pay__tab" role="tab" aria-selected="false" aria-controls="tab-gift-{{ section.id }}" id="btn-gift-{{ section.id }}">
+        {{ section.settings.label_gift }}
+    </button>
+    </nav>
+
+
+      {% if section.settings.help_text != blank %}
+        <div class="lg-pay__help">
+          <div class="lg-pay__help-cta">{{ section.settings.help_text }}</div>
+          {% if section.settings.help_link_label and section.settings.help_link_url %}
+            <a class="lg-pay__help-link" href="{{ section.settings.help_link_url }}" target="{{ section.settings.help_link_target | default: '_self' }}">
+              {{ section.settings.help_link_label }}
+            </a>
+          {% endif %}
+        </div>
+      {% endif %}
+    </aside>
+
+    <div class="lg-pay__content">
+
+        <!-- Mobile-only eyebrow above the chips -->
+        <p class="lg-pay__aside-eyebrow lg-pay__aside-eyebrow--mobile">
+            {{ section.settings.menu_label }}
+        </p>
+
+        <!-- Mobile top horizontal nav (chips) -->
+        <nav class="lg-pay__nav lg-pay__nav--mobile" role="tablist" aria-orientation="horizontal" aria-label="Payments nav">
+        <button class="lg-pay__tab is-active" role="tab" aria-selected="true" aria-controls="tab-methods-{{ section.id }}" id="m-btn-methods-{{ section.id }}">
+            {{ section.settings.label_methods }}
+        </button>
+        <button class="lg-pay__tab" role="tab" aria-selected="false" aria-controls="tab-security-{{ section.id }}" id="m-btn-security-{{ section.id }}">
+            {{ section.settings.label_security }}
+        </button>
+        <button class="lg-pay__tab" role="tab" aria-selected="false" aria-controls="tab-gift-{{ section.id }}" id="m-btn-gift-{{ section.id }}">
+            {{ section.settings.label_gift }}
+        </button>
+        </nav>
+
+      <!-- Payment Methods -->
+      <section id="tab-methods-{{ section.id }}" class="lg-pay__panel is-active" role="tabpanel" aria-labelledby="btn-methods-{{ section.id }} m-btn-methods-{{ section.id }}">
+        <header class="lg-pay__header">
+          <h1 class="lg-pay__title">{{ section.settings.h_methods }}</h1>
+          {% if section.settings.updated_date != blank %}
+            <p class="lg-pay__updated">Updated: {{ section.settings.updated_date }}</p>
+          {% endif %}
+          {% if section.settings.methods_intro %}
+            <p class="lg-pay__lead">{{ section.settings.methods_intro }}</p>
+          {% endif %}
+        </header>
+
+        {% if section.blocks.size > 0 %}
+          <div class="lg-pay__quick grid">
+            {% for block in section.blocks %}
+              {% if block.type == 'option' %}
+                <article class="lg-pay__card" {{ block.shopify_attributes }}>
+                  <div class="lg-pay__card-head">
+                    {% if block.settings.icon != blank %}
+                      <img class="lg-pay__icon" src="{{ block.settings.icon | img_url: '120x' }}" alt="" loading="lazy">
+                    {% else %}
+                      <span class="lg-pay__icon lg-pay__icon--fallback">💳</span>
+                    {% endif %}
+                    <h3 class="lg-pay__card-title">{{ block.settings.title }}</h3>
+                  </div>
+                  {% if block.settings.summary %}<p class="lg-pay__card-summary">{{ block.settings.summary }}</p>{% endif %}
+                  {% if block.settings.badge != blank %}<span class="lg-pay__pill">{{ block.settings.badge }}</span>{% endif %}
+                </article>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <div class="lg-pay__divider"></div>
+
+        <h4 class="lg-pay__sub">{{ section.settings.h_supported }}</h4>
+
+        <ul class="lg-pay__brands-list" role="list" aria-label="Supported payment brands (stacked)">
+        {% for i in (1..10) %}
+            {% capture key %}brand_{{ i }}{% endcapture %}
+            {% capture altkey %}brand_{{ i }}_alt{% endcapture %}
+            {% assign img = section.settings[key] %}
+            {% assign alt = section.settings[altkey] %}
+
+            {% if img != blank or alt != blank %}
+            <li class="lg-pay__brand-row">
+                <span class="lg-brand-logo" aria-hidden="true">
+                {% if img != blank %}
+                    <img
+                    src="{{ img | img_url: '320x' }}"
+                    srcset="{{ img | img_url: '320x' }} 1x, {{ img | img_url: '640x' }} 2x"
+                    alt=""
+                    loading="lazy" decoding="async">
+                {% endif %}
+                </span>
+                <span class="lg-brand-name">{{ alt | default: 'Payment brand' }}</span>
+            </li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+
+
+        {% if section.settings.methods_notes %}
+        <details class="lg-acc" open>
+            <summary class="lg-acc__title">{{ section.settings.methods_notes_heading }}</summary>
+            <div class="lg-acc__body rte">
+            {{ section.settings.methods_notes }}
+            </div>
+        </details>
+        {% endif %}
+      </section>
+
+      <!-- Payment Security -->
+      <section id="tab-security-{{ section.id }}" class="lg-pay__panel" role="tabpanel" aria-labelledby="btn-security-{{ section.id }} m-btn-security-{{ section.id }}">
+        <header class="lg-pay__header">
+          <h2 class="lg-pay__title">{{ section.settings.h_security }}</h2>
+          {% if section.settings.security_intro %}<p class="lg-pay__lead">{{ section.settings.security_intro }}</p>{% endif %}
+        </header>
+        <div class="lg-pay__bullets">
+          {% if section.settings.sec_point1 != blank %}<div class="lg-pay__bullet">🔒 {{ section.settings.sec_point1 }}</div>{% endif %}
+          {% if section.settings.sec_point2 != blank %}<div class="lg-pay__bullet">🛡️ {{ section.settings.sec_point2 }}</div>{% endif %}
+          {% if section.settings.sec_point3 != blank %}<div class="lg-pay__bullet">✅ {{ section.settings.sec_point3 }}</div>{% endif %}
+        </div>
+        {% if section.settings.security_note %}<p class="lg-pay__note">{{ section.settings.security_note }}</p>{% endif %}
+      </section>
+
+      <!-- Gift Cards / Store Credits -->
+      <section id="tab-gift-{{ section.id }}" class="lg-pay__panel" role="tabpanel" aria-labelledby="btn-gift-{{ section.id }} m-btn-gift-{{ section.id }}">
+        <header class="lg-pay__header">
+          <h2 class="lg-pay__title">{{ section.settings.h_gift }}</h2>
+          {% if section.settings.gift_intro %}<p class="lg-pay__lead">{{ section.settings.gift_intro }}</p>{% endif %}
+        </header>
+        <div class="lg-pay__grid2">
+          {% if section.settings.gift_point1 != blank %}<div class="lg-pay__bullet">🎁 {{ section.settings.gift_point1 }}</div>{% endif %}
+          {% if section.settings.gift_point2 != blank %}<div class="lg-pay__bullet">🧾 {{ section.settings.gift_point2 }}</div>{% endif %}
+          {% if section.settings.gift_point3 != blank %}<div class="lg-pay__bullet">➕ {{ section.settings.gift_point3 }}</div>{% endif %}
+        </div>
+        <div class="lg-pay__cta">
+          {% if section.settings.credit_link_label and section.settings.credit_link_url %}
+            <a class="lg-btn" href="{{ section.settings.credit_link_url }}">{{ section.settings.credit_link_label }}</a>
+          {% endif %}
+          {% if section.settings.credit_help_text %}<p class="lg-pay__hint">{{ section.settings.credit_help_text }}</p>{% endif %}
+        </div>
+      </section>
+    </div>
+  </div>
+</section>
+
+<style>
+  :root{
+    --lg-brand: {{ section.settings.brand_color | default: '#E87529' }};
+    --lg-ink:#141414; --lg-muted:#6F6F6F; --lg-sur:#FAFAFA; --lg-line:#ECECEC; --lg-radius:16px;
+  }
+  .lg-pay{font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;color:var(--lg-ink)}
+  .lg-pay .page-width{padding-left:20px;padding-right:20px} /* edge comfort on mobile */
+
+  .lg-pay__wrap{display:grid;grid-template-columns:260px 1fr;gap:32px;align-items:start;padding:24px 0}
+  .lg-pay__aside-eyebrow{font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--lg-muted);margin:6px 0 12px}
+
+  .lg-pay__nav{display:flex;gap:8px}
+  .lg-pay__nav--vertical{flex-direction:column}
+  .lg-pay__nav--mobile{display:none;margin-bottom:10px;position:sticky;top:var(--lg-sticky,0);z-index:1;padding:6px 2px;overflow:auto;scrollbar-width:none}
+  .lg-pay__nav--mobile::-webkit-scrollbar{display:none}
+
+  .lg-pay__tab{appearance:none;border:1px solid var(--lg-line);background:#fff;text-align:left;padding:10px 14px;border-radius:999px;font-weight:600;cursor:pointer;white-space:nowrap}
+  .lg-pay__tab.is-active{border-color:var(--lg-brand);box-shadow:0 0 0 3px color-mix(in srgb, var(--lg-brand) 18%, transparent)}
+
+  .lg-pay__help{border-top:1px solid var(--lg-line);margin-top:16px;padding-top:12px}
+  .lg-pay__help-cta{color:var(--lg-muted);font-size:.95rem}
+  .lg-pay__help-link{display:inline-block;margin-top:6px;color:var(--lg-brand);font-weight:600;text-decoration:none}
+
+  .lg-pay__content{min-width:0}
+  .lg-pay__panel{display:none}
+  .lg-pay__panel.is-active{display:block}
+
+  .lg-pay__header{margin-bottom:8px}
+  .lg-pay__title{font-size:clamp(22px, 3vw, 28px);line-height:1.2;margin:0 0 6px;font-weight:800}
+  .lg-pay__updated{color:var(--lg-muted);font-size:.9rem;margin:0 0 8px}
+  .lg-pay__lead{color:var(--lg-muted);font-size:1rem;margin:0 0 18px}
+
+  .grid{--g:16px;display:grid;gap:var(--g);grid-template-columns:repeat(12,1fr)}
+  .lg-pay__quick{margin:6px 0}
+  .lg-pay__card{border:1px solid var(--lg-line);border-radius:var(--lg-radius);padding:16px;background:#fff}
+  .lg-pay__card-head{display:flex;gap:10px;align-items:center;margin-bottom:6px}
+  .lg-pay__icon{width:28px;height:28px;border-radius:8px;object-fit:contain;background:#fff}
+  .lg-pay__icon--fallback{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:8px;background:#fff}
+  .lg-pay__card-title{margin:0;font-size:1rem}
+  .lg-pay__card-summary{color:var(--lg-muted);margin:6px 0 10px;font-size:.95rem}
+  .lg-pay__pill{display:inline-block;font-size:.8rem;padding:4px 8px;border-radius:999px;background:color-mix(in srgb, var(--lg-brand) 10%, #fff);border:1px solid color-mix(in srgb, var(--lg-brand) 25%, #fff);color:var(--lg-ink)}
+
+  .lg-pay__divider{height:1px;background:var(--lg-line);margin:18px 0}
+  .lg-pay__sub{font-size:1rem;margin:0 0 10px}
+
+  /* Compact brands line */
+  .lg-pay__brand-label{font-size:.9rem;color:var(--lg-muted)}
+
+  .lg-acc{border:1px solid var(--lg-line);border-radius:12px;background:#f8f8f8;padding:10px 12px;margin-top:12px}
+  .lg-acc summary{cursor:pointer;font-weight:600}
+  .lg-acc__body{margin-top:8px;color:var(--lg-muted)}
+
+  .lg-pay__bullets{display:grid;gap:10px}
+  .lg-pay__bullet{border:1px solid var(--lg-line);border-radius:12px;padding:12px;background:#fff}
+  .lg-pay__note{margin-top:10px;color:var(--lg-muted)}
+
+  .lg-steps{display:grid;gap:14px}
+  .lg-step{border:1px solid var(--lg-line);border-radius:12px;padding:14px;background:#fff}
+  .lg-step__title{margin:0 0 6px;font-size:1rem}
+  .lg-step__body{margin:0;color:var(--lg-muted)}
+
+  .lg-pay__grid2{display:grid;gap:10px}
+  .lg-pay__cta{display:flex;align-items:center;gap:12px;margin-top:10px}
+  .lg-btn{display:inline-flex;align-items:center;justify-content:center;height:40px;padding:0 14px;border-radius:10px;background:var(--lg-brand);color:#fff;text-decoration:none;font-weight:700}
+  .lg-pay__hint{color:var(--lg-muted);margin:0}
+
+  /* Responsive: mobile-first improvements */
+  @media (max-width: 980px){
+    .lg-pay__wrap{grid-template-columns:1fr;gap:18px}
+    .lg-pay__aside{order:2}
+    .lg-pay__nav--vertical{display:none}
+    .lg-pay__nav--mobile{display:flex}
+    .lg-pay__header{margin-top:4px}
+  }
+  /* === Customizable typography & sizes (scoped to this section) === */
+#lg-pay-{{ section.id }}{
+  --lg-title-size: {{ section.settings.title_size | default: 28 }}px;
+  --lg-lead-size:  {{ section.settings.lead_size  | default: 16 }}px;
+  --lg-body-size:  {{ section.settings.body_size  | default: 15 }}px;
+  --lg-small-size: {{ section.settings.small_size | default: 13 }}px;
+  --lg-nav-size:   {{ section.settings.nav_size   | default: 14 }}px;
+
+  --lg-icon-size:  {{ section.settings.icon_size  | default: 24 }}px;
+  --lg-brand-img-h:{{ section.settings.brand_logo_height | default: 18 }}px;
+}
+
+/* Font sizes */
+#lg-pay-{{ section.id }} .lg-pay__title{ font-size: var(--lg-title-size); }
+#lg-pay-{{ section.id }} .lg-pay__lead{  font-size: var(--lg-lead-size); }
+#lg-pay-{{ section.id }} .lg-pay__tab{   font-size: var(--lg-nav-size); }
+#lg-pay-{{ section.id }} .lg-pay__card-title,
+#lg-pay-{{ section.id }} .lg-step__title{ font-size: var(--lg-body-size); }
+#lg-pay-{{ section.id }} .lg-pay__card-summary,
+#lg-pay-{{ section.id }} .lg-step__body,
+#lg-pay-{{ section.id }} .lg-pay__brand-label,
+#lg-pay-{{ section.id }} .lg-pay__updated,
+#lg-pay-{{ section.id }} .lg-pay__hint{ font-size: var(--lg-small-size); }
+
+/* Sleeker card visuals + icon sizing */
+#lg-pay-{{ section.id }} .lg-pay__icon,
+#lg-pay-{{ section.id }} .lg-ico{ width: var(--lg-icon-size); height: var(--lg-icon-size); }
+
+/* Density toggle */
+#lg-pay-{{ section.id }}[data-density="compact"] .lg-pay__card{
+  padding: 10px; border-radius: 12px;
+}
+#lg-pay-{{ section.id }}[data-density="compact"] .lg-pay__card-head{ margin-bottom: 2px; gap: 8px; }
+#lg-pay-{{ section.id }}[data-density="compact"] .lg-pay__card-summary{ margin: 4px 0 6px; }
+
+/* Text labels: uppercase, clearer and consistent */
+#lg-pay-{{ section.id }} .lg-pay__brand-label{
+  text-transform:uppercase;
+  letter-spacing:.02em;
+  font-weight:600;
+  color:#6B7280;                  /* subtle ink */
+  font-size: var(--lg-small-size);/* adjustable in Customize */
+  line-height:1;
+}
+
+/* Each row = logo + label */
+#lg-pay-{{ section.id }} .lg-pay__brands-row{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: calc(var(--lg-brand-img-h, 24px) + 10px);
+}
+
+/* Logos: same height, keep original aspect, render crisp on HiDPI */
+#lg-pay-{{ section.id }} .lg-pay__brands-row img{
+  height: var(--lg-brand-img-h, 24px); /* controlled from Theme Editor slider we added */
+  width: auto;
+  object-fit: contain;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: optimizequality;
+  display: block;
+}
+
+/* Labels */
+#lg-pay-{{ section.id }} .lg-pay__brand-label{
+  font-weight: 600;
+  letter-spacing: .02em;
+  color: var(--lg-ink);
+  font-size: var(--lg-body-size);   /* uses your Theme Editor “Body text” slider */
+  text-transform: none;              /* set to uppercase if you prefer */
+}
+/* ——— Brand list (stacked, aligned) ——— */
+#lg-pay-{{ section.id }}{
+  /* already have brand_logo_height; add a fixed logo column width for alignment */
+  --lg-brand-img-h: {{ section.settings.brand_logo_height | default: 24 }}px;
+  --lg-brand-box-w: {{ section.settings.brand_logo_box_width | default: 92 }}px; /* adjust in schema below */
+}
+
+#lg-pay-{{ section.id }} .lg-pay__brands-list{
+  display: grid;
+  grid-template-columns: 1fr;      /* single column stack */
+  gap: 14px;
+  padding: 16px 18px;
+  border: 1px solid var(--lg-line);
+  border-radius: 12px;
+  background: #F7F9FC;
+}
+
+#lg-pay-{{ section.id }} .lg-pay__brand-row{
+  display: grid;
+  grid-template-columns: var(--lg-brand-box-w) 1fr; /* fixed logo column + fluid label column */
+  align-items: center;
+  column-gap: 16px;
+  min-height: calc(var(--lg-brand-img-h) + 10px);
+}
+
+#lg-pay-{{ section.id }} .lg-brand-logo{
+  width: var(--lg-brand-box-w);
+  height: var(--lg-brand-img-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#lg-pay-{{ section.id }} .lg-brand-logo img{
+  height: 100%;            /* same visual height for all */
+  width: auto;             /* keep original aspect ratio */
+  object-fit: contain;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: optimizequality;
+  display: block;
+  pointer-events: none;
+}
+
+#lg-pay-{{ section.id }} .lg-brand-name{
+  font-weight: 700;
+  color: var(--lg-ink);
+  font-size: var(--lg-body-size);  /* controlled by your “Body text” slider */
+  line-height: 1.1;
+}
+
+/* default: hide the mobile eyebrow */
+.lg-pay__aside-eyebrow--mobile{ display:none; margin:0 0 8px; }
+
+/* mobile: show the mobile eyebrow, hide the aside eyebrow */
+@media (max-width: 980px){
+  .lg-pay__aside-eyebrow{ display:none; }              /* the one inside <aside> */
+  .lg-pay__aside-eyebrow--mobile{ display:block; }     /* the one above the chips */
+}
+@media (max-width: 980px){
+  .lg-pay__aside{ order:1; } /* instead of order:2 */
+}
+/* ---------- knobs ---------- */
+#lg-pay-{{ section.id }}{
+  --lg-content-max: {{ section.settings.content_max_width | default: 1100 }}px; /* new */
+  --lg-badge-size:  {{ section.settings.badge_size | default: 14 }}px;         /* new */
+}
+
+/* Constrain width of groups so boxes don't stretch full screen */
+#lg-pay-{{ section.id }} .lg-pay__quick,
+#lg-pay-{{ section.id }} .lg-pay__brands-list,
+#lg-pay-{{ section.id }} .lg-steps,
+#lg-pay-{{ section.id }} .lg-pay__bullets,
+#lg-pay-{{ section.id }} .lg-acc{
+  max-width: var(--lg-content-max);
+  width: fit-content;            /* “hug” content */
+  max-width: min(100%, var(--lg-content-max));
+}
+
+/* Make brand list and bullets feel like neat modules */
+#lg-pay-{{ section.id }} .lg-pay__brands-list{ background:#F7F9FC;border:1px solid var(--lg-line);border-radius:12px;padding:16px 18px }
+#lg-pay-{{ section.id }} .lg-pay__bullets .lg-pay__bullet{ padding:12px }
+#lg-pay-{{ section.id }} .lg-steps .lg-step{ padding:14px }
+
+/* Badges: larger, clearer */
+#lg-pay-{{ section.id }} .lg-pay__pill{
+  font-size: var(--lg-badge-size);
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+
+/* Notes: always open, no disclosure chevron, nice heading */
+#lg-pay-{{ section.id }} .lg-acc[open] > summary::-webkit-details-marker{ display:none }
+#lg-pay-{{ section.id }} .lg-acc[open] > summary{ cursor:default; font-weight:800; margin-bottom:8px }
+#lg-pay-{{ section.id }} .lg-acc{ background:#fff;border:1px solid var(--lg-line);border-radius:12px;padding:14px 16px }
+/* === Hug content and reduce negative space === */
+#lg-pay-{{ section.id }}{
+  --lg-content-max: 1100px;                 /* cap content width */
+  --lg-badge-size: calc(var(--lg-small-size) + 1px);
+
+  /* controls for left push */
+  --lg-left-push-d: {{ section.settings.left_push_desktop | default: 80 }}px;
+  --lg-left-push-t: {{ section.settings.left_push_tablet  | default: 40 }}px;
+}
+
+/* Groups don't stretch full width; they "hug" content */
+#lg-pay-{{ section.id }} .lg-pay__quick,
+#lg-pay-{{ section.id }} .lg-pay__brands-list,
+#lg-pay-{{ section.id }} .lg-steps,
+#lg-pay-{{ section.id }} .lg-pay__bullets,
+#lg-pay-{{ section.id }} .lg-acc{
+  width: fit-content;
+  max-width: min(100%, var(--lg-content-max));
+}
+
+/* Make brand list & bullets tidy */
+#lg-pay-{{ section.id }} .lg-pay__brands-list{
+  background:#F7F9FC; border:1px solid var(--lg-line); border-radius:12px; padding:16px 18px;
+}
+#lg-pay-{{ section.id }} .lg-pay__bullets .lg-pay__bullet{ padding:12px }
+#lg-pay-{{ section.id }} .lg-steps .lg-step{ padding:14px }
+
+/* Badges a bit larger */
+#lg-pay-{{ section.id }} .lg-pay__pill{
+  font-size: var(--lg-badge-size);
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+
+/* Notes always open (remember to add `open` in Liquid; see below) */
+#lg-pay-{{ section.id }} .lg-acc[open] > summary::-webkit-details-marker{ display:none }
+#lg-pay-{{ section.id }} .lg-acc[open] > summary{ cursor:default; font-weight:800; margin-bottom:8px }
+#lg-pay-{{ section.id }} .lg-acc{ background:#fff;border:1px solid var(--lg-line);border-radius:12px;padding:14px 16px }
+
+/* —— Single source of truth: push the WHOLE section to the right —— */
+#lg-pay-{{ section.id }} .page-width{
+  padding-left: calc(20px + var(--lg-left-push-d));
+  padding-right: 20px;
+}
+@media (max-width: 1200px){
+  #lg-pay-{{ section.id }} .page-width{
+    padding-left: calc(20px + var(--lg-left-push-t));
+  }
+}
+/* Mobile stays normal (no extra push) */
+@media (max-width: 980px){
+  #lg-pay-{{ section.id }} .page-width{ padding-left: 20px; }
+}
+
+/* Optional: slightly bigger badge so it reads better */
+#lg-pay-{{ section.id }} .lg-pay__pill{
+  font-size: calc(var(--lg-small-size) + 1px);
+  padding: 6px 10px;
+}
+
+/* Push whole section right on larger screens */
+#lg-pay-{{ section.id }} .page-width{
+  padding-left: calc(20px + var(--lg-left-push-d));
+  padding-right: 20px; /* keep your usual right padding */
+}
+
+/* Tablet */
+@media (max-width: 1200px){
+  #lg-pay-{{ section.id }} .page-width{
+    padding-left: calc(20px + var(--lg-left-push-t));
+  }
+}
+
+/* Mobile stays normal */
+@media (max-width: 980px){
+  #lg-pay-{{ section.id }} .page-width{
+    padding-left: 20px;
+  }
+}
+/* ——— Visibility boost for eyebrow & help area ——— */
+#lg-pay-{{ section.id }}{
+  /* tweakable if you want via schema below */
+  --lg-eyebrow-size: 13px;      /* small label at the very top left */
+  --lg-help-cta-size: 15px;     /* “Can’t find…” line */
+  --lg-help-link-size: 16px;    /* “Contact us” */
+}
+
+#lg-pay-{{ section.id }} .lg-pay__aside-eyebrow{
+  font-size: var(--lg-eyebrow-size);
+  color: #1f2937;               /* much darker than muted */
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  opacity: 1;
+}
+
+/* Make the “Can’t find what you’re looking for?” line stronger */
+#lg-pay-{{ section.id }} .lg-pay__help-cta{
+  font-size: var(--lg-help-cta-size);
+  color: #111827;               /* near-black for contrast */
+  font-weight: 600;
+}
+
+/* Turn “Contact us” into a brand-tinted pill link */
+#lg-pay-{{ section.id }} .lg-pay__help-link{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: var(--lg-help-link-size);
+  font-weight: 700;
+  border-radius: 999px;
+  text-decoration: none;
+  color: #111827;
+  background: color-mix(in srgb, var(--lg-brand) 12%, #fff);
+  border: 1px solid color-mix(in srgb, var(--lg-brand) 38%, transparent);
+}
+#lg-pay-{{ section.id }} .lg-pay__help-link::after{
+  content: "→";
+  transform: translateY(-1px);
+}
+#lg-pay-{{ section.id }} .lg-pay__help-link:hover{
+  background: color-mix(in srgb, var(--lg-brand) 18%, #fff);
+  border-color: color-mix(in srgb, var(--lg-brand) 55%, transparent);
+  transform: translateY(-1px);
+}
+
+#lg-pay-{{ section.id }}{
+  --lg-eyebrow-size: {{ section.settings.eyebrow_size | default: 13 }}px;
+  --lg-help-cta-size: {{ section.settings.help_cta_size | default: 15 }}px;
+  --lg-help-link-size: {{ section.settings.help_link_size | default: 16 }}px;
+}
+
+/* Put helper text on a new line under the CTA button (Gift Cards tab) */
+#lg-pay-{{ section.id }} .lg-pay__cta{
+  display: flex;           /* already flex; we just change direction */
+  flex-direction: column;  /* stack vertically */
+  align-items: flex-start; /* keep left-aligned */
+  gap: 8px;                /* space between button and text */
+}
+#lg-pay-{{ section.id }} .lg-pay__hint{
+  margin: 0;               /* remove inline spacing */
+}
+
+/* Cards per row — controlled only by data-cpr */
+#lg-pay-{{ section.id }} .grid{ grid-template-columns: repeat(12,1fr); }
+
+/* Default desktop/tablet = 2 per row */
+@media (min-width: 900px){
+  #lg-pay-{{ section.id }} .lg-pay__card{ grid-column: span 6; }        /* 12/6 = 2 per row */
+}
+/* If the setting chooses 3 per row */
+@media (min-width: 900px){
+  #lg-pay-{{ section.id }}[data-cpr="3"] .lg-pay__card{ grid-column: span 4; }  /* 12/4 = 3 */
+}
+/* If the setting chooses 4 per row */
+@media (min-width: 1200px){
+  #lg-pay-{{ section.id }}[data-cpr="4"] .lg-pay__card{ grid-column: span 3; }  /* 12/3 = 4 */
+}
+
+/* Mobile: full width */
+@media (max-width: 899.98px){
+  #lg-pay-{{ section.id }} .lg-pay__card{ grid-column: span 12; }
+}
+
+/* === Extra knobs: subheading size + per-role weights === */
+#lg-pay-{{ section.id }}{
+  /* new size for “We accept” */
+  --lg-sub-size: {{ section.settings.sub_size | default: 20 }}px;
+
+  /* weights (editable in settings) */
+  --lg-title-weight: {{ section.settings.title_weight | default: 800 }};
+  --lg-sub-weight:   {{ section.settings.sub_weight   | default: 700 }};
+  --lg-lead-weight:  {{ section.settings.lead_weight  | default: 400 }};
+  --lg-body-weight:  {{ section.settings.body_weight  | default: 600 }};
+  --lg-small-weight: {{ section.settings.small_weight | default: 400 }};
+  --lg-nav-weight:   {{ section.settings.nav_weight   | default: 600 }};
+  --lg-brand-name-weight: {{ section.settings.brand_name_weight | default: 700 }};
+  --lg-eyebrow-weight:    {{ section.settings.eyebrow_weight    | default: 700 }};
+  --lg-help-cta-weight:   {{ section.settings.help_cta_weight   | default: 600 }};
+  --lg-help-link-weight:  {{ section.settings.help_link_weight  | default: 700 }};
+}
+
+/* apply weights + bigger subheading */
+#lg-pay-{{ section.id }} .lg-pay__title{
+  font-size: var(--lg-title-size);
+  font-weight: var(--lg-title-weight);
+}
+#lg-pay-{{ section.id }} .lg-pay__lead{
+  font-size: var(--lg-lead-size);
+  font-weight: var(--lg-lead-weight);
+}
+#lg-pay-{{ section.id }} .lg-pay__tab{
+  font-size: var(--lg-nav-size);
+  font-weight: var(--lg-nav-weight);
+}
+#lg-pay-{{ section.id }} .lg-pay__sub{               /* “We accept” */
+  font-size: var(--lg-sub-size);
+  font-weight: var(--lg-sub-weight);
+}
+#lg-pay-{{ section.id }} .lg-pay__card-title,
+#lg-pay-{{ section.id }} .lg-step__title{
+  font-size: var(--lg-body-size);
+  font-weight: var(--lg-body-weight);
+}
+#lg-pay-{{ section.id }} .lg-pay__card-summary,
+#lg-pay-{{ section.id }} .lg-step__body,
+#lg-pay-{{ section.id }} .lg-pay__updated,
+#lg-pay-{{ section.id }} .lg-pay__hint{
+  font-weight: var(--lg-small-weight);
+}
+#lg-pay-{{ section.id }} .lg-brand-name{
+  font-weight: var(--lg-brand-name-weight);
+}
+#lg-pay-{{ section.id }} .lg-pay__aside-eyebrow{
+  font-weight: var(--lg-eyebrow-weight);
+}
+#lg-pay-{{ section.id }} .lg-pay__help-cta{
+  font-weight: var(--lg-help-cta-weight);
+}
+#lg-pay-{{ section.id }} .lg-pay__help-link{
+  font-weight: var(--lg-help-link-weight);
+}
+/* Plain brand list (no grey box, no border) */
+#lg-pay-{{ section.id }} .lg-pay__brands-list{
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Keep rows simple (no extra box feeling) */
+#lg-pay-{{ section.id }} .lg-pay__brand-row{
+  padding: 0 !important;
+}
+
+/* Ensure logo wrapper has no background either */
+#lg-pay-{{ section.id }} .lg-brand-logo{
+  background: transparent !important;
+}
+
+/* Minimal "Contact us" link (plain text) */
+#lg-pay-{{ section.id }} .lg-pay__help-link{
+  display: inline !important;
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: var(--lg-brand) !important;   /* your brand orange */
+  font-weight: 600;                     /* tweak if you want thinner/thicker */
+  text-decoration: none;
+  gap: 0 !important;                    /* remove icon spacing from old style */
+  transform: none !important;
+}
+
+/* Remove the arrow that was added via ::after */
+#lg-pay-{{ section.id }} .lg-pay__help-link::after{
+  content: none !important;
+}
+</style>
+
+<script>
+  (function(){
+    const root = document.getElementById('lg-pay-{{ section.id }}');
+    if(!root) return;
+
+    // Buttons (desktop + mobile) — no invoices now
+    const tabButtons = [
+      root.querySelector('#btn-methods-{{ section.id }}'),
+      root.querySelector('#btn-security-{{ section.id }}'),
+      root.querySelector('#btn-gift-{{ section.id }}'),
+      root.querySelector('#m-btn-methods-{{ section.id }}'),
+      root.querySelector('#m-btn-security-{{ section.id }}'),
+      root.querySelector('#m-btn-gift-{{ section.id }}')
+    ].filter(Boolean);
+
+    // Panels — no invoices
+    const panels = {
+      methods: root.querySelector('#tab-methods-{{ section.id }}'),
+      security: root.querySelector('#tab-security-{{ section.id }}'),
+      gift:     root.querySelector('#tab-gift-{{ section.id }}')
+    };
+
+    function setActive(which){
+      Object.keys(panels).forEach(k => panels[k] && panels[k].classList.toggle('is-active', k===which));
+      tabButtons.forEach(btn => {
+        const id = (btn.id.includes('methods') ? 'methods'
+                 : btn.id.includes('security') ? 'security'
+                 : 'gift');
+        btn.classList.toggle('is-active', id===which);
+        btn.setAttribute('aria-selected', id===which ? 'true' : 'false');
+      });
+    }
+
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const which = (btn.id.includes('methods') ? 'methods'
+                    : btn.id.includes('security') ? 'security'
+                    : 'gift');
+        history.replaceState(null,'', '#'+which);
+        setActive(which);
+      });
+    });
+
+    const hash = (location.hash||'').replace('#','');
+    if(['methods','security','gift'].includes(hash)){ setActive(hash); }
+    else { setActive('methods'); }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Payment Info (Lagorii)",
+  "settings": [
+    { "type": "range", "id": "sub_size", "label": "Font size — Subheading (“We accept”)", "min": 14, "max": 32, "step": 1, "unit": "px", "default": 20 },
+    { "type": "range", "id": "title_weight",      "label": "Font weight — Main title",   "min": 300, "max": 900, "step": 50, "default": 800 },
+    { "type": "range", "id": "sub_weight",        "label": "Font weight — Subheading",   "min": 300, "max": 900, "step": 50, "default": 700 },
+    { "type": "range", "id": "lead_weight",       "label": "Font weight — Intro/lead",   "min": 300, "max": 900, "step": 50, "default": 400 },
+    { "type": "range", "id": "body_weight",       "label": "Font weight — Card titles",  "min": 300, "max": 900, "step": 50, "default": 600 },
+    { "type": "range", "id": "small_weight",      "label": "Font weight — Small text",   "min": 300, "max": 900, "step": 50, "default": 400 },
+    { "type": "range", "id": "nav_weight",        "label": "Font weight — Tabs",         "min": 300, "max": 900, "step": 50, "default": 600 },
+    { "type": "range", "id": "brand_name_weight", "label": "Font weight — Brand names",  "min": 300, "max": 900, "step": 50, "default": 700 },
+    { "type": "range", "id": "eyebrow_weight",    "label": "Font weight — Eyebrow",      "min": 300, "max": 900, "step": 50, "default": 700 },
+    { "type": "range", "id": "help_cta_weight",   "label": "Font weight — Help text",    "min": 300, "max": 900, "step": 50, "default": 600 },
+    { "type": "range", "id": "help_link_weight",  "label": "Font weight — Help link",    "min": 300, "max": 900, "step": 50, "default": 700 },
+
+    { "type": "range", "id": "left_push_desktop", "label": "Left push (desktop)", "min": 0, "max": 240, "step": 4, "unit": "px", "default": 80 },
+    { "type": "range", "id": "left_push_tablet",  "label": "Left push (tablet)",  "min": 0, "max": 160, "step": 2, "unit": "px", "default": 40 },
+    { "type": "range", "id": "eyebrow_size",     "label": "Font size — Eyebrow (Payments & Invoices)", "min": 10, "max": 18, "step": 1, "unit": "px", "default": 13 },
+    { "type": "range", "id": "help_cta_size",    "label": "Font size — Help text",                      "min": 12, "max": 20, "step": 1, "unit": "px", "default": 15 },
+    { "type": "range", "id": "help_link_size",   "label": "Font size — Help link",                      "min": 12, "max": 20, "step": 1, "unit": "px", "default": 16 },
+    { "type": "range", "id": "content_max_width", "label": "Max content width (cards, lists, notes)", "min": 800, "max": 1400, "step": 10, "unit": "px", "default": 1100 },
+    { "type": "range", "id": "badge_size", "label": "Badge font size", "min": 10, "max": 18, "step": 1, "unit": "px", "default": 14 },
+    { "type": "range", "id": "title_size", "label": "Font size — Main title", "min": 18, "max": 48, "step": 1, "unit": "px", "default": 28 },
+    { "type": "range", "id": "lead_size",  "label": "Font size — Intro/lead", "min": 12, "max": 24, "step": 1, "unit": "px", "default": 16 },
+    { "type": "range", "id": "body_size",  "label": "Font size — Body text", "min": 12, "max": 22, "step": 1, "unit": "px", "default": 15 },
+    { "type": "range", "id": "small_size", "label": "Font size — Small text", "min": 10, "max": 18, "step": 1, "unit": "px", "default": 13 },
+    { "type": "range", "id": "nav_size",   "label": "Font size — Tabs",      "min": 12, "max": 22, "step": 1, "unit": "px", "default": 14 },
+
+    { "type": "range", "id": "icon_size", "label": "Icon size — Method cards", "min": 16, "max": 40, "step": 1, "unit": "px", "default": 24 },
+
+    { "type": "range", "id": "brand_logo_height", "label": "Brand logo height (supported list)", "min": 12, "max": 36, "step": 1, "unit": "px", "default": 18 },
+
+    { "type": "select", "id": "cards_density", "label": "Quick cards density", "default": "compact",
+    "options": [ { "value": "compact", "label": "Compact (sleek)" }, { "value": "cozy", "label": "Cozy" } ]
+    },
+    { "type": "select", "id": "cards_per_row_desktop", "label": "Quick cards per row (desktop)", "default": "4",
+    "options": [
+        { "value": "2", "label": "2 per row" },
+        { "value": "3", "label": "3 per row" },
+        { "value": "4", "label": "4 per row" }
+    ]
+    },
+    { "type": "color", "id": "brand_color", "label": "Brand color", "default": "#E87529" },
+    { "type": "text", "id": "menu_label", "label": "Left menu label", "default": "Payments & Invoices" },
+
+    { "type": "text", "id": "label_methods", "label": "Tab — Payment Methods", "default": "Payment Methods" },
+    { "type": "text", "id": "label_security", "label": "Tab — Payment Security", "default": "Payment Security" },
+    { "type": "text", "id": "label_invoices", "label": "Tab — Invoices", "default": "Invoices" },
+    { "type": "text", "id": "label_gift", "label": "Tab — Gift Cards / Store Credits", "default": "Gift Cards / Store Credits" },
+
+    { "type": "text", "id": "h_methods", "label": "Heading — Methods", "default": "Payment Methods" },
+    { "type": "text", "id": "updated_date", "label": "Updated on (text)", "default": "September 2025" },
+    { "type": "textarea", "id": "methods_intro", "label": "Intro — Methods", "default": "We support quick, secure checkout across UPI, cards, netbanking, and more." },
+    { "type": "text", "id": "h_supported", "label": "Subheading — Supported brands", "default": "We accept" },
+
+    { "type": "textarea", "id": "methods_notes_heading", "label": "Notes accordion heading", "default": "Notes" },
+    { "type": "richtext", "id": "methods_notes", "label": "Notes content", "default": "<p>Available payment methods may vary by order value or account history. COD may be disabled for repeated rejections or high return patterns.</p>" },
+
+    { "type": "text", "id": "h_security", "label": "Heading — Security", "default": "Payment Security" },
+    { "type": "textarea", "id": "security_intro", "label": "Intro — Security", "default": "We invest in best-in-class systems and certifications to keep your data safe." },
+    { "type": "textarea", "id": "sec_point1", "label": "Point 1", "default": "PCI-DSS compliant processing and encryption." },
+    { "type": "textarea", "id": "sec_point2", "label": "Point 2", "default": "Card data is never stored on our servers." },
+    { "type": "textarea", "id": "sec_point3", "label": "Point 3", "default": "3-D Secure / OTP flows where applicable." },
+    { "type": "textarea", "id": "security_note", "label": "Footer note", "default": "If a payment fails, your bank may place a temporary hold. It will auto-reverse as per their timelines." },
+
+    { "type": "text", "id": "h_invoices", "label": "Heading — Invoices", "default": "Invoices" },
+    { "type": "textarea", "id": "inv_intro", "label": "Intro — Invoices", "default": "We provide invoices for in-store and online purchases." },
+    { "type": "text", "id": "inv_store_title", "label": "Card title — In-store", "default": "Invoice for an in-store purchase" },
+    { "type": "textarea", "id": "inv_store", "label": "Body — In-store", "default": "Visit any store with your receipt to request an invoice copy." },
+    { "type": "text", "id": "inv_online_title", "label": "Card title — Online", "default": "Invoice for an online purchase" },
+    { "type": "textarea", "id": "inv_online", "label": "Body — Online", "default": "Place your order using your details. If you need a business invoice, choose 'Purchase as a company' and fill in GST details." },
+
+    { "type": "text", "id": "h_gift", "label": "Heading — Gift Cards / Store Credits", "default": "Gift Cards / Store Credits" },
+    { "type": "textarea", "id": "gift_intro", "label": "Intro — Gift/Store Credits", "default": "Use virtual or physical gift cards and store credits seamlessly at checkout." },
+    { "type": "textarea", "id": "gift_point1", "label": "Point 1", "default": "Store credits never expire and can be combined with other payment methods." },
+    { "type": "textarea", "id": "gift_point2", "label": "Point 2", "default": "Apply your code in the 'Gift card or discount code' box at checkout." },
+    { "type": "textarea", "id": "gift_point3", "label": "Point 3", "default": "If your order exceeds the credit balance, pay the remaining amount using any other method." },
+    { "type": "text", "id": "credit_link_label", "label": "Primary CTA label", "default": "Check Store Credit Balance" },
+    { "type": "url", "id": "credit_link_url", "label": "Primary CTA link" },
+    { "type": "text", "id": "credit_help_text", "label": "Small help text", "default": "Lost your code? Contact support and we’ll help you retrieve it." },
+
+    { "type": "text", "id": "help_text", "label": "Sidebar help text", "default": "Can’t find what you’re looking for?" },
+    { "type": "text", "id": "help_link_label", "label": "Sidebar help link label", "default": "Contact us" },
+    { "type": "url", "id": "help_link_url", "label": "Sidebar help link URL" },
+    { "type": "text", "id": "help_link_target", "label": "Help link target (_self/_blank)", "default": "_self" },
+
+    { "type": "image_picker", "id": "brand_1", "label": "Brand icon 1" },   { "type": "text", "id": "brand_1_alt", "label": "Alt 1", "default": "VISA" },
+    { "type": "image_picker", "id": "brand_2", "label": "Brand icon 2" },   { "type": "text", "id": "brand_2_alt", "label": "Alt 2", "default": "Mastercard" },
+    { "type": "image_picker", "id": "brand_3", "label": "Brand icon 3" },   { "type": "text", "id": "brand_3_alt", "label": "Alt 3", "default": "Maestro" },
+    { "type": "image_picker", "id": "brand_4", "label": "Brand icon 4" },   { "type": "text", "id": "brand_4_alt", "label": "Alt 4", "default": "American Express" },
+    { "type": "image_picker", "id": "brand_5", "label": "Brand icon 5" },   { "type": "text", "id": "brand_5_alt", "label": "Alt 5", "default": "Apple Pay" },
+    { "type": "image_picker", "id": "brand_6", "label": "Brand icon 6" },   { "type": "text", "id": "brand_6_alt", "label": "Alt 6", "default": "PayPal" },
+    { "type": "image_picker", "id": "brand_7", "label": "Brand icon 7" },   { "type": "text", "id": "brand_7_alt", "label": "Alt 7", "default": "Google Pay" },
+    { "type": "image_picker", "id": "brand_8", "label": "Brand icon 8" },   { "type": "text", "id": "brand_8_alt", "label": "Alt 8", "default": "UPI" },
+    { "type": "image_picker", "id": "brand_9", "label": "Brand icon 9" },   { "type": "text", "id": "brand_9_alt", "label": "Alt 9", "default": "RuPay" },
+    { "type": "image_picker", "id": "brand_10", "label": "Brand icon 10" }, { "type": "text", "id": "brand_10_alt", "label": "Alt 10", "default": "NetBanking" }
+  ],
+  "blocks": [
+    {
+      "type": "option",
+      "name": "Quick Method card",
+      "settings": [
+        { "type": "image_picker", "id": "icon", "label": "Icon (square, 64px+)" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Pay via UPI" },
+        { "type": "textarea", "id": "summary", "label": "Summary", "default": "Fastest checkout with apps like PhonePe, GPay, Paytm, BHIM." },
+        { "type": "text", "id": "badge", "label": "Right badge (optional)" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Payment Info (Lagorii)", "blocks": [
+      { "type": "option", "settings": {"title":"Pay via UPI","summary":"Fast checkout using popular UPI apps.","badge":"Recommended"} },
+      { "type": "option", "settings": {"title":"Pay via Debit/Credit cards","summary":"Visa, Mastercard, RuPay, Amex supported."} },
+      { "type": "option", "settings": {"title":"Pay via NetBanking","summary":"All major Indian banks supported."} },
+      { "type": "option", "settings": {"title":"Cash on Delivery (COD)","summary":"Pay ₹100 now, and the rest on delivery.","badge":"Additional ₹100 COD fee"} }
+    ] }
+  ]
+}
+{% endschema %}

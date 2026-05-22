@@ -1,0 +1,50 @@
+{%- assign variantCount = product.variants | size -%}
+{% if product.available and variantCount > 0 %}
+  <div class="wrapper-item-size card-product__group text-center">
+    <ul class="sizes-list">
+      {%- for option in product.options -%}
+        {%- assign downcased_option = option | downcase -%}
+        {%- if downcased_option contains 'size' -%}
+          {%- assign option_index = forloop.index0 -%}
+          {%- assign seen_values = '' -%}
+          {%- assign available_variants = '' -%}
+          {%- assign unavailable_variants = '' -%}
+          {%- assign option_count = 0 -%}
+
+          {%- for variant in product.variants -%}
+            {%- assign value = variant.options[option_index] -%}
+            {%- unless seen_values contains value -%}
+              {%- assign seen_values = seen_values | join: '|' | append: '|' | append: value | split: '|' | sort -%}
+              {%- assign option_count = seen_values | size -%}
+
+              {%- assign variant_data = variant.id | append: '||' | append: value -%}
+              {%- if variant.available -%}
+                {%- assign available_variants = available_variants | append: variant_data | append: '|||' -%}
+              {%- else -%}
+                {%- assign unavailable_variants = unavailable_variants | append: variant_data | append: '|||' -%}
+              {%- endif -%}
+            {%- endunless -%}
+          {%- endfor -%}
+
+          {%- assign all_variants = available_variants | append: unavailable_variants | split: '|||' -%}
+
+          {%- for item in all_variants -%}
+            {%- if item != blank -%}
+              {%- assign parts = item | split: '||' -%}
+              {%- assign variant_id = parts[0] -%}
+              {%- assign value = parts[1] -%}
+
+              <li class="size-item">
+                {%- if available_variants contains item -%}
+                  <a title="{{ value }}" href="{{ product.url }}?variant={{ variant_id }}">{{ value }}</a>
+                {%- else -%}
+                  <span class="size-disabled" title="Out of stock">{{ value }}</span>
+                {%- endif -%}
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+  </div>
+{%- endif -%}

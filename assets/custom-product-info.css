@@ -1,0 +1,278 @@
+.cpi { width: 100%; }
+
+.cpi__wrap {
+  max-width: var(--cpi-maxw-m);
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+@media (min-width: 990px) {
+  .cpi__wrap { max-width: var(--cpi-maxw-d); padding: 0 20px; }
+}
+
+/* Desktop 2-column layout */
+.cpi__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
+@media (min-width: 990px) {
+  .cpi__grid {
+    grid-template-columns: var(--cpi-left-col) 1fr;
+    align-items: start;
+    gap: 28px;
+  }
+}
+
+.cpi__left { min-width: 0; }
+.cpi__right { min-width: 0; }
+
+/* Basic right-side typography */
+.cpi__title { margin: 0 0 10px; }
+.cpi__price { margin: 0 0 14px; }
+
+/* Option pills */
+.cpi__option { margin: 0 0 14px; border: 0; padding: 0; }
+.cpi__option-label { font-size: 14px; margin-bottom: 8px; }
+.cpi__option-values { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.cpi__pill { cursor: pointer; display: inline-flex; }
+.cpi__radio { position: absolute; opacity: 0; pointer-events: none; }
+.cpi__pill-text {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.18);
+  background: transparent;
+  user-select: none;
+}
+
+.cpi__pill input:checked + .cpi__pill-text {
+  border-color: rgba(0,0,0,0.6);
+}
+
+/* Buttons */
+.cpi__size-chart,
+.cpi__atc {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.18);
+  background: transparent;
+  cursor: pointer;
+}
+
+.cpi__atc { margin-top: 12px; }
+
+/* Gallery */
+.cpi__gallery { display: flex; flex-direction: column; gap: 14px; }
+
+@media (min-width: 990px) {
+  .cpi[data-desktop-layout="thumbs_left"] .cpi__gallery {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 18px;
+  }
+}
+
+.cpi__main { min-width: 0; flex: 1 1 auto; }
+
+/* Track (no scrollbars) */
+.cpi__track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 100%;
+  gap: var(--cpi-gap-m);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+
+  scrollbar-width: none;
+}
+.cpi__track::-webkit-scrollbar { display: none; }
+
+@media (min-width: 990px) { .cpi__track { gap: var(--cpi-gap-d); } }
+
+.cpi__slide { scroll-snap-align: center; }
+
+/* Frame: aspect + max height (reduces image height via settings) */
+.cpi__frame {
+  background: var(--cpi-bg);
+  border-radius: var(--cpi-radius-m);
+  padding: var(--cpi-pad-m);
+  overflow: hidden;
+  aspect-ratio: var(--cpi-aspect-m);
+  max-height: var(--cpi-frame-maxh-m);
+}
+
+@media (min-width: 990px) {
+  .cpi__frame {
+    border-radius: var(--cpi-radius-d);
+    padding: var(--cpi-pad-d);
+    aspect-ratio: var(--cpi-aspect-d);
+    max-height: var(--cpi-frame-maxh-d);
+  }
+}
+
+/* If enabled: per-media integer dims */
+.cpi[data-use-media-aspect="true"] .cpi__frame {
+  aspect-ratio: var(--cpi-ar-w, 1) / var(--cpi-ar-h, 1);
+}
+
+.cpi__media {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+
+.cpi__img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: var(--cpi-fit-m);
+}
+@media (min-width: 990px) { .cpi__img { object-fit: var(--cpi-fit-d); } }
+
+.cpi__video,
+.cpi__external-video,
+.cpi__model { width: 100%; height: 100%; display: block; }
+
+/* Dots (hide desktop) */
+.cpi__dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--cpi-dot-gap);
+  margin-top: 12px;
+}
+
+@media (min-width: 990px) {
+  .cpi[data-dots-desktop="false"] .cpi__dots { display: none; }
+}
+@media (max-width: 989px) {
+  .cpi[data-dots-mobile="false"] .cpi__dots { display: none; }
+}
+
+.cpi__dot {
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  background: var(--cpi-dot-color);
+  opacity: var(--cpi-dot-opacity);
+  transition: transform 140ms ease, opacity 140ms ease;
+}
+.cpi__dot.is-active { background: var(--cpi-dot-active); opacity: 1; transform: scale(1.08); }
+
+.cpi__dots--circle .cpi__dot {
+  width: var(--cpi-dot-size);
+  height: var(--cpi-dot-size);
+  border-radius: 999px;
+}
+.cpi__dots--pill .cpi__dot,
+.cpi__dots--bar .cpi__dot {
+  width: var(--cpi-dot-w);
+  height: var(--cpi-dot-size);
+  border-radius: var(--cpi-dot-radius);
+}
+
+/* Thumbs (no scrollbars) */
+.cpi__thumbs {
+  display: flex;
+  gap: var(--cpi-thumb-gap);
+  overflow-x: auto;
+  padding-bottom: 2px;
+
+  scrollbar-width: none;
+}
+.cpi__thumbs::-webkit-scrollbar { display: none; }
+
+/* IMPORTANT: thumbs-left should actually be on the LEFT */
+@media (min-width: 990px) {
+  .cpi[data-desktop-layout="thumbs_left"] .cpi__thumbs {
+    order: -1; /* <- fix */
+    flex-direction: column;
+    max-height: var(--cpi-frame-maxh-d);
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex: 0 0 auto;
+  }
+  .cpi[data-desktop-layout="thumbs_left"] .cpi__thumbs::-webkit-scrollbar { display: none; }
+}
+
+/* Toggle thumbs by device */
+@media (max-width: 989px) { .cpi[data-thumbs-mobile="false"] .cpi__thumbs { display: none; } }
+@media (min-width: 990px) { .cpi[data-thumbs-desktop="false"] .cpi__thumbs { display: none; } }
+
+.cpi__thumb {
+  width: var(--cpi-thumb);
+  height: var(--cpi-thumb);
+  flex: 0 0 auto;
+  border-radius: var(--cpi-thumb-radius);
+  overflow: hidden;
+  border: 1px solid var(--cpi-thumb-border);
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  opacity: 0.9;
+}
+.cpi__thumb.is-active { border-color: var(--cpi-thumb-border-active); opacity: 1; }
+
+.cpi__thumb-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.cpi__empty {
+  padding: 16px;
+  border: 1px dashed rgba(0,0,0,0.25);
+  border-radius: 12px;
+}
+
+/* 1) Hide scrollbars everywhere (track + thumbs) */
+.cpi__track,
+.cpi__thumbs {
+  -ms-overflow-style: none;    /* IE/Edge */
+  scrollbar-width: none;       /* Firefox */
+}
+.cpi__track::-webkit-scrollbar,
+.cpi__thumbs::-webkit-scrollbar {
+  display: none;               /* Chrome/Safari */
+}
+
+/* 2) Disable dots on desktop (keep mobile) */
+@media (min-width: 990px) {
+  .cpi[data-dots-desktop="false"] .cpi__dots { display: none !important; }
+}
+
+/* 3) Mobile: auto-height (image decides height; stays centered) */
+@media (max-width: 989px) {
+  .cpi[data-auto-height-mobile="true"] .cpi__frame {
+    aspect-ratio: auto !important;
+    height: auto !important;
+  }
+
+  .cpi[data-auto-height-mobile="true"] .cpi__media {
+    height: auto !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* IMPORTANT: stop forcing 100% height on mobile auto-height */
+  .cpi[data-auto-height-mobile="true"] .cpi__img {
+    height: auto !important;
+    width: 100% !important;
+    max-width: 100%;
+  }
+
+  /* If you still see “shift left”, this usually fixes it */
+  .cpi__left { align-items: center; }
+  .cpi__main,
+  .cpi__track { width: 100%; }
+}

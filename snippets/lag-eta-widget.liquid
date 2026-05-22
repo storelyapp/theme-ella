@@ -1,0 +1,1213 @@
+<div class="lag-eta-card" data-lag-eta>
+  <div class="lag-eta-rowline">
+    <span class="lag-eta-truck" aria-hidden="true">
+      <!-- Truck icon (24x24, change fill as you like) -->
+      <span class="lag-eta-truck" aria-hidden="true">
+        {% render 'icon-truck-fast' %}
+      </span>
+    </span>
+
+    <div class="lag-eta-copy">
+      <!-- EMPTY STATE -->
+      <button type="button" class="eta-pinlink eta-pinlink--enter" data-open-picker>
+        <u>Enter Pincode</u>
+        <!-- inside the Enter Pincode button -->
+        <span class="eta-edit-ico" aria-hidden="true">
+          <svg width="16" height="16" fill="none" viewBox="0 0 16 16">
+            <path fill="currentColor" d="m11.076 1.174 1.75 1.75-1.334 1.334-1.75-1.75 1.334-1.334Zm-6.41 8.16h1.75l4.251-4.251-1.75-1.75-4.25 4.25v1.75Z"></path>
+            <path fill="currentColor" d="M11.083 11.083H4.76c-.015 0-.031.006-.046.006-.02 0-.039-.005-.059-.006H2.917V2.917H6.91L8.077 1.75h-5.16c-.644 0-1.167.523-1.167 1.167v8.166c0 .644.523 1.167 1.167 1.167h8.166a1.167 1.167 0 0 0 1.167-1.167V6.027l-1.167 1.167v3.89Z"></path>
+          </svg>
+        </span>
+
+      </button>
+      <p class="lag-eta-hint muted" data-enter-hint>Use your pincode to find delivery estimate</p>
+
+      <!-- International option (before PIN) -->
+      <button type="button"
+              class="eta-countrylink eta-countrylink--empty"
+              data-intl-from-empty
+              hidden>
+        {{ settings.lag_eta_intl_prompt_from_india | default: "Shipping internationally?" }}
+      </button>
+
+      <!-- FILLED STATE -->
+      <div class="lag-eta-result" data-eta-filled hidden>
+        <div class="eta-primary" data-eta-primary></div>
+        <div class="eta-secondary">
+          Deliver to
+          <button class="eta-pinlink" type="button" data-edit-pin></button>
+          <span data-eta-bydate></span>
+        </div>
+        <div class="eta-note" data-eta-note hidden></div>
+
+        <!-- Prompt to switch to international matrix -->
+        <button type="button"
+                class="eta-countrylink eta-countrylink--secondary"
+                data-intl-from-india>
+          {{ settings.lag_eta_intl_prompt_from_india | default: "Shipping international?" }}
+        </button>
+      </div>
+    </div>
+      
+      <!-- INTERNATIONAL STATE (auto-detected non-India) -->
+      <div class="lag-eta-result lag-eta-intl" data-eta-intl hidden>
+        <div class="eta-primary eta-primary--intl" data-intl-primary>
+          <span class="eta-primary-icon" aria-hidden="true">
+            {% render 'icon-truck-fast' %}
+          </span>
+          <span class="eta-primary-text">
+            Dispatch within <strong>24HRS</strong>
+          </span>
+        </div>
+
+        <div class="eta-matrix">
+          <div class="eta-matrix-country">
+            <span data-intl-place>United States</span>:
+          </div>
+
+          <div class="eta-matrix-table" role="table">
+            <div class="eta-matrix-row eta-matrix-row--head" role="row">
+              <span role="columnheader">Mode</span>
+              <span role="columnheader">Order value</span>
+              <span role="columnheader">Estimated Delivery</span>
+              <span role="columnheader">Charges</span>
+            </div>
+
+            <div class="eta-matrix-row" role="row">
+              <span>Standard</span>
+              <span>
+                Below
+                <span class="money" data-intl-threshold>
+                  {{ settings.lag_eta_intl_standard_free_threshold | default: 200 | times: 100 | money }}
+                </span>
+              </span>
+              <span>
+                <span data-intl-standard-days>
+                  {{ settings.lag_eta_intl_standard_days | default: "7–10 business days" }}
+                </span>
+              </span>
+              <span>
+                <span class="money" data-intl-standard-fee>
+                  {{ settings.lag_eta_intl_standard_fee | default: 20 | times: 100 | money }}
+                </span>
+              </span>
+            </div>
+
+            <div class="eta-matrix-row" role="row">
+              <span>Standard</span>
+              <span>
+                At / above
+                <span class="money" data-intl-threshold>
+                  {{ settings.lag_eta_intl_standard_free_threshold | default: 200 | times: 100 | money }}
+                </span>
+              </span>
+              <span>
+                <span data-intl-standard-days>
+                  {{ settings.lag_eta_intl_standard_days | default: "7–10 business days" }}
+                </span>
+              </span>
+              <span class="eta-matrix-free">Free</span>
+            </div>
+
+            <div class="eta-matrix-row" role="row">
+              <span>Express</span>
+              <span>Any</span>
+              <span>
+                <span data-intl-express-days>
+                  {{ settings.lag_eta_intl_express_days | default: "5–8 business days" }}
+                </span>
+              </span>
+              <span>
+                <span class="money" data-intl-express-fee>
+                  {{ settings.lag_eta_intl_express_fee | default: 35 | times: 100 | money }}
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <p class="eta-disclaimer">
+          {{ settings.lag_eta_intl_disclaimer | default: "" }}
+        </p>
+
+        <button type="button"
+                class="eta-countrylink"
+                data-change-country>
+          {{ settings.lag_eta_intl_not_your_country_label | default: "Not your country? Select from list" }}
+        </button>
+
+        <div class="lag-eta-country-picker" data-country-picker hidden>
+          <p class="lag-eta-country-title">Select your country</p>
+          <div class="lag-eta-inline lag-eta-inline--country">
+            <select id="lagEtaCountry"
+                    class="lag-eta-input"
+                    data-country-select></select>
+
+            <button type="button"
+                    class="lag-eta-btn lag-eta-btn--apply"
+                    data-country-apply>
+              Apply
+            </button>
+            <button type="button"
+                    class="lag-eta-link lag-eta-link--small"
+                    data-country-cancel>
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+
+  </div>
+</div>
+
+<!-- Modal / Drawer -->
+<div class="lag-eta-modal" data-eta-modal hidden>
+  <div class="lag-eta-modal__backdrop" data-eta-close></div>
+  <div class="lag-eta-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="etaModalTitle">
+
+    <h3 id="etaModalTitle">Enter your pincode</h3>
+
+<div class="lag-eta-row lag-eta-row--modal">
+    <label class="lag-eta-label" for="lagEtaPin">Enter Pincode</label>
+    <div class="lag-eta-inline">
+      <input id="lagEtaPin" type="text" inputmode="numeric" maxlength="6" placeholder="6-digit PIN"
+            class="lag-eta-input" aria-label="Enter pincode">
+      <button class="lag-eta-btn lag-eta-btn--apply" data-action="check" type="button">Apply</button>
+    </div>
+    <p class="lag-eta-error" data-eta-error hidden>
+      {{ settings.lag_eta_invalid_pin_msg | default: "Not a valid pincode. Please enter a 6-digit PIN." }}
+    </p>
+  
+    <div class="lag-eta-divider" style="margin:12px 0"><span>OR</span></div>
+    <button type="button"
+            class="eta-countrylink eta-countrylink--secondary"
+            data-intl-from-modal
+            hidden>
+      {{ settings.lag_eta_intl_prompt_from_india | default: "Shipping internationally?" }}
+    </button>
+  </div>
+
+
+    <div class="lag-eta-modal__actions">
+      <button type="button" class="lag-eta-link" data-eta-close>Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Single source of truth for ETA JSON
+  window.LAG_ETA_URL      = "{{ 'estimate-delivery.json' | asset_url }}";
+  // Backwards-compat alias used by the enrichment helper
+  window.LAG_ETA_JSON_URL = window.LAG_ETA_URL;
+</script>
+
+
+<script>
+(function(){
+  const root = document.querySelector('[data-lag-eta]');
+  if (!root) return;
+  if (root.dataset.etaBound === "1") return; // prevent duplicate binds
+  root.dataset.etaBound = "1";
+
+  // Card elements
+  const $enterBtn        = root.querySelector('[data-open-picker]');
+  const $enterHint       = root.querySelector('[data-enter-hint]');
+  const $filledWrap      = root.querySelector('[data-eta-filled]');
+  const $primary         = root.querySelector('[data-eta-primary]');
+  const $bydate          = root.querySelector('[data-eta-bydate]');
+  const $editPinBtn      = root.querySelector('[data-edit-pin]');
+  const $intlWrap    = root.querySelector('[data-eta-intl]');
+  const $intlPlace   = root.querySelector('[data-intl-place]');
+  const $intlPlaceShort  = root.querySelector('[data-intl-place-short]');
+  const $intlMatrix  = root.querySelector('.lag-eta-intl .eta-matrix');
+
+  const $stdPrefix       = root.querySelector('[data-intl-standard-prefix]');
+  const $stdDays         = root.querySelector('[data-intl-standard-days]');
+  const $exprDays        = root.querySelector('[data-intl-express-days]');
+
+  const $countryLink     = root.querySelector('[data-change-country]');
+  const $countryPicker   = root.querySelector('[data-country-picker]');
+  const $countrySelect   = root.querySelector('[data-country-select]');
+  const $countryApply    = root.querySelector('[data-country-apply]');
+  const $intlFromIndia   = root.querySelector('[data-intl-from-india]');
+  const $intlFromEmpty   = root.querySelector('[data-intl-from-empty]');
+
+  let openedFromIndia = false;
+
+  // Modal elements
+  const $modal    = document.querySelector('[data-eta-modal]');
+  if (!$modal) return;
+
+  // Toggle international triggers (hidden by default in markup)
+  try{
+    if ($intlFromEmpty) $intlFromEmpty.hidden = !window.LAG_ETA_INTL_ENABLE;
+    if ($intlFromModal) $intlFromModal.hidden = !window.LAG_ETA_INTL_ENABLE;
+  }catch(e){}
+
+  const $dialog   = $modal.querySelector('.lag-eta-modal__dialog');
+  const $closes   = $modal.querySelectorAll('[data-eta-close]');
+  const $pinInput = $modal.querySelector('#lagEtaPin');
+  const $applyBtn = $modal.querySelector('[data-action="check"]');
+  const $error    = $modal.querySelector('[data-eta-error]');
+  const $intlFromModal = $modal.querySelector('[data-intl-from-modal]');
+
+  const $countryCancel = root.querySelector('[data-country-cancel]');
+
+
+  // Utils
+  const normPin     = v => (v||'').toString().replace(/\D+/g,'');
+  const shortState  = s => s ? s.slice(0,2).toUpperCase() : "";
+  function addDays(date, n){ const d=new Date(date.getTime()); d.setDate(d.getDate()+n); return d; }
+
+  function normBucket(b){
+    // number -> "N-days"
+    if (typeof b === "number" && isFinite(b)) return `${Math.round(b)}-days`;
+    // {type:'days', value:N} -> "N-days"
+    if (b && typeof b === "object") {
+      if (b.type === "days" && b.value != null) return `${Math.round(Number(b.value))}-days`;
+      if (b.type === "label" && b.value) return String(b.value);
+    }
+    // already a string like "3-days" / "same-day" / "60-min"
+    return String(b ?? "");
+  }
+
+
+  function shortLabel(bucket){
+    if (!bucket) return "SOON";
+    const m = {
+      "60-min":"2-Hours", "same-day":"24HRS",
+      "2-days":"2 DAYS", "3-days":"3 DAYS", "4-days":"4 DAYS",
+      "5-days":"5 DAYS", "6-days":"6 DAYS", "7-days":"7 DAYS", "8-days":"8 DAYS"
+    };
+    if (m[bucket]) return m[bucket];
+
+    // generic: turn "N-days" into "N DAYS" when N is a number
+    const n = String(bucket).match(/^(\d+)-days$/);
+    return n ? `${n[1]} DAYS` : "SOON";
+  }
+
+    function setMode(mode){
+    if (!root) return;
+    if (mode) {
+      root.setAttribute('data-mode', mode);
+    } else {
+      root.removeAttribute('data-mode');
+    }
+  }
+
+
+  // Metro detection (unchanged)
+  function isMetroPin(pinRaw, stateCode){
+    const pin = String(pinRaw || '');
+    const st  = (stateCode || '').toUpperCase();
+
+    if (st === "KA" && (pin.startsWith("560") || pin.startsWith("5621"))) return true; // Bengaluru
+    if (st === "MH" && (pin.startsWith("400") || pin.startsWith("401"))) return true; // Mumbai/Thane
+    if (st === "MH" && pin.startsWith("411")) return true;                             // Pune
+    if (st === "DL" && pin.startsWith("110")) return true;                             // Delhi
+    if (st === "TN" && pin.startsWith("600")) return true;                             // Chennai
+    if (st === "TS" && pin.startsWith("500")) return true;                             // Hyderabad
+    if (st === "WB" && pin.startsWith("700")) return true;                             // Kolkata
+
+    return false;
+  }
+
+  function byDate(bucket){
+    const now = new Date();
+    if (bucket === "60-min")   return " in 2-Hours";
+    if (bucket === "same-day") return " today";
+    const m = /^(\d+)-days$/.exec(String(bucket || ""));
+    const n = m ? parseInt(m[1], 10) : 3;
+    const d = addDays(now, n);
+    const fmt = d.toLocaleString(undefined,{month:"long", day:"2-digit"});
+    return " by " + fmt;
+  }
+
+  function formatDatePlusDays(days){
+    const now = new Date();
+    const d   = addDays(now, days);
+    return d.toLocaleDateString(undefined, { day: "2-digit", month: "short" });
+  }
+
+  // Country data (for selector)
+  const COUNTRY_MAP = {
+    IN:"India",
+    US:"United States",
+    CA:"Canada",
+    GB:"United Kingdom",
+    AE:"United Arab Emirates",
+    SG:"Singapore",
+    AU:"Australia",
+    NZ:"New Zealand",
+    MY:"Malaysia",
+    DE:"Germany",
+    FR:"France",
+    QA:"Qatar",
+    SA:"Saudi Arabia",
+    ZA:"South Africa",
+    LK:"Sri Lanka"
+  };
+
+  const POPULAR_CODES = (window.LAG_ETA_INTL_POPULAR || "US,CA,AE,SG,AU,GB")
+    .split(',')
+    .map(c => c.trim().toUpperCase())
+    .filter(Boolean);
+
+    const INTL_STORE_KEY = 'lag_eta_intl';
+
+  function saveIntlSelection(det){
+    try { localStorage.setItem(INTL_STORE_KEY, JSON.stringify(det)); } catch(e){}
+  }
+  function loadIntlSelection(){
+    try {
+      const v = localStorage.getItem(INTL_STORE_KEY);
+      return v ? JSON.parse(v) : null;
+    } catch(e){ return null; }
+  }
+
+  function clearError(){
+    if ($error){
+      $error.hidden = true;
+      $error.textContent = "";
+    }
+  }
+
+  function showError(msg){
+    if (!$error) return;
+    $error.textContent = msg;
+    $error.hidden = false;
+  }
+
+  // Card states
+  function showEmpty(){
+    setMode('empty');
+    if ($enterBtn){
+      $enterBtn.hidden = false;
+      $enterBtn.setAttribute('aria-hidden','false');
+      $enterBtn.style.display = '';
+    }
+    if ($enterHint)  $enterHint.hidden  = false;
+    if ($intlFromEmpty){
+      $intlFromEmpty.hidden = !window.LAG_ETA_INTL_ENABLE;
+    }
+    if ($filledWrap) $filledWrap.hidden = true;
+    if ($intlWrap)   $intlWrap.hidden   = true;
+  }
+
+  function showFilled(rec){
+    const sig = [rec.pin, rec.express || '', rec.standard || '', rec.timeline || ''].join('|');
+    if (root.dataset.etaSig === sig) return;
+    root.dataset.etaSig = sig;
+
+    setMode('domestic');
+    saveIntlSelection(null);
+
+    const stCode = rec.stateCode || shortState(rec.state);
+    const isMetro = isMetroPin(rec.pin, stCode);
+    const isSixty = rec.timeline === "60-min";
+    const cityST  = [rec.city, stCode].filter(Boolean).join(", ");
+    const $note   = root.querySelector('[data-eta-note]');
+
+    function renderNote(expBucket, stdBucket){
+      if (!$note) return;
+      const rows = [];
+      if (expBucket) rows.push(`<div><strong>Express:</strong> <span class="eta-days">${shortLabel(expBucket)}</span></div>`);
+      if (stdBucket) rows.push(`<div><strong>Standard:</strong> <span class="eta-days">${shortLabel(stdBucket)}</span></div>`);
+      if (rows.length){
+        $note.innerHTML = rows.join('');
+        $note.hidden = false;
+      } else {
+        $note.hidden = true;
+      }
+    }
+
+    if ($intlWrap) $intlWrap.hidden = true;
+
+    const expBucket = rec.express || rec.timeline || "";
+    const stdBucket = (typeof rec.standard === "string" && rec.standard) ? rec.standard : "";
+
+    if (isSixty){
+      const etaDate = formatDatePlusDays(1);
+      $primary.innerHTML = `Get this product within <strong>${shortLabel(expBucket)}</strong>`;
+      $editPinBtn.textContent = rec.pin;
+      $bydate.textContent = `by ${etaDate}${cityST ? ` — ${cityST}` : ""}`;
+      renderNote(expBucket, stdBucket);
+
+    } else if (isMetro){
+      const etaDate = formatDatePlusDays(4);
+      $primary.innerHTML = `Fast shipping within <strong>24HRS</strong>`;
+      $editPinBtn.textContent = rec.pin;
+      $bydate.textContent = `by ${etaDate}${cityST ? ` — ${cityST}` : ""}`;
+      renderNote(expBucket, stdBucket);
+
+    } else {
+      const dur = shortLabel(rec.timeline);
+      $primary.innerHTML = `Get this product within <strong>${dur}</strong>`;
+      $editPinBtn.textContent = rec.pin;
+      $bydate.textContent = (byDate(rec.timeline) || "") + (cityST ? ` — ${cityST}` : "");
+      renderNote(expBucket, stdBucket);
+    }
+
+    // end-state toggles
+    if ($enterBtn){
+      $enterBtn.hidden = true;
+      $enterBtn.setAttribute('aria-hidden','true');
+      $enterBtn.style.display = 'none';
+    }
+    if ($enterHint)  $enterHint.hidden  = true;
+    if ($intlFromEmpty) $intlFromEmpty.hidden = true;
+    if ($filledWrap) $filledWrap.hidden = false;
+  }
+
+  // Keep widget in sync with global ETA (single listener, guarded)
+  if (!window.__lagEtaEventBound2) {
+    window.__lagEtaHydratedPins = window.__lagEtaHydratedPins || new Set();
+
+    const schedule = (fn) => {
+      if (root.__etaRaf) cancelAnimationFrame(root.__etaRaf);
+      root.__etaRaf = requestAnimationFrame(fn);
+    };
+
+    window.addEventListener('lag:eta', function (ev) {
+      try {
+        const detail = ev.detail || {};
+        const rec = detail.result || detail;
+        if (!rec || !rec.pin) return;
+
+        // signature for early bail
+        const sig = [rec.pin, rec.express || '', rec.standard || '', rec.timeline || ''].join('|');
+        if (root.dataset.etaSig === sig) {
+          if (window.LAG_DEBUG) console.log("[ETA] event ignored (same sig)", sig);
+          return;
+        }
+
+        // hydrate once per pin if buckets missing
+        const needsHydration = (!rec.express || !rec.standard);
+        if (needsHydration && !window.__lagEtaHydratedPins.has(rec.pin)) {
+          window.__lagEtaHydratedPins.add(rec.pin);
+          if (window.LAG_DEBUG) console.log("[ETA] hydrating once for pin", rec.pin);
+
+          if (window.LagETA && typeof window.LagETA.byPin === 'function') {
+            window.LagETA.byPin(rec.pin)
+              .then((full) => schedule(() => showFilled(full || rec)))
+              .catch(()   => schedule(() => showFilled(rec)));
+            return;
+          }
+        }
+
+        if (window.LAG_DEBUG) console.log("[ETA] rendering from event payload", rec);
+        schedule(() => showFilled(rec));
+      } catch (e) {
+        console.warn('[Widget ETA] lag:eta listener error', e);
+      }
+    });
+
+    window.__lagEtaEventBound2 = true;
+  }
+
+
+  function renderIntl(det){
+
+    if (!window.LAG_ETA_INTL_ENABLE) return;
+    if (!$intlWrap) return;
+
+    setMode('intl');
+
+    const code = (det.countryCode || det.country || "").toString().toUpperCase();
+    const name = det.countryName || COUNTRY_MAP[code] || code || "your country";
+    const city = det.city ? det.city.toString().trim() : "";
+    const place = city ? `${city}, ${name}` : name;
+
+    if ($intlPlace)      $intlPlace.textContent      = place;
+    if ($intlPlaceShort) $intlPlaceShort.textContent = place;
+
+    // Persist only country
+    saveIntlSelection({ countryCode: code, countryName: name });
+
+    if ($filledWrap)     $filledWrap.hidden = true;
+    if ($enterBtn){
+      $enterBtn.hidden = true;
+      $enterBtn.setAttribute('aria-hidden','true');
+      $enterBtn.style.display = 'none';
+    }
+    if ($enterHint)      $enterHint.hidden  = true;
+    if ($intlFromEmpty)  $intlFromEmpty.hidden = true;
+
+    if ($intlMatrix) $intlMatrix.hidden = false;
+
+    $intlWrap.hidden = false;
+  }
+
+  function buildCountryOptions(){
+    if (!$countrySelect) return;
+    $countrySelect.innerHTML = "";
+    const seen = new Set();
+
+    function add(code){
+      const c = code.toUpperCase();
+      if (!COUNTRY_MAP[c] || seen.has(c)) return;
+      seen.add(c);
+      const opt = document.createElement('option');
+      opt.value = c;
+      opt.textContent = COUNTRY_MAP[c];
+      $countrySelect.appendChild(opt);
+    }
+
+    POPULAR_CODES.forEach(add);
+    if (!seen.has('IN')) add('IN');
+
+    const rest = Object.keys(COUNTRY_MAP)
+      .filter(c => !seen.has(c))
+      .sort((a,b) => COUNTRY_MAP[a].localeCompare(COUNTRY_MAP[b]));
+    rest.forEach(add);
+  }
+
+  // Modal logic (pincode only)
+  function openPinModal(){
+    if (window.matchMedia('(max-width: 767px)').matches){
+      $dialog.classList.add('is-drawer');
+    } else {
+      $dialog.classList.remove('is-drawer');
+    }
+
+    clearError();
+
+    try{
+      const cached = (window.LagETA && typeof window.LagETA.getCookie === 'function')
+        ? window.LagETA.getCookie()
+        : null;
+      if ($pinInput) $pinInput.value = cached && cached.pin ? cached.pin : '';
+    }catch(e){}
+
+    $modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    if ($pinInput) setTimeout(function(){ $pinInput.focus(); }, 0);
+  }
+
+  function closeModal(){
+    $modal.hidden = true;
+    document.body.style.overflow = '';
+  }
+
+  // Events
+  if ($enterBtn) $enterBtn.addEventListener('click', openPinModal);
+  if ($editPinBtn) $editPinBtn.addEventListener('click', openPinModal);
+
+  $closes.forEach(el=>el.addEventListener('click', closeModal));
+
+  // Manual Apply with error handling
+  $applyBtn.addEventListener('click', async ()=>{
+    clearError();
+    const p = normPin($pinInput.value);
+    if (p.length !== 6){
+      const msg = (window.LAG_ETA_TEXT && window.LAG_ETA_TEXT.invalidPin)
+        || "Not a valid pincode. Please enter a 6-digit PIN.";
+      showError(msg);
+      return;
+    }
+    try{
+      const res = await window.LagETA.byPin(p);
+      if (res){
+        showFilled(res);
+        closeModal();
+      } else {
+        const msg = (window.LAG_ETA_TEXT && window.LAG_ETA_TEXT.unserviceablePin)
+          || "We couldn’t find this pincode. Please enter a valid Indian PIN code.";
+        showError(msg);
+      }
+    }catch(e){
+      const msg = (window.LAG_ETA_TEXT && window.LAG_ETA_TEXT.unserviceablePin)
+        || "We couldn’t find this pincode. Please enter a valid Indian PIN code.";
+      showError(msg);
+    }
+  });
+
+  function whenReady(fn){
+    if (window.LagETA && window.LagETA.ready && window.LagETA.ready()) { fn(); return; }
+    window.addEventListener('lageta:ready', fn, {once:true});
+  }
+
+  async function initCard(){
+    // 1) Explicit international choice wins over everything
+    const intlSaved = loadIntlSelection();
+    if (window.LAG_ETA_INTL_ENABLE && intlSaved && intlSaved.countryCode){
+      const code = intlSaved.countryCode.toString().toUpperCase();
+      if (code && code !== 'IN'){
+        renderIntl({
+          countryCode: code,
+          countryName: intlSaved.countryName || code
+        });
+        return;
+      }
+    }
+
+    // 2) Otherwise use the stored India PIN (cookie)
+    const cached = window.LagETA.getCookie && window.LagETA.getCookie();
+    if (cached && cached.pin){
+      // Refresh from source once to get express/standard into the cache
+      try {
+        const fresh = await window.LagETA.byPin(cached.pin);
+        // If app exposes a setter, persist enriched record for next time
+        if (fresh && typeof window.LagETA.setCookie === "function") {
+          window.LagETA.setCookie({
+            ...fresh,
+            // ensure we store both buckets
+            express:  fresh.express  || fresh.timeline,
+            standard: fresh.standard
+          });
+        }
+        showFilled(fresh || cached);
+      } catch {
+        showFilled(cached);
+      }
+      return;
+    }
+ 
+    // 4) Default empty state
+    showEmpty();
+  }
+
+  whenReady(initCard);
+
+
+function openIntlPickerFromIndia(){
+  if (!window.LAG_ETA_INTL_ENABLE) return;
+  if (!$countryPicker || !$countrySelect) return;
+
+  openedFromIndia = true;
+
+  buildCountryOptions();
+
+  const saved = loadIntlSelection();
+  if (saved && saved.countryCode){
+    $countrySelect.value = saved.countryCode;
+  } else if ($countrySelect.options.length){
+    $countrySelect.value = $countrySelect.options[0].value;
+  }
+
+  // Close PIN modal if it is open
+  try{ if ($modal && !$modal.hidden) closeModal(); }catch(e){}
+
+  // Visually switch card into intl mode, but don't commit yet
+  setMode('intl');
+  if ($filledWrap) $filledWrap.hidden = true;
+  if ($enterBtn){
+    $enterBtn.hidden = true;
+    $enterBtn.setAttribute('aria-hidden','true');
+    $enterBtn.style.display = 'none';
+  }
+  if ($enterHint) $enterHint.hidden = true;
+  if ($intlFromEmpty) $intlFromEmpty.hidden = true;
+
+  if ($intlWrap)   $intlWrap.hidden = false;
+  if ($intlMatrix) $intlMatrix.hidden = true;
+
+  $countryPicker.hidden = false;
+
+  // Focus dropdown for faster selection
+  try{ setTimeout(()=>{ $countrySelect.focus(); }, 0); }catch(e){}
+}
+
+  // Country selection
+  if ($countryLink && $countryPicker && $countrySelect){
+    // Already in intl view: "Not your country? Select from list"
+    $countryLink.addEventListener('click', ()=>{
+      if (!window.LAG_ETA_INTL_ENABLE) return;
+
+      openedFromIndia = false; // change within intl mode
+
+      buildCountryOptions();
+
+      const saved = loadIntlSelection();
+      if (saved && saved.countryCode){
+        $countrySelect.value = saved.countryCode;
+      }
+
+      // Hide matrix while choosing
+      if ($intlMatrix) $intlMatrix.hidden = true;
+      $countryPicker.hidden = false;
+    });
+  }
+
+
+// From India view: "Shipping international?"
+if ($intlFromIndia){
+  $intlFromIndia.addEventListener('click', openIntlPickerFromIndia);
+}
+
+// From empty state (before PIN): "Shipping internationally?"
+if ($intlFromEmpty){
+  $intlFromEmpty.addEventListener('click', openIntlPickerFromIndia);
+}
+
+// From PIN modal (invalid/unserviceable PIN): "Shipping internationally?"
+if ($intlFromModal){
+  $intlFromModal.addEventListener('click', openIntlPickerFromIndia);
+}
+
+  if ($countryApply && $countrySelect){
+    $countryApply.addEventListener('click', ()=>{
+      const code = ($countrySelect.value || '').toUpperCase();
+      if (!code) return;
+
+      openedFromIndia = false; // we’re committing a choice now
+
+      if (code === 'IN'){
+        // Back to India flow: show normal card and open pincode modal
+        if ($intlWrap) $intlWrap.hidden = true;
+        $countryPicker.hidden = true;
+        showEmpty();
+        openPinModal();
+      } else {
+        const det = {
+          country: code,
+          countryCode: code,
+          countryName: COUNTRY_MAP[code] || code
+        };
+        renderIntl(det);          // shows the matrix + saves country
+        $countryPicker.hidden = true;
+      }
+    });
+  }
+
+  if ($countryCancel && $countryPicker){
+    $countryCancel.addEventListener('click', ()=>{
+      if (openedFromIndia){
+        // Came here via "Shipping international?" from India → revert
+        openedFromIndia = false;
+        $countryPicker.hidden = true;
+
+        const cached = window.LagETA.getCookie && window.LagETA.getCookie();
+        if (cached && cached.pin){
+          showFilled(cached);   // back to India pin view
+        } else {
+          showEmpty();          // or empty state if no pin yet
+        }
+        return;
+      }
+
+      // Already in intl view: just close picker and re-show matrix
+      $countryPicker.hidden = true;
+      if ($intlMatrix) $intlMatrix.hidden = false;
+    });
+  }
+})();
+</script>
+
+<script>
+window.addEventListener('lageta:ready', ()=>console.log('[ETA] lageta:ready fired'));
+window.addEventListener('lag:eta',    e => console.log('[ETA] lag:eta event →', e.detail||e));
+</script>
+
+<style>
+:root{
+  --eta-accent:#f36c3d;
+  --eta-text:#111;
+  --eta-muted:#666;
+  --eta-brd:#e5e5e5;
+  --eta-apply:#E87529;
+  --eta-card-pad-b:24px;
+
+  /* icon sizes */
+  --eta-ico:28px;
+  --eta-ico-perm:28px;
+
+  /* "Not your country?" */
+  --eta-country-link: {{ settings.lag_eta_intl_not_country_color | default: '#E87529' }};
+}
+
+@media (min-width:768px){
+  :root{
+    --eta-ico:32px;
+    --eta-ico-perm:32px;
+  }
+}
+
+/* ---------- CARD LAYOUT ---------- */
+.lag-eta-card{
+  --eta-card-max:clamp(720px,92vw,1200px);
+  width:min(100%,var(--eta-card-max));
+  margin-inline:auto;
+  padding:14px 20px;
+  border:1px solid var(--eta-brd);
+  border-radius:12px;
+  margin-bottom:var(--eta-card-pad-b) !important;
+  text-align:left;
+}
+
+.lag-eta-rowline{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  align-items:center;
+  column-gap:14px;
+}
+
+.lag-eta-truck{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0;
+  line-height:1;
+  color:var(--eta-accent);
+}
+.lag-eta-truck svg{
+  width:var(--eta-ico);
+  height:var(--eta-ico);
+  display:block;
+}
+
+.lag-eta-copy{
+  flex:1 1 auto;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+/* empty state */
+.eta-pinlink{
+  background:none;
+  border:none;
+  padding:0;
+  margin:0;
+  color:var(--eta-text);
+  cursor:pointer;
+  font:inherit;
+}
+.eta-pinlink--enter{
+  display:inline-flex;
+  align-items:center;
+  font-weight:800;
+  font-size:16px;
+}
+.eta-edit-ico{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--eta-accent);
+  margin-left:8px;
+  padding-left:6px;
+}
+.eta-edit-ico svg{width:16px;height:16px;}
+
+.lag-eta-hint{
+  margin:.15rem 0 .4rem;
+  color:var(--eta-muted);
+}
+
+/* filled state */
+.lag-eta-result{margin:.05rem 0 .25rem;}
+.eta-primary{
+  font-weight:800;
+  letter-spacing:.02em;
+  font-size:clamp(17px,3.6vw,20px);
+  line-height:1.18;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.eta-primary strong{color:var(--eta-accent);}
+
+.eta-secondary{
+  margin-top:2px;
+  color:var(--eta-muted);
+  font-size:clamp(13px,3.2vw,15px);
+  line-height:1.28;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
+}
+.eta-secondary .eta-pinlink{text-decoration:underline;}
+
+.eta-note{
+  margin-top:4px;
+  color:var(--eta-muted);
+  font-size:clamp(12px,2.9vw,13px);
+  line-height:1.3;
+}
+.eta-note div + div{margin-top:2px;}
+.eta-note .eta-days{
+  color:var(--eta-accent);
+  font-weight:700;
+}
+
+/* ---------- MODAL ---------- */
+.lag-eta-modal{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+}
+.lag-eta-modal[hidden]{display:none;}
+.lag-eta-modal__backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.55);
+}
+.lag-eta-modal__dialog{
+  position:relative;
+  max-width:560px;
+  margin:10vh auto;
+  background:#fff;
+  border-radius:14px;
+  padding:16px;
+  border:2px solid #d6d6d6;
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+.lag-eta-modal__dialog.is-drawer{
+  max-width:none;
+  width:100%;
+  margin:0 auto;
+  position:absolute;
+  left:0;right:0;bottom:0;
+  border-radius:16px 16px 0 0;
+}
+
+/* permission banner */
+.lag-eta-perm{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:10px 12px;
+  border:1px solid #f0e5da;
+  background:#fdf6f1;
+  border-radius:10px;
+  margin-bottom:12px;
+}
+.perm-ico{display:flex;align-items:center;}
+.perm-ico svg{
+  width:var(--eta-ico-perm);
+  height:var(--eta-ico-perm);
+  display:block;
+}
+.perm-btn{background:#fff;color:#111;border-color:#111;}
+
+.lag-eta-modal__sub{margin:.25rem 0 1rem;color:#555;}
+.lag-eta-modal__form{max-height:38vh;overflow:auto;padding-right:4px;}
+.lag-eta-option{
+  display:block;
+  padding:10px 8px;
+  border-radius:10px;
+  border:1px solid #eee;
+  margin-bottom:8px;
+}
+.lag-eta-option input{margin-right:8px;}
+.eta-pin{font-weight:700;}
+.eta-label{font-weight:800;}
+
+.lag-eta-divider{
+  position:relative;
+  text-align:center;
+  margin:14px 0;
+}
+.lag-eta-divider:before,
+.lag-eta-divider:after{
+  content:"";
+  display:inline-block;
+  width:40%;
+  height:1px;
+  background:#e5e5e5;
+  vertical-align:middle;
+}
+.lag-eta-divider span{
+  display:inline-block;
+  min-width:3rem;
+  margin:0 8px;
+  color:#777;
+  font-weight:700;
+  letter-spacing:.08em;
+}
+
+/* manual entry */
+.lag-eta-row--modal{margin-top:6px;}
+.lag-eta-inline{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+.lag-eta-label{
+  display:block;
+  font-weight:800;
+  margin:6px 0 6px;
+}
+.lag-eta-input{
+  flex:1;
+  min-width:160px;
+  padding:10px 12px;
+  border:1px solid #ddd;
+  border-radius:8px;
+  font-size:14px;
+}
+.lag-eta-btn{
+  padding:10px 14px;
+  border-radius:8px;
+  border:1px solid #111;
+  background:#111;
+  color:#fff;
+  cursor:pointer;
+  font-weight:700;
+}
+.lag-eta-btn--apply{
+  background:var(--eta-apply);
+  border-color:var(--eta-apply);
+}
+.lag-eta-btn--apply:hover{filter:brightness(.95);}
+
+.lag-eta-modal__actions{
+  display:flex;
+  gap:8px;
+  justify-content:flex-end;
+  margin-top:10px;
+}
+.lag-eta-link{
+  background:none;
+  border:none;
+  text-decoration:underline;
+  cursor:pointer;
+  padding:8px;
+  font-weight:600;
+}
+
+/* error */
+.lag-eta-error{
+  margin-top:6px;
+  color:#c0392b;
+  font-size:13px;
+}
+
+/* ---------- INTL "NOT YOUR COUNTRY" ---------- */
+.eta-countrylink{
+  margin-top:6px;
+  background:none;
+  border:none;
+  padding:0;
+  color:var(--eta-country-link);
+  font-size:13px;
+  text-decoration:underline;
+  cursor:pointer;
+}
+.lag-eta-country-picker{margin-top:8px;}
+.lag-eta-country-title{
+  margin:4px 0 6px;
+  font-weight:700;
+  font-size:13px;
+}
+.lag-eta-inline--country{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.lag-eta-inline--country .lag-eta-input{min-width:160px;}
+.lag-eta-link--small{
+  background:none;
+  border:none;
+  padding:0 4px;
+  font-size:12px;
+  text-decoration:underline;
+  cursor:pointer;
+  color:var(--eta-muted);
+}
+
+/* ---------- INTL MATRIX ---------- */
+.eta-matrix{
+  margin-top:6px;
+  font-size:12px;
+  color:var(--eta-muted);
+}
+.eta-matrix-country{
+  font-weight:700;
+  margin-bottom:4px;
+}
+.eta-matrix-table{
+  border-radius:8px;
+  border:1px solid var(--eta-brd);
+  overflow:hidden;
+}
+
+/* rows: symmetric padding; only horizontal lines */
+.eta-matrix-row{
+  display:grid;
+  grid-template-columns:1.1fr 1.5fr 1.6fr 1fr;
+  align-items:center;
+  column-gap:0;
+  padding:6px 12px;
+}
+.eta-matrix-row + .eta-matrix-row{
+  border-top:1px solid var(--eta-brd);
+}
+.eta-matrix-row span{display:block;}
+
+/* single vertical divider between MODE and ORDER VALUE */
+.eta-matrix-row span:nth-child(1){
+  padding-right:12px;
+}
+.eta-matrix-row span:nth-child(n+2){
+  padding-left:12px;
+}
+
+/* header style */
+.eta-matrix-row--head{
+  background:#fafafa;
+  font-weight:700;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+.eta-matrix-row--head span{font-weight:700;}
+
+.eta-matrix-free{
+  color:#2e7d32;
+  font-weight:700;
+}
+
+/* ---------- INTL HEADING TRUCK + MODE SWITCH ---------- */
+.eta-primary--intl{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.eta-primary--intl .eta-primary-icon svg{
+  width:20px;
+  height:20px;
+}
+
+/* when intl mode active, hide side truck so matrix spans full width */
+[data-lag-eta][data-mode="intl"] .lag-eta-rowline > .lag-eta-truck{
+  display:none;
+}
+
+/* ---------- MISC ---------- */
+[data-lag-eta] [hidden]{display:none !important;}
+
+.eta-countrylink--secondary{
+  margin-top: 6px;
+  font-size: 12px;
+}
+
+.eta-disclaimer{
+  margin-top: 6px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--eta-muted, #666);
+}
+
+/* Montserrat + country emphasis */
+.lag-eta-card{
+  font-family: "Montserrat";
+}
+.lag-eta-card button,
+.lag-eta-card input,
+.lag-eta-card select{
+  font-family: inherit;
+}
+
+/* Country name in intl matrix */
+.eta-matrix-country [data-intl-place]{
+  font-weight: 700;
+  color: #000;
+}
+
+.eta-24{
+  color: #E87529;
+}
+</style>

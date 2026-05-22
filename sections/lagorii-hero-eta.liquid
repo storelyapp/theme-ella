@@ -1,0 +1,1272 @@
+{% comment %}
+Lagorii â€¢ Hero + ETA (buckets JSON)
+- Reads estimate-delivery.json (with buckets:{timeline:[{pin,city,locality?,area?,state?},...]})
+- No dependency on product page widget; fully self-contained
+- Two-line display + 60-min CTA gating
+{% endcomment %}
+
+<section id="lag-hero-eta-{{ section.id }}">
+  <style>
+    #lag-hero-eta-{{ section.id }}{
+      /* Section spacing */
+      margin-top: {{ section.settings.section_margin_top | default: 0 }}px;
+      margin-bottom: {{ section.settings.section_margin_bottom | default: 32 }}px;
+
+      /* Overlay tokens (unchanged) */
+      --inset: {{ section.settings.inset | default: 14 }}px;
+      --inset-lg: {{ section.settings.inset_desktop | default: 18 }}px;
+
+      --ov-pad-y: {{ section.settings.overlay_pad_y | default: 10 }}px;
+      --ov-pad-x: {{ section.settings.overlay_pad_x | default: 12 }}px;
+      --ov-bg: {{ section.settings.overlay_bg | default: '#ffffff' }};
+      --ov-opacity: {{ section.settings.overlay_opacity | default: 90 }}%;
+      --ov-brd: {{ section.settings.overlay_border | default: '#e5e5e5' }};
+      --ov-radius: {{ section.settings.overlay_radius | default: 12 }}px;
+      --ov-text: {{ section.settings.overlay_text | default: '#111' }};
+      --ov-weight: {{ section.settings.overlay_weight | default: '800' }};
+      --ov-fs: {{ section.settings.overlay_font_size | default: 15 }}px;
+
+      --truck-color: {{ section.settings.truck_color | default: '#E87529' }};
+      --truck-size: {{ section.settings.truck_size | default: 20 }}px;
+
+      --cta-bg: {{ section.settings.cta_bg | default: '#111' }};
+      --cta-text: {{ section.settings.cta_text | default: '#fff' }};
+      --cta-brd: {{ section.settings.cta_border | default: 'transparent' }};
+      --cta-radius: {{ section.settings.cta_radius | default: 14 }}px;
+      --cta-pad-y: {{ section.settings.cta_pad_y | default: 10 }}px;
+      --cta-pad-x: {{ section.settings.cta_pad_x | default: 14 }}px;
+      --cta-gap: 8px;
+      --cta-weight: {{ section.settings.cta_weight | default: '800' }};
+      --cta-fs: {{ section.settings.cta_font_size | default: 14 }}px;
+      --cta-opacity: {{ section.settings.cta_opacity | default: 92 }}%;
+
+      /* Dots customisation */
+      --dot-color: {{ section.settings.dots_color | default: '#ffffff' }};
+      --dot-active-color: {{ section.settings.dots_active_color | default: '#111111' }};
+      --dots-margin-top: {{ section.settings.dots_margin_top | default: 8 }}px;
+      --dots-gap: {{ section.settings.dots_gap | default: 6 }}px;
+       --eta-ico-perm:28px;
+    }
+
+    /* Hero now sizes from image aspect ratio (no fixed height) */
+    .hero{
+      position:relative;
+      width:100%;
+      border-radius:{{ section.settings.hero_radius | default: 0 }}px;
+      overflow:hidden;
+      background:#f7f7f7; /* neutral; slides show actual images */
+    }
+
+    /* Carousel track + slides (not absolutely positioned anymore) */
+    .hero-track{
+      display:flex;
+      transition:transform .6s ease;
+      will-change:transform;
+    }
+
+    .hero-slide{
+      flex:0 0 100%;
+    }
+
+    .hero-slide-link{
+      display:block;
+      width:100%;
+      height:100%;
+    }
+
+    .hero-slide-img{
+      display:block;
+      width:100%;
+      height:auto;           /* keep image aspect ratio */
+    }
+
+    .overlay{
+      position:absolute;
+      inset:0;
+      display:grid;
+      grid-template-columns:1fr auto;
+      grid-template-rows:auto 1fr;
+      padding:var(--inset);
+      pointer-events:none; /* so hero is clickable underneath except chip/cta */
+    }
+    @media (min-width:768px){
+      .overlay{padding:var(--inset-lg);}
+    }
+
+    .chip,
+    .cta{
+      pointer-events:auto; /* re-enable interactions */
+    }
+
+    .chip{
+      align-self:start;justify-self:start;display:inline-flex;gap:10px;align-items:flex-start;
+      background:color-mix(in srgb,var(--ov-bg) calc(var(--ov-opacity)),transparent);
+      color:var(--ov-text);border:1px solid var(--ov-brd);border-radius:var(--ov-radius);
+      padding:var(--ov-pad-y) var(--ov-pad-x);backdrop-filter:saturate(1.2) blur(2px);
+      max-width:min(92vw,560px);font-size:var(--ov-fs);font-weight:var(--ov-weight);line-height:1.2;
+    }
+    {% if section.settings.overlay_font != blank %}
+      .chip{ {{ section.settings.overlay_font | font_face }} font-family:{{ section.settings.overlay_font.family }}; }
+    {% endif %}
+
+    .truck{display:flex;align-items:flex-start;color:var(--truck-color);}
+    .truck svg{width:var(--truck-size);height:var(--truck-size);display:block;}
+
+    .body{display:flex;flex-direction:column;gap:2px;min-width:0;}
+    .title{display:flex;align-items:center;gap:6px;white-space:nowrap;}
+    .title u{ text-underline-offset:2px; cursor:pointer; }
+    .sub{font-weight:600;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:72vw;}
+
+    .intl-link{all:unset;display:inline-flex;align-items:center;gap:6px;cursor:pointer;opacity:.85;font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:2px;}
+    .intl-link[hidden]{display:none !important;}
+    .intl-link--filled{margin-top:2px;}
+
+
+    .line1{font-weight:800;letter-spacing:.02em;font-size:clamp(16px,3.6vw,20px);line-height:1.18;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    [data-line2]{display:inline-block;max-width:72vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+    .cta{
+      align-self:start;justify-self:end;display:none;align-items:center;gap:var(--cta-gap);
+      background:color-mix(in srgb,var(--cta-bg) calc(var(--cta-opacity)),transparent);
+      color:var(--cta-text);border:1px solid var(--cta-brd);border-radius:var(--cta-radius);
+      padding:var(--cta-pad-y) var(--cta-pad-x);font-weight:var(--cta-weight);font-size:var(--cta-fs);
+      line-height:1;text-decoration:none;white-space:nowrap;backdrop-filter:saturate(1.2) blur(2px);
+    }
+    {% if section.settings.cta_font != blank %}
+      .cta{ {{ section.settings.cta_font | font_face }} font-family:{{ section.settings.cta_font.family }}; }
+    {% endif %}
+    .cta .ico img{width:{{ section.settings.cta_icon_size | default: 16 }}px;height:{{ section.settings.cta_icon_size | default: 16 }}px;display:block;object-fit:contain;}
+    .cta .mins b{font-weight:900;}
+
+    .modal{position:fixed;inset:0;z-index:9999}
+    .modal[hidden]{display:none}
+    .backdrop{position:absolute;inset:0;background:rgba(0,0,0,.55)}
+    .dialog{position:relative;max-width:560px;margin:10vh auto;background:#fff;border-radius:14px;padding:16px;border:2px solid #d6d6d6;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+    @media (max-width:767px){.dialog{max-width:none;width:100%;margin:0 auto;position:absolute;left:0;right:0;bottom:0;border-radius:16px 16px 0 0}}
+    .inline{display:flex;gap:8px;align-items:center;margin-top:6px}
+    .input{flex:1;min-width:160px;padding:10px 12px;border:1px solid #ddd;border-radius:8px;font-size:14px}
+    .btn{padding:10px 14px;border-radius:8px;border:1px solid #111;background:#111;color:#fff;cursor:pointer;font-weight:700}
+    .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
+
+    /* Clickable secondary line to re-edit pin */
+    .pinlink{
+      all: unset;
+      display: inline-block;
+      max-width: 72vw;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      cursor: pointer;
+      color: inherit;
+    }
+
+    /* Permission banner */
+    .perm{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid #f0e5da;background:#fdf6f1;border-radius:10px;margin:8px 0 12px}
+    .perm-ico{display:flex;align-items:center}
+    .perm-btn{padding:8px 12px;border-radius:8px;border:1px solid #111;background:#111;color:#fff;cursor:pointer;font-weight:700}
+
+    .perm-ico{display:flex;align-items:center;}
+    .perm-ico svg{
+      width:var(--eta-ico-perm);
+      height:var(--eta-ico-perm);
+      display:block;
+    }
+
+    /* Suggestions list */
+    .modal-sub{margin:.2rem 0 .8rem;color:#555}
+    .list{max-height:38vh;overflow:auto;padding-right:4px;margin-bottom:10px}
+    .lag-eta-option{display:block;padding:10px 8px;border-radius:10px;border:1px solid #eee;margin-bottom:8px}
+    .lag-eta-option input{margin-right:8px}
+    .eta-pin{font-weight:700}
+    .eta-label{font-weight:800}
+
+    /* Divider */
+    .divider{position:relative;text-align:center;margin:12px 0}
+    .divider:before,.divider:after{content:"";display:inline-block;width:40%;height:1px;background:#e5e5e5;vertical-align:middle}
+    .divider span{display:inline-block;min-width:3rem;margin:0 8px;color:#777;font-weight:700;letter-spacing:.08em}
+
+    /* PIN underline only (clickable) */
+    .pinlink{all:unset;display:inline;cursor:pointer;color:inherit}
+    .pinlink .pin{ text-decoration:underline; text-underline-offset:2px; }
+    .pinlink .place{
+      text-decoration:none;
+      margin-left: 4px;
+    }
+
+    /* === HERO ETA â€” MODAL (match widget) === */
+    .lag-eta-modal{position:fixed;inset:0;z-index:9999}
+    .lag-eta-modal[hidden]{display:none}
+    .lag-eta-modal__backdrop{position:absolute;inset:0;background:rgba(0,0,0,.35)}
+    .lag-eta-modal__dialog{
+      position:relative;
+      width:min(92vw,520px);
+      margin:10vh auto;
+      background:#fff;
+      border-radius:12px;
+      padding:16px 16px 18px;
+      box-shadow:0 10px 30px rgba(0,0,0,.25);
+      border:1px solid #e8e8e8;
+    }
+    @media (max-width:767px){
+      .lag-eta-modal__dialog.is-drawer{
+        position:fixed; left:0; right:0; bottom:0; top:auto;
+        width:100%; max-width:none; margin:0;
+        border-radius:16px 16px 0 0;
+        animation:lagSlideUp .18s ease-out both;
+      }
+    }
+    @keyframes lagSlideUp{
+      from{ transform:translateY(8%); opacity:0 }
+      to  { transform:translateY(0);  opacity:1 }
+    }
+    .lag-eta-modal__sub{margin:.25rem 0 1rem;color:#555}
+    .lag-eta-country{margin-top:10px;}
+    .lag-eta-country-title{margin:0 0 8px;font-weight:800;}
+    .lag-eta-inline--country{display:flex;gap:10px;align-items:center;}
+    .lag-eta-inline--country select{flex:1;}
+    .lag-eta-link--small{font-size:12px;opacity:.85;margin-top:8px;}
+.lag-eta-country .lag-eta-link--small[data-country-clear]{margin-bottom:12px;}
+
+    .lag-eta-modal__actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+
+    /* Close (X) button */
+    .lag-eta-modal__close{
+      position:absolute; top:10px; right:10px;
+      width:32px; height:32px; display:inline-flex; align-items:center; justify-content:center;
+      border-radius:8px; border:1px solid #e5e5e5; background:#fff; cursor:pointer;
+    }
+    .lag-eta-modal__close svg{width:18px;height:18px;display:block;opacity:.7}
+
+    /* Permission banner (like widget) */
+    .lag-eta-perm{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid #f0e5da;background:#fdf6f1;border-radius:10px;margin:8px 0 12px}
+    .perm-ico{display:flex;align-items:center}
+    .perm-btn{padding:8px 12px;border-radius:8px;border:1px solid #111;background:#111;color:#fff;cursor:pointer;font-weight:700}
+
+    /* ---------- Divider with lines around "OR" (widget-style) ---------- */
+    .lag-eta-divider{
+      display:flex; align-items:center; gap:12px;
+      margin:14px 0;
+    }
+    .lag-eta-divider > span{ font-weight:700; color:#777; letter-spacing:.08em; }
+    .lag-eta-divider::before,
+    .lag-eta-divider::after{
+      content:""; flex:1 1 auto; height:1px; background:#e5e5e5;
+    }
+
+    /* ---------- PIN entry row ---------- */
+    .lag-eta-row--modal .lag-eta-label{
+      display:block; font-weight:700; margin-bottom:6px;
+    }
+    .lag-eta-inline{
+      display:flex; align-items:center; gap:8px;
+    }
+    .lag-eta-input{
+      flex:1 1 160px;
+      padding:10px 12px;
+      border:1px solid #ddd;
+      border-radius:10px;
+      font-size:14px;
+      background:#fff;
+      outline:none;
+    }
+    .lag-eta-input:focus{
+      border-color:#111;
+      box-shadow:0 0 0 3px rgba(17,17,17,.08);
+    }
+
+    /* ---------- Buttons (Apply / Enable) ---------- */
+    .lag-eta-btn{
+      padding:10px 14px;
+      border-radius:10px;
+      border:1px solid #111;
+      background:#111;
+      color:#fff;
+      cursor:pointer;
+      font-weight:700;
+      line-height:1;
+    }
+    .lag-eta-btn:hover{ filter:brightness(.95); }
+
+    .lag-eta-link{
+      padding:8px 12px;
+      border-radius:10px;
+      border:1px solid #e5e5e5;
+      background:#fafafa;
+      font-weight:600;
+      color:#222;
+      cursor:pointer;
+    }
+    .lag-eta-link:hover{ background:#f2f2f2; }
+
+    /* ---------- Option cards ---------- */
+    .lag-eta-option{
+      display:block;
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid #e9e9e9;
+      background:#fff;
+      transition:background .15s, border-color .15s, box-shadow .15s;
+    }
+    .lag-eta-option:hover{
+      background:#fafafa;
+      box-shadow:0 1px 0 rgba(0,0,0,.04) inset;
+    }
+    @supports(selector(:has(*))){
+      .lag-eta-option:has(input:checked){
+        border-color:#111;
+        background:#f9f9f9;
+      }
+    }
+
+    /* ===== Modal scroll behaviour ===== */
+    .lag-eta-modal__dialog{
+      display:flex !important;
+      flex-direction:column !important;
+      gap:12px;
+      max-height:calc(100dvh - 48px) !important;
+      overflow:hidden !important;
+      padding-bottom:0 !important;
+    }
+
+    .lag-eta-modal__form{
+      flex:0 1 auto !important;
+      max-height:clamp(180px, 36vh, 420px) !important;
+      overflow:auto !important;
+      -webkit-overflow-scrolling:touch;
+      padding-right:2px;
+    }
+
+    .lag-eta-row--modal{
+      position:sticky; bottom:0;
+      background:#fff;
+      z-index:2;
+      margin:0 -16px -2px;
+      padding:12px 16px calc(12px + env(safe-area-inset-bottom)) !important;
+      border-top:1px solid #eee;
+      box-shadow:0 -6px 12px rgba(0,0,0,.03);
+    }
+
+    .lag-eta-modal__actions{ display:none !important; }
+
+    .lag-eta-btn--apply{
+      background:#E87529 !important;
+      border-color:#E87529 !important;
+    }
+    .lag-eta-btn--apply:hover{ filter:brightness(.95); }
+
+    #etaModalTitle{ margin:0 !important; }
+
+    @media (max-width:767px){
+      .lag-eta-modal__dialog.is-drawer{
+        height:min(92dvh, 660px) !important;
+        max-height:92dvh !important;
+      }
+      .lag-eta-modal__form{
+        max-height:clamp(160px, 34vh, 380px) !important;
+      }
+    }
+
+    @media (max-height:640px){
+      .lag-eta-modal__form{ max-height:32vh !important; }
+    }
+
+    /* Dots navigation â€” now theme-configurable */
+      .hero-dots{
+      margin-top: var(--dots-margin-top);
+      display:flex;
+      justify-content:center;
+      gap: var(--dots-gap);
+    }
+
+
+
+    .hero-dot{
+      width:8px;
+      height:8px;
+      border-radius:999px;
+      border:none;
+      padding:0;
+      background:var(--dot-color);
+      cursor:pointer;
+      opacity:.8;
+    }
+    .hero-dot.is-active{
+      width:16px;
+      background:var(--dot-active-color);
+      opacity:1;
+    }
+
+      .cta-text{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      line-height:1.1;
+    }
+    .cta-label{
+      font-size: max(11px, var(--cta-fs) * 0.75);
+      opacity:.8;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+    }
+    .cta .mins{
+      margin-top:2px;
+    }
+
+        /* === Lock ETA CTA text styles (no change on hover/active/click) === */
+    .cta,
+    .cta:hover,
+    .cta:active,
+    .cta:focus {
+      color: var(--cta-text);
+      text-transform: none;
+    }
+
+    .cta .cta-label,
+    .cta .mins {
+      text-transform: none;
+    }
+
+    /* Modal "Apply" button â€“ keep same text style across states */
+    .lag-eta-btn,
+    .lag-eta-btn:hover,
+    .lag-eta-btn:active,
+    .lag-eta-btn:focus {
+      background: #111;
+      border-color: #111;
+      color: #fff;
+      text-transform: none;
+    }
+
+    /* Secondary modal link button */
+    .lag-eta-link,
+    .lag-eta-link:hover,
+    .lag-eta-link:active,
+    .lag-eta-link:focus {
+      color: #222;
+      text-transform: none;
+    }
+
+  </style>
+
+  <div class="hero">
+    <!-- Slides -->
+    <div class="hero-track" data-hero-track>
+      {% if section.blocks.size > 0 %}
+        {% for block in section.blocks %}
+          {% assign desktop_image = block.settings.image_desktop | default: block.settings.image | default: section.settings.image %}
+          {% assign mobile_image = block.settings.image_mobile  | default: block.settings.image | default: section.settings.image %}
+
+          {% assign banner_url = blank %}
+          {% if block.settings.banner_collection != blank %}
+            {% assign banner_url = block.settings.banner_collection.url %}
+          {% elsif block.settings.banner_link != blank %}
+            {% assign banner_url = block.settings.banner_link %}
+          {% endif %}
+
+          <div class="hero-slide">
+            {% if banner_url != blank %}
+              <a href="{{ banner_url }}" class="hero-slide-link">
+            {% else %}
+              <div class="hero-slide-link">
+            {% endif %}
+
+              {% if desktop_image or mobile_image %}
+                <picture>
+                  {% if desktop_image != blank %}
+                    <source
+                      media="(min-width: 768px)"
+                      srcset="{{ desktop_image | image_url: width: 2000 }}">
+                  {% endif %}
+                  {% if mobile_image != blank %}
+                    <img
+                      class="hero-slide-img"
+                      src="{{ mobile_image | image_url: width: 1200 }}"
+                      alt="{{ mobile_image.alt | escape }}">
+                  {% elsif desktop_image != blank %}
+                    <img
+                      class="hero-slide-img"
+                      src="{{ desktop_image | image_url: width: 1200 }}"
+                      alt="{{ desktop_image.alt | escape }}">
+                  {% endif %}
+                </picture>
+              {% endif %}
+
+            {% if banner_url != blank %}
+              </a>
+            {% else %}
+              </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      {% else %}
+        {% if section.settings.image != blank %}
+          <div class="hero-slide">
+            <div class="hero-slide-link">
+              <img
+                class="hero-slide-img"
+                src="{{ section.settings.image | image_url: width: 1600 }}"
+                alt="{{ section.settings.image.alt | escape }}">
+            </div>
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+
+    <!-- Fixed overlay (TL pincode + TR 60-min CTA) -->
+    <div class="overlay">
+      <!-- TL chip -->
+      <div class="chip">
+        <span class="body">
+          <!-- empty -->
+          <button type="button" class="title" data-open style="all:unset;display:inline-flex;align-items:center;cursor:pointer;color:inherit">
+            <u>Check shipping</u>
+          </button>
+          <small class="sub" data-hint>{{ section.settings.hint_label | default: 'Choose country or enter pincode' }}</small>
+<!-- filled -->
+          <div class="filled" data-filled hidden>
+            <div class="title"><span class="line1" data-line1>Get it by â€”</span></div>
+            <small class="sub">
+              <button type="button" class="pinlink" data-edit>
+                <span class="pin" data-pin></span><span class="place" data-place></span>
+              </button>
+            </small>
+              <button type="button"
+                      class="intl-link intl-link--filled"
+                      data-hero-change-country
+                      hidden>
+                {{ section.settings.intl_change_label | default: 'Not your country? Select from list' }}
+              </button>
+          </div>
+        </span>
+      </div>
+
+      <!-- TR CTA (global 60-min link) -->
+      {% assign button_url = section.settings.cta_collection | default: blank %}
+            <a {% if button_url != blank %}href="{{ section.settings.cta_collection.url }}"{% else %}href="{{ section.settings.cta_fallback_url | default: '#' }}"{% endif %}
+         class="cta" data-cta aria-label="{{ section.settings.cta_aria | default: 'Go to collection' }}">
+
+        {% if section.settings.cta_icon != blank %}
+          <span class="ico" aria-hidden="true">
+            <img src="{{ section.settings.cta_icon | image_url: width: 64 }}" alt="">
+          </span>
+        {% endif %}
+
+        <span class="cta-text">
+          {% if section.settings.cta_label != blank %}
+            <span class="cta-label">
+              {{ section.settings.cta_label }}
+            </span>
+          {% endif %}
+          <span class="mins">
+            <b>{{ section.settings.cta_main_text | default: '60 Mins' }}</b>
+          </span>
+        </span>
+      </a>
+    </div>
+
+    
+  </div>
+{% if section.blocks.size > 1 %}
+      <div class="hero-dots" aria-hidden="true">
+        {% for block in section.blocks %}
+          <button type="button"
+                  class="hero-dot{% if forloop.first %} is-active{% endif %}"
+                  data-hero-dot></button>
+        {% endfor %}
+      </div>
+    {% endif %}
+  <!-- modal -->
+  <div class="lag-eta-modal" data-eta-modal hidden>
+    <div class="lag-eta-modal__backdrop" data-eta-close></div>
+    <div class="lag-eta-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="etaModalTitle">
+      <button type="button" class="lag-eta-modal__close" data-eta-close aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+
+      <h3 id="etaModalTitle">Check shipping</h3>
+
+
+      <div class="lag-eta-country" data-hero-country hidden>
+        <p class="lag-eta-country-title">Shipping international?</p>
+        <div class="lag-eta-inline lag-eta-inline--country">
+          <select class="lag-eta-input" data-country-select aria-label="Select your country"></select>
+          <button class="lag-eta-btn lag-eta-btn--apply" data-country-apply type="button">Check shipping</button>
+        </div>
+        <button type="button" class="lag-eta-link lag-eta-link--small" data-country-clear>Back to India (enter PIN)</button>
+      </div>
+
+      <div class="lag-eta-row lag-eta-row--modal" data-hero-india>
+      <label class="lag-eta-label" for="lagEtaPin">Enter pincode</label>
+      <div class="lag-eta-inline">
+        <input id="lagEtaPin" type="text" inputmode="numeric" maxlength="6" placeholder="6-digit PIN"
+              class="lag-eta-input" aria-label="Enter pincode">
+        <button class="lag-eta-btn lag-eta-btn--apply" data-action="check" type="button">Check shipping</button>
+      </div>
+      <button type="button" class="lag-eta-link lag-eta-link--small" data-hero-switch-intl hidden>Shipping international?</button>
+      <p class="lag-eta-error" data-eta-error hidden>
+        {{ settings.lag_eta_invalid_pin_msg | default: "Not a valid pincode. Please enter a 6-digit PIN." }}
+      </p>
+    </div>
+
+      <div class="lag-eta-modal__actions">
+        <button type="button" class="lag-eta-link" data-eta-close>Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+(function(){
+  const root = document.getElementById('lag-hero-eta-{{ section.id }}');
+  if (!root) return;
+  if (root.dataset.heroEtaBound === "1") return;
+  root.dataset.heroEtaBound = "1";
+
+  // --- International (shared key with widget) ---
+  const INTL_STORE_KEY    = 'lag_eta_intl';
+  const INTL_SUMMARY_DAYS = {{ settings.lag_eta_intl_standard_days | default: "7â€“10 business days" | json }};
+
+  // Intl enable: default ON unless explicitly set to false
+  const intlEnabled = () => (window.LAG_ETA_INTL_ENABLE !== false);
+  const INTL_EVENT = 'lag:eta:intl';
+  function emitIntlEvent(det){
+    try{ window.dispatchEvent(new CustomEvent(INTL_EVENT, { detail: det || null })); }catch(e){}
+  }
+
+
+
+// Country data (keep in sync with widget)
+const COUNTRY_MAP = {
+  IN:"India",
+  US:"United States",
+  CA:"Canada",
+  GB:"United Kingdom",
+  AE:"United Arab Emirates",
+  SG:"Singapore",
+  AU:"Australia",
+  NZ:"New Zealand",
+  MY:"Malaysia",
+  DE:"Germany",
+  FR:"France",
+  QA:"Qatar",
+  SA:"Saudi Arabia",
+  ZA:"South Africa",
+  LK:"Sri Lanka"
+};
+
+const POPULAR_CODES = (window.LAG_ETA_INTL_POPULAR || "US,CA,AE,SG,AU,GB")
+  .split(',')
+  .map(c => c.trim().toUpperCase())
+  .filter(Boolean);
+
+function saveIntlSelection(det, broadcast = true){
+  try{
+    if (!det){
+      localStorage.removeItem(INTL_STORE_KEY);
+      if (broadcast) emitIntlEvent(null);
+      return;
+    }
+    localStorage.setItem(INTL_STORE_KEY, JSON.stringify(det));
+    if (broadcast) emitIntlEvent(det);
+  }catch(e){}
+}
+
+function buildCountryOptions(){
+  if (!$countrySelect) return;
+  $countrySelect.innerHTML = "";
+  const seen = new Set();
+
+  function add(code){
+    const c = code.toUpperCase();
+    if (!COUNTRY_MAP[c] || seen.has(c)) return;
+    seen.add(c);
+    const opt = document.createElement('option');
+    opt.value = c;
+    opt.textContent = COUNTRY_MAP[c];
+    $countrySelect.appendChild(opt);
+  }
+
+  // always allow going back to India flow
+  if (!seen.has('IN')) add('IN');
+
+  POPULAR_CODES.forEach(add);
+
+  const rest = Object.keys(COUNTRY_MAP)
+    .filter(c => !seen.has(c))
+    .sort((a,b) => COUNTRY_MAP[a].localeCompare(COUNTRY_MAP[b]));
+  rest.forEach(add);
+}
+
+
+  function loadIntlSelection(){
+    try{ return JSON.parse(localStorage.getItem(INTL_STORE_KEY) || 'null'); }catch(e){ return null; }
+  }
+  function clearIntlSelection(){ saveIntlSelection(null, true); }
+
+  // --- Hooks ---
+  const $open   = root.querySelector('[data-open]');
+  const $hint   = root.querySelector('[data-hint]');
+  const $filled = root.querySelector('[data-filled]');
+  const $line1  = root.querySelector('[data-line1]');
+  const $cta    = root.querySelector('[data-cta]');
+  const $pinEl  = root.querySelector('[data-pin]');
+  const $placeEl= root.querySelector('[data-place]');
+
+
+const $intlOpen      = root.querySelector('[data-hero-intl-open]');
+const $changeCountry = root.querySelector('[data-hero-change-country]');
+const $editBtn       = root.querySelector('[data-edit]');
+
+
+  // Modal
+  const $modal    = root.querySelector('[data-eta-modal]');
+  const $dialog   = $modal && $modal.querySelector('.lag-eta-modal__dialog');
+  const $pinInput = $modal && $modal.querySelector('#lagEtaPin');
+  const $applyBtn = $modal && $modal.querySelector('[data-action="check"]');
+  const $error    = $modal && $modal.querySelector('[data-eta-error]');
+
+  const $indiaWrap = $modal && $modal.querySelector('[data-hero-india]');
+  const $switchIntl = $modal && $modal.querySelector('[data-hero-switch-intl]');
+
+const $countryWrap   = $modal && $modal.querySelector('[data-hero-country]');
+const $divider       = $modal && $modal.querySelector('[data-hero-divider]');
+const $countrySelect = $modal && $modal.querySelector('[data-country-select]');
+const $countryApply  = $modal && $modal.querySelector('[data-country-apply]');
+const $countryClear  = $modal && $modal.querySelector('[data-country-clear]');
+
+  const $closes   = $modal ? $modal.querySelectorAll('[data-eta-close]') : [];
+
+  const normPin = v => (v||'').toString().replace(/\D+/g,'').slice(0,6);
+
+  function addDays(date, n){ const d=new Date(date.getTime()); d.setDate(d.getDate()+n); return d; }
+  function durationText(tl){
+    switch(tl){
+      case '60-min':   return '60 mins';
+      case 'same-day': return 'today';
+      case '2-days':   return '2 days';
+      case '4-days':   return '4 days';
+      case '6-days':   return '6 days';
+      case '8-days':   return '8 days';
+      default:         return 'soon';
+    }
+  }
+  function dateSuffix(tl){
+    if (tl === '60-min' || tl === 'same-day') return '';
+    const map = {'2-days':2,'4-days':4,'6-days':6,'8-days':8};
+    const d = addDays(new Date(), map[tl] || 3);
+    return d.toLocaleString(undefined,{month:'long', day:'2-digit'});
+  }
+
+  
+function showEmpty(){
+  $filled && $filled.setAttribute('hidden','');
+  $hint && $hint.removeAttribute('hidden');
+  if ($cta) $cta.style.display = 'none';
+
+  if ($open){
+    $open.removeAttribute('hidden');
+    $open.style.display = 'inline-flex';
+    $open.removeAttribute('aria-hidden');
+  }
+
+  // domestic edit button hidden in empty state
+  if ($editBtn) $editBtn.style.display = 'none';
+
+  // intl link only if enabled
+  if ($intlOpen){
+    const enabled = intlEnabled();
+    $intlOpen.hidden = !enabled;
+    $intlOpen.style.display = enabled ? 'inline-flex' : 'none';
+  }
+
+  if ($changeCountry){
+    $changeCountry.hidden = true;
+    $changeCountry.style.display = 'none';
+  }
+}
+
+  function render(rec){
+    if (!rec){ showEmpty(); return; }
+
+    // Switching to a PIN clears any prior intl selection (silent, no broadcast)
+    saveIntlSelection(null, false);
+
+    let line1;
+    if (rec.timeline === 'same-day') {
+      line1 = 'Get it by today';
+    } else if (rec.timeline === '60-min') {
+      line1 = 'Get it in 2-hours';
+    } else {
+      const dur  = durationText(rec.timeline);
+      const date = dateSuffix(rec.timeline);
+      line1 = date ? `Get it by ${dur}, ${date}` : `Get it by ${dur}`;
+    }
+    if ($line1) $line1.textContent = line1;
+
+    if ($pinEl) $pinEl.textContent = String(rec.pin || '');
+    if ($placeEl) {
+      const place = [rec.city, (rec.locality || rec.area || '')].filter(Boolean).join(', ').trim();
+      $placeEl.textContent = place ? ` ${place}` : '';
+    }
+
+    if ($open){
+      $open.setAttribute('hidden','');
+      $open.style.display = 'none';
+      $open.setAttribute('aria-hidden','true');
+    }
+    $hint && $hint.setAttribute('hidden','');
+    $filled && $filled.removeAttribute('hidden');
+
+    if ($intlOpen){ $intlOpen.hidden = true; $intlOpen.style.display = 'none'; }
+    if ($changeCountry){ $changeCountry.hidden = true; $changeCountry.style.display = 'none'; }
+    if ($editBtn) $editBtn.style.display = 'inline-flex';
+
+    if ($cta) $cta.style.display = (rec.timeline === '60-min') ? 'inline-flex' : 'none';
+  }
+
+  function renderIntlLine(det){
+    if (!det){ showEmpty(); return; }
+    const code = (det.countryCode || det.country || '').toString().toUpperCase();
+    const name = det.countryName || code || 'your country';
+    const days = INTL_SUMMARY_DAYS || '7â€“10 business days';
+
+    if ($line1) $line1.textContent = `Delivery to ${name}, ${days}.`;
+    if ($pinEl)   $pinEl.textContent = '';
+    if ($placeEl) $placeEl.textContent = '';
+
+    if ($open){
+      $open.setAttribute('hidden','');
+      $open.style.display = 'none';
+      $open.setAttribute('aria-hidden','true');
+    }
+    $hint && $hint.setAttribute('hidden','');
+    $filled && $filled.removeAttribute('hidden');
+
+    if ($intlOpen){ $intlOpen.hidden = true; $intlOpen.style.display = 'none'; }
+    if ($editBtn) $editBtn.style.display = 'none';
+    if ($changeCountry){
+      const enabled = intlEnabled();
+      $changeCountry.hidden = !enabled;
+      $changeCountry.style.display = enabled ? 'inline-flex' : 'none';
+    }
+
+    if ($cta) $cta.style.display = 'none';
+  }
+
+  function clearErr(){
+    if (!$error) return;
+    $error.hidden = true;
+    // restore to default text (Liquid) when hiding
+    try{
+      $error.textContent = $error.getAttribute('data-default') || $error.textContent;
+    }catch(e){}
+  }
+
+  let __heroMode = 'india'; // 'india' | 'intl'
+
+  function setMode(mode){
+    // fallback if intl disabled
+    const intlOk = intlEnabled();
+    const target = (mode === 'intl' && intlOk) ? 'intl' : 'india';
+    __heroMode = target;
+
+    if ($countryWrap) $countryWrap.hidden = (target !== 'intl');
+    if ($indiaWrap)   $indiaWrap.hidden   = (target !== 'india');
+
+    // show/hide "Shipping international?" switch in india mode
+    if ($switchIntl) $switchIntl.hidden = !(intlOk && target === 'india');
+
+    // divider (legacy) always hidden
+    if ($divider) $divider.hidden = true;
+
+    clearErr();
+
+    if (target === 'intl'){
+      // keep PIN value but move focus to country
+      if ($countrySelect){
+        setTimeout(()=>{ try{ $countrySelect.focus(); }catch(e){} }, 0);
+      }
+    } else {
+      if ($pinInput){
+        setTimeout(()=>{ try{ $pinInput.focus(); }catch(e){} }, 0);
+      }
+    }
+  }
+
+  function showErr(msg){
+    if (!$error) return;
+    if (!$error.getAttribute('data-default')) {
+      try{ $error.setAttribute('data-default', $error.textContent || ''); }catch(e){}
+    }
+    $error.textContent = msg || $error.textContent || 'Please enter a valid PIN.';
+    $error.hidden = false;
+  }
+
+  
+function openModal(focusTarget){
+  if (!$modal) return;
+
+  // toggle drawer
+  if (window.matchMedia && window.matchMedia('(max-width: 767px)').matches) $dialog && $dialog.classList.add('is-drawer');
+  else $dialog && $dialog.classList.remove('is-drawer');
+
+  const intlOk = intlEnabled();
+
+  // Build country options + restore selected if intl is enabled
+  if (intlOk && $countrySelect){
+    buildCountryOptions();
+    const saved = loadIntlSelection();
+    const code  = saved && saved.countryCode ? String(saved.countryCode).toUpperCase() : '';
+    if (code && $countrySelect.querySelector(`option[value="${code}"]`)) {
+      $countrySelect.value = code;
+    } else if ($countrySelect.options.length){
+      const usOpt = $countrySelect.querySelector('option[value="US"]');
+      $countrySelect.value = usOpt ? 'US' : $countrySelect.options[0].value;
+    }
+  }
+
+  $modal.hidden = false;
+  document.body.style.overflow = 'hidden';
+
+  // restore last PIN (if any)
+  try{
+    const c = window.LagETA && typeof window.LagETA.getCookie === 'function' ? window.LagETA.getCookie() : null;
+    if ($pinInput) $pinInput.value = (c && c.pin) ? String(c.pin) : '';
+  }catch(e){}
+
+  clearErr();
+
+  // Decide initial mode
+  const savedIntl = intlOk ? loadIntlSelection() : null;
+
+  if (focusTarget === 'country') setMode('intl');
+  else if (focusTarget === 'pin') setMode('india');
+  else if (savedIntl && savedIntl.countryCode) setMode('intl');
+  else setMode('india');
+}
+
+
+  function closeModal(){
+    if ($modal) $modal.hidden = true;
+    document.body.style.overflow = '';
+    clearErr();
+  }
+
+  async function byPinSafe(pin){
+    if (window.LagETA && typeof window.LagETA.byPin === 'function') return window.LagETA.byPin(pin);
+
+    await new Promise((resolve)=>{
+      let done = false;
+      const t = setTimeout(()=>{ if(done) return; done=true; resolve(); }, 2500);
+      window.addEventListener('lageta:ready', ()=>{ if(done) return; done=true; clearTimeout(t); resolve(); }, { once:true });
+    });
+
+    if (window.LagETA && typeof window.LagETA.byPin === 'function') return window.LagETA.byPin(pin);
+    return null;
+  }
+
+  async function applyPin(){
+    if (!$pinInput) return;
+    clearErr();
+
+    const p = normPin($pinInput.value);
+    if (p.length !== 6){
+      const msg = (window.LAG_ETA_TEXT && window.LAG_ETA_TEXT.invalidPin)
+        || 'Not a valid pincode. Please enter a 6-digit PIN.';
+      showErr(msg);
+      return;
+    }
+
+    clearIntlSelection();
+
+    let rec = null;
+    try{ rec = await byPinSafe(p); }catch(e){}
+
+    if (rec){
+      render(rec);
+      closeModal();
+    } else {
+      const msg = (window.LAG_ETA_TEXT && window.LAG_ETA_TEXT.unserviceablePin)
+        || "We couldnâ€™t find this pincode. Please enter a valid Indian PIN code.";
+      showErr(msg);
+    }
+  }
+
+  // Bind
+  $open && $open.addEventListener('click', ()=>openModal());
+  $editBtn && $editBtn.addEventListener('click', ()=>openModal());
+  $applyBtn && $applyBtn.addEventListener('click', applyPin);
+  $switchIntl && $switchIntl.addEventListener('click', ()=>setMode('intl'));
+  $intlOpen && $intlOpen.addEventListener('click', ()=>openModal('country'));
+  $changeCountry && $changeCountry.addEventListener('click', ()=>openModal('country'));
+  $pinInput && $pinInput.addEventListener('keydown', function(e){
+    if (e.key === 'Enter'){ e.preventDefault(); applyPin(); }
+  });
+
+// International country apply
+$countryApply && $countryApply.addEventListener('click', function(){
+  if (!$countrySelect) return;
+  const code = String($countrySelect.value || '').toUpperCase();
+  if (!code) return;
+
+  clearErr();
+
+  if (code === 'IN'){
+    // Back to India flow: clear country, keep modal open for PIN entry
+    clearIntlSelection();
+    showEmpty();
+    setMode('india');
+    if ($pinInput) setTimeout(()=>{ try{ $pinInput.focus(); }catch(e){} }, 0);
+    return;
+  }
+
+  const det = { countryCode: code, countryName: COUNTRY_MAP[code] || code };
+  saveIntlSelection(det);
+  renderIntlLine(det);
+  closeModal();
+});
+
+$countryClear && $countryClear.addEventListener('click', function(){
+  clearIntlSelection();
+  showEmpty();
+  setMode('india');
+});
+
+  $closes && $closes.forEach(el => el.addEventListener('click', closeModal));
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && $modal && !$modal.hidden) closeModal();
+  }, { passive:true });
+
+  // Keep in sync with widget
+  
+  // Keep in sync with widget (intl selection)
+  window.addEventListener(INTL_EVENT, function(ev){
+    if (!intlEnabled()) return;
+    const det = (ev && ev.detail) || null;
+    const code = det && (det.countryCode || det.country) ? String(det.countryCode || det.country).toUpperCase() : '';
+    if (code && code !== 'IN'){
+      renderIntlLine({ countryCode: code, countryName: det.countryName || det.countryName === '' ? det.countryName : (det.countryName || det.country || code) });
+      return;
+    }
+    // cleared → fall back to PIN cookie if present
+    try{
+      const c = window.LagETA && typeof window.LagETA.getCookie === 'function' ? window.LagETA.getCookie() : null;
+      if (c && c.pin){ render(c); return; }
+    }catch(e){}
+    showEmpty();
+    if ($modal && !$modal.hidden) setMode('india');
+  }, { passive:true });
+window.addEventListener('lag:eta', function(ev){
+    // If user explicitly chose international, don't override it with stale PIN events.
+    if (intlEnabled()){
+      const intlSaved = loadIntlSelection();
+      const code = intlSaved && intlSaved.countryCode ? String(intlSaved.countryCode).toUpperCase() : '';
+      if (code && code !== 'IN') return;
+    }
+    const detail = (ev && ev.detail) || null;
+    const rec = (detail && (detail.result || detail)) || null;
+    if (rec && rec.pin) render(rec);
+  }, { passive:true });
+
+  function init(){
+    if (intlEnabled()){
+      const saved = loadIntlSelection();
+      if (saved && saved.countryCode && saved.countryCode.toUpperCase() !== 'IN'){
+        renderIntlLine(saved);
+        return;
+      }
+    }
+
+    try{
+      const c = window.LagETA && typeof window.LagETA.getCookie === 'function' ? window.LagETA.getCookie() : null;
+      if (c && c.pin){ render(c); return; }
+    }catch(e){}
+
+    showEmpty();
+  }
+
+  if (window.LagETA && window.LagETA.ready && window.LagETA.ready()) init();
+  else window.addEventListener('lageta:ready', init, { once:true });
+})();
+</script>
+
+
+  <script>
+   (function(){
+    const root  = document.getElementById('lag-hero-eta-{{ section.id }}');
+    if (!root) return;
+
+    const track  = root.querySelector('[data-hero-track]');
+    if (!track) return;
+
+    const slides = Array.from(track.children);
+    if (slides.length <= 1) return;
+
+    const dots   = Array.from(root.querySelectorAll('[data-hero-dot]'));
+    let index    = 0;
+    let timerId  = null;
+    const INTERVAL = {{ section.settings.autoplay_speed | default: 5000 | times: 1 }};
+
+    function goTo(i){
+      index = (i + slides.length) % slides.length;
+      track.style.transform = 'translateX(-' + (index * 100) + '%)';
+      dots.forEach((dot, idx) => {
+        dot.classList.toggle('is-active', idx === index);
+      });
+    }
+
+    function startAuto(){
+      stopAuto();
+      timerId = setInterval(() => goTo(index + 1), INTERVAL);
+    }
+    function stopAuto(){
+      if (timerId) clearInterval(timerId);
+      timerId = null;
+    }
+
+    // Dot click
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => {
+        goTo(i);
+        startAuto();
+      });
+    });
+
+    // Pause on hover (desktop only)
+    root.addEventListener('mouseenter', stopAuto);
+    root.addEventListener('mouseleave', startAuto);
+
+    // Swipe support (touch)
+    let touchStartX = null;
+    let touchStartY = null;
+
+    track.addEventListener('touchstart', function(e){
+      if (!e.touches || !e.touches.length) return;
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    track.addEventListener('touchend', function(e){
+      if (touchStartX === null) return;
+      if (!e.changedTouches || !e.changedTouches.length) {
+        touchStartX = touchStartY = null;
+        return;
+      }
+      const endX = e.changedTouches[0].clientX;
+      const endY = e.changedTouches[0].clientY;
+      const diffX = endX - touchStartX;
+      const diffY = endY - touchStartY;
+
+      const absX = Math.abs(diffX);
+      const absY = Math.abs(diffY);
+      const SWIPE_THRESHOLD = 40; // px
+
+      // Only act if mostly horizontal swipe
+      if (absX > absY && absX > SWIPE_THRESHOLD){
+        if (diffX < 0){
+          // swipe left -> next
+          goTo(index + 1);
+        }else{
+          // swipe right -> prev
+          goTo(index - 1);
+        }
+        startAuto();
+      }
+
+      touchStartX = touchStartY = null;
+    }, { passive: true });
+
+    goTo(0);
+    startAuto();
+  })();
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "Lagorii â€¢ Hero + ETA",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Fallback banner image" },
+
+    { "type": "range", "id": "hero_radius", "label": "Banner radius (px)", "min": 0, "max": 40, "step": 1, "default": 0 },
+
+    { "type": "range", "id": "section_margin_top", "label": "Section margin top (px)", "min": 0, "max": 120, "step": 4, "default": 24 },
+    { "type": "range", "id": "section_margin_bottom", "label": "Section margin bottom (px)", "min": 0, "max": 120, "step": 4, "default": 32 },
+
+    { "type": "range", "id": "inset", "label": "Overlay inset (mobile, px)", "min": 6, "max": 40, "step": 1, "default": 14 },
+    { "type": "range", "id": "inset_desktop", "label": "Overlay inset (desktop, px)", "min": 8, "max": 60, "step": 1, "default": 18 },
+
+    { "type": "header", "content": "Chip styles" },
+    { "type": "font_picker", "id": "overlay_font", "label": "Overlay font", "default": "sans-serif" },
+    { "type": "range", "id": "overlay_font_size", "label": "Overlay font size (px)", "min": 12, "max": 22, "step": 1, "default": 15 },
+    { "type": "select", "id": "overlay_weight", "label": "Overlay weight", "default": "800", "options": [
+      { "value":"600","label":"600" }, { "value":"700","label":"700" }, { "value":"800","label":"800" }, { "value":"900","label":"900" }
+    ]},
+    { "type": "range", "id": "overlay_pad_y", "label": "Overlay padding Y (px)", "min": 4, "max": 24, "step": 1, "default": 10 },
+    { "type": "range", "id": "overlay_pad_x", "label": "Overlay padding X (px)", "min": 6, "max": 28, "step": 1, "default": 12 },
+    { "type": "range", "id": "overlay_radius", "label": "Overlay corner radius (px)", "min": 6, "max": 28, "step": 1, "default": 12 },
+    { "type": "color", "id": "overlay_bg", "label": "Overlay background", "default": "#ffffff" },
+    { "type": "color", "id": "overlay_border", "label": "Overlay border color", "default": "#e5e5e5" },
+    { "type": "color", "id": "overlay_text", "label": "Overlay text color", "default": "#111111" },
+    { "type": "range", "id": "overlay_opacity", "label": "Overlay opacity (%)", "min": 0, "max": 100, "step": 1, "default": 50 },
+
+    { "type": "color", "id": "truck_color", "label": "Truck icon color", "default": "#E87529" },
+    { "type": "range", "id": "truck_size", "label": "Truck icon size (px)", "min": 12, "max": 32, "step": 1, "default": 20 },
+
+    { "type": "header", "content": "Data source" },
+    { "type": "url", "id": "rules_url", "label": "Rules JSON URL (estimate-delivery.json asset URL)" },
+
+    { "type": "header", "content": "CTA (shows only for 60-min)" },
+    { "type": "collection", "id": "cta_collection", "label": "CTA collection link" },
+    { "type": "url", "id": "cta_fallback_url", "label": "Fallback URL (if no collection selected)" },
+    { "type": "font_picker", "id": "cta_font", "label": "CTA font", "default": "sans-serif" },
+    { "type": "select", "id": "cta_weight", "label": "CTA weight", "default": "800", "options": [
+      { "value":"600","label":"600" }, { "value":"700","label":"700" }, { "value":"800","label":"800" }, { "value":"900","label":"900" }
+    ]},
+    { "type": "range", "id": "cta_font_size", "label": "CTA font size (px)", "min": 12, "max": 22, "step": 1, "default": 14 },
+    { "type": "range", "id": "cta_pad_y", "label": "CTA padding Y (px)", "min": 6, "max": 20, "step": 1, "default": 10 },
+    { "type": "range", "id": "cta_pad_x", "label": "CTA padding X (px)", "min": 8, "max": 26, "step": 1, "default": 14 },
+    { "type": "range", "id": "cta_radius", "label": "CTA corner radius (px)", "min": 0, "max": 28, "step": 1, "default": 14 },
+    { "type": "color", "id": "cta_bg", "label": "CTA background", "default": "#111111" },
+    { "type": "color", "id": "cta_text", "label": "CTA text", "default": "#ffffff" },
+    { "type": "color", "id": "cta_border", "label": "CTA border color", "default": "transparent" },
+    { "type": "range", "id": "cta_opacity", "label": "CTA opacity (%)", "min": 0, "max": 100, "step": 1, "default": 50 },
+    { "type": "image_picker", "id": "cta_icon", "label": "CTA icon PNG" },
+    { "type": "range", "id": "cta_icon_size", "label": "CTA icon size (px)", "min": 12, "max": 40, "step": 1, "default": 16 },
+        { "type": "text", "id": "cta_label", "label": "CTA top line", "default": "Delivery in" },
+    { "type": "text", "id": "cta_main_text", "label": "CTA main text", "default": "60 Mins" },
+
+
+    { "type": "header", "content": "Carousel dots & speed" },
+    { "type": "color", "id": "dots_color", "label": "Dot color", "default": "#ffffff" },
+    { "type": "color", "id": "dots_active_color", "label": "Active dot color", "default": "#111111" },
+    { "type": "range", "id": "autoplay_speed", "label": "Autoplay speed (ms)", "min": 2000, "max": 9500, "step": 500, "default": 5000 },
+    { "type": "range", "id": "dots_margin_top", "label": "Dots margin top (px)", "min": 0, "max": 40, "step": 2, "default": 8 },
+    { "type": "range", "id": "dots_gap", "label": "Dots gap (px)", "min": 2, "max": 20, "step": 1, "default": 6 }
+
+  ],
+  "blocks": [
+    {
+      "type": "banner",
+      "name": "Banner slide",
+      "settings": [
+        { "type": "image_picker", "id": "image_mobile", "label": "Mobile banner image" },
+        { "type": "image_picker", "id": "image_desktop", "label": "Desktop banner image" },
+        { "type": "image_picker", "id": "image", "label": "Legacy/fallback image (optional)" },
+        { "type": "collection", "id": "banner_collection", "label": "Banner collection link" },
+        { "type": "url", "id": "banner_link", "label": "Custom link (overrides collection if set)" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Lagorii â€¢ Hero + ETA (Buckets JSON)",
+      "category": "Banners",
+      "blocks": [
+        { "type": "banner" }
+      ]
+    }
+  ]
+}
+{% endschema %}

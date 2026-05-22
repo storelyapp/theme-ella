@@ -1,0 +1,703 @@
+{% comment %}
+  Sticky Bottom Navigation (Mobile-first, fast + smart)
+  - Reveal-all-at-once readiness gate (no flicker)
+  - Cart badge: sessionStorage cache + SWR, no polling
+  - Event/visibility based refresh; interval removed
+  Added (customizable in Theme Editor):
+  - layout_mode: "island" | "stretch"
+  - Outer paddings (island): left/right/top/bottom
+  - Inner paddings (island): X/Y
+  - Gap between items
+  - Active indicator bar flush to the top edge
+{% endcomment %}
+
+{% if section.settings.enable %}
+  <nav
+    id="sticky-bottom-nav"
+    class="sbn"
+    role="navigation"
+    aria-label="Primary bottom navigation"
+    data-show-breakpoint="{{ section.settings.show_on }}"
+    data-ready="0"
+    style="
+      --sbn-bg: {{ section.settings.bg_color }};
+      --sbn-fg: {{ section.settings.text_color }};
+      --sbn-active: {{ section.settings.active_color }};
+      --sbn-border: {{ section.settings.border_color }};
+      --sbn-shadow: {% if section.settings.shadow %}0 -8px 20px rgb(0 0 0 / 8%){% else %}none{% endif %};
+      --sbn-icon-size: {{ section.settings.icon_size | default: 22 }}px;
+      --sbn-font-size: {{ section.settings.font_size | default: 11 }}px;
+      --sbn-icon-color: {{ section.settings.icon_color | default: section.settings.text_color }};
+      --sbn-icon-stroke: {{ section.settings.icon_stroke_color | default: 'transparent' }};
+      --sbn-icon-stroke-w: {{ section.settings.icon_stroke_width | default: 0 }};
+      --sbn-icon-active: {{ section.settings.icon_active_fill | default: section.settings.active_color }};
+      --sbn-icon-stroke-active: {{ section.settings.icon_active_stroke | default: section.settings.active_color }};
+      --sbn-z: 100;
+      --sbn-z-under: 50;
+
+      --sbn-active-outline: {{ section.settings.active_outline_color | default: section.settings.active_color }};
+      --sbn-active-outline-w: {{ section.settings.active_outline_width | default: 2 }}px;
+
+      /* NEW: layout + paddings + gaps (Theme settings) */
+      --sbn-mode: {{ section.settings.layout_mode | default: 'island' }};
+      --outer-left: {{ section.settings.outer_pad_left | default: 10 }}px;
+      --outer-right: {{ section.settings.outer_pad_right | default: 10 }}px;
+      --outer-top: {{ section.settings.outer_pad_top | default: 10 }}px;
+      --outer-bottom: {{ section.settings.outer_pad_bottom | default: 10 }}px;
+      --inner-x: {{ section.settings.inner_pad_x | default: 8 }}px;
+      --inner-y: {{ section.settings.inner_pad_y | default: 6 }}px;
+      --list-gap: {{ section.settings.item_gap | default: 6 }}px;
+
+      /* Island cosmetics */
+      --island-radius: {{ section.settings.island_radius | default: 14 }}px;
+      --island-border-w: {{ section.settings.island_border_w | default: 1 }}px;
+      --island-outline-w: {{ section.settings.island_outline_w | default: 0 }}px;
+      --island-outline-color: rgba(0,0,0,.04);
+
+      /* Active indicator gutter (keeps the bar at the very top edge) */
+      --indicator-gutter: {{ section.settings.indicator_gutter | default: 4 }}px;
+    "
+  >
+    <div class="sbn__container"><!-- mode wrapper -->
+      <ul class="sbn__list">
+
+      {% for block in section.blocks %}
+        {% assign label = block.settings.label | default: 'Item' %}
+        {% assign link  = block.settings.link | default: routes.root_url %}
+
+        {%- if block.settings.kind == 'cart' -%}
+          {% assign link = routes.cart_url %}
+        {%- elsif block.settings.kind == 'account' -%}
+          {% if customer %}{% assign link = routes.account_url %}{% else %}{% assign link = routes.account_login_url %}{% endif %}
+        {%- endif -%}
+
+        {% assign mode = block.settings.display_mode %}
+        {% assign show_badge = false %}
+        {% if block.settings.show_badge and block.settings.kind == 'cart' %}
+          {% assign show_badge = true %}
+        {% endif %}
+
+        <li class="sbn__item" {{ block.shopify_attributes }}>
+          <a
+            href="{{ link }}"
+            class="sbn__link"
+            aria-label="{{ label | escape }}"
+            data-kind="{{ block.settings.kind }}"
+            data-mode="{{ mode }}"
+            style="
+              --icon-fill-inactive: {{ block.settings.inactive_fill | default: section.settings.icon_color }};
+              --icon-stroke-inactive: {{ block.settings.inactive_stroke | default: section.settings.icon_stroke_color }};
+              --icon-stroke-w-inactive: {{ block.settings.inactive_stroke_w | default: section.settings.icon_stroke_width }};
+              --icon-fill-active: {{ block.settings.active_fill | default: section.settings.icon_active_fill }};
+              --icon-stroke-active: {{ block.settings.active_stroke | default: section.settings.icon_active_stroke }};
+              --icon-stroke-w-active: {{ block.settings.active_stroke_w | default: section.settings.icon_stroke_width }};
+              {% if block.settings.icon_size_inactive and block.settings.icon_size_inactive != 0 %}--icon-size-inactive: {{ block.settings.icon_size_inactive }}px;{% endif %}
+              {% if block.settings.icon_size_active and block.settings.icon_size_active != 0 %}--icon-size-active: {{ block.settings.icon_size_active }}px;{% endif %}
+            "
+          >
+            {% if mode != 'text' %}
+              <span class="sbn__icon">
+                {%- comment -%} INACTIVE ICON {%- endcomment -%}
+                {%- case block.settings.icon_source_inactive | default: 'builtin' -%}
+                  {%- when 'builtin' -%}
+                    <span class="icon--inactive">
+                      {%- assign inactive_builtin = block.settings.icon_inactive | default: 'home' -%}
+                      {%- case inactive_builtin -%}
+                        {%- when 'home' -%}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 3 10v10h6v-6h6v6h6V10z" fill="currentColor"/></svg>
+                        {%- when 'grid' -%}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z" fill="currentColor"/></svg>
+                        {%- when 'cart' -%}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM17 22a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM6.3 6h14l-1.4 7H8.2L7 4H3V2h4l1.3 4z" fill="currentColor"/></svg>
+                        {%- when 'user' -%}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-5 0-9 2.5-9 5.5V22h18v-2.5C21 16.5 17 14 12 14z" fill="currentColor"/></svg>
+                        {%- when 'heart' -%}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-8.5-5.7-8.5-11A4.5 4.5 0 0 1 12 6a4.5 4.5 0 0 1 8.5 4c0 5.3-8.5 11-8.5 11z" fill="currentColor"/></svg>
+                        {%- when 'search' -%}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 18a8 8 0 1 1 5.3-14L22 10.7l-1.4 1.4-6.7-6.6A6 6 0 1 0 10 18z" fill="currentColor"/></svg>
+                        {%- else -%}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 3 10v10h6v-6h6v6h6V10z" fill="currentColor"/></svg>
+                      {%- endcase -%}
+                    </span>
+                  {%- when 'custom_svg' -%}
+                    <span class="sbn__svg icon--inactive" aria-hidden="true">{{ block.settings.icon_svg }}</span>
+                  {%- when 'image' -%}
+                    {% if block.settings.icon_image_inactive %}
+                      <span class="sbn__img icon--inactive" aria-hidden="true">
+                        {{ block.settings.icon_image_inactive | image_url: width: 96 | image_tag: loading: 'lazy', decoding: 'async', widths: '48,64,96' }}
+                      </span>
+                    {% endif %}
+                {%- endcase -%}
+
+                {%- comment -%} ACTIVE ICON {%- endcomment -%}
+                {%- case block.settings.icon_source_active | default: 'builtin' -%}
+                  {%- when 'builtin' -%}
+                    <span class="icon--active">
+                      {%- assign active_builtin = block.settings.icon_active | default: inactive_builtin -%}
+                      {%- case active_builtin -%}
+                        {%- when 'home' -%}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 3 10v10h6v-6h6v6h6V10z" fill="currentColor"/></svg>
+                        {%- when 'grid' -%}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z" fill="currentColor"/></svg>
+                        {%- when 'cart' -%}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18a2 2 0 1 0 0 4 2 2 0 0 0 0-4zM17 22a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM6.3 6h14l-1.4 7H8.2L7 4H3V2h4l1.3 4z" fill="currentColor"/></svg>
+                        {%- when 'user' -%}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-5 0-9 2.5-9 5.5V22h18v-2.5C21 16.5 17 14 12 14z" fill="currentColor"/></svg>
+                        {%- when 'heart' -%}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-8.5-5.7-8.5-11A4.5 4.5 0 0 1 12 6a4.5 4.5 0 0 1 8.5 4c0 5.3-8.5 11-8.5 11z" fill="currentColor"/></svg>
+                        {%- when 'search' -%}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 18a8 8 0 1 1 5.3-14L22 10.7l-1.4 1.4-6.7-6.6A6 6 0 1 0 10 18z" fill="currentColor"/></svg>
+                        {%- else -%}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 3 10v10h6v-6h6v6h6V10z" fill="currentColor"/></svg>
+                      {%- endcase -%}
+                    </span>
+                  {%- when 'custom_svg' -%}
+                    <span class="sbn__svg icon--active" aria-hidden="true">{{ block.settings.icon_svg_active | default: block.settings.icon_svg }}</span>
+                  {%- when 'image' -%}
+                    {% assign icon_image_active_src = block.settings.icon_image_active | default: block.settings.icon_image %}
+                    {% if icon_image_active_src %}
+                      <span class="sbn__img icon--active" aria-hidden="true">
+                        {{ icon_image_active_src | image_url: width: 96 | image_tag: loading: 'lazy', decoding: 'async', widths: '48,64,96' }}
+                      </span>
+                    {% endif %}
+                {%- endcase -%}
+              </span>
+            {% endif %}
+
+            {% if mode != 'icon' %}
+              <span class="sbn__label">{{ label }}</span>
+            {% endif %}
+
+            {% if show_badge %}
+              <span class="sbn__badge" data-cart-badge data-cart-count aria-hidden="true">0</span>
+            {% endif %}
+          </a>
+        </li>
+      {% endfor %}
+      </ul>
+    </div>
+  </nav>
+{% endif %}
+
+<style>
+/* =======================
+   Modes & container shell
+   =======================*/
+
+.sbn{
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: var(--sbn-z, 120) !important; /* normal layer */
+  background: transparent;
+  border: 0;
+  visibility: hidden;
+}
+
+/* When cart drawer/menu is open (or on cart page), push nav behind + don't intercept taps */
+.sbn[data-under="1"]{
+  z-index: var(--sbn-z-under, 0);
+}
+
+.sbn[data-ready="1"]{ visibility: visible; }
+
+/* Apply chosen mode as attribute for stronger CSS hooks */
+#sticky-bottom-nav{ }
+#sticky-bottom-nav[data-mode="island"],
+#sticky-bottom-nav[style*="--sbn-mode:island"]{
+  padding:
+    var(--outer-top)
+    var(--outer-right)
+    calc(env(safe-area-inset-bottom) + var(--outer-bottom))
+    var(--outer-left);
+}
+#sticky-bottom-nav[data-mode="stretch"],
+#sticky-bottom-nav[style*="--sbn-mode:stretch"]{
+  padding: 0;
+}
+
+/* The visual bar wrapper */
+.sbn__container{
+  width: 100%;
+  background: var(--sbn-bg);
+  box-shadow: var(--sbn-shadow);
+}
+
+/* ISLAND look */
+#sticky-bottom-nav[data-mode="island"] .sbn__container,
+#sticky-bottom-nav[style*="--sbn-mode:island"] .sbn__container{
+  border-radius: var(--island-radius);
+  border: var(--island-border-w) solid var(--sbn-border);
+  overflow: hidden;
+  padding: var(--inner-y) var(--inner-x);
+}
+
+/* STRETCH look */
+#sticky-bottom-nav[data-mode="stretch"] .sbn__container,
+#sticky-bottom-nav[style*="--sbn-mode:stretch"] .sbn__container{
+  border-top: 1px solid var(--sbn-border);
+  border-radius: 0;
+  padding: var(--inner-y) var(--inner-x);
+}
+
+/* =======================
+   List & items
+   =======================*/
+
+.sbn__list{
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  align-items: center;
+  gap: var(--list-gap);
+  margin: 0;
+  list-style: none;
+
+  /* This top padding creates a mini gutter where the active indicator sits
+     so the indicator visually kisses the very top edge of the container. */
+  padding: var(--indicator-gutter) 0 0;
+}
+
+.sbn__item{ position: relative; }
+
+.sbn__link{
+  color: var(--sbn-fg);
+  text-decoration: none;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px; position: relative;
+  min-height: 44px;
+  border-radius: 10px;
+  padding: 6px 8px;
+
+  --icon-size: var(--icon-size-inactive, var(--sbn-icon-size));
+}
+.sbn__link[aria-current="page"], .sbn__link:focus-visible{ color: var(--sbn-active); outline: none; }
+.sbn__link[aria-current="page"]{ --icon-size: var(--icon-size-active, var(--icon-size-inactive, var(--sbn-icon-size))); }
+
+.sbn__icon svg, .sbn__img img{ width: var(--icon-size); height: var(--icon-size); display: block; }
+.sbn__img img{ object-fit: contain; }
+.sbn__label{ font-size: var(--sbn-font-size); line-height: 1; letter-spacing: .2px; }
+
+.sbn__icon svg, .sbn__icon .sbn__svg[data-paint="css"] svg{
+  color: var(--icon-fill-inactive, var(--sbn-icon-color));
+  fill: var(--icon-fill-inactive, var(--sbn-icon-color));
+  stroke: var(--icon-stroke-inactive, var(--sbn-icon-stroke));
+  stroke-width: var(--icon-stroke-w-inactive, var(--sbn-icon-stroke-w));
+}
+.sbn__icon .icon--active{ display: none; }
+.sbn__link[aria-current="page"] .sbn__icon .icon--inactive{ display: none; }
+.sbn__link[aria-current="page"] .sbn__icon .icon--active{ display: grid; }
+.sbn__link[aria-current="page"] .sbn__icon svg,
+.sbn__link[aria-current="page"] .sbn__icon .sbn__svg[data-paint="css"] svg{
+  color: var(--icon-fill-active, var(--sbn-icon-active));
+  fill: var(--icon-fill-active, var(--sbn-icon-active));
+  stroke: var(--icon-stroke-active, var(--sbn-icon-stroke-active));
+  stroke-width: var(--icon-stroke-w-active, var(--sbn-icon-stroke-w));
+}
+
+/* ---- Make labels align regardless of icon size ---- */
+.sbn__icon{
+  display: grid;
+  place-items: center;
+  line-height: 0;
+
+  /* reserve the same icon-row height for every item */
+  height: var(--sbn-icon-box, var(--sbn-icon-size));
+}
+
+/* ---- Make labels align regardless of icon size (without showing both icons) ---- */
+.sbn__icon{
+  display: grid;
+  place-items: center;
+  line-height: 0;
+  height: var(--sbn-icon-box, var(--sbn-icon-size));
+}
+
+/* center whichever icon span is currently visible */
+.sbn__icon > .icon--inactive,
+.sbn__icon > .icon--active{
+  place-self: center;
+}
+
+.sbn__icon .icon--active{ display: none; }
+.sbn__link[aria-current="page"] .sbn__icon .icon--inactive{ display: none; }
+.sbn__link[aria-current="page"] .sbn__icon .icon--active{ display: grid; } /* or block */
+
+/* Badge */
+.sbn__badge{
+  position: absolute;
+  top: 6px; right: 12px;
+  min-width: 16px; height: 16px; padding: 0 4px;
+  border-radius: 8px; font-size: 10px; line-height: 16px; text-align: center;
+  background: var(--sbn-active); color: #fff; font-weight: 600;
+}
+
+/* Active top indicator — truly flush to the TOP of the visual bar */
+.sbn__link[aria-current="page"]::after{
+  content: "";
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  height: var(--sbn-active-outline-w, 2px);
+  background: var(--sbn-active-outline, var(--sbn-active));
+  border-radius: 2px 2px 0 0;
+  pointer-events: none;
+
+  /* Compensate for container padding + list gutter */
+  top: calc(-1 * (var(--inner-y) + var(--indicator-gutter)));
+}
+
+#sticky-bottom-nav[data-mode="stretch"]{ --sbn-top-border: 1px; }
+#sticky-bottom-nav[data-mode="island"]{ --sbn-top-border: var(--island-border-w); }
+
+.sbn__link[aria-current="page"]::after{
+  top: calc(-1 * (var(--inner-y) + var(--indicator-gutter) + var(--sbn-top-border, 0px)));
+}
+
+/* =======================
+   Visibility + page reserve
+   =======================*/
+
+@media (min-width: 990px){
+  #sticky-bottom-nav[data-show-breakpoint="mobile"]{ display: none; }
+  body{ padding-bottom: 0 !important; }
+}
+@media (max-width: 989px){
+  #sticky-bottom-nav[data-show-breakpoint="desktop"]{ display: none; }
+  /* Reserve safe space (works for both island & stretch since both share inner-y) */
+  body{ padding-bottom: calc(64px + env(safe-area-inset-bottom)) !important; }
+}
+</style>
+
+<script>
+  (function () {
+    const el = document.getElementById('sticky-bottom-nav');
+    if (!el) return;
+
+        // ---- Normalize icon row height so all labels line up ----
+    function toPx(v) {
+      const n = parseFloat(String(v || '').trim());
+      return Number.isFinite(n) ? n : 0;
+    }
+
+    function syncIconBoxHeight() {
+      const links = el.querySelectorAll('.sbn__link');
+      if (!links.length) return;
+
+      const navCS = getComputedStyle(el);
+      const base = toPx(navCS.getPropertyValue('--sbn-icon-size')) || 22;
+
+      let maxSize = base;
+
+      links.forEach(a => {
+        // only consider items that actually have an icon
+        if (!a.querySelector('.sbn__icon')) return;
+
+        const cs = getComputedStyle(a);
+        const inactive = toPx(cs.getPropertyValue('--icon-size-inactive')) || base;
+        const active   = toPx(cs.getPropertyValue('--icon-size-active'))   || inactive || base;
+
+        maxSize = Math.max(maxSize, inactive, active);
+      });
+
+      // Set one shared icon box size for the whole nav
+      el.style.setProperty('--sbn-icon-box', maxSize + 'px');
+    }
+
+    // Run once after layout, and again on resize/orientation changes
+    requestAnimationFrame(syncIconBoxHeight);
+    window.addEventListener('resize', syncIconBoxHeight, { passive: true });
+
+    // Apply data-mode attribute so CSS selectors work regardless of inline style
+    const mode = (getComputedStyle(el).getPropertyValue('--sbn-mode') || 'island').trim();
+    el.setAttribute('data-mode', mode);
+
+    // Reveal-all-at-once (no flicker)
+    const reveal = () => el.setAttribute('data-ready', '1');
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => requestAnimationFrame(reveal), { once: true });
+    } else {
+      requestAnimationFrame(reveal);
+    }
+
+    // Active state by path (cheap compare, no network)
+    try {
+      const here = new URL(location.href);
+      el.querySelectorAll('.sbn__link').forEach(a => {
+        const there = new URL(a.href, location.origin);
+        if (there.pathname === here.pathname) a.setAttribute('aria-current','page');
+      });
+    } catch(e) {}
+
+    // Cart badge: cache + SWR, event-driven refresh (no polling)
+    const badgeEl = el.querySelector('[data-cart-badge]');
+    const CACHE_KEY = 'sbn_cart_badge_v1';
+    const CACHE_TTL = 15000;
+
+    function applyBadge(count) {
+      if (!badgeEl) return;
+      const n = Number(count) || 0;
+      badgeEl.textContent = n;
+      badgeEl.style.display = n > 0 ? 'inline-block' : 'none';
+    }
+    function readCache() {
+      try {
+        const raw = sessionStorage.getItem(CACHE_KEY);
+        if (!raw) return null;
+        const { c, t } = JSON.parse(raw);
+        if (Date.now() - t > CACHE_TTL) return null;
+        return c;
+      } catch { return null; }
+    }
+    function writeCache(count) {
+      try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ c: count, t: Date.now() })); } catch {}
+    }
+    async function fetchCartAndUpdate({ force = false } = {}) {
+      const cached = readCache();
+      if (!force && cached !== null) {
+        applyBadge(cached);
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(() => fetchCartAndUpdate({ force: true }), { timeout: 2000 });
+        } else {
+          setTimeout(() => fetchCartAndUpdate({ force: true }), 0);
+        }
+        return;
+      }
+      try {
+        const res = await fetch('/cart.js', { credentials: 'same-origin', headers: { 'Accept': 'application/json' } });
+        if (!res.ok) throw new Error('cart.js failed');
+        const cart = await res.json();
+        const count = cart.item_count || 0;
+        writeCache(count);
+        applyBadge(count);
+      } catch { /* silent */ }
+    }
+    fetchCartAndUpdate();
+    ['cart:refresh','cart:updated','ajaxProduct:added','quantity:change','lineItem:remove'].forEach(evt => {
+      document.addEventListener(evt, () => fetchCartAndUpdate({ force: true }), { passive: true });
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') fetchCartAndUpdate({ force: true });
+    }, { passive: true });
+    window.addEventListener('pageshow', (e) => {
+      if (e.persisted) fetchCartAndUpdate();
+    }, { passive: true });
+
+        // --- Layer management: keep nav under cart drawer / mobile menu / cart page ---
+    const CLASS_TRIGGERS = [
+      'overflow-hidden', 'no-scroll',
+      'menu-open', 'mobile-menu-open',
+      'drawer-open', 'cart-drawer-open', 'cart-open',
+      'modal-open'
+    ];
+
+    function hasTriggerClass() {
+      const b = document.body;
+      const h = document.documentElement;
+      if (!b || !h) return false;
+      for (let i = 0; i < CLASS_TRIGGERS.length; i++) {
+        const c = CLASS_TRIGGERS[i];
+        if (b.classList.contains(c) || h.classList.contains(c)) return true;
+      }
+      return false;
+    }
+
+    function hasOpenDrawerLikeThing() {
+      // Covers Dawn-style <details open> drawers + common drawer/modal patterns.
+      return !!document.querySelector(
+        [
+          'details[open] .menu-drawer',
+          'details[open] #CartDrawer',
+          'details[open] .cart-drawer',
+          '.menu-drawer.is-open',
+          '.menu-drawer.active',
+          '#CartDrawer.is-open',
+          '.cart-drawer.is-open',
+          '.drawer.is-open',
+          '.drawer.active',
+          'dialog[open]',
+          '[aria-modal="true"]'
+        ].join(',')
+      );
+    }
+
+    function isCartPage() {
+      const p = location.pathname || '';
+      return p === '/cart' || p.indexOf('/cart/') === 0;
+    }
+
+    function computeUnder() {
+      return isCartPage() || hasTriggerClass() || hasOpenDrawerLikeThing();
+    }
+
+    let raf = 0;
+    function applyUnder() {
+      const under = computeUnder();
+      el.setAttribute('data-under', under ? '1' : '0');
+    }
+    function scheduleUnderCheck() {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        applyUnder();
+      });
+    }
+
+    // Initial + event driven updates
+    applyUnder();
+    document.addEventListener('click', scheduleUnderCheck, { passive: true, capture: true });
+    document.addEventListener('keyup', scheduleUnderCheck, { passive: true, capture: true });
+    window.addEventListener('popstate', scheduleUnderCheck, { passive: true });
+    window.addEventListener('pageshow', scheduleUnderCheck, { passive: true });
+
+    // React to theme toggling body/html classes when drawers open/close
+    if (document.body) {
+      const mo = new MutationObserver(scheduleUnderCheck);
+      mo.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+      mo.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Sticky Bottom Nav",
+  "settings": [
+    { "type": "checkbox", "id": "enable", "label": "Enable", "default": true },
+    {
+      "type": "select",
+      "id": "show_on",
+      "label": "Show on",
+      "default": "mobile",
+      "options": [
+        { "value": "mobile", "label": "Mobile only (< 990px)" },
+        { "value": "desktop", "label": "Desktop only (≥ 990px)" }
+      ]
+    },
+
+    /* NEW: Modes & spacings */
+    {
+      "type": "select",
+      "id": "layout_mode",
+      "label": "Layout mode",
+      "default": "island",
+      "options": [
+        { "value": "island", "label": "Island (floating capsule)" },
+        { "value": "stretch", "label": "Stretch (full-width bar)" }
+      ]
+    },
+    { "type": "range", "id": "outer_pad_left", "label": "Outer padding — Left (px)", "min": 0, "max": 40, "step": 1, "default": 10 },
+    { "type": "range", "id": "outer_pad_right", "label": "Outer padding — Right (px)", "min": 0, "max": 40, "step": 1, "default": 10 },
+    { "type": "range", "id": "outer_pad_top", "label": "Outer padding — Top (px)", "min": 0, "max": 40, "step": 1, "default": 10 },
+    { "type": "range", "id": "outer_pad_bottom", "label": "Outer padding — Bottom (px)", "min": 0, "max": 40, "step": 1, "default": 10 },
+
+    { "type": "range", "id": "inner_pad_x", "label": "Inner padding — Horizontal (px)", "min": 0, "max": 32, "step": 1, "default": 8 },
+    { "type": "range", "id": "inner_pad_y", "label": "Inner padding — Vertical (px)", "min": 0, "max": 24, "step": 1, "default": 6 },
+
+    { "type": "range", "id": "item_gap", "label": "Gap between items (px)", "min": 0, "max": 24, "step": 1, "default": 6 },
+
+    { "type": "range", "id": "indicator_gutter", "label": "Active bar gutter (px)", "min": 0, "max": 10, "step": 1, "default": 4 },
+
+    { "type": "range", "id": "island_radius", "label": "Island corner radius (px)", "min": 0, "max": 32, "step": 1, "default": 14 },
+    { "type": "range", "id": "island_border_w", "label": "Island border width (px)", "min": 0, "max": 3, "step": 1, "default": 1 },
+    { "type": "range", "id": "island_outline_w", "label": "Island outer outline (halo) (px)", "min": 0, "max": 2, "step": 1, "default": 0 },
+
+    /* Colors & sizes (existing) */
+    { "type": "range", "id": "icon_size", "label": "Icon size (px)", "min": 12, "max": 64, "step": 1, "default": 22 },
+    { "type": "range", "id": "font_size", "label": "Label font size (px)", "min": 9, "max": 14, "step": 1, "default": 11 },
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#ffffff" },
+    { "type": "color", "id": "text_color", "label": "Text & icons", "default": "#222222" },
+    { "type": "color", "id": "active_color", "label": "Active / Badge", "default": "#111827" },
+    { "type": "color", "id": "border_color", "label": "Border color", "default": "#e5e7eb" },
+    { "type": "checkbox", "id": "shadow", "label": "Soft shadow", "default": true },
+
+    { "type": "header", "content": "Icon styles" },
+    { "type": "color", "id": "icon_color", "label": "Icon fill (inactive)", "default": "#222222" },
+    { "type": "color", "id": "icon_stroke_color", "label": "Icon outline color (inactive)", "default": "#000000" },
+    { "type": "range", "id": "icon_stroke_width", "label": "Icon outline width (inactive, px)", "min": 0, "max": 3, "step": 0.5, "default": 0 },
+
+    { "type": "header", "content": "Active icon styles" },
+    { "type": "color", "id": "icon_active_fill", "label": "Icon fill (active)", "default": "#111827" },
+    { "type": "color", "id": "icon_active_stroke", "label": "Icon outline color (active)", "default": "#111827" },
+
+    { "type": "header", "content": "Active indicator" },
+    { "type": "color", "id": "active_outline_color", "label": "Active top bar color", "default": "#E87529" },
+    { "type": "range", "id": "active_outline_width", "label": "Active top bar height (px)", "min": 0, "max": 8, "step": 0.1, "default": 2 }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Nav item",
+      "settings": [
+        { "type": "select", "id": "kind", "label": "Special behavior", "default": "custom",
+          "options": [
+            { "value": "custom", "label": "Custom link" },
+            { "value": "cart", "label": "Cart (auto link + badge)" },
+            { "value": "account", "label": "Account/Login (auto link)" }
+          ]
+        },
+        { "type": "text", "id": "label", "label": "Label", "default": "Home" },
+        { "type": "url", "id": "link", "label": "Link (ignored for Cart/Account when special behavior is chosen)" },
+
+        { "type": "select", "id": "display_mode", "label": "Display", "default": "text_icon",
+          "options": [
+            { "value": "text", "label": "Text only" },
+            { "value": "text_icon", "label": "Text + Icon" },
+            { "value": "icon", "label": "Icon only" }
+          ]
+        },
+
+        { "type": "header", "content": "Inactive icon" },
+        { "type": "select", "id": "icon_source_inactive", "label": "Inactive source", "default": "builtin",
+          "options": [
+            { "value": "builtin", "label": "Built-in icon set (painted by CSS vars)" },
+            { "value": "custom_svg", "label": "Custom SVG (paste code; uses its own colors)" },
+            { "value": "image", "label": "Uploaded image (PNG/SVG)" }
+          ]
+        },
+        { "type": "select", "id": "icon_inactive", "label": "Inactive built-in icon", "default": "home",
+          "options": [
+            { "value": "home", "label": "Home" },
+            { "value": "grid", "label": "Categories" },
+            { "value": "cart", "label": "Cart" },
+            { "value": "user", "label": "Profile" },
+            { "value": "heart", "label": "Wishlist/Like" },
+            { "value": "search", "label": "Search" }
+          ]
+        },
+        { "type": "textarea", "id": "icon_svg", "label": "Custom SVG markup (inactive)", "info": "Paste full <svg>…</svg>." },
+        { "type": "image_picker", "id": "icon_image_inactive", "label": "Inactive image" },
+        { "type": "color", "id": "inactive_fill", "label": "Inactive fill (CSS-painted icons)", "default": "#222222" },
+        { "type": "color", "id": "inactive_stroke", "label": "Inactive outline (CSS-painted icons)", "default": "#000000" },
+        { "type": "range", "id": "inactive_stroke_w", "label": "Inactive outline width (px)", "min": 0, "max": 3, "step": 0.5, "default": 0 },
+        { "type": "range", "id": "icon_size_inactive", "label": "Inactive icon size (px, 0 = inherit)", "min": 0, "max": 64, "step": 1, "default": 0 },
+
+        { "type": "header", "content": "Active icon" },
+        { "type": "select", "id": "icon_source_active", "label": "Active source", "default": "builtin",
+          "options": [
+            { "value": "builtin", "label": "Built-in icon set (painted by CSS vars)" },
+            { "value": "custom_svg", "label": "Custom SVG (paste code; uses its own colors)" },
+            { "value": "image", "label": "Uploaded image (PNG/SVG)" }
+          ]
+        },
+        { "type": "select", "id": "icon_active", "label": "Active built-in icon", "default": "home",
+          "options": [
+            { "value": "home", "label": "Home" },
+            { "value": "grid", "label": "Categories" },
+            { "value": "cart", "label": "Cart" },
+            { "value": "user", "label": "Profile" },
+            { "value": "heart", "label": "Wishlist/Like" },
+            { "value": "search", "label": "Search" }
+          ]
+        },
+        { "type": "header", "content": "Active outline" },
+        { "type": "color", "id": "active_outline_color", "label": "Active outline color", "default": "#E87529" },
+        { "type": "range", "id": "active_outline_width", "label": "Active outline width (px)", "min": 0, "max": 6, "step": 1, "default": 2 },
+
+        { "type": "textarea", "id": "icon_svg_active", "label": "Custom SVG markup (active)" },
+        { "type": "image_picker", "id": "icon_image_active", "label": "Active image" },
+        { "type": "color", "id": "active_fill", "label": "Active fill (CSS-painted icons)", "default": "#E87529" },
+        { "type": "color", "id": "active_stroke", "label": "Active outline color (active)", "default": "#E87529" },
+        { "type": "range", "id": "active_stroke_w", "label": "Active outline width (px)", "min": 0, "max": 3, "step": 0.5, "default": 0 },
+        { "type": "range", "id": "icon_size_active", "label": "Active icon size (px, 0 = inherit)", "min": 0, "max": 64, "step": 1, "default": 0 },
+
+        { "type": "checkbox", "id": "show_badge", "label": "Show badge (Cart only)", "default": true }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "default": {
+    "blocks": [
+      { "type": "item", "settings": { "kind": "custom", "label": "Home", "link": "/", "display_mode": "text_icon", "icon_source_inactive": "builtin", "icon_inactive": "home", "icon_source_active": "builtin", "icon_active": "home" } },
+      { "type": "item", "settings": { "kind": "custom", "label": "Categories", "link": "/collections", "display_mode": "text_icon", "icon_source_inactive": "builtin", "icon_inactive": "grid", "icon_source_active": "builtin", "icon_active": "grid" } },
+      { "type": "item", "settings": { "kind": "cart", "label": "Bag", "display_mode": "text_icon", "icon_source_inactive": "builtin", "icon_inactive": "cart", "icon_source_active": "builtin", "icon_active": "cart", "show_badge": true } },
+      { "type": "item", "settings": { "kind": "account", "label": "Profile", "display_mode": "text_icon", "icon_source_inactive": "builtin", "icon_inactive": "user", "icon_source_active": "builtin", "icon_active": "user" } }
+    ]
+  }
+}
+{% endschema %}

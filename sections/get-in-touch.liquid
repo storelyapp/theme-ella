@@ -1,0 +1,218 @@
+{% comment %}
+  Section: Get in Touch
+  Features:
+  • Address, Email, Phone number (editable in Theme Editor)
+  • Download App buttons (Play Store & App Store links)
+  • Responsive layout (2-column on desktop, stacked on mobile)
+{% endcomment %}
+
+<section id="get-in-touch-{{ section.id }}" class="get-in-touch">
+  <div class="page-width">
+    <div class="contact-wrapper">
+      <!-- Left Column: Contact Info -->
+        <div class="contact-info-minimal">
+        <h2 class="contact-heading">Get in Touch</h2>
+        <ul class="contact-list">
+            <li>
+            <span class="contact-icon">
+                <!-- Phone Icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.05-.24c1.12.37 2.33.57 3.54.57.55 0 1 .45 1 1V20c0 
+                .55-.45 1-1 1C10.07 21 3 13.93 3 5c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 
+                0 1.21.2 2.42.57 3.54.11.36.03.77-.24 1.05l-2.21 2.2z"/>
+                </svg>
+            </span>
+            <a href="tel:{{ section.settings.phone }}">{{ section.settings.phone }}</a>
+            </li>
+            <li>
+            <span class="contact-icon">
+                <!-- Email Icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 
+                1.1.9 2 2 2h16c1.1 0 2-.9 
+                2-2V6c0-1.1-.9-2-2-2zm0 
+                4l-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
+            </span>
+            <a href="mailto:{{ section.settings.email }}">{{ section.settings.email }}</a>
+            </li>
+            <li>
+            <span class="contact-icon">
+                <!-- Location Icon -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C8.13 2 5 5.13 5 
+                9c0 5.25 7 13 7 13s7-7.75 
+                7-13c0-3.87-3.13-7-7-7zm0 
+                9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 
+                2.5-2.5 2.5 1.12 2.5 2.5-1.12 
+                2.5-2.5 2.5z"/>
+                </svg>
+            </span>
+            {{ section.settings.address }}
+            </li>
+        </ul>
+        </div>
+
+      <!-- Right Column: App Download -->
+      <div class="contact-apps">
+        <h3 class="app-heading">Download Our App</h3>
+        <div class="app-buttons">
+        {% if section.settings.playstore_link != blank %}
+            <a class="store-badge" href="{{ section.settings.playstore_link }}" target="_blank" rel="noopener" aria-label="Get it on Google Play">
+            <img 
+                src="https://cdn.shopify.com/s/files/1/0572/8685/2744/files/GET_IT_ON.png?v=1766665082"
+                alt="Get it on Google Play"
+                width="160" height="48" loading="lazy" decoding="async">
+            </a>
+        {% endif %}
+
+        {% if section.settings.appstore_link != blank %}
+            <a class="store-badge" href="{{ section.settings.appstore_link }}" target="_blank" rel="noopener" aria-label="Download on the App Store">
+            <img 
+                src="https://cdn.shopify.com/s/files/1/0572/8685/2744/files/apple-store.png?v=1757157431"
+                alt="Download on the App Store"
+                width="160" height="48" loading="lazy" decoding="async">
+            </a>
+        {% endif %}
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+    <style>
+    /* Section container stays as-is */
+    #get-in-touch-{{ section.id }}{
+        padding:40px 20px;
+        background:#fffaf5;
+        color:#333;
+    }
+
+    /* Two-column wrapper */
+    #get-in-touch-{{ section.id }} .contact-wrapper{
+        display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-start; gap:30px;
+    }
+
+    /* LEFT column — minimalist look (like pic 2) */
+    #get-in-touch-{{ section.id }} .contact-info-minimal{ flex:1 1 40%; text-align:left; }
+
+    /* Heading: small, uppercase, neutral (not orange) */
+    #get-in-touch-{{ section.id }} .contact-heading{
+        margin:0 0 12px;
+        font-size:14px;                /* smaller like reference */
+        letter-spacing:.06em;
+        text-transform:uppercase;
+        font-weight:600;
+        color:#232323;                 /* neutral, not brand orange */
+    }
+
+    /* List reset + comfortable reading */
+    #get-in-touch-{{ section.id }} .contact-list{ list-style:none; margin:0; padding:0; }
+    #get-in-touch-{{ section.id }} .contact-list li{
+        display:flex;
+        align-items:flex-start;        /* keeps icon at top for multi-line address */
+        gap:12px;
+        margin:0 0 14px;
+        line-height:1.6;               /* airy like pic 2 */
+        font-size:15px;
+        color:#232323;
+    }
+
+    /* Icon column: subtle and aligned */
+    #get-in-touch-{{ section.id }} .contact-list .contact-icon{
+        display:inline-flex; align-items:center; justify-content:center;
+        width:20px; height:20px; flex:0 0 20px;
+        color:#6b6b6b;                 /* muted grey */
+        margin-top:2px;                /* optical align with text baseline */
+    }
+    #get-in-touch-{{ section.id }} .contact-list .contact-icon svg{ width:18px; height:18px; }
+
+    /* Links: neutral, underline on hover only */
+    #get-in-touch-{{ section.id }} .contact-list a{ color:#232323; text-decoration:none; }
+    #get-in-touch-{{ section.id }} .contact-list a:hover{ text-decoration:underline; }
+
+    #get-in-touch-{{ section.id }} .contact-apps{
+    flex:1 1 40%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;    /* center horizontally */
+    justify-content:center;
+    text-align:center;
+    }
+    #get-in-touch-{{ section.id }} .app-heading{
+    font-size:14px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:#232323;
+    margin:0 0 10px;
+    text-align:center;     /* center heading */
+    }
+
+    #get-in-touch-{{ section.id }} .app-buttons{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    justify-content:center; /* force center alignment */
+    }
+    #get-in-touch-{{ section.id }} .store-badge{ display:inline-flex; line-height:0; }
+    #get-in-touch-{{ section.id }} .store-badge img{
+        display:block; width:160px; height:auto; max-width:100%; object-fit:contain;
+        opacity:1 !important; filter:none !important; -webkit-filter:none !important; mix-blend-mode:normal !important;
+        transition:transform .2s ease;
+    }
+    @media (hover:hover){ #get-in-touch-{{ section.id }} .store-badge:hover img{ transform:translateY(-2px); } }
+
+    /* Mobile: stack and center like pic 2 keeps left? We'll center for balance */
+    @media (max-width:768px){
+        #get-in-touch-{{ section.id }} .contact-wrapper{ flex-direction:column; }
+        #get-in-touch-{{ section.id }} .contact-info-minimal,
+        #get-in-touch-{{ section.id }} .contact-apps{ width:100%; }
+        #get-in-touch-{{ section.id }} .contact-info-minimal{ text-align:left; }
+        #get-in-touch-{{ section.id }} .contact-list li{ justify-content:flex-start; }
+        #get-in-touch-{{ section.id }} .store-badge img{ width:140px; }
+    }
+    </style>
+
+</section>
+
+{% schema %}
+{
+  "name": "Get in Touch",
+  "settings": [
+    {
+      "type": "text",
+      "id": "address",
+      "label": "Address",
+      "default": "283/2, 1st Floor, 10th Main Rd, Jayanagar, Bangalore 560011"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email",
+      "default": "care@lagorii.com"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Phone Number",
+      "default": "+91 9620237728"
+    },
+    {
+      "type": "url",
+      "id": "playstore_link",
+      "label": "Play Store Link"
+    },
+    {
+      "type": "url",
+      "id": "appstore_link",
+      "label": "App Store Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Get in Touch"
+    }
+  ]
+}
+{% endschema %}
+

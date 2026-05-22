@@ -1,0 +1,179 @@
+{% comment %}
+  Responsive Media Banner – Image / Video / GIF
+  Desktop & Mobile separated
+  Uses natural aspect ratio of media
+  Full width, responsive, no inner white bars
+{% endcomment %}
+
+{% if section.settings.banner_collection != blank %}
+  {% assign banner_url = section.settings.banner_collection.url %}
+{% endif %}
+
+<section
+  class="rmb-section"
+  style="
+    background-color: {{ section.settings.bg_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  {% if banner_url %}
+    <a href="{{ banner_url }}" class="rmb-link-wrapper">
+  {% endif %}
+
+    <!-- DESKTOP MEDIA -->
+    {% if section.settings.desktop_video != blank or section.settings.desktop_image != blank %}
+      <div class="rmb-media rmb-desktop">
+        {% if section.settings.desktop_video != blank %}
+          {{ section.settings.desktop_video | video_tag:
+            autoplay: true,
+            loop: true,
+            muted: true,
+            controls: false,
+            playsinline: true
+          }}
+        {% elsif section.settings.desktop_image != blank %}
+          <img
+            src="{{ section.settings.desktop_image | image_url }}"
+            alt=""
+            loading="lazy"
+          >
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <!-- MOBILE MEDIA -->
+    {% if section.settings.mobile_video != blank or section.settings.mobile_image != blank %}
+      <div class="rmb-media rmb-mobile">
+        {% if section.settings.mobile_video != blank %}
+          {{ section.settings.mobile_video | video_tag:
+            autoplay: true,
+            loop: true,
+            muted: true,
+            controls: false,
+            playsinline: true
+          }}
+        {% elsif section.settings.mobile_image != blank %}
+          <img
+            src="{{ section.settings.mobile_image | image_url }}"
+            alt=""
+            loading="lazy"
+          >
+        {% endif %}
+      </div>
+    {% endif %}
+
+  {% if banner_url %}
+    </a>
+  {% endif %}
+</section>
+
+<style>
+  .rmb-section {
+    width: 100%;
+    margin: 0;
+    padding-left: 0;
+    padding-right: 0;
+    overflow: hidden;
+  }
+
+  .rmb-link-wrapper {
+    display: block;
+    width: 100%;
+    text-decoration: none;
+  }
+
+  .rmb-media {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .rmb-media img,
+  .rmb-media video {
+    width: 100%;
+    height: auto;          /* ✅ keeps original aspect ratio */
+    display: block;
+  }
+
+  /* Visibility control */
+  .rmb-desktop {
+    display: block;
+  }
+
+  .rmb-mobile {
+    display: none;
+  }
+
+  @media (max-width: 749px) {
+    .rmb-desktop {
+      display: none;
+    }
+
+    .rmb-mobile {
+      display: block;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Responsive Media Banner",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "desktop_image",
+      "label": "Desktop Image / GIF"
+    },
+    {
+      "type": "video",
+      "id": "desktop_video",
+      "label": "Desktop MP4 Video"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile Image / GIF"
+    },
+    {
+      "type": "collection",
+      "id": "banner_collection",
+      "label": "Link banner to collection"
+    },
+    {
+      "type": "video",
+      "id": "mobile_video",
+      "label": "Mobile MP4 Video"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding Top (px)",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding Bottom (px)",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Responsive Media Banner"
+    }
+  ]
+}
+{% endschema %}

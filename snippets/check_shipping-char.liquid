@@ -1,0 +1,30 @@
+{%- comment -%}
+  Snippet: check-shipping-char
+  Usage:
+    {% render 'check-shipping-char',
+      head: 'Check Shipping Charges',
+      head_size: 14,
+      spacing_top: 10,
+      spacing_bottom: 13
+    %}
+{%- endcomment -%}
+
+{%- assign _head         = head         | default: 'Check Shipping Charges' -%}
+{%- assign _head_size    = head_size    | default: 14 -%}
+{%- assign _space_top    = spacing_top  | default: 10 -%}
+{%- assign _space_bottom = spacing_bottom | default: 13 -%}
+
+<div class="check-shipping-container"
+     style="margin-top:{{ _space_top }}px; margin-bottom:{{ _space_bottom }}px;">
+  <a href="javascript:void(0);" class="check-shipping-link open_charge_popup"
+     style="font-size:{{ _head_size }}px;">
+    <svg class="shipping-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+         viewBox="0 0 24 24" fill="none">
+      <path d="M3 6a2 2 0 0 1 2-2h11v10H3V6z" stroke="#000" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M16 8h4a2 2 0 0 1 2 2v4h-6V8z" stroke="#000" stroke-width="2" stroke-linejoin="round"/>
+      <circle cx="7" cy="18" r="2" fill="#000"/>
+      <circle cx="17" cy="18" r="2" fill="#000"/>
+    </svg>
+    <span class="check-shipping-text">{{ _head }}</span>
+  </a>
+</div>

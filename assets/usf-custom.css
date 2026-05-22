@@ -1,0 +1,1267 @@
+.usf-sr-paging .pagination__item.pagination__item--current::after,
+.usf-horz-layout #main-collection-filters,
+.usf-has-no-facets #main-collection-filters,
+.usf-mobile .toolbar-sidebar,
+body:not(.usf-has-filter-drawer) #main-collection-filters,
+.usf-has-no-facets #halo-sidebar,
+.usf-horz-layout #halo-sidebar{
+    display: none !important;
+}
+
+.usf-has-filter-drawer .usf-facets,
+.usf-has-filter-drawer .usf-sr-container,
+.usf-sr-empty,
+body:not(.usf-mobile) .usf-sr-config .toolbar,
+.usf-has-no-facets .container .page-content,
+.usf-horz-layout .container .page-content{
+	width: 100%
+}
+
+.usf-has-filter-drawer .usf-sr-container,
+.usf-has-filter-drawer .usf-sr-container {
+	padding-left: 0;
+}
+.usf-has-filter-drawer #main-collection-filters{
+    display: flex;
+}
+.usf-facets *:empty,
+.usf-popup *:empty {
+    display: unset;
+}
+
+.usf-sr-config .toolbar{
+    border: none;
+    padding: 0;
+}
+.usf-card-action{
+    height: 70px;
+}
+
+body:not(.usf-collections-page) .usf-sr-inputbox {
+	display: none;
+}
+.usf-sr-empty *{
+    font-size: initial;
+}
+.usf-sr-config .toolbar .toolbar-viewAs {
+    margin-bottom: 0;
+}
+.usf-sr-config .toolbar-colLeft{
+    width: 100% !important;
+    justify-content: flex-start !important;
+}
+.usf-horz-layout .container .page-content,
+.usf-has-no-facets .container .page-content{
+    padding: 0!important;
+}
+.usf-skeleton .usf-img,
+.usf-skeleton .usf-info-column .usf-title,
+.usf-skeleton .usf-info-column .usf-vendor,
+.usf-skeleton .usf-meta,
+.usf-skeleton .usf-info-column .usf-price-wrapper{
+    display: inherit!important;
+}
+body:not(.usf-mobile) .usf-grid .usf-skeleton{
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.usf-results.usf-grid{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+@media (min-width: 1025px){
+    .usf-vert-layout.usf-has-filter-drawer .usf-facets .usf-facets__wrapper {
+        width: 210px;
+    }
+}
+
+.usf-is--full__container button{
+	color: initial !important;
+}
+
+.usf-vert-filters-sticky-desktop .page-sidebar .sidebarBlock{
+    opacity: 0;
+}
+
+.usf-mobile .usf-sr-config i.usf-icon-equalizer,
+.usf-preview .usf-preview__image,
+.usf-sr-preview .usf-icon{
+    display: block;
+}
+.usf-vert-filters-sticky-desktop .usf-sticky-element,
+.usf-horz-filters-sticky-desktop .usf-sticky-element,
+.usf-vert-filters-sticky-mobile .usf-sticky-element,
+.usf-sr-product__image-container:hover .usf-add-to-cart-btn,
+.usf-sr-product__image-container:hover .usf-sr-preview{
+    z-index: 99 !important;
+}
+body:not(.usf-mobile) .collection-express-order .container .halo-collection-content .coll-express-order{
+    padding: 0 10px;
+}
+/* === Shared Styles === */
+.usf-sr-config {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+}
+
+/* === Filter Label with Divider === */
+.usf-facets::before {
+  content: "FILTERS";
+  display: block;
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 0px;
+  padding-bottom: 20px;
+  color: #E87529;
+  border-bottom: 1px solid #e0e0e0;
+  margin-top: 24px;
+}
+
+/* === Remove side gap between filters & product section === */
+.usf-facets {
+  padding-right: 0 !important;
+  margin-right: 0 !important;
+}
+
+.usf-has-filter-drawer .usf-sr-container {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+
+.usf-horz-layout .container .page-content,
+.usf-has-no-facets .container .page-content {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* === Sort Button Styling === */
+.usf-c-select__input-value.usf-btn::before {
+  content: "Sort by: ";
+  font-weight: 500;
+  color: #333;
+}
+
+@media (min-width: 768px) {
+.usf-c-select__input-value.usf-btn {
+  padding: 10px 40px 10px 16px;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: #fff;
+  border: 2px solid #E87529;
+  color: #E87529;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+  min-width: 180px;
+  position: relative;
+  z-index: 1;
+}
+
+.usf-c-select__input-value.usf-btn:hover {
+  background-color: #fff3ec;
+  color: #E87529;
+}
+}
+
+/* === Sort Dropdown Menu Styling === */
+.usf-popover {
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-top: 8px;
+  z-index: 10;
+}
+
+.usf-popover .usf-body,
+.usf-c-select__list {
+  border-radius: 0 0 10px 10px;
+  overflow: hidden;
+}
+
+.usf-c-select__btn.usf-btn {
+  font-size: 15px;
+  padding: 12px 20px;
+  color: #333;
+  font-weight: 500;
+  background: transparent;
+  text-align: left;
+  width: 100%;
+  transition: 0.2s ease;
+}
+
+.usf-c-select__btn.usf-btn:hover {
+  background-color: #fff3ec;
+  color: #E87529;
+}
+
+.usf-c-select__btn.usf-btn.usf-selected {
+  background-color: #E87529;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* === Hide Toolbar Grid View Switcher & Summary Count === */
+toolbar-item.toolbar,
+.usf-sr-summary {
+  display: none !important;
+}
+
+/* === Hide Collection Header Banner === */
+[data-section-type="header-collection"] {
+  display: none !important;
+}
+
+/* === Mobile Cleanup === */
+@media (max-width: 767px) {
+  .usf-c-select__input-value.usf-btn::before {
+    content: none;
+  }
+
+  .usf-footer,
+  toolbar-item.toolbar,
+  .usf-sr-summary {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) {
+  /* Use flex layout for proper column separation */
+  .usf-has-filter-drawer .page-content {
+    display: flex;
+  }
+  .usf-facets__wrapper{
+      border-right: 1px solid #e0e0e0;
+      padding-top: 12px;
+      padding-right: 12px;
+  }
+  /* Add spacing between divider and product grid */
+  .usf-has-filter-drawer .usf-sr-container {
+    padding-left: 24px !important;
+  }
+  ul.productListing.usf-results.usf-grid {
+  padding-left: 26px !important;
+}
+
+
+  /* Fix padding and margin to eliminate misalignment */
+  .usf-horz-layout .container .page-content,
+  .usf-has-no-facets .container .page-content {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
+
+@media (min-width: 768px) {
+  /* Add left margin (space) between product grid and divider */
+  .usf-has-filter-drawer .usf-sr-container {
+    padding-left: 32px !important; /* Increase/decrease as needed */
+  }
+}
+
+@media (max-width: 767px) {
+  /* Make filter drawer background white and tidy */
+  .usf-facets-wrapper {
+    background-color: #fff;
+    padding: 16px;
+  }
+
+  /* Header "Filters" title */
+  .usf-facets-wrapper .usf-header .usf-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #E87529 !important;
+    margin-bottom: 16px;
+  }
+
+  /* Each filter section title like "Availability", "Gender", etc. */
+  .usf-facet-value .usf-title {
+    font-size: 16px;
+    font-weight: 600;
+    padding: 12px 0;
+  }
+
+  /* Optional: spacing between filter blocks */
+  .usf-facet-value {
+    margin-bottom: 10px;
+  }
+
+  /* Hide the "View items" button if needed */
+  .usf-footer {
+    display: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+.usf-sr-config__mobile-filters-wrapper {
+  display: flex;
+  gap: 15px; /* increased from 10px */
+  padding: 10px 16px;
+  justify-content: center;
+}
+
+
+  .usf-sr-config__mobile-filters-wrapper .usf-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px !important; /* reduced height */
+    min-width: 150px !important; /* widen the button */
+    padding: 0 20px; /* more padding for wider feel */
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: 14px;
+    border: 1px solid #E87529; /* stronger brand-colored outline */
+    background-color: #fff;
+    gap: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* deeper shadow */
+    transition: all 0.2s ease;
+  }
+
+  .usf-sr-config__mobile-filters-wrapper .usf-btn:hover {
+    background-color: #fff7f2;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+    border-color: #e86500;
+  }
+
+/* FILTERS Button Icon — to the left of the text */
+.usf-filters .usf-btn::after {
+  content: '';
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  background-image: url('https://cdn.shopify.com/s/files/1/0572/8685/2744/files/icons8-sort-24.png?v=1752906384');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-right: 6px; /* small gap between icon and text */
+}
+
+
+
+  /* SORT Button Icon */
+  .usf-c-select .usf-c-select__input-value.usf-btn::before {
+    content: '';
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    background-image: url('https://cdn.shopify.com/s/files/1/0572/8685/2744/files/Untitled_design_288640d1-9bb9-43d3-b5bf-6f3850f823f4.png?v=1752908305');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  /* Clean up other elements */
+  .usf-c-select .usf-c-select__input-value.usf-btn::after,
+  .usf-c-select .usf-c-select__input-value.usf-btn svg,
+  .usf-filters .usf-btn svg,
+  .usf-filters .usf-btn::before {
+    display: none !important;
+  }
+
+  .usf-sr-config__mobile-filters-wrapper > div,
+  .usf-c-select,
+  .usf-filters {
+    border: none !important;
+    box-shadow: none !important;
+    background: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .usf-facet-value .usf-label span {
+    font-size: 14px;         /* slightly larger font */
+    font-weight: 300;        /* makes it bolder */
+    color: #222;             /* optional: darker for better readability */
+  }
+
+  .usf-facet-value .usf-value {
+    font-size: 13px;         /* value count next to the label */
+    font-weight: 150;
+    color: #555;             /* slightly muted to keep focus on label */
+    margin-left: 6px;
+  }
+
+  .usf-facet-value.usf-btn {
+    padding: 10px 12px;
+  }
+  .usf-more {
+  font-size: 12px !important; /* or 16px for even more prominence */
+}
+
+.usf-dimmed > span {
+  font-size: 11px !important;
+}
+
+/* Remove the tick completely */
+.usf-filters.usf-has-filters::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* Minimalist orange highlight using box-shadow */
+.usf-filters.usf-has-filters .usf-btn {
+  background-color: #fff !important;
+  color: #333 !important;
+  border-color: #E87529 !important;
+  box-shadow: 0 0 0 2px rgba(232, 117, 41, 0.25), 0 2px 6px rgba(232, 117, 41, 0.3) !important;
+  transition: box-shadow 0.3s ease;
+}
+
+/* Optional: Slight hover enhancement */
+.usf-filters.usf-has-filters .usf-btn:hover {
+  box-shadow: 0 0 0 2px rgba(232, 117, 41, 0.35), 0 4px 10px rgba(232, 117, 41, 0.4) !important;
+}
+}
+
+@media (max-width: 767px) {
+  .usf-popover,
+  .usf-popover .usf-body,
+  .usf-c-select__content,
+  .usf-c-select__list,
+  .usf-c-select__btn.usf-btn {
+    border-radius: 0 !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .usf-refineby {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 0 !important;
+    margin: 0;
+    border: 0px
+  }
+
+  .usf-refineby .usf-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .usf-refineby__body {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+  }
+
+  .usf-refineby__item {
+    background-color: #f5f5f5;
+    padding: 6px 10px;
+    border-radius: 12px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    height: 32px;
+  }
+
+  .usf-clear-all.usf-btn {
+    display: flex;
+    align-items: center;
+    height: 32px; /* same height as pill */
+    font-size: 13px;
+    font-weight: 500;
+    color: #E87529;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0 8px 0 0;
+    margin: 0;
+    text-decoration: underline;
+    line-height: 1;
+  }
+
+  .usf-clear-all.usf-btn:hover {
+    text-decoration: none;
+    opacity: 0.9;
+  }
+}
+
+/* Hide label/icon */
+.usf-title.usf-clear > .usf-pull-left,
+.usf-title.usf-clear > .usf-label {
+  display: none !important;
+}
+
+
+@media (min-width: 768px) {
+  .usf-facet .usf-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 8px;
+    margin-bottom: 4px;
+  }
+
+  .usf-facet .usf-clear-all.usf-btn {
+    font-size: 13px;
+    font-weight: 500;
+    color: #E87529;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    margin-right: 8px; /* Adds space between Clear and dropdown icon */
+    transition: opacity 0.2s ease;
+  }
+
+  .usf-facet .usf-clear-all.usf-btn:hover {
+    opacity: 0.8;
+    text-decoration: none;
+  }
+
+  .usf-facet .usf-title .usf-pm {
+    margin-left: 6px; /* Ensure space between Clear button and icon */
+    font-size: 12px;
+    color: #888; /* Optional: make icon subtle */
+  }
+}
+
+@media (min-width: 768px) {
+  .usf-refineby__body {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px; /* Reduced gap between filter chips */
+    margin: 0;
+    row-gap: 8px;
+  }
+
+  .usf-refineby {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0 !important;
+    margin: 0;
+    border: 0;
+    width: 100%; /* Ensures it doesn't overflow toolbar bounds */
+  }
+
+  .usf-refineby__item {
+    background-color: #f5f5f5;
+    padding: 6px 10px;
+    border-radius: 12px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    height: 32px;
+    white-space: nowrap;
+    margin-right: 3px !important;
+    margin-bottom: 3px !important;
+  }
+
+  .usf-clear-all.usf-btn {
+    display: flex;
+    align-items: center;
+    height: 32px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #E87529;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0 6px 0 0;
+    margin: 0;
+    text-decoration: underline;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .usf-clear-all.usf-btn:hover {
+    text-decoration: none;
+    opacity: 0.9;
+  }
+}
+/* === Price Filter Container === */
+.usf-facet-range {
+  padding: 12px 0;
+}
+
+/* === Input Wrapper (Align inputs & dash) === */
+.usf-slider-inputs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.usf-slider-inputs::after {
+    display: none!important;
+}
+@media (max-width: 767px) {
+    .usf-has-container .usf-slider-inputs input {
+        width: 100%!important;
+    }
+}
+
+/* === Input Boxes (Min/Max Price) === */
+.usf-slider-inputs input {
+  height: 36px;
+  padding: 8px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  text-align: center;
+  color: #333;
+  background-color: #fff;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.usf-slider-inputs input:focus {
+  outline: none;
+  border-color: #E87529;
+  box-shadow: 0 0 0 3px rgba(232, 117, 41, 0.25);
+}
+
+/* === Separator Dash === */
+.usf-slider-div {
+  font-weight: 500;
+  font-size: 18px;
+  color: #888;
+  line-height: 1;
+}
+
+/* === Slider Track Styling === */
+.usf-c-slider__track {
+  background-color: #eee;
+  height: 6px;
+  border-radius: 3px;
+  position: relative;
+  margin: 12px 0;
+}
+
+.usf-c-slider__track .usf-active {
+  background-color: #E87529 !important;
+  height: 6px;
+  border-radius: 3px;
+}
+
+/* === Slider Handles === */
+.usf-c-slider__handle {
+  width: 16px;
+  height: 16px;
+  background-color: #fff;
+  border: 2px solid #E87529 !important;
+  border-radius: 50%;
+  top: -5px;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+}
+
+.usf-c-slider__handle:hover {
+  box-shadow: 0 0 0 4px rgba(232, 117, 41, 0.2);
+}
+
+/* === Tick Mark Labels (Pips) === */
+.usf-slider-pip__value {
+  font-size: 12px;
+  color: #888;
+  background: #fff;
+  padding: 0 4px;
+}
+
+/* === Mobile Responsiveness === */
+@media (max-width: 767px) {
+  .usf-slider-inputs {
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .usf-slider-inputs input {
+    width: 60px;
+    height: 32px;
+    font-size: 13px;
+  }
+
+  .usf-slider-div {
+    font-size: 16px;
+  }
+}
+
+/* === Hover Effect ONLY for Size Filter === */
+#usf-facet-6948859 .usf-facet-value-multiple:hover,
+#usf-facet-6948859 .usf-facet-value-single:hover {
+  border-color: #E87529 !important;
+  color: #E87529 !important;
+  background-color: rgba(232, 117, 41, 0.06) !important;
+}
+
+/* === Selected State ONLY for Size Filter === */
+#usf-facet-6948859 .usf-facet-value-multiple.usf-selected,
+#usf-facet-6948859 .usf-facet-value-single.usf-selected {
+  background-color: #E87529 !important;
+  color: #fff !important;
+  border-color: #E87529 !important;
+  box-shadow: 0 2px 5px rgba(232, 117, 41, 0.25);
+}
+
+/* === Box Styling ONLY for Size Filter === */
+#usf-facet-6948859 .usf-facet-value-multiple,
+#usf-facet-6948859 .usf-facet-value-single {
+  border-radius: 5px !important;
+  min-width: 40px !important;
+  min-height: auto !important;
+}
+
+.card-product, /* adjust if your card class name differs */
+.card-product .card-media,
+.card-product .card-media img,
+.card-product .card-image,
+.card-product .card-link {
+  border-radius: 14px !important; /* adjust radius as needed */
+  overflow: hidden; /* ensures image corners also get clipped */
+}
+
+/* --- Reset default inner --- */
+.usf-checkbox-inner {
+  display: none !important;
+}
+
+/* --- Base checkbox --- */
+.usf-checkbox {
+  width: 15px;
+  height: 15px;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  background-color: #fff;
+  cursor: pointer;
+  position: relative;
+}
+
+/* --- Hover effect --- */
+.usf-checkbox:hover {
+  border-color: #E87529;
+  box-shadow: 0 0 0 2px rgba(232, 117, 41, 0.15);
+}
+
+/* --- Checked state --- */
+.usf-checkbox.usf-checked {
+  border-color: #E87529;
+  background-color: #E87529;
+}
+
+/* --- White tick icon --- */
+.usf-checkbox.usf-checked::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="white" d="M6.173 11.414l-3.89-3.89 1.06-1.06 2.83 2.83L12.657 3.83l1.06 1.06-7.544 7.545z"/></svg>') no-repeat center;
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="white" d="M6.173 11.414l-3.89-3.89 1.06-1.06 2.83 2.83L12.657 3.83l1.06 1.06-7.544 7.545z"/></svg>') no-repeat center;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+}
+
+.usf-checkbox.usf-checked::after {
+  opacity: 0;
+  animation: fadeInTick 0.2s ease forwards;
+}
+
+@keyframes fadeInTick {
+  to { opacity: 1; }
+}
+
+@media screen and (max-width: 767px) {
+  /* Remove the right checkmark icon */
+  .usf-selected::before {
+    display: none !important;
+  }
+
+  /* Button layout: checkbox left, label right */
+  .usf-facet-value-multiple {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 12px 16px;
+    width: 100%;
+  }
+
+  /* Proper checkbox styling */
+  .usf-checkbox {
+    width: 18px !important;
+    height: 18px !important;
+    border: 2px solid #ccc !important;
+    border-radius: 6px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.25s ease !important;
+    background-color: #fff !important;
+    position: relative !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Hide the default inner span */
+  .usf-checkbox-inner {
+    display: none !important;
+  }
+
+  /* Checked state */
+  .usf-checkbox.usf-checked {
+    background-color: #E87529 !important;
+    border-color: #E87529 !important;
+  }
+
+  /* White tick */
+  .usf-checkbox.usf-checked::after {
+    content: "" !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    width: 12px !important;
+    height: 12px !important;
+    transform: translate(-50%, -50%) !important;
+    background-color: white !important;
+    mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="white" d="M6.173 11.414l-3.89-3.89 1.06-1.06 2.83 2.83L12.657 3.83l1.06 1.06-7.544 7.545z"/></svg>') no-repeat center !important;
+    -webkit-mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path fill="white" d="M6.173 11.414l-3.89-3.89 1.06-1.06 2.83 2.83L12.657 3.83l1.06 1.06-7.544 7.545z"/></svg>') no-repeat center !important;
+    mask-size: contain !important;
+    -webkit-mask-size: contain !important;
+  }
+
+  /* Fix label layout to stay in row */
+  .usf-label.usf-btn {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 4px;
+  }
+}
+
+.usf-label.usf-btn .usf-value {
+  all: unset; /* resets inline styles if needed */
+  font-size: 12px !important;
+  color: #3a3b3c !important;
+  font-weight: 300 !important;
+  line-height: 1.2;
+}
+.usf-facets .usf-facet-values--Box {
+    margin: 0 -2px 0 -8px;
+}
+.usf-facets .usf-facet-values--Box .usf-facet-value {
+    border: 1px solid rgba(0, 0, 0, .2);
+    display: inline-block!important;
+    padding: 3px;
+    margin: 7px 0 7px 8px;
+    min-width: calc(33% - 8px)!important;
+    width: unset;
+    max-width: calc(98% - 2px);
+    text-align: center;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    line-height: 34px;
+}
+
+.usf-label .usf-value {
+  display: none !important;
+}
+
+@media(max-width: 767px) {
+/* Add selected ring/border to color swatch */
+.usf-facet-value.usf-selected .usf-mobile-swatch {
+  outline: 2px solid #000; /* or any theme color */
+  outline-offset: 2px;
+  border-radius: 50%; /* to match circle swatches */
+  box-shadow: 0 0 0 2px white; /* optional: adds white padding ring for contrast */
+}
+.usf-facet-value.usf-title{
+    padding: 0px 0px 0px 0px !important;
+}
+}
+
+.usf-hide-theme-search .halo-sidebar_search,
+.usf-hide-theme-search .quickSearchResultsWrap,
+.usf-hide-theme-search .quickSearchResultsBlock {
+    display: none!important;
+}
+
+body:not(.usf-mobile) .usf-is.usf-is--compact.usf-is-layout--two-columns .usf-is-content-container .usf-is-content:not(.usf-is-content--without-sidebar):not(.usf-is-content--without-results) {
+    flex-direction: row-reverse;
+}
+
+@media (min-width: 768px) {
+  /* Hide mobile suggestions */
+  .mobile-suggestions {
+    display: none !important;
+  }
+
+  /* Popup layout + rounded corners */
+  .usf-popup.usf-zone.usf-is {
+    max-width: 740px !important;
+    border-radius: 14px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+  }
+
+  /* Content container with smaller column gap */
+  .usf-is-content {
+    display: flex !important;
+    gap: 16px !important; /* ↓ Reduced gap */
+    padding: 20px 20px !important;
+    justify-content: flex-start;
+  }
+
+  /* Match section widths */
+  .usf-is-side.usf-is-matches.usf-is-suggestions,
+  .usf-is-matches.usf-is-collections {
+    display: flex !important;
+    flex-direction: column;
+    width: 50%;
+  }
+
+/* Custom header before Search Suggestions */
+.usf-is-suggestions::before {
+  content: "Search Suggestions";
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
+  color: #E87529; /* Or #999 for subtle */
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+  border-top-width: 0px !important;
+}
+
+/* Custom header before Collections */
+.usf-is-collections::before {
+  content: "Collection";
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Montserrat', sans-serif;
+  color: #E87529; /* Or #999 */
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+  border-top-width: 0px !important;
+}
+
+  /* Search Suggestions */
+  .usf-is-suggestions .usf-is-match {
+    background: none !important;
+    border: none !important;
+    color: #000 !important;
+    font-size: 13px !important;
+    font-weight: 400;
+    padding: 4px 0 !important;
+    text-align: left;
+    transition: all 0.2s ease;
+  }
+
+  .usf-is-suggestions .usf-is-match:hover {
+    color: #E87529 !important;
+    font-weight: 500;
+  }
+
+  /* Subtle highlight in suggestions */
+  .usf-is-suggestions .usf-highlight {
+    font-weight: 500 !important;
+    color: #E87529 !important;
+    background: none !important;
+  }
+
+  /* Collection Buttons (tight spacing + better hover) */
+  .usf-is-collections .usf-is-match {
+    background-color: #FFF6F0 !important;
+    color: #E87529 !important;
+    border: 1px solid #FFE4D1 !important;
+    padding: 6px 12px !important;
+    font-size: 13px !important;
+    border-radius: 6px;
+    width: fit-content;
+    font-weight: 500 !important;
+    margin: 3px 0 !important; /* tighter vertical spacing */
+    transition: all 0.2s ease;
+  }
+
+  .usf-is-collections .usf-is-match:hover {
+    background-color: #E87529 !important;
+    color: #fff !important;
+    font-weight: 600 !important;
+  }
+
+  /* Remove highlight effect inside collection buttons */
+  .usf-is-collections .usf-highlight {
+    font-weight: inherit !important;
+    color: inherit !important;
+  }
+
+  /* Remove visual borders from container edges */
+  .usf-is-side {
+    border: none !important;
+  }
+  .usf-is-matches .usf-title {
+  display: none !important;
+}
+    .usf-is-suggestions, .usf-is-collections{
+        border-top-width: 0px !important;
+    }
+
+    .usf-popup.usf-zone.usf-is {
+    width: 700px !important;
+    max-width: 700px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    }
+
+    /* Completely neutralize inline width override */
+    .usf-popup[style*="width"] {
+    width: 700px !important;
+    max-width: 700px !important;
+    }
+
+}
+
+
+/* Hide product matches grid globally */
+.usf-is-products.usf-is-matches {
+  display: none !important;
+}
+
+/* Hide the "View all results" button */
+.usf-is-viewall {
+  display: none !important;
+}
+
+@media (max-width: 767px) {
+
+  /* Centered "COLLECTIONS" title */
+  .usf-is-collections {
+    padding: 16px 12px !important;
+    text-align: center !important;
+  }
+
+  .usf-is-collections::before {
+    content: "COLLECTIONS";
+    display: block;
+    font-weight: 600;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+    text-align: center;
+  }
+
+  /* Remove default heading */
+  .usf-is-collections > .usf-title {
+    display: none !important;
+  }
+
+  /* Button container */
+  .usf-is-collections .usf-is-matches {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* Buttons styling and spacing */
+  .usf-is-collections .usf-is-match {
+    display: inline-block;
+    padding: 6px 14px !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    border-radius: 20px !important;
+    background: #E87529 !important;
+    color: #fff !important;
+    border: none !important;
+    width: auto !important;
+    max-width: 100%;
+    white-space: nowrap;
+    margin: 6px 6px !important; /* spacing between buttons */
+  }
+
+  /* Hide right sidebar */
+  .usf-is-side {
+    display: none !important;
+  }
+
+    /* Common heading style for both titles */
+    .usf-is-matches.usf-is-suggestions .usf-title,
+    .usf-is-collections::before {
+    display: block !important;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+    color: #666 !important;
+    letter-spacing: 0.5px !important;
+    text-align: center !important;
+    font-family: Montserrat, sans-serif !important;
+    text-transform: uppercase;
+    border-bottom-width: 0px !important;
+    }
+
+    .usf-is-matches.usf-is-suggestions .usf-title{
+        margin-bottom: 0px !important;
+    }
+  
+  /* Search suggestion container */
+  .usf-is-suggestions {
+    padding: 12px 16px !important;
+  }
+
+  /* Individual suggestion items */
+  .usf-is-suggestions .usf-is-match {
+    background: none !important;
+    border: none !important;
+    padding: 6px 0 !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    color: #E87529 !important;
+    margin: 0 !important;
+    text-align: left;
+    display: block;
+    width: 100%;
+  }
+}
+
+/* Remove highlight styling in collection buttons */
+.usf-is-collections .usf-highlight {
+  font-weight: inherit !important;
+  color: inherit !important;
+  background: none !important;
+}
+
+.halo-sidebar .halo-sidebar-left .halo-sidebar_search{
+    display: none !important;
+}
+   
+body:not(.usf-mobile) .usf-is-content{
+    display: flex !important;
+    justify-content: flex-end;
+}
+
+/* Modernized Search Title */
+.page-header.text-center {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 24px;
+  letter-spacing: 0.4px;
+  text-align: center;
+}
+
+/* Search Form Container */
+.form-fieldInline {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+  max-width: 480px;
+  margin: 0 auto;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* Input Styling */
+.search__input {
+  flex-grow: 1;
+  padding: 12px 16px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  background-color: #fff;
+  color: #333;
+}
+
+.search__input::placeholder {
+  color: #999;
+  font-style: italic;
+}
+
+/* Button Styling */
+.search__button {
+  background-color: #E87529;
+  padding: 12px 16px;
+  border: none;
+  border-left: 1px solid #eee;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.2s ease;
+}
+
+.search__button:hover {
+  background-color: #e65c00;
+}
+
+/* Icon */
+.icon-search-1 {
+  width: 20px;
+  height: 20px;
+  fill: #fff;
+}
+
+#Search-In-Template {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.page-header.text-center {
+  margin: 0 !important;
+  padding-bottom: 15px !important;
+}
+
+@media (max-width: 767px) {
+  .page-header.text-center {
+    font-size: 18px !important; /* Or adjust as needed */
+    line-height: 1.3;
+  }
+}
+@media (max-width: 767px) {
+    .usf-mobile-swatch {
+    border: 2px solid #ccc; /* light grey border */
+    border-radius: 50%;     /* keeps it circular */
+    width: 24px;            /* optional: ensure consistent size */
+    height: 24px;           /* optional: ensure consistent size */
+    box-sizing: border-box; /* makes border fit inside size */
+    }
+
+    .usf-facet-value.usf-is-selected .usf-mobile-swatch {
+    border: 2px solid #E87529 !important; /* black border when selected */
+    }
+}
+
+
+body:not(.usf-horz-layout) .usf-facets:not(.usf-facets--mobile) .usf-facet-values--circle{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.usf-mobile .usf-facets:not(.usf-facets--mobile) .usf-show-swatch-label .usf-mobile-swatch{
+    flex: unset;
+}
+.usf-mobile .usf-facets .usf-body{
+    height: calc(100vh - 80px);
+}
+.usf-scrollLock{
+    overflow: hidden
+}

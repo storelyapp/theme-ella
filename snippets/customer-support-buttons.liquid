@@ -1,0 +1,99 @@
+<style>
+  .customer-support-container {
+    margin: 0 auto; /* center container */
+    max-width: 437px;
+    padding: 0;
+    border: 0;
+    border-radius: 10px;
+    background: #fff;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  .customer-support-buttons {
+    display: flex;
+    justify-content: center; /* center horizontally */
+    align-items: center;
+    gap: 20px; /* space between buttons */
+    flex-wrap: wrap;
+  }
+
+  .support-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* center content inside button */
+    gap: 10px;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    color: #1c1c1c;
+    background-color: #f7f5f5;
+    border: none;
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+    min-width: 140px; /* keeps balance */
+  }
+
+  .support-btn:hover {
+    background-color: #eeeeee;
+  }
+
+  .support-icon-circle {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .support-icon-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .support-icon-phone {
+    background-color: #007bff;
+  }
+
+  .support-icon-circle svg {
+    width: 16px;
+    height: 16px;
+    fill: #fff;
+  }
+
+  @media screen and (max-width: 480px) {
+    .customer-support-buttons {
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .support-btn {
+      flex: 1 1 45%; /* two per row */
+      min-width: 0;
+    }
+  }
+</style>
+
+<div class="customer-support-container">
+  <div class="customer-support-buttons">
+    <a href="https://wa.me/919620237728" class="support-btn" target="_blank">
+      <span class="support-icon-circle">
+        <img width="14px" height="14px" src="https://cdn.shopify.com/s/files/1/0572/8685/2744/files/whatsapp_icon_e7e5d8a5-67cc-4164-98f0-15514c01fe96.webp?v=1750340946" alt="WhatsApp Icon">
+      </span>
+      Chat With Us
+    </a>
+    <a href="tel:+91 9620237728" class="support-btn">
+      <span class="support-icon-circle support-icon-phone">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 3.08 5.18 2 2 0 0 1 5 3h3a2 2 0 0 1 2 1.72c.12.82.37 1.61.7 2.38a2 2 0 0 1-.45 2.11L9.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.77.33 1.56.58 2.38.7A2 2 0 0 1 22 16.92z"></path>
+        </svg>
+      </span>
+      Call Us
+    </a>
+  </div>
+</div>

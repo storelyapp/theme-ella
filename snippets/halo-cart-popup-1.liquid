@@ -1,0 +1,1274 @@
+{%- comment -%}
+  Lag ATC Popup (snippet, driven by config/settings_schema.json)
+  Responsive profiles:
+    - Mobile:    *_m   (≤ 767px)
+    - Desktop/T: *_d   (≥ 768px)
+  Keeps Halo hooks: #halo-add-to-cart-popup, data-add-to-cart-popup, data-close-add-to-cart-popup
+{%- endcomment -%}
+
+{%- if settings.lag_atc_enable -%}
+  {%- unless settings.show_quick_cart -%}
+    <link rel="stylesheet" href="{{ 'component-quick-cart.css' | asset_url }}" media="print" onload="this.media='all'">
+  {%- endunless -%}
+  <link rel="stylesheet" href="{{ 'component-add-to-cart.css' | asset_url }}" media="print" onload="this.media='all'">
+
+  {%- unless settings.show_quick_cart -%}
+    <noscript>{{ 'component-quick-cart.css' | asset_url | stylesheet_tag }}</noscript>
+  {%- endunless -%}
+  <noscript>{{ 'component-add-to-cart.css' | asset_url | stylesheet_tag }}</noscript>
+
+  {%- liquid
+    # -----------------------------
+    # Desktop/Tablet computed colors (rgba)
+    # -----------------------------
+    assign bg_alpha_d = settings.lag_atc_bg_opacity_d | divided_by: 100.0
+    assign bg_rgba_d = settings.lag_atc_bg_color_d | color_modify: 'alpha', bg_alpha_d
+
+    assign overlay_alpha_d = settings.lag_atc_progress_overlay_opacity_d | divided_by: 100.0
+    assign overlay_rgba_d = settings.lag_atc_progress_overlay_color_d | color_modify: 'alpha', overlay_alpha_d
+
+    assign close_bg_alpha_d = settings.lag_atc_close_bg_opacity_d | divided_by: 100.0
+    assign close_bg_rgba_d = settings.lag_atc_close_bg_d | color_modify: 'alpha', close_bg_alpha_d
+
+    assign bd_alpha_d = settings.lag_atc_backdrop_opacity_d | divided_by: 100.0
+    assign bd_rgba_d = settings.lag_atc_backdrop_color_d | color_modify: 'alpha', bd_alpha_d
+
+    # -----------------------------
+    # Mobile computed colors (rgba)
+    # -----------------------------
+    assign bg_alpha_m = settings.lag_atc_bg_opacity_m | divided_by: 100.0
+    assign bg_rgba_m = settings.lag_atc_bg_color_m | color_modify: 'alpha', bg_alpha_m
+
+    assign overlay_alpha_m = settings.lag_atc_progress_overlay_opacity_m | divided_by: 100.0
+    assign overlay_rgba_m = settings.lag_atc_progress_overlay_color_m | color_modify: 'alpha', overlay_alpha_m
+
+    assign close_bg_alpha_m = settings.lag_atc_close_bg_opacity_m | divided_by: 100.0
+    assign close_bg_rgba_m = settings.lag_atc_close_bg_m | color_modify: 'alpha', close_bg_alpha_m
+
+    assign bd_alpha_m = settings.lag_atc_backdrop_opacity_m | divided_by: 100.0
+    assign bd_rgba_m = settings.lag_atc_backdrop_color_m | color_modify: 'alpha', bd_alpha_m
+
+    # -----------------------------
+    # Texts (D/M)
+    # -----------------------------
+    assign success_msg_d = settings.lag_atc_success_text_d
+    if success_msg_d == blank
+      assign success_msg_d = 'products.product.add_to_cart_success_message' | t
+    endif
+
+    assign success_msg_m = settings.lag_atc_success_text_m
+    if success_msg_m == blank
+      assign success_msg_m = 'products.product.add_to_cart_success_message' | t
+    endif
+
+    assign continue_label_d = settings.lag_atc_continue_label_d
+    if continue_label_d == blank
+      assign continue_label_d = 'sections.cart.continue_shopping' | t
+    endif
+
+    assign continue_label_m = settings.lag_atc_continue_label_m
+    if continue_label_m == blank
+      assign continue_label_m = 'sections.cart.continue_shopping' | t
+    endif
+
+    assign view_cart_label_d = settings.lag_atc_view_cart_label_d
+    if view_cart_label_d == blank
+      assign view_cart_label_d = 'sections.cart.view_cart' | t
+    endif
+
+    assign view_cart_label_m = settings.lag_atc_view_cart_label_m
+    if view_cart_label_m == blank
+      assign view_cart_label_m = 'sections.cart.view_cart' | t
+    endif
+
+    # Fonts
+    assign title_font_d = settings.lag_atc_title_font_d
+    assign text_font_d  = settings.lag_atc_text_font_d
+    assign btn_font_d   = settings.lag_atc_button_font_d
+
+    assign title_font_m = settings.lag_atc_title_font_m
+    assign text_font_m  = settings.lag_atc_text_font_m
+    assign btn_font_m   = settings.lag_atc_button_font_m
+  -%}
+  
+  <style>
+    /* =========================================================
+      1) FIX BACKDROP SCOPE (must live on BODY/ROOT, not popup)
+    ========================================================= */
+    body{
+      --lag-atc-backdrop-d: {% if settings.lag_atc_backdrop_enable_d %}{{ bd_rgba_d }}{% else %}rgba(0,0,0,0){% endif %};
+      --lag-atc-backdrop-m: {% if settings.lag_atc_backdrop_enable_m %}{{ bd_rgba_m }}{% else %}rgba(0,0,0,0){% endif %};
+      --lag-atc-backdrop: var(--lag-atc-backdrop-d);
+    }
+    @media (max-width: 767px){
+      body{ --lag-atc-backdrop: var(--lag-atc-backdrop-m); }
+    }
+
+    body.add-to-cart-show .background-overlay,
+    body.add-to-cart-show .halo-background,
+    body.add-to-cart-show .halo-overlay,
+    body.add-to-cart-show .popup-overlay,
+    body.add-to-cart-show .modal-overlay{
+      background: var(--lag-atc-backdrop, rgba(0,0,0,0.18)) !important;
+      opacity: 1 !important;
+      z-index: 60 !important;
+    }
+
+    /* =========================================================
+      2) Vars: bind to #halo-add-to-cart-popup (NOT inline style)
+         So even if Halo rewrites classes, vars survive.
+    ========================================================= */
+    #halo-add-to-cart-popup{
+      /* Desktop vars */
+      --lag-popup-width-d: {{ settings.lag_atc_popup_width_d }}px;
+      --lag-padding-d: {{ settings.lag_atc_popup_padding_d }}px;
+      --lag-bg-d: {{ bg_rgba_d }};
+      --lag-shadow-d: {% if settings.lag_atc_enable_shadow_d %}0 10px 30px rgba(0,0,0,0.18){% else %}none{% endif %};
+
+      --lag-offset-x-d: {{ settings.lag_atc_offset_x_d }}px;
+      --lag-offset-y-d: {{ settings.lag_atc_offset_y_d }}px;
+
+      --lag-border-color-d: {{ settings.lag_atc_border_color_d }};
+      --lag-border-width-d: {{ settings.lag_atc_border_width_d }}px;
+      --lag-radius-d: {{ settings.lag_atc_border_radius_d }}px;
+
+      --lag-title-color-d: {{ settings.lag_atc_title_color_d }};
+      --lag-text-color-d: {{ settings.lag_atc_text_color_d }};
+      --lag-title-size-d: {{ settings.lag_atc_title_size_d }}px;
+      --lag-text-size-d: {{ settings.lag_atc_text_size_d }}px;
+      --lag-title-weight-d: {{ settings.lag_atc_title_weight_d }};
+      --lag-text-weight-d: {{ settings.lag_atc_text_weight_d }};
+
+      --lag-image-size-d: {{ settings.lag_atc_image_size_d }}px;
+      --lag-image-radius-d: {{ settings.lag_atc_image_radius_d }}px;
+
+      --lag-btn-radius-d: {{ settings.lag_atc_button_radius_d }}px;
+      --lag-btn-size-d: {{ settings.lag_atc_button_text_size_d }}px;
+
+      --lag-btn-bg-d: {{ settings.lag_atc_view_cart_bg_d }};
+      --lag-btn-fg-d: {{ settings.lag_atc_view_cart_fg_d }};
+      --lag-btn-border-d: {{ settings.lag_atc_view_cart_border_d }};
+
+      --lag-btn2-bg-d: {{ settings.lag_atc_continue_bg_d | default: 'transparent' }};
+      --lag-btn2-fg-d: {{ settings.lag_atc_continue_fg_d }};
+      --lag-btn2-border-d: {{ settings.lag_atc_continue_border_d }};
+
+      --lag-progress-color-d: {{ settings.lag_atc_progress_color_d }};
+      --lag-progress-overlay-d: {{ overlay_rgba_d }};
+
+      --lag-close-size-d: {{ settings.lag_atc_close_size_d }}px;
+      --lag-close-bg-d: {{ close_bg_rgba_d }};
+      --lag-close-border-d: {{ settings.lag_atc_close_border_d }};
+      --lag-close-icon-d: {{ settings.lag_atc_close_icon_color_d }};
+
+      --lag-font-body-d: {% if settings.lag_atc_body_font_d != blank %}{{ settings.lag_atc_body_font_d.family }}, {{ settings.lag_atc_body_font_d.fallback_families }}{% else %}inherit{% endif %};
+      --lag-font-title-d: {% if title_font_d != blank %}{{ title_font_d.family }}, {{ title_font_d.fallback_families }}{% else %}inherit{% endif %};
+      --lag-font-text-d: {% if text_font_d != blank %}{{ text_font_d.family }}, {{ text_font_d.fallback_families }}{% else %}inherit{% endif %};
+      --lag-font-btn-d: {% if btn_font_d != blank %}{{ btn_font_d.family }}, {{ btn_font_d.fallback_families }}{% else %}inherit{% endif %};
+
+      --lag-strip-h-d: {{ settings.lag_atc_strip_height_d }}px;
+      --lag-pad-x-d: {{ settings.lag_atc_padding_x_d }}px;
+      --lag-pad-y-d: {{ settings.lag_atc_padding_y_d }}px;
+      --lag-simple-outer-pad-d: {{ settings.lag_atc_simple_outer_padding_d }}px;
+
+      /* Mobile vars */
+      --lag-popup-width-m: {{ settings.lag_atc_popup_width_m }}px;
+      --lag-padding-m: {{ settings.lag_atc_popup_padding_m }}px;
+      --lag-bg-m: {{ bg_rgba_m }};
+      --lag-shadow-m: {% if settings.lag_atc_enable_shadow_m %}0 10px 30px rgba(0,0,0,0.18){% else %}none{% endif %};
+
+      --lag-offset-x-m: {{ settings.lag_atc_offset_x_m }}px;
+      --lag-offset-y-m: {{ settings.lag_atc_offset_y_m }}px;
+
+      --lag-border-color-m: {{ settings.lag_atc_border_color_m }};
+      --lag-border-width-m: {{ settings.lag_atc_border_width_m }}px;
+      --lag-radius-m: {{ settings.lag_atc_border_radius_m }}px;
+
+      --lag-title-color-m: {{ settings.lag_atc_title_color_m }};
+      --lag-text-color-m: {{ settings.lag_atc_text_color_m }};
+      --lag-title-size-m: {{ settings.lag_atc_title_size_m }}px;
+      --lag-text-size-m: {{ settings.lag_atc_text_size_m }}px;
+      --lag-title-weight-m: {{ settings.lag_atc_title_weight_m }};
+      --lag-text-weight-m: {{ settings.lag_atc_text_weight_m }};
+
+      --lag-image-size-m: {{ settings.lag_atc_image_size_m }}px;
+      --lag-image-radius-m: {{ settings.lag_atc_image_radius_m }}px;
+
+      --lag-btn-radius-m: {{ settings.lag_atc_button_radius_m }}px;
+      --lag-btn-size-m: {{ settings.lag_atc_button_text_size_m }}px;
+
+      --lag-btn-bg-m: {{ settings.lag_atc_view_cart_bg_m }};
+      --lag-btn-fg-m: {{ settings.lag_atc_view_cart_fg_m }};
+      --lag-btn-border-m: {{ settings.lag_atc_view_cart_border_m }};
+
+      --lag-btn2-bg-m: {{ settings.lag_atc_continue_bg_m | default: 'transparent' }};
+      --lag-btn2-fg-m: {{ settings.lag_atc_continue_fg_m }};
+      --lag-btn2-border-m: {{ settings.lag_atc_continue_border_m }};
+
+      --lag-progress-color-m: {{ settings.lag_atc_progress_color_m }};
+      --lag-progress-overlay-m: {{ overlay_rgba_m }};
+
+      --lag-close-size-m: {{ settings.lag_atc_close_size_m }}px;
+      --lag-close-bg-m: {{ close_bg_rgba_m }};
+      --lag-close-border-m: {{ settings.lag_atc_close_border_m }};
+      --lag-close-icon-m: {{ settings.lag_atc_close_icon_color_m }};
+
+      --lag-font-body-m: {% if settings.lag_atc_body_font_m != blank %}{{ settings.lag_atc_body_font_m.family }}, {{ settings.lag_atc_body_font_m.fallback_families }}{% else %}inherit{% endif %};
+      --lag-font-title-m: {% if title_font_m != blank %}{{ title_font_m.family }}, {{ title_font_m.fallback_families }}{% else %}inherit{% endif %};
+      --lag-font-text-m: {% if text_font_m != blank %}{{ text_font_m.family }}, {{ text_font_m.fallback_families }}{% else %}inherit{% endif %};
+      --lag-font-btn-m: {% if btn_font_m != blank %}{{ btn_font_m.family }}, {{ btn_font_m.fallback_families }}{% else %}inherit{% endif %};
+
+      --lag-strip-h-m: {{ settings.lag_atc_strip_height_m }}px;
+      --lag-pad-x-m: {{ settings.lag_atc_padding_x_m }}px;
+      --lag-pad-y-m: {{ settings.lag_atc_padding_y_m }}px;
+      --lag-simple-outer-pad-m: {{ settings.lag_atc_simple_outer_padding_m }}px;
+
+      /* Active defaults = Desktop */
+      --lag-popup-width: var(--lag-popup-width-d);
+      --lag-padding: var(--lag-padding-d);
+      --lag-bg: var(--lag-bg-d);
+      --lag-shadow: var(--lag-shadow-d);
+
+      --lag-offset-x: var(--lag-offset-x-d);
+      --lag-offset-y: var(--lag-offset-y-d);
+
+      --lag-border-color: var(--lag-border-color-d);
+      --lag-border-width: var(--lag-border-width-d);
+      --lag-radius: var(--lag-radius-d);
+
+      --lag-title-color: var(--lag-title-color-d);
+      --lag-text-color: var(--lag-text-color-d);
+      --lag-title-size: var(--lag-title-size-d);
+      --lag-text-size: var(--lag-text-size-d);
+      --lag-title-weight: var(--lag-title-weight-d);
+      --lag-text-weight: var(--lag-text-weight-d);
+
+      --lag-image-size: var(--lag-image-size-d);
+      --lag-image-radius: var(--lag-image-radius-d);
+
+      --lag-btn-radius: var(--lag-btn-radius-d);
+      --lag-btn-size: var(--lag-btn-size-d);
+
+      --lag-btn-bg: var(--lag-btn-bg-d);
+      --lag-btn-fg: var(--lag-btn-fg-d);
+      --lag-btn-border: var(--lag-btn-border-d);
+
+      --lag-btn2-bg: var(--lag-btn2-bg-d);
+      --lag-btn2-fg: var(--lag-btn2-fg-d);
+      --lag-btn2-border: var(--lag-btn2-border-d);
+
+      --lag-progress-color: var(--lag-progress-color-d);
+      --lag-progress-overlay: var(--lag-progress-overlay-d);
+
+      --lag-close-size: var(--lag-close-size-d);
+      --lag-close-bg: var(--lag-close-bg-d);
+      --lag-close-border: var(--lag-close-border-d);
+      --lag-close-icon: var(--lag-close-icon-d);
+
+      --lag-font-body: var(--lag-font-body-d);
+      --lag-font-title: var(--lag-font-title-d);
+      --lag-font-text: var(--lag-font-text-d);
+      --lag-font-btn: var(--lag-font-btn-d);
+
+      --lag-strip-h: var(--lag-strip-h-d);
+      --lag-pad-x: var(--lag-pad-x-d);
+      --lag-pad-y: var(--lag-pad-y-d);
+      --lag-simple-outer-pad: var(--lag-simple-outer-pad-d);
+    }
+
+    @media (max-width: 767px){
+      #halo-add-to-cart-popup{
+        --lag-popup-width: var(--lag-popup-width-m);
+        --lag-padding: var(--lag-padding-m);
+        --lag-bg: var(--lag-bg-m);
+        --lag-shadow: var(--lag-shadow-m);
+
+        --lag-offset-x: var(--lag-offset-x-m);
+        --lag-offset-y: var(--lag-offset-y-m);
+
+        --lag-border-color: var(--lag-border-color-m);
+        --lag-border-width: var(--lag-border-width-m);
+        --lag-radius: var(--lag-radius-m);
+
+        --lag-title-color: var(--lag-title-color-m);
+        --lag-text-color: var(--lag-text-color-m);
+        --lag-title-size: var(--lag-title-size-m);
+        --lag-text-size: var(--lag-text-size-m);
+        --lag-title-weight: var(--lag-title-weight-m);
+        --lag-text-weight: var(--lag-text-weight-m);
+
+        --lag-image-size: var(--lag-image-size-m);
+        --lag-image-radius: var(--lag-image-radius-m);
+
+        --lag-btn-radius: var(--lag-btn-radius-m);
+        --lag-btn-size: var(--lag-btn-size-m);
+
+        --lag-btn-bg: var(--lag-btn-bg-m);
+        --lag-btn-fg: var(--lag-btn-fg-m);
+        --lag-btn-border: var(--lag-btn-border-m);
+
+        --lag-btn2-bg: var(--lag-btn2-bg-m);
+        --lag-btn2-fg: var(--lag-btn2-fg-m);
+        --lag-btn2-border: var(--lag-btn2-border-m);
+
+        --lag-progress-color: var(--lag-progress-color-m);
+        --lag-progress-overlay: var(--lag-progress-overlay-m);
+
+        --lag-close-size: var(--lag-close-size-m);
+        --lag-close-bg: var(--lag-close-bg-m);
+        --lag-close-border: var(--lag-close-border-m);
+        --lag-close-icon: var(--lag-close-icon-m);
+
+        --lag-font-body: var(--lag-font-body-m);
+        --lag-font-title: var(--lag-font-title-m);
+        --lag-font-text: var(--lag-font-text-m);
+        --lag-font-btn: var(--lag-font-btn-m);
+
+        --lag-strip-h: var(--lag-strip-h-m);
+        --lag-pad-x: var(--lag-pad-x-m);
+        --lag-pad-y: var(--lag-pad-y-m);
+        --lag-simple-outer-pad: var(--lag-simple-outer-pad-m);
+      }
+    }
+
+    /* =========================================================
+      3) Core styling — target by ID + data attrs (NOT .lag-atc)
+    ========================================================= */
+    #halo-add-to-cart-popup,
+    #halo-add-to-cart-popup *{
+      box-sizing: border-box !important;
+    }
+
+    #halo-add-to-cart-popup{
+      position: fixed !important;
+      z-index: 80 !important;
+
+      inset: auto !important;
+      left: auto !important;
+      right: auto !important;
+      top: auto !important;
+      bottom: auto !important;
+      transform: none !important;
+
+      border: var(--lag-border-width) solid var(--lag-border-color) !important;
+      border-radius: var(--lag-radius) !important;
+      background: var(--lag-bg) !important;
+      box-shadow: var(--lag-shadow) !important;
+      overflow: hidden !important;
+
+      font-family: var(--lag-font-body) !important;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+
+      --lag-safe-top: env(safe-area-inset-top, 0px);
+      --lag-safe-right: env(safe-area-inset-right, 0px);
+      --lag-safe-bottom: env(safe-area-inset-bottom, 0px);
+      --lag-safe-left: env(safe-area-inset-left, 0px);
+
+      --lag-close-reserve: calc(var(--lag-close-size, 36px) + 12px);
+      --lag-simple-edge-left: max(calc(var(--lag-simple-outer-pad, 10px) + var(--lag-offset-x, 0px)), var(--lag-safe-left));
+      --lag-simple-edge-right: max(calc(var(--lag-simple-outer-pad, 10px) + var(--lag-offset-x, 0px)), var(--lag-safe-right));
+    }
+
+    /* show/hide via canonical data attrs */
+    #halo-add-to-cart-popup[data-lag-show-image="0"] .product-image{ display:none !important; }
+    #halo-add-to-cart-popup[data-lag-show-title="0"] .product-title .title{ display:none !important; }
+    #halo-add-to-cart-popup[data-lag-show-text="0"] .product-title .text{ display:none !important; }
+    #halo-add-to-cart-popup[data-lag-show-buttons="0"] .product-action{ display:none !important; }
+    #halo-add-to-cart-popup[data-lag-show-continue="0"] .button-continue{ display:none !important; }
+    #halo-add-to-cart-popup[data-lag-show-viewcart="0"] .button-view-cart{ display:none !important; }
+    #halo-add-to-cart-popup[data-lag-close-icon="0"] .halo-popup-close .lag-close-ico{
+      display:none !important;
+    }
+
+
+    /* Position (data driven) */
+    #halo-add-to-cart-popup[data-lag-position="top_right"]{
+      top: calc(var(--lag-safe-top) + var(--lag-offset-y, 0px)) !important;
+      right: calc(var(--lag-safe-right) + var(--lag-offset-x, 0px)) !important;
+    }
+
+    #halo-add-to-cart-popup[data-lag-position="bottom_center"]{
+      left: 50% !important;
+      bottom: calc(var(--lag-safe-bottom) + var(--lag-offset-y, 0px)) !important;
+      transform: translateX(-50%) !important;
+    }
+
+    /* Width by mode */
+    #halo-add-to-cart-popup[data-lag-mode="full"]{
+      width: var(--lag-popup-width) !important;
+      max-width: calc(100vw - 24px) !important;
+    }
+    #halo-add-to-cart-popup[data-lag-mode="simple"]{
+      width: auto !important;
+      max-width: calc(100vw - 24px) !important;
+      min-width: 0 !important;
+    }
+
+    /* Simple fullwidth strip */
+    #halo-add-to-cart-popup[data-lag-mode="simple"][data-lag-simple-fullwidth="1"]{
+      left: var(--lag-simple-edge-left) !important;
+      right: var(--lag-simple-edge-right) !important;
+      width: auto !important;
+      max-width: none !important;
+      transform: none !important;
+    }
+
+    /* Autoclose BG fill overlay */
+    #halo-add-to-cart-popup[data-lag-autoclose="1"][data-lag-ac-anim="bg_fill"]::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:0;
+      pointer-events:none;
+      background: var(--lag-progress-overlay);
+      transform: scaleX(var(--lag-ac-progress, 0));
+      transform-origin: left center;
+    }
+
+    /* Content root */
+    #halo-add-to-cart-popup .halo-popup-content{
+      position: relative;
+      z-index: 2;
+      padding: var(--lag-padding, 14px) !important;
+      padding-right: calc(var(--lag-padding, 14px) + var(--lag-close-reserve)) !important;
+    }
+
+    /* Layout reset */
+    #halo-add-to-cart-popup .product-added{
+      display:flex !important;
+      align-items:center !important;
+      gap: 12px !important;
+      width: 100% !important;
+      font-size: inherit !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    #halo-add-to-cart-popup .product-added::before,
+    #halo-add-to-cart-popup .product-added::after{
+      content:none !important;
+      display:none !important;
+    }
+
+    /* Image (force display; some Halo variants hide it) */
+    #halo-add-to-cart-popup .product-image{
+      display:block !important;
+      width: var(--lag-image-size) !important;
+      height: var(--lag-image-size) !important;
+      border-radius: var(--lag-image-radius) !important;
+      overflow:hidden !important;
+      flex: 0 0 auto !important;
+      background-size: cover !important;
+      background-position: center !important;
+    }
+    #halo-add-to-cart-popup .product-image img{
+      width:100% !important;
+      height:100% !important;
+      object-fit:cover !important;
+      display:block !important;
+    }
+    #halo-add-to-cart-popup .product-image img:not([src]),
+    #halo-add-to-cart-popup .product-image img[src=""]{
+      display:none !important;
+    }
+
+    /* Info column */
+    #halo-add-to-cart-popup .product-info{
+      flex: 1 1 auto !important;
+      min-width: 0 !important;
+      display:flex !important;
+      flex-direction: column !important;
+      gap: 8px !important;
+      width: auto !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    /* Typography */
+    #halo-add-to-cart-popup .product-title{
+      margin:0 !important;
+      padding:0 !important;
+      min-width:0 !important;
+    }
+    #halo-add-to-cart-popup .product-title .title,
+    #halo-add-to-cart-popup .product-title .text{
+      display:block !important;
+      white-space: nowrap !important;
+      overflow:hidden !important;
+      text-overflow: ellipsis !important;
+      max-width: 100% !important;
+    }
+    #halo-add-to-cart-popup .product-title .title{
+      color: var(--lag-title-color) !important;
+      font-size: var(--lag-title-size) !important;
+      font-weight: var(--lag-title-weight) !important;
+      line-height: 1.2 !important;
+      font-family: var(--lag-font-title) !important;
+    }
+    #halo-add-to-cart-popup .product-title .text{
+      color: var(--lag-text-color) !important;
+      font-size: var(--lag-text-size) !important;
+      font-weight: var(--lag-text-weight) !important;
+      line-height: 1.25 !important;
+      font-family: var(--lag-font-text) !important;
+    }
+
+    /* Buttons */
+    #halo-add-to-cart-popup .product-action{
+      display:flex !important;
+      gap: 10px !important;
+      flex-wrap: wrap !important;
+      align-items:center !important;
+      margin:0 !important;
+      padding:0 !important;
+    }
+    #halo-add-to-cart-popup .product-action .button{
+      border-radius: var(--lag-btn-radius) !important;
+      font-size: var(--lag-btn-size) !important;
+      font-family: var(--lag-font-btn) !important;
+      padding: 10px 12px !important;
+      line-height: 1 !important;
+    }
+    #halo-add-to-cart-popup .button-view-cart{
+      background: var(--lag-btn-bg) !important;
+      color: var(--lag-btn-fg) !important;
+      border: 1px solid var(--lag-btn-border) !important;
+    }
+    #halo-add-to-cart-popup .button-continue{
+      background: var(--lag-btn2-bg, transparent) !important;
+      color: var(--lag-btn2-fg) !important;
+      border: 1px solid var(--lag-btn2-border) !important;
+    }
+
+    /* =========================================================
+      Action buttons (Close + Cart) — SAME styling + safe ring
+      (Fixes horizontal overflow / blank right side on mobile)
+    ========================================================= */
+
+    #halo-add-to-cart-popup{
+      --lag-action-inset: 10px;
+      --lag-action-gap: 10px;
+
+      /* Ring tuning (outside button with gap) */
+      --lag-ring-gap: 4px; /* space between button edge and ring */
+      --lag-ring-w: clamp(2px, calc(var(--lag-close-size) * 0.09), 3.5px);
+
+      /* Total ring box size = button + (gap + stroke) on both sides */
+      --lag-ring-size: calc(var(--lag-close-size) + (2 * (var(--lag-ring-gap) + var(--lag-ring-w))));
+    }
+
+    /* Default: show close; hide cart */
+    #halo-add-to-cart-popup .halo-popup-cart{ display:none !important; }
+
+    /* Switch action by profile */
+    #halo-add-to-cart-popup[data-lag-action="cart"] .halo-popup-close{ display:none !important; }
+    #halo-add-to-cart-popup[data-lag-action="cart"] .halo-popup-cart{ display:inline-flex !important; }
+
+    #halo-add-to-cart-popup[data-lag-action="both"] .halo-popup-cart{ display:inline-flex !important; }
+    #halo-add-to-cart-popup[data-lag-action="both"] .halo-popup-cart{
+      right: calc(var(--lag-action-inset) + var(--lag-close-size) + var(--lag-action-gap)) !important;
+    }
+
+    /* Shared action button base */
+    #halo-add-to-cart-popup .lag-atc-action{
+      position:absolute !important;
+      z-index: 3 !important;
+      top: 50% !important;
+      transform: translateY(-50%) !important;
+      right: var(--lag-action-inset) !important;
+
+      width: var(--lag-close-size) !important;
+      height: var(--lag-close-size) !important;
+
+      border-radius: 999px !important;
+      background: var(--lag-close-bg) !important;
+      border: 1px solid var(--lag-close-border) !important;
+
+      display:inline-flex !important;
+      align-items:center !important;
+      justify-content:center !important;
+
+      padding:0 !important;
+      margin:0 !important;
+      cursor:pointer !important;
+      text-decoration:none !important;
+
+      /* IMPORTANT: prevents ring from creating horizontal overflow */
+      overflow: hidden !important;
+
+      /* icons use currentColor */
+      color: var(--lag-close-icon) !important;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Icon sizing */
+    #halo-add-to-cart-popup .lag-atc-action .lag-close-ico svg,
+    #halo-add-to-cart-popup .lag-atc-action .lag-cart-ico svg{
+      width: calc(var(--lag-close-size) - 16px) !important;
+      height: calc(var(--lag-close-size) - 16px) !important;
+      display:block !important;
+    }
+
+    /* Force close SVG strokes to theme color */
+    #halo-add-to-cart-popup .lag-atc-action .lag-close-ico svg *{
+      stroke: var(--lag-close-icon) !important;
+    }
+
+    /* Hide X icon if configured (button still clickable) */
+    #halo-add-to-cart-popup[data-lag-close-icon="0"] .halo-popup-close .lag-close-ico{
+      display:none !important;
+    }
+
+    /* --- Ring (SVG) — OUTSIDE the button, centered, with gap --- */
+    #halo-add-to-cart-popup .lag-ac-ring{
+      display:none !important;
+      position:absolute !important;
+      left: 50% !important;
+      top: 50% !important;
+
+      width: var(--lag-ring-size) !important;
+      height: var(--lag-ring-size) !important;
+
+      /* center + start at 12 o’clock */
+      transform: translate(-50%, -50%) rotate(-90deg) !important;
+      transform-origin: 50% 50% !important;
+
+      pointer-events:none !important;
+      overflow: visible !important;
+      shape-rendering: geometricPrecision;
+    }
+
+    /* IMPORTANT: button must allow ring outside */
+    #halo-add-to-cart-popup .lag-atc-action{
+      overflow: visible !important;
+    }
+
+    #halo-add-to-cart-popup .lag-ac-ring-track{
+      fill:none;
+      stroke: rgba(255,255,255,0.22);
+      stroke-width: var(--lag-ring-w);
+      vector-effect: non-scaling-stroke;
+    }
+
+    #halo-add-to-cart-popup .lag-ac-ring-prog{
+      fill:none;
+      stroke: var(--lag-progress-color);
+      stroke-width: var(--lag-ring-w);
+      stroke-linecap: round;
+      vector-effect: non-scaling-stroke;
+
+      /* Using pathLength=100 => easy dash math */
+      stroke-dasharray: 100;
+      stroke-dashoffset: var(--lag-ac-dash, 100);
+    }
+
+    /* show ring only for ring-host */
+    #halo-add-to-cart-popup[data-lag-autoclose="1"][data-lag-ac-anim="close_ring"]
+      .lag-atc-action.is-ring-host .lag-ac-ring{
+      display:block !important;
+    }
+
+    /* Extra safety to avoid horizontal scroll caused by any fixed children */
+    #halo-add-to-cart-popup{
+      max-width: calc(100vw - 16px) !important;
+    }
+
+    /* Mode-specific tweaks */
+    #halo-add-to-cart-popup[data-lag-mode="full"] .product-title{
+      display:flex !important;
+      align-items:center !important;
+      gap: 10px !important;
+    }
+    #halo-add-to-cart-popup[data-lag-mode="full"] .product-title .title{
+      flex: 1 1 auto !important;
+      min-width:0 !important;
+    }
+    #halo-add-to-cart-popup[data-lag-mode="full"] .product-title .text{
+      flex: 0 0 auto !important;
+      opacity: 0.9;
+    }
+
+    #halo-add-to-cart-popup[data-lag-mode="simple"] .product-image,
+    #halo-add-to-cart-popup[data-lag-mode="simple"] .product-action,
+    #halo-add-to-cart-popup[data-lag-mode="simple"] .product-title .title{
+      display:none !important;
+    }
+
+    #halo-add-to-cart-popup[data-lag-mode="simple"] .halo-popup-content{
+      display:flex !important;
+      align-items:center !important;
+      justify-content:center !important;
+      height: var(--lag-strip-h) !important;
+
+      --lag-pad-y-cap: min(
+        var(--lag-pad-y, 10px),
+        max(0px, calc((var(--lag-strip-h) - 1.2em) / 2))
+      );
+
+      padding-top: var(--lag-pad-y-cap) !important;
+      padding-bottom: var(--lag-pad-y-cap) !important;
+      padding-left: calc(var(--lag-pad-x, 18px) + var(--lag-close-reserve)) !important;
+      padding-right: calc(var(--lag-pad-x, 18px) + var(--lag-close-reserve)) !important;
+    }
+
+    #halo-add-to-cart-popup[data-lag-mode="simple"] .product-added{
+      flex: 1 1 auto !important;
+      justify-content:center !important;
+      gap: 0 !important;
+    }
+    #halo-add-to-cart-popup[data-lag-mode="simple"] .product-info{
+      flex: 0 1 auto !important;
+      flex-direction: row !important;
+      align-items:center !important;
+      justify-content:center !important;
+      gap: 0 !important;
+    }
+    #halo-add-to-cart-popup[data-lag-mode="simple"] .product-title{
+      display:flex !important;
+      align-items:center !important;
+      justify-content:center !important;
+    }
+    #halo-add-to-cart-popup[data-lag-mode="simple"] .product-title .text{
+      text-align:center !important;
+      max-width: 100% !important;
+      line-height: 1.2 !important;
+    }
+
+    /* Mobile view differences */
+    @media (max-width: 767px){
+      #halo-add-to-cart-popup[data-lag-mode="full"]{
+        max-width: calc(100vw - 16px) !important;
+      }
+      #halo-add-to-cart-popup[data-lag-mode="full"] .product-title{
+        display:block !important;
+      }
+      #halo-add-to-cart-popup[data-lag-mode="full"] .product-title .text{
+        opacity: 0.95 !important;
+        margin-top: 4px !important;
+      }
+      #halo-add-to-cart-popup[data-lag-mode="full"] .halo-popup-content{
+        padding: 12px !important;
+        padding-right: calc(12px + var(--lag-close-reserve)) !important;
+      }
+
+      #halo-add-to-cart-popup .product-action .button{
+        flex: 1 1 140px !important;
+        min-width: 140px !important;
+        padding: 11px 12px !important;
+      }
+
+      #halo-add-to-cart-popup[data-lag-mode="simple"] .halo-popup-content{
+        height: clamp(44px, var(--lag-strip-h), 88px) !important;
+      }
+
+      #halo-add-to-cart-popup .product-title .title{
+        font-size: clamp(12px, var(--lag-title-size), 16px) !important;
+      }
+      #halo-add-to-cart-popup .product-title .text{
+        font-size: clamp(12px, var(--lag-text-size), 14px) !important;
+      }
+    }
+
+    /* Ensure popup above overlay */
+    #halo-add-to-cart-popup{ z-index: 80 !important; }
+
+    /* =========================
+      MOBILE SIMPLE = STRIP
+    ========================= */
+    @media (max-width: 767px){
+      /* Force strip geometry even if attrs glitch for a frame */
+      #halo-add-to-cart-popup[data-lag-mode="simple"]{
+        left: var(--lag-simple-edge-left) !important;
+        right: var(--lag-simple-edge-right) !important;
+        bottom: calc(var(--lag-safe-bottom) + var(--lag-offset-y, 0px)) !important;
+        width: auto !important;
+        max-width: none !important;
+        transform: none !important;
+      }
+
+      /* Strip padding: reserve ONLY on the right for the action button */
+      #halo-add-to-cart-popup[data-lag-mode="simple"] .halo-popup-content{
+        justify-content: flex-start !important;
+        padding-left: var(--lag-pad-x, 18px) !important;
+        padding-right: calc(var(--lag-pad-x, 18px) + var(--lag-close-reserve)) !important;
+      }
+
+      #halo-add-to-cart-popup[data-lag-mode="simple"] .product-added{
+        justify-content: flex-start !important;
+      }
+
+      #halo-add-to-cart-popup[data-lag-mode="simple"] .product-info{
+        justify-content: flex-start !important;
+      }
+
+      #halo-add-to-cart-popup[data-lag-mode="simple"] .product-title .text{
+        text-align: left !important;
+      }
+    }
+
+    /* Cart icon only for MOBILE + SIMPLE */
+    #halo-add-to-cart-popup[data-lag-mode="full"] .halo-popup-cart{
+      display: none !important;
+    }
+    @media (max-width: 767px){
+      #halo-add-to-cart-popup[data-lag-mode="simple"][data-lag-action="cart"] .halo-popup-cart{
+        display: inline-flex !important;
+      }
+      #halo-add-to-cart-popup[data-lag-mode="simple"][data-lag-action="cart"] .halo-popup-close{
+        display: none !important;
+      }
+    }
+
+    /* =========================
+      FIX HORIZONTAL BLANK AREA
+    ========================= */
+    body.add-to-cart-show{
+      overflow-x: hidden !important;
+    }
+    html{
+      overflow-x: hidden !important;
+    }
+    body.add-to-cart-show .background-overlay,
+    body.add-to-cart-show .halo-background,
+    body.add-to-cart-show .halo-overlay,
+    body.add-to-cart-show .popup-overlay,
+    body.add-to-cart-show .modal-overlay{
+      left: 0 !important;
+      right: 0 !important;
+      width: 100vw !important;
+      max-width: 100vw !important;
+    }
+  </style>
+
+  <div
+    class="halo-popup halo-add-to-cart-popup customPopup-tiny"
+    data-add-to-cart-popup
+    id="halo-add-to-cart-popup"
+
+    data-lag-atc="1"
+    data-lag-mode="{{ settings.lag_atc_mode_d }}"
+    data-lag-position="{{ settings.lag_atc_position_d }}"
+
+    data-lag-autoclose="{% if settings.lag_atc_autoclose_enable_d %}1{% else %}0{% endif %}"
+    data-lag-ac-seconds="{{ settings.lag_atc_autoclose_seconds_d }}"
+    data-lag-ac-pause="{% if settings.lag_atc_pause_on_hover_d %}1{% else %}0{% endif %}"
+    data-lag-ac-anim="{{ settings.lag_atc_autoclose_animation_d }}"
+    data-lag-close-icon="{% if settings.lag_atc_show_close_icon_d %}1{% else %}0{% endif %}"
+    data-lag-simple-fullwidth="{% if settings.lag_atc_simple_fullwidth_d %}1{% else %}0{% endif %}"
+
+    data-lag-show-image="{% if settings.lag_atc_show_image_d %}1{% else %}0{% endif %}"
+    data-lag-show-title="{% if settings.lag_atc_show_title_d %}1{% else %}0{% endif %}"
+    data-lag-show-text="{% if settings.lag_atc_show_text_d %}1{% else %}0{% endif %}"
+    data-lag-show-buttons="{% if settings.lag_atc_show_buttons_d %}1{% else %}0{% endif %}"
+    data-lag-show-continue="{% if settings.lag_atc_show_continue_button_d %}1{% else %}0{% endif %}"
+    data-lag-show-viewcart="{% if settings.lag_atc_show_view_cart_button_d %}1{% else %}0{% endif %}"
+    data-lag-cart-url="{{ routes.cart_url }}"
+    data-lag-cart-aria="{{ 'sections.cart.view_cart' | t | escape }}"
+    data-lag-action="close"  
+  >
+    <button type="button" class="lag-atc-action halo-popup-close is-ring-host" data-close-add-to-cart-popup aria-label="{{ 'general.common.close' | t }}">
+      <svg class="lag-ac-ring" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+        <circle class="lag-ac-ring-track" cx="50" cy="50" r="45"></circle>
+        <circle class="lag-ac-ring-prog"  cx="50" cy="50" r="45"></circle>
+      </svg>
+
+      <span class="lag-close-ico" aria-hidden="true">
+        {% render 'icon-close' %}
+      </span>
+    </button>
+
+    <a class="lag-atc-action halo-popup-cart" href="{{ routes.cart_url }}" aria-label="{{ 'sections.cart.view_cart' | t }}">
+      <svg class="lag-ac-ring" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+        <circle class="lag-ac-ring-track" cx="50" cy="50" r="45"></circle>
+        <circle class="lag-ac-ring-prog"  cx="50" cy="50" r="45"></circle>
+      </svg>
+
+      <span class="lag-cart-ico" aria-hidden="true">
+        <svg viewBox="0 0 32 32" class="icon icon-cart" aria-hidden="true" focusable="false" role="presentation">
+          <path
+            d="M 16 3 C 13.253906 3 11 5.253906 11 8 L 11 9 L 6.0625 9 L 6 9.9375 L 5 27.9375 L 4.9375 29 L 27.0625 29 L 27 27.9375 L 26 9.9375 L 25.9375 9 L 21 9 L 21 8 C 21 5.253906 18.746094 3 16 3 Z M 16 5 C 17.65625 5 19 6.34375 19 8 L 19 9 L 13 9 L 13 8 C 13 6.34375 14.34375 5 16 5 Z M 7.9375 11 L 11 11 L 11 14 L 13 14 L 13 11 L 19 11 L 19 14 L 21 14 L 21 11 L 24.0625 11 L 24.9375 27 L 7.0625 27 Z"
+            fill="#FFFFFF"
+            stroke="currentColor"
+            stroke-width="0"
+            stroke-linejoin="round"
+            stroke-linecap="round"
+          />
+        </svg>
+      </span>
+    </a>
+
+
+    <div class="halo-popup-content">
+      <div class="product-added">
+        <a class="product-image" href="">
+          <img alt="" loading="lazy" decoding="async">
+        </a>
+
+        <div class="product-info">
+          <div class="product-title">
+            <a class="title" href=""></a>
+            <span class="text">{{ success_msg_d }}</span>
+          </div>
+
+          <div class="product-action">
+            <a class="button button-2 button-continue"
+              {% if settings.quick_cart_redirect_button == 'go_back' %}
+                role="link" aria-disabled="true" onclick="window.history.back();"
+              {% elsif settings.quick_cart_redirect_button == 'link_to' %}
+                href="{{ settings.quick_cart_redirect_button_link }}"
+              {% else %}
+                role="link" aria-disabled="true" onclick="window.location.reload();"
+              {% endif %}
+            >{{ continue_label_d }}</a>
+
+            <a class="button button-2 button-view-cart" href="{{ routes.cart_url }}">
+              {{ view_cart_label_d }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+    "use strict";
+
+    var CFG = {
+      d: {
+        mode: {{ settings.lag_atc_mode_d | json }},
+        position: {{ settings.lag_atc_position_d | json }},
+        autoclose_enable: {{ settings.lag_atc_autoclose_enable_d | json }},
+        autoclose_seconds: {{ settings.lag_atc_autoclose_seconds_d | json }},
+        pause_on_hover: {{ settings.lag_atc_pause_on_hover_d | json }},
+        ac_anim: {{ settings.lag_atc_autoclose_animation_d | json }},
+        show_close_icon: {{ settings.lag_atc_show_close_icon_d | json }},
+        simple_fullwidth: {{ settings.lag_atc_simple_fullwidth_d | json }},
+
+        show_image: {{ settings.lag_atc_show_image_d | json }},
+        show_title: {{ settings.lag_atc_show_title_d | json }},
+        show_text: {{ settings.lag_atc_show_text_d | json }},
+        show_buttons: {{ settings.lag_atc_show_buttons_d | json }},
+        show_continue: {{ settings.lag_atc_show_continue_button_d | json }},
+        show_viewcart: {{ settings.lag_atc_show_view_cart_button_d | json }},
+
+        success_text: {{ success_msg_d | json }},
+        continue_label: {{ continue_label_d | json }},
+        viewcart_label: {{ view_cart_label_d | json }}
+      },
+      m: {
+        mode: {{ settings.lag_atc_mode_m | json }},
+        position: {{ settings.lag_atc_position_m | json }},
+        autoclose_enable: {{ settings.lag_atc_autoclose_enable_m | json }},
+        autoclose_seconds: {{ settings.lag_atc_autoclose_seconds_m | json }},
+        pause_on_hover: {{ settings.lag_atc_pause_on_hover_m | json }},
+        ac_anim: {{ settings.lag_atc_autoclose_animation_m | json }},
+        show_close_icon: {{ settings.lag_atc_show_close_icon_m | json }},
+        simple_fullwidth: {{ settings.lag_atc_simple_fullwidth_m | json }},
+
+        show_image: {{ settings.lag_atc_show_image_m | json }},
+        show_title: {{ settings.lag_atc_show_title_m | json }},
+        show_text: {{ settings.lag_atc_show_text_m | json }},
+        show_buttons: {{ settings.lag_atc_show_buttons_m | json }},
+        show_continue: {{ settings.lag_atc_show_continue_button_m | json }},
+        show_viewcart: {{ settings.lag_atc_show_view_cart_button_m | json }},
+
+        success_text: {{ success_msg_m | json }},
+        continue_label: {{ continue_label_m | json }},
+        viewcart_label: {{ view_cart_label_m | json }},
+        action: {{ settings.lag_atc_mobile_action_m | default: 'close' | json }}
+      }
+    };
+
+    function $(sel, root){ return (root || document).querySelector(sel); }
+    function getPopup(){ return document.getElementById("halo-add-to-cart-popup"); }
+    function isOpen(){ return document.body.classList.contains("add-to-cart-show"); }
+
+    function to01(v){ return v ? "1" : "0"; }
+
+    function ensureRing(btn){
+      if (!btn) return;
+      if ($('.lag-ac-ring', btn)) return;
+
+      var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("class", "lag-ac-ring");
+      svg.setAttribute("viewBox", "0 0 100 100");
+      svg.setAttribute("aria-hidden", "true");
+      svg.setAttribute("focusable", "false");
+
+      var c1 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      c1.setAttribute("class", "lag-ac-ring-track");
+      c1.setAttribute("cx", "50"); c1.setAttribute("cy", "50"); c1.setAttribute("r", "45");
+
+      var c2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      c2.setAttribute("class", "lag-ac-ring-prog");
+      c2.setAttribute("cx", "50"); c2.setAttribute("cy", "50"); c2.setAttribute("r", "45");
+
+      svg.appendChild(c1);
+      svg.appendChild(c2);
+
+      btn.insertBefore(svg, btn.firstChild);
+    }
+
+    function stamp(popup){
+      if (!popup) return null;
+      popup.setAttribute("data-lag-atc", "1");
+
+      var closeBtn = $('[data-close-add-to-cart-popup]', popup);
+      ensureRing(closeBtn);
+
+      var cartBtn = $('.halo-popup-cart', popup);
+      ensureRing(cartBtn);
+
+      var imgA = $(".product-image", popup);
+      if (imgA && !$("img", imgA)) {
+        var img = document.createElement("img");
+        img.alt = "";
+        img.loading = "lazy";
+        img.decoding = "async";
+        imgA.appendChild(img);
+      }
+      return popup;
+    }
+
+    function init(popup){
+      if (!popup || popup.dataset.lagInit === "1") return;
+      popup.dataset.lagInit = "1";
+
+      var closeBtn = $('[data-close-add-to-cart-popup]', popup);
+      var successEl = $('.product-title .text', popup);
+      var continueEl = $('.button-continue', popup);
+      var viewCartEl = $('.button-view-cart', popup);
+
+      var mq = window.matchMedia("(max-width: 767px)");
+      var activeProfile = null;
+
+      var rafId = 0;
+      var running = false;
+      var t0 = 0;
+      var pausedAt = 0;
+      var pausedTotal = 0;
+
+      function readConfig(){
+        return {
+          enable: popup.getAttribute("data-lag-autoclose") === "1",
+          seconds: Math.max(0, parseInt(popup.getAttribute("data-lag-ac-seconds") || "0", 10) || 0),
+          pauseOnHover: popup.getAttribute("data-lag-ac-pause") === "1"
+        };
+      }
+
+      function stop(){
+        running = false;
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = 0;
+        popup.style.removeProperty("--lag-ac-progress");
+        popup.style.removeProperty("--lag-ac-deg");
+        popup.style.removeProperty("--lag-ac-dash");
+      }
+
+      function forceCloseFallback(){
+        document.body.classList.remove("add-to-cart-show");
+        popup.style.display = "none";
+        popup.setAttribute("aria-hidden", "true");
+      }
+
+      function isModifiedClick(e){
+        return e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0;
+      }
+
+      function closePopupFast(){
+        stop();
+        try { if (closeBtn) closeBtn.click(); } catch(_) {}
+        setTimeout(function(){ if (isOpen()) forceCloseFallback(); }, 80);
+      }
+
+      function finishClose(){
+        stop();
+        try { if (closeBtn) closeBtn.click(); } catch(e) {}
+        setTimeout(function(){ if (isOpen()) forceCloseFallback(); }, 140);
+      }
+
+      function tick(now){
+        if (!running) return;
+
+        var cfg = readConfig();
+        var dur = Math.max(1, cfg.seconds) * 1000;
+
+        var elapsed = now - t0 - pausedTotal;
+        var p = Math.max(0, Math.min(1, elapsed / dur));
+
+        popup.style.setProperty("--lag-ac-progress", String(p));
+        popup.style.setProperty("--lag-ac-deg", (p * 360).toFixed(2) + "deg");
+
+        // r=45 => C ≈ 282.743 ; dashoffset = (1 - p) * C
+        var C = 282.743;
+        popup.style.setProperty("--lag-ac-dash", ((1 - p) * C).toFixed(3)); // <-- add this
+
+        if (elapsed >= dur) { finishClose(); return; }
+        rafId = requestAnimationFrame(tick);
+      }
+
+
+      function start(){
+        stop();
+        var cfg = readConfig();
+        if (!cfg.enable || cfg.seconds < 1) return;
+
+        popup.style.removeProperty("display");
+        popup.removeAttribute("aria-hidden");
+
+        running = true;
+        t0 = performance.now();
+        pausedAt = 0;
+        pausedTotal = 0;
+
+        popup.style.setProperty("--lag-ac-progress", "0");
+        popup.style.setProperty("--lag-ac-deg", "0deg");
+        popup.style.setProperty("--lag-ac-dash", "282.743");
+
+        rafId = requestAnimationFrame(tick);
+      }
+
+      function pause(){
+        if (!running || pausedAt) return;
+        pausedAt = performance.now();
+      }
+
+      function resume(){
+        if (!running || !pausedAt) return;
+        pausedTotal += (performance.now() - pausedAt);
+        pausedAt = 0;
+      }
+
+      function profileKey(){ return mq.matches ? "m" : "d"; }
+
+      function applyProfile(p){
+        if (activeProfile === p) return;
+        activeProfile = p;
+
+        var c = CFG[p] || CFG.d;
+        var isMobile = (p === "m");
+
+        var mode = (c.mode === "simple" ? "simple" : "full");
+        var wantsStrip = isMobile && mode === "simple";
+
+        // Mode / Position
+        popup.setAttribute("data-lag-mode", mode);
+        popup.setAttribute("data-lag-position", wantsStrip ? "bottom_center"
+          : (c.position === "bottom_center" ? "bottom_center" : "top_right"));
+
+        // Force fullwidth strip on mobile simple
+        popup.setAttribute("data-lag-simple-fullwidth", wantsStrip ? "1" : to01(!!c.simple_fullwidth));
+
+        // ✅ Cart ONLY for mobile simple; otherwise close
+        popup.setAttribute("data-lag-action", wantsStrip ? "cart" : "close");
+
+        // ✅ In strip: force minimal content regardless of settings
+        var showImage    = wantsStrip ? false : !!c.show_image;
+        var showTitle    = wantsStrip ? false : !!c.show_title;
+        var showText     = wantsStrip ? true  : !!c.show_text;
+        var showButtons  = wantsStrip ? false : !!c.show_buttons;
+        var showContinue = wantsStrip ? false : !!c.show_continue;
+        var showViewCart = wantsStrip ? false : !!c.show_viewcart;
+
+        popup.setAttribute("data-lag-show-image", to01(showImage));
+        popup.setAttribute("data-lag-show-title", to01(showTitle));
+        popup.setAttribute("data-lag-show-text", to01(showText));
+        popup.setAttribute("data-lag-show-buttons", to01(showButtons));
+        popup.setAttribute("data-lag-show-continue", to01(showContinue));
+        popup.setAttribute("data-lag-show-viewcart", to01(showViewCart));
+
+        // Close icon visibility (keep your setting)
+        popup.setAttribute("data-lag-close-icon", to01(!!c.show_close_icon));
+
+        // ✅ Autoclose: keep user setting, but for strip we force-enable so it never “sticks”
+        var acEnable = wantsStrip ? true : !!c.autoclose_enable;
+        var acSeconds = parseInt(c.autoclose_seconds || 0, 10) || 0;
+        if (wantsStrip && acSeconds < 1) acSeconds = 5;
+
+        popup.setAttribute("data-lag-autoclose", to01(acEnable));
+        popup.setAttribute("data-lag-ac-seconds", String(acSeconds));
+        popup.setAttribute("data-lag-ac-pause", to01(!!c.pause_on_hover));
+        popup.setAttribute("data-lag-ac-anim", (c.ac_anim === "bg_fill" ? "bg_fill" : "close_ring"));
+
+        // Text swap
+        if (successEl && typeof c.success_text === "string") successEl.textContent = c.success_text;
+        if (continueEl && typeof c.continue_label === "string") continueEl.textContent = c.continue_label;
+        if (viewCartEl && typeof c.viewcart_label === "string") viewCartEl.textContent = c.viewcart_label;
+
+        // Ring host: in strip use cart, otherwise close
+        var cartBtn = $(".halo-popup-cart", popup);
+        if (closeBtn) closeBtn.classList.remove("is-ring-host");
+        if (cartBtn) cartBtn.classList.remove("is-ring-host");
+        if (wantsStrip) { if (cartBtn) cartBtn.classList.add("is-ring-host"); }
+        else { if (closeBtn) closeBtn.classList.add("is-ring-host"); }
+
+        stop();
+        if (isOpen()) start();
+      }
+
+      // Pause on hover/focus if enabled
+      popup.addEventListener("mouseenter", function(){ if (readConfig().pauseOnHover) pause(); }, { passive:true });
+      popup.addEventListener("mouseleave", function(){ if (readConfig().pauseOnHover) resume(); }, { passive:true });
+      popup.addEventListener("focusin",    function(){ if (readConfig().pauseOnHover) pause(); }, { passive:true });
+      popup.addEventListener("focusout",   function(){ if (readConfig().pauseOnHover) resume(); }, { passive:true });
+
+      if (closeBtn) closeBtn.addEventListener("click", stop, { passive:true });
+
+      // Initial apply
+      applyProfile(profileKey());
+
+      // Breakpoint change
+      if (mq.addEventListener) mq.addEventListener("change", function(){ applyProfile(profileKey()); });
+      else if (mq.addListener) mq.addListener(function(){ applyProfile(profileKey()); });
+
+      // Halo open/close tracking (also re-stamp after open; Halo may rewrite markup)
+      var lastOpen = isOpen();
+      if (lastOpen) start();
+
+      var bodyObserver = new MutationObserver(function(){
+        var nowOpen = isOpen();
+
+        // Always enforce correct profile; also re-stamp just after open
+        applyProfile(profileKey());
+        if (nowOpen && !lastOpen) {
+          setTimeout(function(){
+            stamp(popup);
+            applyProfile(profileKey());
+            start();
+          }, 0);
+        }
+        if (!nowOpen && lastOpen) stop();
+
+        lastOpen = nowOpen;
+      });
+
+      bodyObserver.observe(document.body, { attributes:true, attributeFilter:["class"] });
+
+      document.addEventListener("visibilitychange", function(){
+        if (document.hidden) pause();
+        else resume();
+      });
+    }
+
+    // Boot robustly (in case Halo injects/replaces popup later)
+    function boot(){
+      var p = stamp(getPopup());
+      if (p) init(p);
+    }
+
+    boot();
+    document.addEventListener("DOMContentLoaded", boot);
+
+    // A few retries for themes that inject late
+    var tries = 0;
+    var t = setInterval(function(){
+      tries++;
+      boot();
+      if (getPopup() && getPopup().dataset.lagInit === "1") clearInterval(t);
+      if (tries > 30) clearInterval(t);
+    }, 250);
+
+  })();
+  </script>
+{%- endif -%}

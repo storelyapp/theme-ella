@@ -1,0 +1,719 @@
+{% comment %}
+Lagorii – Tabs + Category Cards (namespaced)
+Fixes:
+- Banner default radius now 0 (no unexpected curves)
+- Strong border/radius/outline resets for banner wrappers & image
+- Full-bleed setting added to schema and wired (spans viewport)
+- Banner CSS fully namespaced; won’t inherit card styles
+Enhancements:
+- Responsive banner image sizes + srcset
+{% endcomment %}
+
+<section id="lagorii-tabs-cards-{{ section.id }}">
+  <style>
+    #shopify-section-{{ section.id }}{
+      /* Tabs (global) */
+      --tabs-pad-x: {{ section.settings.container_pad | default: 14 }}px;
+      --tab-font: {{ section.settings.tab_font_family | default: "system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif" }};
+      --tab-fs: {{ section.settings.tab_font_size | default: 14 }}px;
+      --tab-fw: {{ section.settings.tab_font_weight | default: '600' }};
+      --tab-text: {{ section.settings.tab_font_color | default: '#333333' }};
+      --tab-py: {{ section.settings.tab_pad_y | default: 10 }}px;
+      --tab-px: {{ section.settings.tab_pad_x | default: 14 }}px;
+      --tab-r:  {{ section.settings.tab_radius | default: 18 }}px;
+      --tab-gap: {{ section.settings.tab_gap | default: 10 }}px;
+      --tab-icon: {{ section.settings.tab_icon_size | default: 18 }}px;
+      --tabs-bg: {{ section.settings.tabs_bar_bg | default: '#ffffff' }};
+      --tab-brd: {{ section.settings.tab_border | default: '#eeeeee' }};
+      --tab-active-bg: {{ section.settings.tab_active_bg | default: '#fff7f1' }};
+      --tab-active-text: {{ section.settings.tab_active_color | default: '#E87529' }};
+      --tab-active-brd: {{ section.settings.tab_active_border | default: '#E87529' }};
+
+      /* Cards – global */
+      --cards-pad-x: {{ section.settings.container_pad | default: 14 }}px;
+      --cards-area-bg: {{ section.settings.cards_bg_color | default: '#ffffff' }};
+      --card-bg: {{ section.settings.card_bg | default: '#f3f3f3' }};
+      --card-r: {{ section.settings.card_radius | default: 16 }}px;
+      --card-gap: {{ section.settings.card_gap | default: 12 }}px;
+
+      /* Padding controls */
+      --card-pad: {{ section.settings.card_pad | default: 0 }}px;
+      --art-pad:  {{ section.settings.art_pad  | default: 0 }}px;
+
+      /* Typography */
+      --title-font: {{ section.settings.title_font_family | default: "system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif" }};
+      --title-fs: {{ section.settings.title_font_size | default: 20 }}px;
+      --title-fw: {{ section.settings.title_font_weight | default: '800' }};
+      --title-color: {{ section.settings.title_color | default: '#1e1e1e' }};
+      --sub-font: {{ section.settings.subtitle_font_family | default: "system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif" }};
+      --sub-fs: {{ section.settings.subtitle_font_size | default: 14 }}px;
+      --sub-fw: {{ section.settings.subtitle_font_weight | default: '400' }};
+      --sub-color: {{ section.settings.subtitle_color | default: '#6a6a6a' }};
+    }
+
+    #lagorii-tabs-cards-{{ section.id }} *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    #lagorii-tabs-cards-{{ section.id }} a{text-decoration:none;color:inherit}
+
+    /* ---------- Tabs ---------- */
+    #lagorii-tabs-cards-{{ section.id }} .tabs-wrap{
+      background: var(--tabs-bg);
+      padding: 12px var(--tabs-pad-x) 6px;
+      {% if section.settings.tabs_bg_image != blank %}
+        background-image:url('{{ section.settings.tabs_bg_image | image_url: width: 1600 }}');
+        background-size:cover;background-position:center;
+      {% endif %}
+    }
+    #lagorii-tabs-cards-{{ section.id }} .tabs{
+      display:flex;gap:var(--tab-gap);
+      overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;
+      font-family:var(--tab-font);
+    }
+    #lagorii-tabs-cards-{{ section.id }} .tabs::-webkit-scrollbar{display:none}
+    #lagorii-tabs-cards-{{ section.id }} .tab{
+      flex:0 0 auto;display:inline-flex;align-items:center;gap:8px;
+      font-size:var(--tab-fs);font-weight:var(--tab-fw);color:var(--tab-text);
+      padding:var(--tab-py) var(--tab-px);
+      border-radius:var(--tab-r);background:#fff;border:1px solid var(--tab-brd);
+      line-height:1;white-space:nowrap;transition:background .15s,border-color .15s,color .15s;
+      cursor:pointer;
+    }
+    #lagorii-tabs-cards-{{ section.id }} .tab:hover{background:#f9f9f9;border-color:#e9e9e9}
+    #lagorii-tabs-cards-{{ section.id }} .tab.is-active{
+      background:var(--tab-active-bg);color:var(--tab-active-text);border-color:var(--tab-active-brd);
+    }
+    #lagorii-tabs-cards-{{ section.id }} .tab .icon{width:var(--tab-icon);height:var(--tab-icon);display:inline-grid;place-items:center}
+    #lagorii-tabs-cards-{{ section.id }} .tab .icon img{width:100%;height:100%;object-fit:contain;display:block}
+
+    /* ---------- Cards ---------- */
+    #lagorii-tabs-cards-{{ section.id }} .cards-host{
+      background: var(--cards-area-bg);
+      {% if section.settings.cards_bg_image != blank %}
+        background-image:url('{{ section.settings.cards_bg_image | image_url: width: 1800 }}');
+        background-size:cover;background-position:center;
+      {% endif %}
+    }
+    #lagorii-tabs-cards-{{ section.id }} .container{max-width:1200px;margin:0 auto;padding:10px var(--cards-pad-x) 24px}
+    #lagorii-tabs-cards-{{ section.id }} .cards{display:flex;flex-direction:column;gap:var(--card-gap)}
+
+    /* Card (namespaced; legacy supported) */
+    #lagorii-tabs-cards-{{ section.id }} .lag-card,
+    #lagorii-tabs-cards-{{ section.id }} .lag_card{
+      /* layout */
+      display:block;
+      /* horizontal gap without overflow */
+      margin-inline: var(--card-mx, 0px);
+      width: calc(100% - (var(--card-mx, 0px) * 2));
+      /* vertical gaps */
+      margin-top: var(--card-mt, 0px);
+      margin-bottom: var(--card-mb, 0px);
+
+      /* visuals (unchanged) */
+      background:var(--card-bg);
+      border-radius:var(--card-r);
+      padding:var(--card-pad);
+      overflow:hidden;
+    }
+
+
+    #lagorii-tabs-cards-{{ section.id }} .lag-meta{margin-bottom:12px}
+    #lagorii-tabs-cards-{{ section.id }} .lag-meta h3{margin:0 0 6px;font:var(--title-fw) var(--title-fs)/1.25 var(--title-font);color:var(--title-color)}
+    #lagorii-tabs-cards-{{ section.id }} .lag-meta p{margin:0;font:var(--sub-fw) var(--sub-fs)/1.35 var(--sub-font);color:var(--sub-color)}
+
+    /* Right image inside cards */
+    #lagorii-tabs-cards-{{ section.id }} .lag-art{
+      width:100%;
+      padding:var(--art-pad);
+      border-radius:12px;
+      background:var(--art-bg, transparent);
+      display:block;
+    }
+    #lagorii-tabs-cards-{{ section.id }} .lag-art > img{
+      display:block;
+      width:100%;
+      max-width:100%;
+      height:auto !important;
+      max-height:none !important;
+      aspect-ratio:auto !important;
+      object-fit:unset !important;
+    }
+
+    #lagorii-tabs-cards-{{ section.id }} .lag-art[data-fit="contain"]{background:var(--art-bg, #fff)}
+    #lagorii-tabs-cards-{{ section.id }} .lag-art[data-fit="contain"] > img{object-fit:contain}
+    #lagorii-tabs-cards-{{ section.id }} .lag-art[data-fit="adapt"] > img{object-fit:contain}
+
+    /* App CTA */
+    #lagorii-tabs-cards-{{ section.id }} .app-cta{
+      display:flex;align-items:center;justify-content:space-between;gap:16px;
+      padding:16px;border-radius:12px;border:1px solid var(--app-cta-brd, #ececec);
+      background:var(--app-cta-bg, #fff);
+    }
+    #lagorii-tabs-cards-{{ section.id }} .app-cta .copy{flex:1 1 auto}
+    #lagorii-tabs-cards-{{ section.id }} .app-cta h3{margin:0 0 6px;font:700 18px/1.25 var(--title-font)}
+    #lagorii-tabs-cards-{{ section.id }} .app-cta p{margin:0;color:#666}
+    #lagorii-tabs-cards-{{ section.id }} .app-cta .actions{display:flex;gap:10px;flex-wrap:wrap}
+    #lagorii-tabs-cards-{{ section.id }} .badge-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:10px;border:1px solid #ddd;background:#fff}
+    #lagorii-tabs-cards-{{ section.id }} .badge-btn .ico{width:18px;height:18px;display:grid;place-items:center}
+
+    @media (min-width:768px){
+      #lagorii-tabs-cards-{{ section.id }} .tabs{overflow:visible;flex-wrap:wrap}
+      #lagorii-tabs-cards-{{ section.id }} .container{padding:18px 24px 32px}
+    }
+    @media (min-width:1200px){
+      #lagorii-tabs-cards-{{ section.id }} .tabs{ {% if section.settings.center_tabs_desktop %}justify-content:center;{% endif %} flex-wrap:wrap }
+    }
+    #lagorii-tabs-cards-{{ section.id }} .badge-btn .ico img{width:100%;height:100%;object-fit:contain;display:block}
+
+    /* ---------- Image / Ad Banner (fully isolated) ---------- */
+    #lagorii-tabs-cards-{{ section.id }} .lag-banner{
+      --ban-pad: 0px;              /* default: no padding */
+      --ban-rad: 0px;              /* default: NO RADIUS (fixes unexpected curves) */
+      --ban-bg: transparent;
+      --ban-brd: transparent;
+      --ban-brd-w: 0px;
+
+      display:block;
+      padding:var(--ban-pad);
+      background:var(--ban-bg);
+      border:var(--ban-brd-w) solid var(--ban-brd);
+      border-radius:var(--ban-rad);
+      overflow:hidden;
+
+      /* nuke theme defaults that might bleed in */
+      border:0 !important;
+      outline:0 !important;
+      box-shadow:none !important;
+    }
+
+    /* Full-bleed option (break out of 1200px container and side padding) */
+    #lagorii-tabs-cards-{{ section.id }} .lag-banner[data-full="true"]{
+      width:100vw;
+      margin-left:calc(50% - 50vw);
+      margin-right:calc(50% - 50vw);
+    }
+
+    #lagorii-tabs-cards-{{ section.id }} .lag-banner .ban-media{
+      display:block;
+      width:100%;
+      border-radius:calc(var(--ban-rad) - var(--ban-brd-w));
+      overflow:hidden;
+      border:0 !important; outline:0 !important; box-shadow:none !important;
+      background:transparent !important;
+    }
+
+    #lagorii-tabs-cards-{{ section.id }} .lag-banner .ban-media img{
+      display:block;
+      width:100%;
+      height:auto !important;      /* keep native aspect ratio */
+      max-width:100%;
+      max-height:none !important;
+      aspect-ratio:auto !important;
+
+      /* kill any inherited rounding/borders/glows */
+      border:0 !important;
+      outline:0 !important;
+      box-shadow:none !important;
+      border-radius:0 !important;
+      background:transparent !important;
+    }
+
+    #lagorii-tabs-cards-{{ section.id }} .lag-banner[data-mode="copy"]{cursor:pointer}
+    #lagorii-tabs-cards-{{ section.id }} .lag-banner[data-mode="copy"]:hover{opacity:.96}
+
+    #lagorii-tabs-cards-{{ section.id }} .lag-toast{
+      position:fixed;left:50%;bottom:24px;transform:translateX(-50%);
+      background:#111;color:#fff;padding:8px 12px;border-radius:8px;
+      font:600 12px/1.2 var(--title-font);opacity:0;pointer-events:none;
+      transition:opacity .2s, transform .2s;z-index:9999;
+    }
+    #lagorii-tabs-cards-{{ section.id }} .lag-toast.is-show{opacity:1;transform:translateX(-50%) translateY(-4px)}
+
+    /* --- Per-tab overlay (fireworks etc.) --- */
+    #lagorii-tabs-cards-{{ section.id }} .tab{
+      position: relative;
+      overflow: hidden; /* contain overlay */
+    }
+
+    #lagorii-tabs-cards-{{ section.id }} .tab[data-ov]::after{
+      content:"";
+      position:absolute; inset:0;
+      background-image: var(--ov-img, none);
+      background-repeat: var(--ov-rep, repeat);
+      background-size: var(--ov-size, 160%);
+      background-position: var(--ov-pos, 0 0);
+      opacity: 0;                      /* hidden by default */
+      mix-blend-mode: var(--ov-blend, normal);
+      pointer-events:none;
+      transform: translateZ(0);        /* GPU promote */
+    }
+
+    /* Show only when active, unless "always show" is on */
+    #lagorii-tabs-cards-{{ section.id }} .tab.is-active[data-ov]::after,
+    #lagorii-tabs-cards-{{ section.id }} .tab[data-ov][data-ov-always="1"]::after{
+      opacity: var(--ov-op, .85);      /* controlled by block setting */
+      animation: lag-ov-pan var(--ov-speed, 12s) linear infinite;
+    }
+
+    /* Gentle pan to create motion even with a small sprite */
+    @keyframes lag-ov-pan{
+      from { background-position: 0 0; }
+      to   { background-position: 1000px 0; }
+    }
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      #lagorii-tabs-cards-{{ section.id }} .tab[data-ov]::after{ animation: none !important; }
+    }
+
+  </style>
+
+  {% assign has_tabs = false %}
+  {% for block in section.blocks %}{% if block.type == 'tab' %}{% assign has_tabs = true %}{% break %}{% endif %}{% endfor %}
+  {% if has_tabs %}
+    <div class="tabs-wrap">
+      <nav class="tabs" role="tablist" aria-label="Collections tabs">
+        {% for block in section.blocks %}
+          {% if block.type == 'tab' %}
+            {% assign tab_fs_num = block.settings.tab_fs | plus: 0 %}
+            {% assign tab_py_num = block.settings.tab_py | plus: 0 %}
+            {% assign tab_px_num = block.settings.tab_px | plus: 0 %}
+            {% assign tab_r_num  = block.settings.tab_r  | plus: 0 %}
+            {% assign tab_ic_num = block.settings.tab_icon | plus: 0 %}
+            <a class="tab {% if forloop.first %}is-active{% endif %}"
+              href="{{ block.settings.url | default: '#' }}"
+              role="tab"
+              aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+              {% if block.settings.ov_image != blank %} data-ov="1"{% if block.settings.ov_show_always %} data-ov-always="1"{% endif %}{% endif %}
+              style="
+                {%- if tab_fs_num > 0 -%}font-size: {{ tab_fs_num }}px;{% endif -%}
+                {%- if tab_py_num > 0 -%}padding-top: {{ tab_py_num }}px; padding-bottom: {{ tab_py_num }}px;{% endif -%}
+                {%- if tab_px_num > 0 -%}padding-left: {{ tab_px_num }}px; padding-right: {{ tab_px_num }}px;{% endif -%}
+                {%- if tab_r_num  > 0 -%}border-radius: {{ tab_r_num }}px;{% endif -%}
+                {%- if tab_ic_num > 0 -%}--tab-icon: {{ tab_ic_num }}px;{% endif -%}
+                {%- if block.settings.tab_bg_color != blank -%}background: {{ block.settings.tab_bg_color }};{% endif -%}
+                {%- if block.settings.tab_text_color != blank -%}color: {{ block.settings.tab_text_color }};{% endif -%}
+                {%- if block.settings.tab_border_color != blank -%}border-color: {{ block.settings.tab_border_color }};{% endif -%}
+                {%- if block.settings.ov_image != blank -%}
+                  --ov-img: url('{{ block.settings.ov_image | image_url: width: 256 }}');
+                  --ov-op: {{ block.settings.ov_opacity | default: 0.8 }};
+                  --ov-size: {{ block.settings.ov_size | default: '160%' }};
+                  --ov-rep: {{ block.settings.ov_repeat | default: 'repeat' }};
+                  --ov-blend: {{ block.settings.ov_blend | default: 'normal' }};
+                  --ov-speed: {{ block.settings.ov_speed | default: '12s' }};
+                {%- endif -%}
+              "
+              {{ block.shopify_attributes }}>
+
+              {% if block.settings.icon_svg != blank %}
+                <span class="icon">{{ block.settings.icon_svg }}</span>
+              {% elsif block.settings.icon_image != blank %}
+                <span class="icon"><img src="{{ block.settings.icon_image | image_url: width: 64 }}" alt=""></span>
+              {% endif %}
+              <span>{{ block.settings.label }}</span>
+            </a>
+          {% endif %}
+        {% endfor %}
+      </nav>
+    </div>
+  {% endif %}
+
+  <div class="cards-host">
+    <main class="container">
+      <section class="cards" aria-label="Collection categories">
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when 'card' %}
+              {% assign pad_card = block.settings.card_pad_item | plus: 0 %}
+              {% assign pad_art  = block.settings.art_pad_item  | plus: 0 %}
+              {% assign mx       = block.settings.card_margin_x | plus: 0 %}
+              {% assign mt       = block.settings.card_margin_top | plus: 0 %}
+              {% assign mb       = block.settings.card_margin_bottom | plus: 0 %}
+
+              <a class="lag-card"
+                href="{{ block.settings.link | default: '#' }}"
+                style="
+                  {% if block.settings.card_bg_color != blank %}background: {{ block.settings.card_bg_color }};{% endif %}
+                  {% if block.settings.bg_image != blank %}
+                    background-image:url('{{ block.settings.bg_image | image_url: width: 1600 }}');
+                    background-size:cover;background-position:center;
+                    aspect-ratio: {{ block.settings.bg_image.aspect_ratio }};
+                  {% endif %}
+                  {% if block.settings.card_radius_override %}border-radius: {{ block.settings.card_radius }}px;{% endif %}
+                  {% if pad_card > 0 %}--card-pad: {{ pad_card }}px;{% endif %}
+                  {% if pad_art  > 0 %}--art-pad:  {{ pad_art  }}px;{% endif %}
+                  {% if mx > 0 %}--card-mx: {{ mx }}px;{% endif %}
+                  {% if mt > 0 %}--card-mt: {{ mt }}px;{% endif %}
+                  {% if mb > 0 %}--card-mb: {{ mb }}px;{% endif %}
+                "
+                {{ block.shopify_attributes }}>
+
+                <div class="lag-meta">
+                  {% if block.settings.show_title %}<h3>{{ block.settings.title }}</h3>{% endif %}
+                  {% if block.settings.show_subtitle and block.settings.subtitle != blank %}<p>{{ block.settings.subtitle }}</p>{% endif %}
+                </div>
+
+                {% if block.settings.show_art and block.settings.image != blank %}
+                  <span class="lag-art" data-fit="{{ block.settings.image_fit | default: 'cover' }}"
+                        style="{% if block.settings.art_bg_color != blank %}--art-bg: {{ block.settings.art_bg_color }};{% endif %}">
+                    <img
+                      src="{{ block.settings.image | image_url: width: 1400 }}"
+                      srcset="{{ block.settings.image | image_url: width: 700 }} 700w, {{ block.settings.image | image_url: width: 1000 }} 1000w, {{ block.settings.image | image_url: width: 1400 }} 1400w"
+                      sizes="(min-width:1200px) 1200px, (min-width:768px) 700px, 100vw"
+                      alt="{{ block.settings.image_alt | escape }}">
+                  </span>
+                {% endif %}
+              </a>
+
+            {% when 'app_cta' %}
+              <div class="app-cta" style="--app-cta-bg: {{ block.settings.bg | default: '#ffffff' }}; --app-cta-brd: {{ block.settings.brd | default: '#ececec' }}; {{ block.settings.extra_css }}" {{ block.shopify_attributes }}>
+                <div class="copy">
+                  {% if block.settings.heading != blank %}<h3>{{ block.settings.heading }}</h3>{% endif %}
+                  {% if block.settings.subheading != blank %}<p>{{ block.settings.subheading }}</p>{% endif %}
+                </div>
+                <div class="actions">
+                  {% if block.settings.android_url != blank %}
+                    <a class="badge-btn" href="{{ block.settings.android_url }}" target="_blank" rel="nofollow noopener">
+                      <span class="ico">
+                        {% if block.settings.android_svg != blank %}
+                          {{ block.settings.android_svg }}
+                        {% elsif block.settings.android_icon_image != blank %}
+                          <img src="{{ block.settings.android_icon_image | image_url: width: 64 }}" alt="Android">
+                        {% else %}
+                          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4.5v15l12-7.5L3 4.5zM17.5 7.2l-1.2.7 1.2.8 3 1.8v-5l-3 1.7zM16.3 15.6l1.2.7 3 1.7v-5l-3 1.8-1.2.8z"/></svg>
+                        {% endif %}
+                      </span>
+                      <span>Get it on Android</span>
+                    </a>
+                  {% endif %}
+                  {% if block.settings.ios_url != blank %}
+                    <a class="badge-btn" href="{{ block.settings.ios_url }}" target="_blank" rel="nofollow noopener">
+                      <span class="ico">
+                        {% if block.settings.ios_svg != blank %}
+                          {{ block.settings.ios_svg }}
+                        {% elsif block.settings.ios_icon_image != blank %}
+                          <img src="{{ block.settings.ios_icon_image | image_url: width: 64 }}" alt="iOS">
+                        {% else %}
+                          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.365 1.43c.02 1.19-.43 2.15-1.2 3.03-.77.88-1.84 1.38-3.16 1.29-.13-1.17.45-2.27 1.2-3.03.83-.86 2.08-1.47 3.16-1.29zM20.68 17.14c-.58 1.36-.87 1.96-1.62 3.16-1.05 1.68-2.27 3.77-3.9 3.8-1.46.03-1.86-.9-3.46-.9-1.6 0-2.04.87-3.5.93-1.66.06-2.92-1.82-3.98-3.5-2.17-3.33-3.84-9.4-1.6-13.49.94-1.72 2.62-2.82 4.46-2.85 1.41-.03 2.74.97 3.46.97.71 0 2-.96 3.46-.9 1.48.06 2.87.76 3.73 1.94-3.29 1.8-2.76 6.51.36 7.74-.36.95-.8 1.77-1.36 2.6z"/></svg>
+                        {% endif %}
+                      </span>
+                      <span>Download on iOS</span>
+                    </a>
+                  {% endif %}
+                </div>
+              </div>
+
+            {% when 'image_banner' %}
+              {% assign ban_pad = block.settings.ban_pad | plus: 0 %}
+              {% assign ban_rad = block.settings.ban_rad | plus: 0 %}
+              {% assign ban_brw = block.settings.ban_border_w | plus: 0 %}
+
+              {%- capture wrapper_style -%}
+                {% if block.settings.ban_bg != blank %}--ban-bg: {{ block.settings.ban_bg }};{% endif %}
+                {% if block.settings.ban_border != blank %}--ban-brd: {{ block.settings.ban_border }};{% endif %}
+                {% if ban_pad > 0 %}--ban-pad: {{ ban_pad }}px;{% endif %}
+                {% if ban_rad > 0 %}--ban-rad: {{ ban_rad }}px;{% endif %}
+                {% if ban_brw > 0 %}--ban-brd-w: {{ ban_brw }}px;{% endif %}
+                {{ block.settings.extra_css }}
+              {%- endcapture -%}
+
+              {% assign mode = block.settings.banner_mode | default: 'link' %}
+              <div class="lag-banner"
+                   data-mode="{{ mode }}"
+                   data-full="{{ block.settings.full_bleed }}"
+                   {% if mode == 'copy' %} data-copy="{{ block.settings.copy_text | escape }}" {% endif %}
+                   style="{{ wrapper_style | strip }}"
+                   {{ block.shopify_attributes }}>
+
+                {% if mode == 'link' and block.settings.banner_url != blank %}
+                  <a class="ban-media"
+                     href="{{ block.settings.banner_url }}"
+                     {% if block.settings.url_newtab %}target="_blank"{% endif %}
+                     rel="{% if block.settings.url_nofollow %}nofollow {% endif %}noopener">
+                    {% if block.settings.image != blank %}
+                      <img
+                        src="{{ block.settings.image | image_url: width: 2000 }}"
+                        srcset="{{ block.settings.image | image_url: width: 1000 }} 1000w, {{ block.settings.image | image_url: width: 1500 }} 1500w, {{ block.settings.image | image_url: width: 2000 }} 2000w"
+                        sizes="100vw"
+                        alt="{{ block.settings.alt | escape }}">
+                    {% endif %}
+                  </a>
+                {% else %}
+                  <button type="button" class="ban-media" aria-label="{{ block.settings.copy_aria | default: 'Copy code' }}">
+                    {% if block.settings.image != blank %}
+                      <img
+                        src="{{ block.settings.image | image_url: width: 2000 }}"
+                        srcset="{{ block.settings.image | image_url: width: 1000 }} 1000w, {{ block.settings.image | image_url: width: 1500 }} 1500w, {{ block.settings.image | image_url: width: 2000 }} 2000w"
+                        sizes="100vw"
+                        alt="{{ block.settings.alt | escape }}">
+                    {% endif %}
+                  </button>
+                {% endif %}
+              </div>
+          {% endcase %}
+        {% endfor %}
+      </section>
+    </main>
+  </div>
+
+  <script>
+  (function(){
+    const root  = document.getElementById('lagorii-tabs-cards-{{ section.id }}');
+    if(!root) return;
+    const tabs  = Array.from(root.querySelectorAll('.tab'));
+    function setActiveTab(el){
+      tabs.forEach(t => {
+        const active = (t === el);
+        t.classList.toggle('is-active', active);
+        t.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+    }
+    if(tabs.length) setActiveTab(tabs[0]);
+    tabs.forEach(t => t.addEventListener('click', (e) => {
+      if(t.getAttribute('href') === '#') e.preventDefault();
+      setActiveTab(t)
+    }, {passive:false}));
+
+    // Banner copy-to-clipboard + toast (only for copy mode)
+    const banners = root.querySelectorAll('.lag-banner[data-mode="copy"][data-copy]');
+    if (banners.length){
+      let toast = document.createElement('div');
+      toast.className = 'lag-toast';
+      toast.setAttribute('role','status');
+      root.appendChild(toast);
+
+      function showToast(msg){
+        toast.textContent = msg || 'Copied!';
+        toast.classList.add('is-show');
+        clearTimeout(showToast._t);
+        showToast._t = setTimeout(() => toast.classList.remove('is-show'), 1500);
+      }
+
+      banners.forEach(b => {
+        const msg = b.getAttribute('data-copy') || '';
+        b.addEventListener('click', async () => {
+          try{
+            await navigator.clipboard.writeText(msg);
+            showToast(b.getAttribute('data-toast') || 'Copied!');
+          }catch(e){
+            const ta = document.createElement('textarea');
+            ta.value = msg; ta.style.position='fixed'; ta.style.opacity='0';
+            document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+            showToast(b.getAttribute('data-toast') || 'Copied!');
+          }
+        });
+      });
+    }
+  })();
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "Tabs + Cards Nav",
+  "class": "lagorii-tabs-cards",
+  "settings": [
+    { "type": "checkbox", "id": "center_tabs_desktop", "label": "Center tabs on desktop", "default": true },
+
+    { "type": "header", "content": "Tabs – global styling" },
+    { "type": "text", "id": "tab_font_family", "label": "Tab font family", "default": "system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif" },
+    { "type": "range", "id": "tab_font_size", "label": "Font size", "min": 11, "max": 22, "step": 1, "default": 14, "unit": "px" },
+    { "type": "select", "id": "tab_font_weight", "label": "Font weight", "default": "600", "options": [
+      { "value": "400", "label": "Regular" }, { "value": "600", "label": "Semibold" }, { "value": "700", "label": "Bold" }
+    ]},
+    { "type": "color", "id": "tab_font_color", "label": "Text color", "default": "#333333" },
+    { "type": "range", "id": "tab_pad_y", "label": "Padding (top/bottom)", "min": 4, "max": 20, "step": 1, "default": 10, "unit": "px" },
+    { "type": "range", "id": "tab_pad_x", "label": "Padding (left/right)", "min": 8, "max": 28, "step": 1, "default": 14, "unit": "px" },
+    { "type": "range", "id": "tab_radius", "label": "Tab corner radius", "min": 0, "max": 30, "step": 1, "default": 18, "unit": "px" },
+    { "type": "range", "id": "tab_gap", "label": "Space between tabs", "min": 4, "max": 24, "step": 1, "default": 10, "unit": "px" },
+    { "type": "range", "id": "tab_icon_size", "label": "Icon size", "min": 12, "max": 40, "step": 1, "default": 18, "unit": "px" },
+
+    { "type": "header", "content": "Tabs – background" },
+    { "type": "color", "id": "tabs_bar_bg", "label": "Tabs bar background", "default": "#FFFFFF" },
+    { "type": "image_picker", "id": "tabs_bg_image", "label": "Tabs bar background image (optional)" },
+    { "type": "color", "id": "tab_border", "label": "Tab border color (global)", "default": "#EEEEEE" },
+    { "type": "color", "id": "tab_active_bg", "label": "Active tab background", "default": "#FFF7F1" },
+    { "type": "color", "id": "tab_active_color", "label": "Active tab text color", "default": "#E87529" },
+    { "type": "color", "id": "tab_active_border", "label": "Active tab border color", "default": "#E87529" },
+
+    { "type": "header", "content": "Cards – global" },
+    { "type": "range", "id": "container_pad", "label": "Side padding (mobile)", "min": 0, "max": 24, "step": 1, "default": 14, "unit": "px" },
+    { "type": "color", "id": "cards_bg_color", "label": "Cards area background", "default": "#FFFFFF" },
+    { "type": "image_picker", "id": "cards_bg_image", "label": "Cards area background image (optional)" },
+    { "type": "color", "id": "card_bg", "label": "Default card background", "default": "#F3F3F3" },
+    { "type": "range", "id": "card_radius", "label": "Card corner radius", "min": 8, "max": 28, "step": 1, "default": 16, "unit": "px" },
+    { "type": "range", "id": "card_gap", "label": "Gap between cards", "min": 8, "max": 28, "step": 1, "default": 12, "unit": "px" },
+
+    { "type": "range", "id": "card_pad", "label": "Card padding", "min": 0, "max": 40, "step": 1, "default": 0, "unit": "px" },
+    { "type": "range", "id": "art_pad",  "label": "Right image padding", "min": 0, "max": 24, "step": 1, "default": 0,  "unit": "px" },
+
+    { "type": "header", "content": "Card text" },
+    { "type": "text", "id": "title_font_family", "label": "Title font family", "default": "system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif" },
+    { "type": "range", "id": "title_font_size", "label": "Title size", "min": 12, "max": 36, "step": 1, "default": 20, "unit": "px" },
+    { "type": "select", "id": "title_font_weight", "label": "Title weight", "default": "800", "options": [
+      { "value": "600", "label": "Semibold" }, { "value": "700", "label": "Bold" }, { "value": "800", "label": "Extra Bold" }
+    ]},
+    { "type": "color", "id": "title_color", "label": "Title color", "default": "#1E1E1E" },
+
+    { "type": "text", "id": "subtitle_font_family", "label": "Subtitle font family", "default": "system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif" },
+    { "type": "range", "id": "subtitle_font_size", "label": "Subtitle size", "min": 10, "max": 24, "step": 1, "default": 14, "unit": "px" },
+    { "type": "select", "id": "subtitle_font_weight", "label": "Subtitle weight", "default": "400", "options": [
+      { "value": "400", "label": "Regular" }, { "value": "500", "label": "Medium" }, { "value": "600", "label": "Semibold" }
+    ]},
+    { "type": "color", "id": "subtitle_color", "label": "Subtitle color", "default": "#6A6A6A" }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Tab label", "default": "New Arrivals" },
+        { "type": "url", "id": "url", "label": "Collection link (leave blank to stay on page)" },
+
+        { "type": "textarea", "id": "icon_svg", "label": "Icon SVG (paste inline <svg>…</svg>)" },
+        { "type": "image_picker", "id": "icon_image", "label": "Icon image (PNG/JPG/SVG)" },
+
+        { "type": "header", "content": "Per-tab colors (optional)" },
+        { "type": "color", "id": "tab_bg_color", "label": "Tab background color" },
+        { "type": "color", "id": "tab_text_color", "label": "Tab text color" },
+        { "type": "color", "id": "tab_border_color", "label": "Tab border color" },
+
+        { "type": "header", "content": "Per-tab sizing (optional)" },
+        { "type": "range", "id": "tab_fs",  "label": "Font size override",           "min": 0, "max": 28, "step": 1, "default": 0, "unit": "px" },
+        { "type": "range", "id": "tab_py",  "label": "Padding top/bottom override",  "min": 0, "max": 28, "step": 1, "default": 0, "unit": "px" },
+        { "type": "range", "id": "tab_px",  "label": "Padding left/right override",  "min": 0, "max": 36, "step": 1, "default": 0, "unit": "px" },
+        { "type": "range", "id": "tab_r",   "label": "Corner radius override",       "min": 0, "max": 30, "step": 1, "default": 0, "unit": "px" },
+        { "type": "range", "id": "tab_icon","label": "Icon size override",           "min": 0, "max": 48, "step": 1, "default": 0, "unit": "px" },
+        { "type": "header", "content": "Overlay (per tab)" },
+        { "type": "image_picker", "id": "ov_image", "label": "Overlay image (transparent GIF/PNG/APNG/WEBP)" },
+        { "type": "range", "id": "ov_opacity_pct", "label": "Overlay opacity (%)", "min": 0, "max": 100, "step": 5, "default": 80 },
+        { "type": "select", "id": "ov_blend", "label": "Blend mode", "default": "normal",
+          "options": [
+            { "value": "normal", "label": "Normal" },
+            { "value": "screen", "label": "Screen" },
+            { "value": "lighten", "label": "Lighten" },
+            { "value": "overlay", "label": "Overlay" }
+          ]
+        },
+        { "type": "text", "id": "ov_size", "label": "Background size (e.g. 160%, contain, 200px)", "default": "160%" },
+        { "type": "select", "id": "ov_repeat", "label": "Repeat", "default": "repeat",
+          "options": [
+            { "value": "repeat", "label": "Repeat" },
+            { "value": "no-repeat", "label": "No repeat" },
+            { "value": "repeat-x", "label": "Repeat X" },
+            { "value": "repeat-y", "label": "Repeat Y" }
+          ]
+        },
+        { "type": "text", "id": "ov_speed", "label": "Animation speed (e.g. 12s, 20s)", "default": "12s" },
+        { "type": "checkbox", "id": "ov_show_always", "label": "Show overlay even when tab is not active", "default": false }
+      ]
+    },
+    {
+      "type": "card",
+      "name": "Category card",
+      "settings": [
+        { "type": "checkbox", "id": "show_title", "label": "Show title", "default": true },
+        { "type": "text", "id": "title", "label": "Title", "default": "Category name" },
+        { "type": "checkbox", "id": "show_subtitle", "label": "Show subtitle", "default": true },
+        { "type": "textarea", "id": "subtitle", "label": "Subtitle", "default": "Short description" },
+
+        { "type": "range", "id": "card_margin_x",    "label": "Left/right gap (margin)", "min": 0, "max": 40, "step": 1, "default": 0, "unit": "px" },
+        { "type": "range", "id": "card_margin_top",  "label": "Top gap (margin)",        "min": 0, "max": 40, "step": 1, "default": 0, "unit": "px" },
+        { "type": "range", "id": "card_margin_bottom","label": "Bottom gap (margin)",    "min": 0, "max": 40, "step": 1, "default": 0, "unit": "px" },
+
+
+        { "type": "color", "id": "card_bg_color", "label": "Card background color (override global)" },
+        { "type": "image_picker", "id": "bg_image", "label": "Card background image (optional)" },
+        { "type": "checkbox", "id": "card_radius_override", "label": "Override card radius", "default": false },
+        { "type": "range", "id": "card_radius", "label": "Card radius (override)", "min": 8, "max": 28, "step": 1, "default": 16, "unit": "px" },
+
+        { "type": "checkbox", "id": "show_art", "label": "Show right-side image", "default": true },
+        { "type": "image_picker", "id": "image", "label": "Right-side image" },
+        { "type": "text", "id": "image_alt", "label": "Right image alt text", "default": "Category image" },
+
+        { "type": "header", "content": "Right image fit" },
+        { "type": "select", "id": "image_fit", "label": "Image fit", "default": "cover", "options": [
+          { "value": "cover", "label": "Cover (crop to fill)" },
+          { "value": "contain", "label": "Contain (no crop)" },
+          { "value": "adapt", "label": "Adapt image (natural ratio inside fixed height)" }
+        ]},
+        { "type": "color", "id": "art_bg_color", "label": "Image background (for contain/adapt)" },
+
+        { "type": "header", "content": "Per-card overrides" },
+        { "type": "range", "id": "card_pad_item", "label": "Card padding (override)", "min": 0, "max": 40, "step": 1, "default": 0, "unit": "px" },
+        { "type": "range", "id": "art_pad_item",  "label": "Right image padding (override)", "min": 0, "max": 24, "step": 1, "default": 0, "unit": "px" },
+
+        { "type": "url", "id": "link", "label": "Card link URL" }
+      ]
+    },
+    {
+      "type": "app_cta",
+      "name": "App download CTA",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Get our app" },
+        { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "Faster checkout · Exclusive drops" },
+        { "type": "color", "id": "bg", "label": "Background", "default": "#ffffff" },
+        { "type": "color", "id": "brd", "label": "Border color", "default": "#ECECEC" },
+
+        { "type": "url", "id": "android_url", "label": "Android (Play Store) URL" },
+        { "type": "textarea", "id": "android_svg", "label": "Android icon (inline SVG, optional)" },
+        { "type": "image_picker", "id": "android_icon_image", "label": "Android icon PNG/JPG (optional)" },
+
+        { "type": "url", "id": "ios_url", "label": "iOS (App Store) URL" },
+        { "type": "textarea", "id": "ios_svg", "label": "iOS icon (inline SVG, optional)" },
+        { "type": "image_picker", "id": "ios_icon_image", "label": "iOS icon PNG/JPG (optional)" },
+
+        { "type": "textarea", "id": "extra_css", "label": "Extra inline CSS (advanced)", "info": "e.g. max-width:900px;margin-inline:auto;" }
+      ]
+    },
+    {
+      "type": "image_banner",
+      "name": "Image / Ad banner",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Banner image (PNG/WEBP/GIF/JPG)" },
+        { "type": "text", "id": "alt", "label": "Alt text", "default": "Promotional banner" },
+
+        { "type": "select", "id": "banner_mode", "label": "On click", "default": "link",
+          "options": [
+            { "value": "link", "label": "Go to URL" },
+            { "value": "copy", "label": "Copy text to clipboard" }
+          ]
+        },
+        { "type": "url", "id": "banner_url", "label": "URL (used in 'Go to URL' mode)" },
+        { "type": "checkbox", "id": "url_newtab", "label": "Open URL in new tab", "default": true },
+        { "type": "checkbox", "id": "url_nofollow", "label": "Add rel=\"nofollow\"", "default": false },
+
+        { "type": "textarea", "id": "copy_text", "label": "Text to copy (used in 'Copy' mode)", "default": "LAGORII10" },
+        { "type": "text", "id": "copy_aria", "label": "ARIA label for copy button", "default": "Copy code" },
+
+        { "type": "header", "content": "Banner style" },
+        { "type": "checkbox", "id": "full_bleed", "label": "Full-bleed (span full viewport width)", "default": false },
+        { "type": "range", "id": "ban_pad", "label": "Outer padding", "min": 0, "max": 40, "step": 1, "default": 0, "unit": "px" },
+        { "type": "range", "id": "ban_rad", "label": "Corner radius", "min": 0, "max": 40, "step": 1, "default": 0, "unit": "px" },
+        { "type": "color", "id": "ban_bg", "label": "Background behind image", "default": "#00000000" },
+        { "type": "color", "id": "ban_border", "label": "Border color", "default": "#00000000" },
+        { "type": "range", "id": "ban_border_w", "label": "Border width", "min": 0, "max": 8, "step": 1, "default": 0, "unit": "px" },
+
+        { "type": "textarea", "id": "extra_css", "label": "Extra inline CSS (advanced)", "info": "e.g. max-width:1100px;margin-inline:auto;" }
+      ]
+    }
+  ],
+  "max_blocks": 49,
+  "presets": [
+    {
+      "name": "Tabs + Cards Nav",
+      "blocks": [
+        { "type": "tab", "settings": { "label": "New Arrivals" } },
+        { "type": "tab", "settings": { "label": "Bestsellers" } },
+        { "type": "tab", "settings": { "label": "Sale" } },
+
+        { "type": "card", "settings": { "title": "Ethnic Wear",  "subtitle": "Lehenga Choli, kurtas, sherwani & more" } },
+        { "type": "card", "settings": { "title": "Clothing Sets", "subtitle": "Stylish co-ords, everyday comfy" } },
+        { "type": "card", "settings": { "title": "Night Wear",    "subtitle": "Night suits, comfy sets" } },
+        { "type": "app_cta", "settings": { "heading": "Get the Lagorii App", "subheading": "Shop faster. Track orders. Early access drops." } }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}{% endstylesheet %}
+{% javascript %}{% endjavascript %}

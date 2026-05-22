@@ -1,0 +1,576 @@
+{% comment %}
+  Sticky Add to Cart — Mobile Only (<= 1024px)
+  - No image, no title (no "sticky-left")
+  - Fully customizable via Theme Editor
+  - Desktop: section exists but is visually inert unless your JS shows it
+  - NEW:
+    • layout_mode: "island" | "stretch"
+    • Outer paddings (L/R/T/B), Inner padding (X/Y)
+    • Island radius, border, halo (outline), shadow, background color
+    • Close button is now a real <button> (no javascript:void(0))
+{% endcomment %}
+
+<style>
+
+/* ===== LAG: ATC loading dots (replaces ripple/white circle) ===== */
+.product-form__submit,
+button[name="add"],
+button[data-btn-addtocart],
+button[data-btn-addToCart],
+button[id*="AddToCart" i] {
+  position: relative;
+  overflow: hidden; /* avoid outside ripple */
+}
+
+.lag-atc__dots{
+  display:none;
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  pointer-events:none;
+}
+.lag-atc__dot{
+  width:6px;
+  height:6px;
+  border-radius:999px;
+  background: currentColor;
+  transform: translateY(0);
+  animation: lagAtcDotJump 900ms infinite ease-in-out;
+}
+.lag-atc__dot:nth-child(2){ animation-delay:120ms; }
+.lag-atc__dot:nth-child(3){ animation-delay:240ms; }
+
+@keyframes lagAtcDotJump{
+  0%, 60%, 100% { transform: translateY(0); opacity: .65; }
+  30% { transform: translateY(-6px); opacity: 1; }
+}
+
+/* Loading state: hide label, show dots; suppress any ripple pseudo-element */
+.lag-atc--loading .lag-atc__label{ opacity:0; visibility:hidden; }
+.lag-atc--loading .lag-atc__dots{ display:inline-flex; }
+.lag-atc--loading::before,
+.lag-atc--loading::after{
+  animation:none !important;
+  opacity:0 !important;
+  transform:none !important;
+  box-shadow:none !important;
+}
+
+/* Hide old X icon slot from base theme */
+.productView-stickyCart .sticky-product-close { display: none !important; }
+
+/* ===== Sticky ATC container shell (mirrors sticky bottom nav variables) ===== */
+.sac {                       /* outer wrapper */
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 121; /* above nav */
+  background: transparent;
+  /* OUTER padding + safe area for ISLAND mode (zeroed for STRETCH) */
+  padding:
+    var(--sac-outer-top, 10px)
+    var(--sac-outer-right, 10px)
+    calc(env(safe-area-inset-bottom) + var(--sac-outer-bottom, 10px))
+    var(--sac-outer-left, 10px);
+}
+.sac[data-mode="stretch"]{
+  /* stretch spans edge-to-edge; no external padding */
+  padding: 0;
+}
+
+/* The visible bar/box */
+.sac__container{
+  width: 100%;
+  background: var(--sac-bg, #ffffff);
+  box-shadow: var(--sac-shadow, 0 -8px 20px rgb(0 0 0 / 8%));
+  padding: var(--sac-inner-y, 8px) var(--sac-inner-x, 8px);
+}
+
+.sac[data-mode="island"] .sac__container{
+  border-radius: var(--sac-radius, 14px);
+  border: var(--sac-border-w, 1px) solid var(--sac-border, rgba(0,0,0,.12));
+  overflow: hidden;
+  /* optional faint outer halo */
+  box-shadow:
+    var(--sac-shadow, 0 -8px 20px rgb(0 0 0 / 8%)),
+    0 0 0 var(--sac-outline-w, 0px) rgba(0,0,0,.04);
+}
+
+.sac[data-mode="stretch"] .sac__container{
+  border-top: 1px solid var(--sac-border, rgba(0,0,0,.12));
+  border-radius: 0;
+}
+
+/* Inner layout (we keep your theme’s .sticky-… classes) */
+.sac__row{ display: flex; align-items: center; gap: 10px; }
+.sac__grow{ flex: 1 1 auto; }
+
+/* Keep wishlist inline nicely */
+.sac .sticky-wishlist-inline .wishlist-toggle{
+  display: inline-flex; align-items: center; gap: 6px;
+}
+
+/* Reserve page space on mobile so content never hides behind the bar */
+@media (max-width: 1024px){
+  body{ padding-bottom: calc(64px + env(safe-area-inset-bottom)) !important; }
+}
+@media (min-width: 1025px){
+  /* let your product page JS decide visibility; we don't push content on desktop */
+  body{ padding-bottom: 0 !important; }
+}
+
+/* === Sticky Add to Cart: layout modes === */
+
+/* default = stretch (your theme styles already handle it) */
+
+/* ISLAND MODE */
+[data-sticky-add-to-cart][data-layout="island"]{
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 140;
+  background: transparent; /* the capsule supplies its own bg */
+  padding:
+    var(--island-outer-pad-top)
+    var(--island-outer-pad-right)
+    calc(env(safe-area-inset-bottom) + var(--island-outer-pad-bottom))
+    var(--island-outer-pad-left);
+}
+
+[data-sticky-add-to-cart][data-layout="island"] .sticky-product-wrapper{
+  /* floating capsule */
+  background: var(--sbn-bg, #fff);
+  border-radius: var(--island-radius);
+  border: var(--island-border-w) solid var(--island-border-color);
+  box-shadow:
+    var(--island-shadow),
+    0 0 0 var(--island-outline-w) var(--island-outline-color);
+  padding: var(--island-pad-y) var(--island-pad-x);
+}
+
+/* inner row spacing */
+[data-sticky-add-to-cart][data-layout="island"] .sticky-actions-row{
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content 1fr;
+  align-items: center;
+  gap: var(--island-gap);
+}
+
+/* Reserve space so content doesn’t hide behind island */
+@media (max-width: 1024px){
+  body{ padding-bottom: calc(var(--sac-reserve) + env(safe-area-inset-bottom)) !important; }
+}
+
+/* Wishlist behavior:
+   - island: icon-only (no text), hollow when not wishlisted, filled when wishlisted)
+   - stretch: unchanged */
+[data-sticky-add-to-cart][data-layout="island"] .sticky-wishlist-inline .wishlist-label{
+  display: none !important;
+}
+.sticky-wishlist-inline .wishlist-toggle svg{
+  width: 22px; height: 22px;
+  fill: transparent;                /* hollow by default */
+  stroke: currentColor; stroke-width: 1.6px;
+}
+.sticky-wishlist-inline .wishlist-toggle.wishlisted svg{
+  fill: currentColor;               /* filled when wishlisted */
+  stroke: currentColor;
+}
+
+/* Make the add-to-cart button stretch nicely next to the icon in island */
+[data-sticky-add-to-cart][data-layout="island"] .sticky-actions-row > div:last-child{
+  min-width: 0;
+}
+
+/* Hollow by default */
+.sticky-wishlist-inline .wishlist-toggle svg{
+  width: 22px; height: 22px;
+  fill: transparent !important;
+  stroke: currentColor !important;
+  stroke-width: 1.6px !important;
+}
+
+/* Filled when wishlisted */
+.sticky-wishlist-inline .wishlist-toggle.wishlisted svg{
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+</style>
+
+{% assign bp = section.settings.mobile_max_width | default: 1024 %}
+{%- assign sticky_icon_size = settings.notify_me_sticky_icon_size | default: 18 -%}
+{%- assign sticky_icon_size_done = settings.notify_me_sticky_done_icon_size | default: sticky_icon_size -%}
+
+<sticky-add-to-cart
+  class="productView-stickyCart style-1"
+  data-sticky-add-to-cart
+  data-sticky-breakpoint="{{ bp }}"
+  data-always-mobile="{{ section.settings.always_mobile }}"
+  data-layout="{{ section.settings.layout_mode }}"
+  style="
+    /* share the same variable names you used in the bottom nav ‘island’ */
+    --island-outer-pad-top: {{ section.settings.island_outer_pad_top | default: 10 }}px;
+    --island-outer-pad-bottom: {{ section.settings.island_outer_pad_bottom | default: 10 }}px;
+    --island-outer-pad-left: {{ section.settings.island_outer_pad_left | default: 10 }}px;
+    --island-outer-pad-right: {{ section.settings.island_outer_pad_right | default: 10 }}px;
+
+    --island-radius: {{ section.settings.island_radius | default: 14 }}px;
+    --island-pad-y: {{ section.settings.island_inner_pad_y | default: 6 }}px;
+    --island-pad-x: {{ section.settings.island_inner_pad_x | default: 8 }}px;
+    --island-gap: {{ section.settings.island_gap | default: 6 }}px;
+
+    --island-border-w: {{ section.settings.island_border_w | default: 0 }}px;
+    --island-border-color: {{ section.settings.island_border_color | default: '#e5e7eb' }};
+    --island-outline-w: {{ section.settings.island_outline_w | default: 0 }}px;
+    --island-outline-color: {{ section.settings.island_outline_color | default: '#E5E5E5' }};
+
+    --island-shadow: {% if section.settings.island_shadow %}0 8px 28px rgba(0,0,0,.12){% else %}none{% endif %};
+    --sac-reserve: {{ section.settings.reserve_height | default: 52 }}px;
+  "
+>
+
+  <!-- NEW: mode wrapper with variables inline to mimic sticky-nav controls -->
+  <div
+    class="sac"
+    data-mode="{{ section.settings.layout_mode | default: 'island' }}"
+    style="
+      /* If you want this to match your bottom nav exactly, copy the same numbers */
+      --sac-bg: {{ section.settings.bg_color | default: '#ffffff' }};
+      --sac-border: {{ section.settings.border_color | default: '#e5e7eb' }};
+      --sac-shadow: {% if section.settings.shadow %}0 -8px 20px rgb(0 0 0 / 8%){% else %}none{% endif %};
+
+      /* Outer paddings */
+      --sac-outer-left: {{ section.settings.outer_pad_left | default: 10 }}px;
+      --sac-outer-right: {{ section.settings.outer_pad_right | default: 10 }}px;
+      --sac-outer-top: {{ section.settings.outer_pad_top | default: 10 }}px;
+      --sac-outer-bottom: {{ section.settings.outer_pad_bottom | default: 10 }}px;
+
+      /* Inner paddings */
+      --sac-inner-x: {{ section.settings.inner_pad_x | default: 8 }}px;
+      --sac-inner-y: {{ section.settings.inner_pad_y | default: 8 }}px;
+
+      /* Island cosmetics */
+      --sac-radius: {{ section.settings.island_radius | default: 14 }}px;
+      --sac-border-w: {{ section.settings.island_border_w | default: 1 }}px;
+      --sac-outline-w: {{ section.settings.island_outline_w | default: 0 }}px;
+    "
+  >
+    <div class="sac__container">
+      <!-- OPTIONAL: a visible close button (real button, no javascript:void) -->
+      {% if section.settings.show_close %}
+        <button class="close" data-close-sticky-add-to-cart aria-label="Close sticky add to cart" style="position:absolute; right:12px; top:10px; display:inline-grid; place-items:center; width:28px; height:28px; border:0; background:transparent; cursor:pointer;">
+          {% render 'icon-close' %}
+        </button>
+      {% endif %}
+
+      <div class="sticky-product-wrapper">
+        <div class="sticky-product clearfix">
+          <!-- No sticky-left -->
+
+          <div class="sticky-right sticky-content">
+            <div class="sticky-actions">
+              {%- assign product_form_sticky_id = 'product-form-sticky-' | append: product.id -%}
+              {% form 'product',
+                product,
+                id: product_form_sticky_id,
+                class: 'form',
+                novalidate: 'novalidate',
+                data-type: 'add-to-cart-form'
+              %}
+                <div class="sac__row sticky-actions-row">
+                  {%- if section.settings.show_wishlist -%}
+                    <div class="sticky-wishlist-inline">
+                      <a
+                        href="#"
+                        data-wishlist
+                        class="wishlist-toggle"
+                        data-wishlist-handle="{{ product.handle }}"
+                        data-product-id="{{ product.id }}"
+                        aria-label="Toggle wishlist"
+                      >
+                        {% render 'icon-heart-2' %}
+                        <span
+                          class="wishlist-label"
+                          data-default-label="{{ section.settings.wishlist_label | escape }}"
+                          data-active-label="Wishlisted!"
+                        >
+                          {{ section.settings.wishlist_label }}
+                        </span>
+                      </a>
+                    </div>
+                  {%- endif -%}
+
+                  <div class="sac__grow">
+                    {%- comment -%} Sticky Add to Cart (shown when variant is in stock) {%- endcomment -%}
+                    <button
+                      type="submit"
+                      name="add"
+                      data-btn-addToCart
+                      data-lag-sticky-atc
+                      class="product-form__submit button button--primary"
+                      id="product-sticky-add-to-cart"
+                      style="width:100%;text-align:center;"
+                      {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
+                    >
+                      {% if product.selected_or_first_available_variant.available %}
+                        {{ section.settings.button_text }}
+                      {% else %}
+                        {{ 'products.product.sold_out' | t }}
+                      {% endif %}
+                    </button>
+                  </div>
+                </div>
+                <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+              {% endform %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</sticky-add-to-cart>
+
+
+
+<script>
+(function(){
+  'use strict';
+
+  function isEligible(btn){
+    if(!btn) return false;
+    if(btn.dataset.lagAtcEnhanced === '1') return false;
+    // exclude notify buttons
+    if(btn.matches('[data-lag-notify-btn], [data-lag-notify-btn-sticky]')) return false;
+    // eligible ATC selectors
+    if(btn.matches('button[name="add"], button[data-btn-addtocart], button[data-btn-addToCart], button[data-btn-addToCart], button[data-btn-addToCart], button.product-form__submit[type="submit"], button[id*="AddToCart" i]')) return true;
+    // also match common theme patterns
+    if(btn.classList.contains('product-form__submit') && (btn.type === 'submit' || btn.getAttribute('name') === 'add')) return true;
+    return false;
+  }
+
+  function enhance(btn){
+    if(!isEligible(btn)) return;
+
+    // Wrap existing contents into label span
+    var label = document.createElement('span');
+    label.className = 'lag-atc__label';
+    while(btn.firstChild){ label.appendChild(btn.firstChild); }
+
+    var dots = document.createElement('span');
+    dots.className = 'lag-atc__dots';
+    dots.setAttribute('aria-hidden','true');
+    dots.innerHTML = '<span class="lag-atc__dot"></span><span class="lag-atc__dot"></span><span class="lag-atc__dot"></span>';
+
+    btn.appendChild(label);
+    btn.appendChild(dots);
+    btn.dataset.lagAtcEnhanced = '1';
+
+    // Auto-stop loading when the theme re-enables the button (common in AJAX ATC)
+    var mo = new MutationObserver(function(muts){
+      for(var i=0;i<muts.length;i++){
+        if(muts[i].attributeName === 'disabled'){
+          if(!btn.disabled){
+            stopLoading(btn);
+          }
+        }
+      }
+    });
+    mo.observe(btn, { attributes:true });
+
+    btn.addEventListener('click', function(){
+      startLoading(btn);
+    }, true);
+  }
+
+  function startLoading(btn){
+    if(btn.classList.contains('lag-atc--loading')) return;
+    btn.classList.add('lag-atc--loading');
+    btn.setAttribute('aria-busy','true');
+    // fallback: never keep spinner forever
+    window.clearTimeout(btn._lagAtcTimer);
+    btn._lagAtcTimer = window.setTimeout(function(){
+      // if theme didn't resolve, stop anyway
+      stopLoading(btn);
+    }, 6500);
+  }
+
+  function stopLoading(btn){
+    if(!btn || !btn.classList.contains('lag-atc--loading')) return;
+    btn.classList.remove('lag-atc--loading');
+    btn.removeAttribute('aria-busy');
+    window.clearTimeout(btn._lagAtcTimer);
+  }
+
+  function enhanceAll(root){
+    var scope = root || document;
+    var candidates = scope.querySelectorAll('button[name="add"], button[data-btn-addtocart], button[data-btn-addToCart], button.product-form__submit, button[id*="AddToCart" i]');
+    for(var i=0;i<candidates.length;i++) enhance(candidates[i]);
+  }
+
+  // Common theme/cart events that indicate ATC completed
+  ['cart:added','cart:updated','ajaxProduct:added','product:added','theme:cart:updated','cart:refresh'].forEach(function(evt){
+    document.addEventListener(evt, function(){
+      var btns = document.querySelectorAll('.lag-atc--loading');
+      for(var i=0;i<btns.length;i++) stopLoading(btns[i]);
+    });
+  });
+
+  // Init
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', function(){ enhanceAll(document); });
+  } else {
+    enhanceAll(document);
+  }
+
+  // If sections re-render / quick view / ajax, re-run
+  document.addEventListener('shopify:section:load', function(e){ enhanceAll(e.target); });
+})();
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    function syncStickyWishlistLabels() {
+      document.querySelectorAll('.sticky-wishlist-inline .wishlist-toggle').forEach(function (link) {
+        var label = link.querySelector('.wishlist-label');
+        if (!label) return;
+
+        var isActive =
+          link.classList.contains('is-active') ||
+          link.classList.contains('active') ||
+          link.classList.contains('wishlist-added') ||
+          link.getAttribute('aria-pressed') === 'true';
+
+        var defaultLabel = label.getAttribute('data-default-label') || 'Wishlist';
+        var activeLabel = label.getAttribute('data-active-label') || 'Wishlisted!';
+
+        label.textContent = isActive ? activeLabel : defaultLabel;
+      });
+    }
+
+    syncStickyWishlistLabels();
+
+    document.addEventListener('click', function (event) {
+      var trigger = event.target.closest('.sticky-wishlist-inline .wishlist-toggle');
+      if (!trigger) return;
+
+      setTimeout(syncStickyWishlistLabels, 50);
+      setTimeout(syncStickyWishlistLabels, 250);
+      setTimeout(syncStickyWishlistLabels, 600);
+    });
+  });
+</script>
+{% schema %}
+{
+  "name": "Sticky-Cart-mobile",
+  "settings": [
+  {
+    "type": "header",
+    "content": "Layout"
+  },
+  {
+    "type": "select",
+    "id": "layout_mode",
+    "label": "Layout mode",
+    "default": "stretch",
+    "options": [
+      { "value": "stretch", "label": "Stretch (full-width)" },
+      { "value": "island",  "label": "Island (floating capsule)" }
+    ]
+  },
+  {
+    "type": "range",
+    "id": "reserve_height",
+    "label": "Page bottom reserve (mobile)",
+    "min": 36, "max": 96, "step": 2,
+    "default": 52,
+    "unit": "px"
+  },
+
+  { "type": "header", "content": "Island — Outer padding" },
+  { "type": "range", "id": "island_outer_pad_top",    "label": "Top",    "min": 0, "max": 32, "step": 1, "default": 10, "unit": "px" },
+  { "type": "range", "id": "island_outer_pad_bottom", "label": "Bottom", "min": 0, "max": 32, "step": 1, "default": 10, "unit": "px" },
+  { "type": "range", "id": "island_outer_pad_left",   "label": "Left",   "min": 0, "max": 32, "step": 1, "default": 10, "unit": "px" },
+  { "type": "range", "id": "island_outer_pad_right",  "label": "Right",  "min": 0, "max": 32, "step": 1, "default": 10, "unit": "px" },
+
+  { "type": "header", "content": "Island — Inner layout" },
+  { "type": "range", "id": "island_inner_pad_y", "label": "Inner padding (Y)", "min": 0, "max": 24, "step": 1, "default": 6, "unit": "px" },
+  { "type": "range", "id": "island_inner_pad_x", "label": "Inner padding (X)", "min": 0, "max": 24, "step": 1, "default": 8, "unit": "px" },
+  { "type": "range", "id": "island_gap",         "label": "Gap between items", "min": 0, "max": 24, "step": 1, "default": 6, "unit": "px" },
+  { "type": "range", "id": "island_radius",      "label": "Corner radius",     "min": 0, "max": 32, "step": 1, "default": 14, "unit": "px" },
+
+  { "type": "header", "content": "Island — Border & halo" },
+  { "type": "range", "id": "island_border_w",       "label": "Border width",    "min": 0, "max": 4,  "step": 1, "default": 1, "unit": "px" },
+  { "type": "color", "id": "island_border_color",   "label": "Border color",    "default": "#e5e7eb" },
+  { "type": "range", "id": "island_outline_w",      "label": "Outer halo width","min": 0, "max": 6,  "step": 1, "default": 0, "unit": "px" },
+  { "type": "color", "id": "island_outline_color",  "label": "Outer halo color","default": "#E5E5E5" },
+  { "type": "checkbox", "id": "island_shadow",      "label": "Soft drop shadow","default": false },
+
+
+    { "type": "color", "id": "bg_color", "label": "Background", "default": "#ffffff" },
+    { "type": "color", "id": "border_color", "label": "Border color", "default": "#e5e7eb" },
+    { "type": "checkbox", "id": "shadow", "label": "Soft shadow", "default": true },
+
+    { "type": "range", "id": "outer_pad_left", "label": "Outer padding — Left (px)", "min": 0, "max": 40, "step": 1, "default": 10 },
+    { "type": "range", "id": "outer_pad_right", "label": "Outer padding — Right (px)", "min": 0, "max": 40, "step": 1, "default": 10 },
+    { "type": "range", "id": "outer_pad_top", "label": "Outer padding — Top (px)", "min": 0, "max": 40, "step": 1, "default": 10 },
+    { "type": "range", "id": "outer_pad_bottom", "label": "Outer padding — Bottom (px)", "min": 0, "max": 40, "step": 1, "default": 10 },
+
+    { "type": "range", "id": "inner_pad_x", "label": "Inner padding — Horizontal (px)", "min": 0, "max": 32, "step": 1, "default": 8 },
+    { "type": "range", "id": "inner_pad_y", "label": "Inner padding — Vertical (px)", "min": 0, "max": 24, "step": 1, "default": 8 },
+
+    {
+      "type": "select",
+      "id": "container",
+      "label": "Container width (inner content only)",
+      "default": "container",
+      "options": [
+        { "value": "container",  "label": "Theme default" },
+        { "value": "1170",       "label": "1170px" },
+        { "value": "1770",       "label": "1770px" },
+        { "value": "fullwidth",  "label": "Full width" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "mobile_max_width",
+      "label": "Mobile breakpoint (max width)",
+      "min": 640, "max": 1600, "step": 64,
+      "default": 1024,
+      "unit": "px"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Add to cart"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_wishlist",
+      "label": "Show wishlist button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "wishlist_label",
+      "label": "Wishlist label",
+      "default": "Wishlist"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_close",
+      "label": "Show close button",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "always_mobile",
+      "label": "Always pin to bottom on mobile (ignore scroll)",
+      "default": true
+    }
+  ],
+  "presets": [
+    { "name": "Sticky Add to Cart (Mobile)" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,338 @@
+{% comment %}
+  Snippet: lagorii-coupon-copy
+  Usage:
+  {% render 'lagorii-coupon-copy',
+    id: some_id,
+    s: block.settings,
+    hide_desktop: true
+  %}
+{% endcomment %}
+
+{%- liquid
+  assign _id = id | default: 'coupon'
+  assign s = s
+  assign hide_desktop = hide_desktop | default: false
+-%}
+
+<div class="lag-coupon lag-coupon--{{ _id }}"
+  {% if s.enable_hide_toggle %}
+    data-coupon-hide-toggle="true"
+  {% endif %}
+>
+  <style>
+    .lag-coupon--{{ _id }}{
+      padding-top: {{ s.section_padding_top }}px;
+      padding-bottom: {{ s.section_padding_bottom }}px;
+    }
+
+    .lag-coupon--{{ _id }} .lag-coupon__outer{
+      padding: {{ s.outer_pad_top }}px {{ s.outer_pad_right }}px {{ s.outer_pad_bottom }}px {{ s.outer_pad_left }}px;
+    }
+
+    .lag-coupon--{{ _id }} .lag-coupon__card{
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: {{ s.card_gap }}px;
+
+      padding: {{ s.card_pad_top }}px {{ s.card_pad_right }}px {{ s.card_pad_bottom }}px {{ s.card_pad_left }}px;
+
+      border-radius: {{ s.card_radius }}px;
+      border: {{ s.card_border_width }}px solid {{ s.card_border_color }};
+      box-shadow: {{ s.card_shadow }};
+      background-color: {{ s.card_bg_color }};
+
+      {% if s.card_bg_image != blank %}
+        background-image: url({{ s.card_bg_image | image_url: width: 2000 }});
+        background-repeat: no-repeat;
+        background-position: {{ s.bg_position }};
+        background-size: {{ s.bg_size }};
+      {% endif %}
+
+      font-family: {{ s.font_family }};
+      overflow: hidden;
+    }
+
+    .lag-coupon--{{ _id }} .lag-coupon__left{
+      display: flex;
+      align-items: center;
+      gap: {{ s.left_gap }}px;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+
+    .lag-coupon--{{ _id }} .lag-coupon__badge{
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: {{ s.badge_pad_y }}px {{ s.badge_pad_x }}px;
+      border-radius: {{ s.badge_radius }}px;
+      border: {{ s.badge_border_width }}px dashed {{ s.badge_border_color }};
+      background: {{ s.badge_bg_color }};
+      color: {{ s.badge_text_color }};
+      flex: 0 0 auto;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .lag-coupon--{{ _id }} .lag-coupon__badge img{
+      width: {{ s.badge_icon_size }}px;
+      height: {{ s.badge_icon_size }}px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .lag-coupon--{{ _id }} .lag-coupon__badge-text{
+      font-size: {{ s.badge_font_size }}px;
+      font-weight: {{ s.badge_font_weight }};
+      letter-spacing: 0.3px;
+    }
+
+    .lag-coupon--{{ _id }} .lag-coupon__text{ min-width: 0; }
+
+    .lag-coupon--{{ _id }} .lag-coupon__title{
+      margin: 0;
+      color: {{ s.title_color }};
+      font-size: {{ s.title_size }}px;
+      font-weight: {{ s.title_weight }};
+      line-height: 1.2;
+    }
+
+    .lag-coupon--{{ _id }} .lag-coupon__subtitle{
+      margin: {{ s.subtitle_margin_top }}px 0 0 0;
+      color: {{ s.subtitle_color }};
+      font-size: {{ s.subtitle_size }}px;
+      font-weight: {{ s.subtitle_weight }};
+      line-height: 1.35;
+    }
+
+    .lag-coupon--{{ _id }} .lag-coupon__right{
+      display: flex;
+      align-items: center;
+      gap: {{ s.right_gap }}px;
+      flex: 0 0 auto;
+    }
+
+    .lag-coupon--{{ _id }} .lag-coupon__copy{
+      appearance: none;
+      border: {{ s.copy_border_width }}px solid {{ s.copy_border_color }};
+      background: {{ s.copy_bg }};
+      color: {{ s.copy_color }};
+      border-radius: {{ s.copy_radius }}px;
+      padding: {{ s.copy_pad_y }}px {{ s.copy_pad_x }}px;
+      font-family: {{ s.font_family }};
+      font-size: {{ s.copy_font_size }}px;
+      font-weight: {{ s.copy_font_weight }};
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      line-height: 1;
+      transition: transform .08s ease, opacity .15s ease, background .15s ease;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .lag-coupon--{{ _id }} .lag-coupon__copy:active{ transform: scale(0.98); }
+
+    .lag-coupon--{{ _id }} .lag-coupon__code{
+      font-weight: {{ s.code_font_weight }};
+      letter-spacing: 0.6px;
+    }
+
+    .lag-coupon--{{ _id }} .lag-coupon__copy svg{
+      width: {{ s.copy_icon_size }}px;
+      height: {{ s.copy_icon_size }}px;
+      display: block;
+      fill: currentColor;
+    }
+
+    {% if hide_desktop %}
+      @media (min-width: 990px){
+        .lag-coupon--{{ _id }}{ display: none !important; }
+      }
+    {% endif %}
+
+    .lag-coupon--{{ _id }} .lag-coupon__toggle{
+      {% if s.enable_hide_toggle %} display: inline-flex; {% else %} display: none; {% endif %}
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: {{ s.toggle_color }};
+      font-family: {{ s.font_family }};
+      font-size: {{ s.toggle_font_size }}px;
+      font-weight: {{ s.toggle_font_weight }};
+      cursor: pointer;
+      padding: 6px 8px;
+      border-radius: 10px;
+      user-select: none;
+      opacity: .85;
+    }
+
+    .lag-coupon--{{ _id }} .lag-coupon__toggle:hover{
+      opacity: 1;
+      background: rgba(0,0,0,0.04);
+    }
+
+    .lag-coupon--{{ _id }} .lag-coupon__toast{
+      position: absolute;
+      right: 14px;
+      top: 14px;
+      background: {{ s.toast_bg }};
+      color: {{ s.toast_color }};
+      border-radius: {{ s.toast_radius }}px;
+      padding: {{ s.toast_pad_y }}px {{ s.toast_pad_x }}px;
+      font-size: {{ s.toast_font_size }}px;
+      font-weight: {{ s.toast_font_weight }};
+      opacity: 0;
+      transform: translateY(-6px);
+      pointer-events: none;
+      transition: opacity .18s ease, transform .18s ease;
+    }
+
+    .lag-coupon--{{ _id }} .lag-coupon__toast.is-visible{
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .lag-coupon--{{ _id }}.is-hidden .lag-coupon__card{ display: none; }
+
+    @media (max-width: 767px){
+      .lag-coupon--{{ _id }} .lag-coupon__card{ gap: 12px; }
+      .lag-coupon--{{ _id }} .lag-coupon__title{ font-size: {{ s.title_size_mobile }}px; }
+      .lag-coupon--{{ _id }} .lag-coupon__subtitle{ font-size: {{ s.subtitle_size_mobile }}px; }
+      .lag-coupon--{{ _id }} .lag-coupon__copy{
+        font-size: {{ s.copy_font_size_mobile }}px;
+        padding: {{ s.copy_pad_y_mobile }}px {{ s.copy_pad_x_mobile }}px;
+      }
+    }
+  </style>
+
+  <div class="lag-coupon__outer">
+    {% if s.enable_hide_toggle %}
+      <button class="lag-coupon__toggle" type="button" aria-expanded="true">
+        {{ s.toggle_text_hide }}
+      </button>
+    {% endif %}
+
+    <div class="lag-coupon__card" role="region" aria-label="Coupon">
+      <div class="lag-coupon__left">
+        {% if s.show_badge %}
+          <div class="lag-coupon__badge">
+            {% if s.badge_icon != blank %}
+              <img src="{{ s.badge_icon | image_url: width: 200 }}" alt="" loading="lazy">
+            {% endif %}
+            <span class="lag-coupon__badge-text">{{ s.badge_text }}</span>
+          </div>
+        {% endif %}
+
+        <div class="lag-coupon__text">
+          {% if s.title != blank %}<p class="lag-coupon__title">{{ s.title }}</p>{% endif %}
+          {% if s.subtitle != blank %}<p class="lag-coupon__subtitle">{{ s.subtitle }}</p>{% endif %}
+        </div>
+      </div>
+
+      <div class="lag-coupon__right">
+        <button
+          class="lag-coupon__copy"
+          type="button"
+          data-coupon-code="{{ s.coupon_code | escape }}"
+          aria-label="Copy coupon code"
+        >
+          <span class="lag-coupon__code">{{ s.coupon_code }}</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M16 1H6a2 2 0 0 0-2 2v12h2V3h10V1zm3 4H10a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H10V7h9v14z"></path>
+          </svg>
+        </button>
+
+        {% if s.show_copy_hint %}
+          <span style="font-size: {{ s.hint_size }}px; color: {{ s.hint_color }};">
+            {{ s.copy_hint_text }}
+          </span>
+        {% endif %}
+      </div>
+
+      <div class="lag-coupon__toast" aria-live="polite">{{ s.toast_text }}</div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      var root = document.querySelector('.lag-coupon--{{ _id }}');
+      if(!root) return;
+
+      var copyBtn = root.querySelector('.lag-coupon__copy');
+      var toast = root.querySelector('.lag-coupon__toast');
+      var toggleBtn = root.querySelector('.lag-coupon__toggle');
+
+      function showToast(){
+        if(!toast) return;
+        toast.classList.add('is-visible');
+        window.clearTimeout(toast.__t);
+        toast.__t = window.setTimeout(function(){
+          toast.classList.remove('is-visible');
+        }, {{ s.toast_duration_ms }});
+      }
+
+      async function copyText(text){
+        try{
+          if(navigator.clipboard && window.isSecureContext){
+            await navigator.clipboard.writeText(text);
+            return true;
+          }
+        }catch(e){}
+        try{
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.setAttribute('readonly','');
+          ta.style.position = 'absolute';
+          ta.style.left = '-9999px';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          return true;
+        }catch(e){
+          return false;
+        }
+      }
+
+      if(copyBtn){
+        copyBtn.addEventListener('click', async function(e){
+          e.preventDefault();
+          e.stopPropagation();
+
+          var code = copyBtn.getAttribute('data-coupon-code') || '';
+          if(!code) return;
+
+          var ok = await copyText(code);
+
+          if(ok){
+            {% if s.swap_button_text_on_copy %}
+              var original = copyBtn.__originalText || null;
+              if(!original){
+                copyBtn.__originalText = copyBtn.innerHTML;
+                original = copyBtn.__originalText;
+              }
+              copyBtn.innerHTML = '<span class="lag-coupon__code">{{ s.copied_button_text | escape }}</span>';
+              window.clearTimeout(copyBtn.__t);
+              copyBtn.__t = window.setTimeout(function(){
+                copyBtn.innerHTML = original;
+              }, {{ s.button_text_reset_ms }});
+            {% endif %}
+            showToast();
+          }
+        }, {passive:false});
+      }
+
+      if(toggleBtn){
+        toggleBtn.addEventListener('click', function(){
+          var isHidden = root.classList.toggle('is-hidden');
+          toggleBtn.setAttribute('aria-expanded', String(!isHidden));
+          toggleBtn.textContent = isHidden ? '{{ s.toggle_text_show | escape }}' : '{{ s.toggle_text_hide | escape }}';
+        });
+      }
+    })();
+  </script>
+</div>

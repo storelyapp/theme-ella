@@ -1,0 +1,190 @@
+{%- comment -%}
+  Product Gallery Mobile (PGM) v4
+  - Visible only on < 768px (controlled via CSS)
+  - Native swipe (scroll-snap) + custom dots OVERLAY inside the image frame
+  - Image click opens the theme's Fancybox zoom (same popup system as existing gallery)
+  - Per-media aspect ratio (recommended): pgm_use_media_aspect
+{%- endcomment -%}
+
+{%- liquid
+  assign s = section.settings
+  assign enabled = s.pgm_enable | default: true
+  assign use_media_aspect = s.pgm_use_media_aspect | default: true
+  assign aspect_w = s.pgm_aspect_w | default: 1
+  assign aspect_h = s.pgm_aspect_h | default: 1
+
+  assign frame_bg = s.pgm_bg | default: 'rgba(0,0,0,0.03)'
+  assign pad = s.pgm_pad | default: 0
+  assign radius = s.pgm_radius | default: 12
+  assign fit = s.pgm_fit | default: 'contain'
+
+  assign show_dots = s.pgm_enable_dots | default: true
+  assign dot_style = s.pgm_dot_style | default: 'circle'
+  assign dot_size = s.pgm_dot_size | default: 8
+  assign dot_gap = s.pgm_dot_gap | default: 8
+  assign dot_opacity = s.pgm_dot_opacity | default: 35
+  assign dot_color = s.pgm_dot_color | default: '#cfcfcf'
+  assign dot_active = s.pgm_dot_active | default: '#E87529'
+
+  assign dots_bg_enable = s.pgm_dots_bg_enable | default: true
+  assign dots_bg_color = s.pgm_dots_bg_color | default: '#000000'
+  assign dots_bg_opacity = s.pgm_dots_bg_opacity | default: 35
+  assign dots_bg_radius = s.pgm_dots_bg_radius | default: 999
+  assign dots_bg_pad_x = s.pgm_dots_bg_pad_x | default: 10
+  assign dots_bg_pad_y = s.pgm_dots_bg_pad_y | default: 6
+
+  assign dots_inset = s.pgm_dots_inset | default: 10
+
+  assign dots_bg_alpha = 0
+  if dots_bg_enable
+    assign dots_bg_alpha = dots_bg_opacity | divided_by: 100.0
+  endif
+-%}
+
+{%- if enabled and product.media.size > 0 -%}
+  <div
+    class="pgm"
+    data-pgm
+    data-section-id="{{ section.id }}"
+    data-use-media-aspect="{{ use_media_aspect }}"
+    style="
+      --pgm-bg: {{ frame_bg }};
+      --pgm-pad: {{ pad }}px;
+      --pgm-radius: {{ radius }}px;
+      --pgm-fit: {{ fit }};
+      --pgm-ar-w: {{ first_ar_w }};
+      --pgm-ar-h: {{ first_ar_h }};
+      --pgm-aspect: {{ aspect_w }} / {{ aspect_h }};
+
+      --pgm-dot-size: {{ dot_size }}px;
+      --pgm-dot-gap: {{ dot_gap }}px;
+      --pgm-dot-opacity: {{ dot_opacity | divided_by: 100.0 }};
+      --pgm-dot-color: {{ dot_color }};
+      --pgm-dot-active: {{ dot_active }};
+
+      --pgm-dots-inset: {{ dots_inset }}px;
+      --pgm-dots-bg: {{ dots_bg_color | color_modify: 'alpha', dots_bg_alpha }};
+      --pgm-dots-radius: {{ dots_bg_radius }}px;
+      --pgm-dots-pad-x: {{ dots_bg_pad_x }}px;
+      --pgm-dots-pad-y: {{ dots_bg_pad_y }}px;
+    "
+  >
+
+    {%- liquid
+      assign first_media = product.featured_media | default: product.media.first
+
+      # Hard fallback = 487:731 (2:3-ish) so the first paint is never 1:1
+      assign first_ar_w = 487
+      assign first_ar_h = 731
+
+      if first_media and first_media.preview_image and first_media.preview_image.width and first_media.preview_image.height
+        assign first_ar_w = first_media.preview_image.width
+        assign first_ar_h = first_media.preview_image.height
+      endif
+    -%}
+
+    <div class="pgm__frame pgm__frame--outer">
+      <div class="pgm__trackWrap">
+        <div class="pgm__track" data-pgm-track aria-label="Product media">
+          {%- for media in product.media -%}
+            {%- liquid
+              assign ar_w = 487
+              assign ar_h = 731
+              if media.preview_image and media.preview_image.width and media.preview_image.height
+                assign ar_w = media.preview_image.width
+                assign ar_h = media.preview_image.height
+              endif
+
+              assign loading_attr = 'lazy'
+              assign fetchpriority_attr = 'auto'
+              if forloop.first
+                assign loading_attr = 'eager'
+                assign fetchpriority_attr = 'high'
+              endif
+
+              assign zoom_url = ''
+              if media.preview_image
+                assign zoom_url = media.preview_image | image_url: width: 2400
+              endif
+            -%}
+
+            <div
+              class="pgm__slide"
+              data-pgm-slide
+              data-index="{{ forloop.index0 }}"
+              style="--pgm-ar-w: {{ ar_w }}; --pgm-ar-h: {{ ar_h }};"
+
+              aria-roledescription="slide"
+              aria-label="{{ forloop.index }} of {{ product.media.size }}"
+            >
+              <div class="pgm__media">
+                {% case media.media_type %}
+                  {% when 'image' %}
+                    {%- comment -%}
+                      Use Fancybox like existing theme (videoPopup-btn uses data-fancybox="video-gallery").
+                      Here we use a dedicated group per product section.
+                    {%- endcomment -%}
+                    <a
+                      class="pgm__zoomLink"
+                      href="{{ zoom_url }}"
+                      data-fancybox="product-gallery-{{ section.id }}"
+                      aria-label="Zoom image {{ forloop.index }}"
+                    >
+                      {{
+                        media
+                        | image_url: width: 1600
+                        | image_tag:
+                          widths: '320, 480, 640, 750, 900, 1100, 1400, 1600',
+                          sizes: '100vw',
+                          loading: loading_attr,
+                          fetchpriority: fetchpriority_attr,
+                          decoding: 'async',
+                          class: 'pgm__img',
+                          alt: media.alt | escape
+                      }}
+                    </a>
+
+                  {% when 'video' %}
+                    {{ media | video_tag: controls: true, autoplay: false, loop: false, muted: false, class: 'pgm__video' }}
+
+                  {% when 'external_video' %}
+                    {{ media | external_video_tag: class: 'pgm__external-video' }}
+
+                  {% when 'model' %}
+                    {{ media | model_viewer_tag: reveal: 'interaction', class: 'pgm__model', auto_rotate: false }}
+
+                  {% else %}
+                    {{ media | media_tag }}
+                {% endcase %}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+
+        {%- if show_dots and product.media.size > 1 -%}
+          <div class="pgm__dotsOverlay" aria-label="Gallery navigation">
+            {%- if dots_bg_enable -%}
+              <div class="pgm__dotsBg">
+            {%- endif -%}
+
+            <div class="pgm__dots pgm__dots--{{ dot_style }}" data-pgm-dots>
+              {%- for media in product.media -%}
+                <button
+                  type="button"
+                  class="pgm__dot{% if forloop.first %} is-active{% endif %}"
+                  data-pgm-dot
+                  data-index="{{ forloop.index0 }}"
+                  aria-label="Go to media {{ forloop.index }}"
+                ></button>
+              {%- endfor -%}
+            </div>
+
+            {%- if dots_bg_enable -%}
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+{%- endif -%}

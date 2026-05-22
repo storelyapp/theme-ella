@@ -1,0 +1,144 @@
+/* PGM v4 breakpoint: show only <768px */
+@media (min-width: 768px){
+  .productView-gallery--mobile{ display:none !important; }
+  .productView-gallery--desktop{ display:block !important; }
+}
+@media (max-width: 767px){
+  .productView-gallery--mobile{ display:block !important; }
+  .productView-gallery--desktop{ display:none !important; }
+}
+
+/* If you still have an older mobile gallery instance, force-hide it under 768 */
+@media (max-width: 767px){
+  .productView-nav[data-image-gallery-main]{ display:none !important; }
+  .productView-thumbnail-wrapper{ display:none !important; }
+}
+
+@media (max-width: 767px){
+  .pgm{ width:100%; }
+
+  /* Outer frame uses per-media aspect ratio (no stretch) */
+  .pgm__frame--outer{
+    background: var(--pgm-bg, rgba(0,0,0,0.03));
+    padding: var(--pgm-pad, 0px);
+    border-radius: var(--pgm-radius, 12px);
+    overflow: hidden;
+    position: relative;
+    /* fallback aspect */
+    aspect-ratio: var(--pgm-aspect, 1/1);
+  }
+  .pgm[data-use-media-aspect="true"] .pgm__frame--outer{
+    aspect-ratio: var(--pgm-ar-w, 1) / var(--pgm-ar-h, 1);
+  }
+
+  .pgm__trackWrap{
+    width:100%;
+    height:100%;
+    position:relative;
+  }
+
+  .pgm__track{
+    height:100%;
+    display:grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 100%;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+
+    /* Important: allow vertical page scroll naturally (do NOT force pan-x) */
+    touch-action: auto;
+
+    /* hide scrollbar visuals */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .pgm__track::-webkit-scrollbar{ display:none; }
+
+  .pgm__slide{
+    height:100%;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    /* provide per-slide AR variables to the outer frame via JS */
+  }
+
+  .pgm__media{
+    width:100%;
+    height:100%;
+    display:grid;
+    place-items:center;
+    overflow:hidden;
+  }
+
+  .pgm__zoomLink{
+    width:100%;
+    height:100%;
+    display:block;
+  }
+
+  .pgm__img{
+    width:100%;
+    height:100%;
+    display:block;
+    object-fit: var(--pgm-fit, contain);
+  }
+
+  .pgm__video,
+  .pgm__external-video,
+  .pgm__model{
+    width:100%;
+    height:100%;
+    display:block;
+  }
+
+  /* Dots overlay inside frame */
+  .pgm__dotsOverlay{
+    position:absolute;
+    left:50%;
+    transform: translateX(-50%);
+    bottom: var(--pgm-dots-inset, 10px);
+    z-index: 3;
+    pointer-events: none; /* only the buttons receive pointer events */
+  }
+  .pgm__dotsBg{
+    display:inline-flex;
+    background: var(--pgm-dots-bg, rgba(0,0,0,0.35));
+    border-radius: var(--pgm-dots-radius, 999px);
+    padding: var(--pgm-dots-pad-y, 6px) var(--pgm-dots-pad-x, 10px);
+    pointer-events: none;
+  }
+  .pgm__dots{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap: var(--pgm-dot-gap, 8px);
+    pointer-events: auto;
+    user-select:none;
+  }
+  .pgm__dot{
+    border:0;
+    padding:0;
+    cursor:pointer;
+    background: var(--pgm-dot-color, #cfcfcf);
+    opacity: var(--pgm-dot-opacity, .35);
+    transition: transform 140ms ease, opacity 140ms ease, background 140ms ease;
+  }
+  .pgm__dot.is-active{
+    background: var(--pgm-dot-active, #E87529);
+    opacity:1;
+    transform: scale(1.15);
+  }
+  .pgm__dots--circle .pgm__dot{
+    width: var(--pgm-dot-size, 8px);
+    height: var(--pgm-dot-size, 8px);
+    border-radius: 999px;
+  }
+  .pgm__dots--pill .pgm__dot{
+    width: calc(var(--pgm-dot-size, 8px) * 2.6);
+    height: var(--pgm-dot-size, 8px);
+    border-radius: 999px;
+  }
+}

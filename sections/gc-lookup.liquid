@@ -1,0 +1,734 @@
+{% comment %} Gift Card Lookup (minimal) {% endcomment %}
+
+<div class="gc-lookup-wrap">
+  <div class="gc-pane" id="gc-lookup">
+    <div class="giftcard-lookup">
+
+      <!-- Page title -->
+      <h1 class="gc-title">{{ page.title | default: 'Check Gift Card Balance' }}</h1>
+
+      <!-- Lookup form -->
+    <form class="gc-form" id="gcLookupForm" novalidate>
+      <div class="gc-field">
+        <label for="gcEmail">Email</label>
+        <input id="gcEmail" name="email" type="email" inputmode="email" placeholder="you@example.com" required>
+      </div>
+      <div class="gc-field gc-field--last4">
+        <label for="gcLast4">Gift Card (Last 4 digits)</label>
+        <input id="gcLast4" name="last4" type="text" inputmode="text" maxlength="4" pattern="[0-9A-Za-z]{4}" placeholder="AB12" required>
+      </div>
+      <div class="gc-submit-wrap">
+        <button class="gc-btn" type="submit">Check balance</button>
+      </div>
+      <p class="gc-help"><small>We only need the last 4 digits for security.</small></p>
+    </form>
+
+      <!-- Results (hidden until submit) -->
+      <div id="creditsList" class="gc-list" hidden></div>
+
+    <button type="button" class="gc-back is-hidden" id="gcBack" aria-label="Go back">
+  <svg class="gc-back-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+    <!-- circle outline -->
+    <circle cx="12" cy="12" r="10" />
+    <!-- chevron left -->
+    <polyline points="13 8 9 12 13 16" />
+    <line x1="16" y1="12" x2="9" y2="12" />
+  </svg>
+  Back
+</button>
+
+    </div>
+  </div>
+
+  <style>
+    :root{ --lag-brand:#E87529; }
+
+    /* Page container */
+    .gc-lookup-wrap{
+      padding: 24px 16px;
+    }
+    .giftcard-lookup{
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* Title */
+    .gc-title{
+      margin: 0 0 14px;
+      font-size: 22px;
+      line-height: 1.25;
+      letter-spacing: .2px;
+    }
+
+    /* Form (minimal) */
+    .gc-form{
+      display:grid;
+      grid-template-columns: 1fr 180px 160px;
+      gap: 12px;
+      align-items:end;
+      margin: 8px 0 12px;
+    }
+    .gc-field label{
+      display:block; font-size:12px; opacity:.75; margin-bottom:6px;
+    }
+    .gc-field input{
+      width:100%; height:44px; padding:0 12px; background:#fff; outline:none;
+      border:1px solid rgba(0,0,0,.12); border-radius:10px;
+    }
+    .gc-field input:focus{
+      border-color:var(--lag-brand);
+      box-shadow:0 0 0 3px color-mix(in srgb, var(--lag-brand) 20%, transparent);
+    }
+    .gc-btn{
+      height:44px; border-radius:10px; border:0; cursor:pointer;
+      background:var(--lag-brand); color:#fff; font-weight:600; padding:0 14px;
+      transition:transform .06s ease, filter .18s ease;
+    }
+    .gc-btn:hover{ filter:brightness(.96); }
+    .gc-btn:active{ transform:translateY(1px); }
+    .gc-help{ grid-column:1 / -1; margin:2px 0 0; opacity:.65; }
+
+    /* Back button */
+    .gc-back{
+      appearance:none; background:transparent; border:0; padding:0;
+      color:var(--lag-brand); font-weight:600; cursor:pointer;
+      margin: 6px 0 10px; /* appears above the list when visible */
+    }
+    .gc-back.is-hidden{ display:none; }
+
+    /* Results list (simple cards) */
+    .gc-list{ display:grid; gap:12px; }
+    .gc-card{
+      border:1px solid rgba(0,0,0,.08);
+      border-radius:12px;
+      background:#fff;
+      padding:12px 14px;
+      box-shadow:0 2px 10px rgba(0,0,0,.03);
+    }
+    .gc-card-head{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      margin-bottom:6px;
+    }
+    .gc-card-title{ font-weight:700; }
+    .gc-pill{
+      font-size:12px; background:#f5f5f5; padding:4px 8px; border-radius:999px;
+    }
+    .gc-usage{ height:6px; background:#f1f1f1; border-radius:999px; overflow:hidden; margin:6px 0; }
+    .gc-usage-bar{ height:100%; background:var(--lag-brand); width:0; transition:width .3s ease; }
+    .gc-usage-legend{ display:flex; justify-content:space-between; font-size:12px; opacity:.7; }
+    .gc-row{ display:flex; justify-content:space-between; gap:10px; padding:4px 0; font-size:13px; }
+    .gc-status .badge{ padding:2px 8px; border-radius:999px; font-size:12px; }
+    .badge.good{ background:rgba(4,166,80,.12); color:#069455; }
+    .badge.bad{ background:rgba(220,60,60,.12); color:#C12727; }
+
+    /* Utilities */
+    .is-hidden{ display:none !important; }
+
+    /* Responsive */
+    @media (max-width: 900px){
+      .gc-form{ grid-template-columns: 1fr 140px; }
+      .gc-btn{ grid-column: span 2; }
+    }
+
+    /* ===== Page frame ===== */
+.gc-lookup-wrap{
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 28px 16px;         /* padding on both sides */
+}
+
+.gc-page-title{
+  margin: 4px 0 14px;
+  font-size: clamp(22px, 2.4vw, 34px);
+  line-height: 1.2;
+  letter-spacing: .2px;
+}
+
+.gc-back{
+  display:inline-flex; align-items:center; gap:8px;
+  color:#E87529; text-decoration:none; font-weight:700;
+  margin: 2px 0 14px;
+}
+.gc-back:hover{ opacity:.85; }
+
+/* ===== Result card ===== */
+.gc-card{
+  background:#fff;
+  border:1px solid rgba(0,0,0,.08);
+  border-radius:16px;
+  box-shadow:0 10px 30px rgba(0,0,0,.04);
+  padding:16px 18px 14px;
+}
+
+.gc-card-head{
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:10px;
+}
+
+.gc-card-title{
+  font-weight:800;
+  font-size:15px;
+}
+
+.gc-pill{
+  background:rgba(232,117,41,.10);
+  color:#1d1d1f;
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:12px;
+}
+
+/* Usage bar */
+.gc-usage{
+  height:6px;
+  border-radius:999px;
+  background:#efefef;
+  overflow:hidden;
+  position:relative;
+}
+.gc-usage-bar{
+  height:100%;
+  background:#E87529;
+  width:0;
+  transition: width .35s ease;
+}
+.gc-usage-legend{
+  display:flex; justify-content:space-between;
+  font-size:12px; opacity:.65; margin:8px 0 2px;
+}
+
+/* Rows: left labels / right values, perfectly aligned */
+.gc-row{
+  display:grid;
+  grid-template-columns: 180px 1fr;    /* label column width */
+  align-items:center;
+  gap:10px;
+  padding:10px 0;
+  font-size:14px;
+  border-top:1px dashed rgba(0,0,0,.08);
+}
+.gc-row:first-of-type{ border-top:0; }
+.gc-row span:last-child{
+  justify-self:end;                    /* right-align values */
+}
+
+/* Status badge */
+.gc-status .badge{
+  padding:4px 10px; font-size:12px; border-radius:999px;
+}
+.badge.good{ background:rgba(4,166,80,.12); color:#069455; }
+.badge.bad{  background:rgba(220,60,60,.12); color:#C12727; }
+
+/* Note text */
+.gc-note{ margin:12px 0 0; }
+.gc-note small{ opacity:.7; }
+
+/* Mobile tweaks */
+@media (max-width: 720px){
+  .gc-lookup-wrap{ padding: 20px 12px; }
+  .gc-row{ grid-template-columns: 1fr auto; }  /* flexible on narrow */
+  .gc-card{ padding:14px 14px 12px; }
+}
+
+
+/* ================================
+   Check Gift Card Balance — UI skin
+   Brand: Lagorii (#E87529)
+   ================================ */
+
+/* Page container + title */
+.gc-lookup-wrap{
+  max-width: 980px;           /* comfy reading width on desktop */
+  margin: 24px auto 80px;
+  padding: 0 20px;            /* left/right breathing room */
+}
+.gc-title,
+.gc-lookup-wrap h1{
+  margin: 8px 0 18px;
+  font-size: clamp(22px, 2.8vw, 32px);
+  font-weight: 800;
+  letter-spacing: .2px;
+  color: #1E252B;
+}
+
+/* -------- Form -------- */
+.gc-form{
+  display: grid;
+  grid-template-columns: 1fr 220px 160px;  /* email | last4 | button */
+  gap: 14px;
+  align-items: end;
+  margin: 16px 0 12px;
+}
+.gc-field label{
+  display:block;
+  font-size: 12px;
+  color:#4A4F55;
+  margin: 0 0 6px;
+}
+.gc-field input{
+  width:100%;
+  height: 46px;
+  padding: 0 12px;
+  border: 1px solid rgba(0,0,0,.12);
+  border-radius: 12px;
+  background: #fff;
+  font-size: 14px;
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.gc-field input:focus{
+  border-color:#E87529;
+  box-shadow: 0 0 0 4px rgba(232,117,41,.12);
+}
+
+/* Submit */
+.gc-btn{
+  height: 46px;
+  border-radius: 12px;
+  border: 0;
+  cursor: pointer;
+  background: #E87529;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  transition: transform .06s ease, filter .18s ease, box-shadow .18s ease;
+  box-shadow: 0 6px 20px rgba(232,117,41,.22);
+}
+.gc-btn:hover{ filter: brightness(.98); }
+.gc-btn:active{ transform: translateY(1px); }
+
+/* Helper text */
+.gc-help{ margin-top: 6px; color:#6B737B; }
+.gc-help small{ font-size: 12px; }
+
+/* -------- Results card -------- */
+.gc-list{ display: grid; gap: 14px; }
+
+.gc-card{
+  border: 1px solid rgba(0,0,0,.06);
+  border-radius: 16px;
+  background: #fff;
+  padding: 14px 14px 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.04);
+}
+
+.gc-card-head{
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom: 10px;
+}
+.gc-card-title{
+  font-weight: 700; color:#151A1F;
+}
+.gc-pill{
+  background: #F6F7F8;
+  color:#3A3F45;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+
+/* Progress rail */
+.gc-usage{
+  height: 8px;
+  background: #EEEFF0;
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 6px 0 2px;
+}
+.gc-usage-bar{
+  height: 100%;
+  background: #E87529;
+  width: 0;
+  transition: width .28s ease;
+}
+.gc-usage-legend{
+  display:flex; justify-content:space-between;
+  font-size: 12px; color:#6B737B; margin-bottom: 4px;
+}
+
+/* Rows */
+.gc-row{
+  display:flex; justify-content:space-between; align-items:center;
+  padding: 8px 2px;
+  border-bottom: 1px dashed rgba(0,0,0,.06);
+  font-size: 14px;
+  color:#22272B;
+}
+.gc-row:last-of-type{ border-bottom: 0; }
+
+.gc-status .badge{
+  padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight:700;
+}
+.badge.good{ background: rgba(4,166,80,.12); color:#069455; }
+.badge.bad { background: rgba(220,60,60,.12); color:#C12727; }
+
+/* -------- Back link -------- */
+.gc-back{
+  display:inline-flex; align-items:center; gap:6px;
+  color:#E87529; text-decoration:none; font-weight:700;
+  margin: 8px 0 10px;
+}
+.gc-back:hover{ text-decoration: underline; }
+
+/* Hide form when showing results (your JS toggles .is-hidden) */
+.is-hidden{ display:none !important; }
+
+/* Empty state */
+#creditsList[hidden]{ display:none !important; }
+#creditsList.is-empty{
+  color:#6B737B;
+  padding: 4px 2px;
+  font-size: 14px;
+}
+
+/* -------- Mobile tweaks -------- */
+@media (max-width: 900px){
+  .gc-lookup-wrap{ padding: 0 16px; margin-top: 16px; }
+  .gc-form{
+    grid-template-columns: 1fr;        /* stack */
+    gap: 10px;
+  }
+  .gc-btn{ width: 100%; }
+  .gc-help{ font-size:12px; }
+  .gc-card{ border-radius: 14px; }
+}
+
+.gc-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background: #E87529; /* Lagorii orange */
+  border: none;
+  border-radius: 999px; /* pill shape */
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+  box-shadow: 0 4px 8px rgba(232,117,41,.2);
+}
+
+.gc-back:hover {
+  background: #d7641f;
+}
+
+.gc-back:active {
+  transform: translateY(1px);
+}
+
+.gc-back-icon {
+  width: 22px;
+  height: 22px;
+  stroke: #fff; /* white arrow & circle */
+  flex-shrink: 0;
+  display: block;
+}
+
+/* -------- Form: flex so it can wrap smartly -------- */
+.gc-form{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:flex-end;
+  gap:12px;
+  margin:16px 0 12px;
+}
+
+/* Make email grow, last4 + button stay fixed */
+.gc-field{ flex:1 1 320px; min-width:280px; }
+.gc-field--last4{ flex:0 0 180px; }
+.gc-submit-wrap{ flex:0 0 160px; }
+
+.gc-field label{
+  display:block;
+  font-size:12px;
+  color:#4A4F55;
+  margin:0 0 6px;
+}
+
+/* Inputs: no letter spacing & no wrapping */
+.gc-field input{
+  width:100%;
+  height:46px;
+  padding:0 12px;
+  border:1px solid rgba(0,0,0,.12);
+  border-radius:12px;
+  background:#fff;
+  font-size:14px;
+  letter-spacing:0;         /* ensure no visual gaps */
+  white-space:nowrap;       /* keep email on one line */
+  outline:none;
+  transition:border-color .15s ease, box-shadow .15s ease;
+}
+#gcLast4{ text-transform:uppercase; } /* show AB12 style */
+
+.gc-field input:focus{
+  border-color:#E87529;
+  box-shadow:0 0 0 4px rgba(232,117,41,.12);
+}
+
+/* Submit button kept in-line with fields */
+.gc-btn{
+  height:46px;
+  width:100%;
+  border-radius:12px;
+  border:0;
+  cursor:pointer;
+  background:#E87529;
+  color:#fff;
+  font-weight:700;
+  font-size:14px;
+  transition:transform .06s ease, filter .18s ease, box-shadow .18s ease;
+  box-shadow:0 6px 20px rgba(232,117,41,.22);
+}
+.gc-btn:hover{ filter:brightness(.98); }
+.gc-btn:active{ transform:translateY(1px); }
+
+/* Helper text full row */
+.gc-help{ flex:1 1 100%; margin-top:6px; color:#6B737B; }
+.gc-help small{ font-size:12px; }
+
+/* Mobile: stack cleanly */
+@media (max-width: 900px){
+  .gc-form{ gap:10px; }
+  .gc-field{ flex:1 1 100%; min-width:0; }
+  .gc-field--last4{ flex:1 1 180px; }
+  .gc-submit-wrap{ flex:1 1 160px; }
+}
+
+/* Red summary above results */
+.gc-expired-summary{
+  margin: 6px 0 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #C12727;
+}
+.gc-amt-bad{ color:#C12727; font-weight:700; }
+
+.gc-back { color:#fff; } /* icon will inherit this */
+.gc-back-icon{ width:22px; height:22px; display:block; }
+/* ensure all shapes use stroke only */
+.gc-back-icon, .gc-back-icon *{
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+/* Mobile title tidy-up */
+@media (max-width: 560px){
+  .giftcard-lookup .gc-title{
+    font-size: clamp(20px, 6vw, 24px); /* smaller on small screens */
+    line-height: 1.15;                 /* tighter but clean */
+    letter-spacing: 0;                  /* remove desktop tracking */
+    font-weight: 700;                   /* avoid heavy 800 look on mobile */
+    margin: 6px 0 8px;
+    word-break: keep-all;               /* don’t break words */
+    overflow-wrap: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  .gc-expired-summary{
+    font-size: 12px;
+    margin: 2px 0 8px;                  /* better spacing under title */
+  }
+}
+
+/* Optional: nicer multi-line wrapping when supported */
+@supports (text-wrap: balance){
+  .giftcard-lookup .gc-title{ text-wrap: balance; }
+}
+  </style>
+
+<script>
+(() => {
+  const API_BASE = 'https://store-credit-576084571817.us-central1.run.app/public/store-credits';
+  const $ = (s, r = document) => r.querySelector(s);
+
+  const form     = $('#gcLookupForm');
+  const emailEl  = $('#gcEmail');
+  const last4El  = $('#gcLast4');
+  const listPane = $('#creditsList');
+  const backBtn  = $('#gcBack');
+
+  const MONEY_FMT = {{ shop.money_format | json }};
+  const moneyHTML = (majorUnits, cur) => {
+    const rupees = Number(majorUnits || 0);
+    const minor = Math.round(rupees * 100);
+    try {
+      return Shopify.formatMoney(minor, MONEY_FMT);
+    } catch {
+      try {
+        return new Intl.NumberFormat('en-IN', { style: 'currency', currency: (cur || 'INR') }).format(rupees);
+      } catch {
+        return (cur || 'INR') + ' ' + rupees.toFixed(2);
+      }
+    }
+  };
+
+  const daysLeft = (d) => {
+    if (!d) return null;
+    const now = new Date();
+    const end = new Date(d + 'T23:59:59Z');
+    return Math.ceil((end - now) / 86400000);
+  };
+
+  {% if customer and customer.email %}
+    if (emailEl) emailEl.value = {{ customer.email | json }};
+  {% endif %}
+
+  const hide = (el) => el && (el.hidden = true);
+  const show = (el) => el && (el.hidden = false);
+
+  function setLoading() {
+    show(listPane);
+    listPane.innerHTML = '<p>Fetching your gift cards…</p>';
+  }
+
+  function render(cards) {
+    // Show an empty state if nothing matched
+    if (!Array.isArray(cards) || !cards.length) {
+      listPane.innerHTML = '<p>No matching gift cards were found for those details.</p>';
+      return;
+    }
+
+    // helper: treat these as "not usable"
+    const isInactive = (status) => {
+      const s = String(status || '').toLowerCase();
+      return s === 'expired' || s === 'deactivated' || s === 'inactive' || s === 'disabled';
+    };
+
+    // Compute total unusable (expired/deactivated) amount across the shown cards
+    let totalInactive = 0;
+    let currency = cards[0]?.currency || 'INR';
+    cards.forEach(c => {
+      if (isInactive(c.status)) totalInactive += Number(c.balanceAmount || 0);
+    });
+
+    // Build optional red summary line
+    const summaryHTML = totalInactive > 0
+      ? `<div class="gc-expired-summary">Expired/Deactivated: <span class="gc-amt-bad">${moneyHTML(totalInactive, currency)}</span></div>`
+      : '';
+
+    // Cards list
+    listPane.classList.add('gc-list');
+    listPane.innerHTML =
+      summaryHTML +
+      cards.map((c) => {
+        const init = Number(c.initialAmount || 0);
+        const bal  = Number(c.balanceAmount || 0);
+        const used = Math.max(0, init - bal);
+        const pct  = init > 0 ? Math.round((used / init) * 100) : 0;
+
+        const d  = daysLeft(c.expiresOn);
+        const expiry = c.expiresOn
+          ? `${c.expiresOn} (${Math.abs(d)} day${Math.abs(d) === 1 ? '' : 's'} ${d >= 0 ? 'left' : 'past'})`
+          : 'No expiry';
+
+        const last4 = String(c.lastCharacters || '----').toUpperCase();
+        const inactive = isInactive(c.status);
+
+        return `
+          <div class="gc-card">
+            <div class="gc-card-head">
+              <div class="gc-card-title">Gift Card</div>
+              <div class="gc-pill">•••• ${last4}</div>
+            </div>
+
+            <div class="gc-usage">
+              <div class="gc-usage-bar" style="width:${Math.min(100, Math.max(0, pct))}%"></div>
+            </div>
+            <div class="gc-usage-legend">
+              <span>Used ${pct}%</span>
+              <span>Remaining ${100 - pct}%</span>
+            </div>
+
+            <div class="gc-row"><span>Initial</span><span>${moneyHTML(init, c.currency)}</span></div>
+            <div class="gc-row"><span>Used so far</span><span>${moneyHTML(used, c.currency)}</span></div>
+
+            <!-- If inactive, hide the numeric balance (show an em dash) -->
+            <div class="gc-row"><span>Balance</span><span>${inactive ? '—' : moneyHTML(bal, c.currency)}</span></div>
+
+            <div class="gc-row"><span>Issued on</span><span>${c.createdAt || '-'}</span></div>
+            <div class="gc-row"><span>Expires on</span><span>${expiry}</span></div>
+
+            <div class="gc-row gc-status">
+              <span>Status</span>
+              <span class="badge ${inactive ? 'bad' : 'good'}">${c.status || '—'}</span>
+            </div>
+          </div>`;
+      }).join('');
+  }
+
+  async function fetchByEmailLast4(email, last4) {
+    const url = `${API_BASE}?email=${encodeURIComponent(email.trim())}&last4=${encodeURIComponent(last4.trim())}`;
+    const res = await fetch(url, { headers: { Accept: 'application/json' } });
+    const txt = await res.text();
+    try { return JSON.parse(txt); } catch { return { error: 'bad_json' }; }
+  }
+
+  function validate() {
+    const email = (emailEl?.value || '').trim();
+    const last4 = (last4El?.value || '').trim().toUpperCase();
+    if (!email || !/^\S+@\S+\.\S+$/.test(email)) return { ok:false, msg:'Please enter a valid email.' };
+    if (!last4 || last4.length !== 4) return { ok:false, msg:'Please enter the last 4 characters of your code.' };
+    return { ok:true, email, last4 };
+  }
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const v = validate();
+    if (!v.ok) {
+      // Client-side validation errors: keep form visible; do NOT show back button
+      show(listPane);
+      listPane.innerHTML = `<p>${v.msg}</p>`;
+      return;
+    }
+
+    // Hide form; show results pane + back button
+    form.classList.add('is-hidden');
+    setLoading();
+
+    try {
+      const data  = await fetchByEmailLast4(v.email, v.last4);
+      const cards = Array.isArray(data?.cards) ? data.cards : [];
+
+      // Ensure we only display the card that matches the entered last4
+      const filtered = cards.filter(c => String(c.lastCharacters || '')
+        .slice(-4)
+        .toUpperCase() === v.last4);
+
+      render(filtered);
+    } catch {
+      listPane.innerHTML = '<p>We couldn’t fetch your gift card details. Please try again later.</p>';
+    } finally {
+      backBtn?.classList.remove('is-hidden');  // show Back for success OR server error
+      show(listPane);
+    }
+  });
+
+  backBtn?.addEventListener('click', () => {
+    // Reset to pristine state
+    hide(listPane);
+    listPane.innerHTML = '';
+    form.classList.remove('is-hidden');
+    backBtn.classList.add('is-hidden');
+    form.reset();
+    emailEl?.focus();
+  });
+
+  // Initial state
+  hide(listPane);
+})();
+</script>
+</div>
+
+{% schema %}
+{
+  "name": "Gift card lookup",
+  "settings": []
+}
+{% endschema %}

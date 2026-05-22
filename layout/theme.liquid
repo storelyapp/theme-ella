@@ -1,0 +1,1423 @@
+<!doctype html>
+{%- liquid
+  if settings.list_iso_rtl != blank
+    assign locale_iso_code = request.locale.iso_code
+    assign arr_list_rtl = settings.list_iso_rtl | remove: ' ' | split: ','
+    if arr_list_rtl contains locale_iso_code
+      assign enable_iso_rtl = true
+    else
+      assign enable_iso_rtl = false
+    endif
+  else
+    assign enable_iso_rtl = false
+  endif
+-%}
+<html
+  class="no-js"
+  lang="{{ request.locale.iso_code }}"
+  {% if settings.enable_layout_rtl and enable_iso_rtl %}
+    dir="rtl"
+  {% endif %}
+>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="">
+    <link rel="canonical" href="{{ canonical_url }}" canonical-shop-url="{{ shop.url }}/">
+    {%- if settings.favicon != blank -%}
+      <link rel="shortcut icon" href="{{ settings.favicon | image_url: width: 32 }}" type="image/png">
+    {%- endif -%}
+
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+    <title>
+      {{ page_title }}
+      {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+      {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+    {% render 'meta-tags' %}
+    {{ content_for_header }}
+    {% render 'usf' %}
+    {{ 'lag-share.css' | asset_url | stylesheet_tag }}
+    {% render 'variable' %}
+    {% render 'global-style' %}
+    
+    {{ 'pc02-carousel.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'pc02-carousel.js' | asset_url }}" defer></script>
+    <script src="{{ 'pc02-offer-badge.js' | asset_url }}" defer></script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+    
+    {% render 'global-script' %}
+
+    {% if template.name == 'product' %}
+      {{ 'estimate-delivery.css' | asset_url | stylesheet_tag }}
+    {% endif %}
+
+    <script defer>
+      document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+    </script>
+
+    {%- liquid
+      if settings.layout_body == 'full'
+        assign layout_body = 'body-full-width'
+      elsif settings.layout_body == 'boxed'
+        assign layout_body = 'body-boxed'
+      elsif settings.layout_body == 'custom_width'
+        assign layout_body = 'body-custom-width'
+      endif
+
+      if settings.style_dots == '02'
+        assign style_dots = 'style-dots-2'
+      endif
+
+      if settings.style_arrows == '02'
+        assign style_arrows = 'style-arrows-2'
+      elsif settings.style_arrows == '05'
+        assign style_arrows = 'style-arrows-5'
+      elsif settings.style_arrows == '06'
+        assign style_arrows = 'style-arrows-6'
+      elsif settings.style_arrows == '07'
+        assign style_arrows = 'style-arrows-7'
+      endif
+
+      if settings.product_card_layout == '02'
+        assign product_card_layout = 'product-card-layout-02'
+      elsif settings.product_card_layout == '03'
+        assign product_card_layout = 'product-card-layout-03'
+      elsif settings.product_card_layout == '04'
+        assign product_card_layout = 'product-card-layout-04'
+      elsif settings.product_card_layout == '05'
+        assign product_card_layout = 'product-card-layout-05'
+      elsif settings.product_card_layout == '06'
+        assign product_card_layout = 'product-card-layout-06'
+      elsif settings.product_card_layout == '07'
+        assign product_card_layout = 'product-card-layout-07'
+      elsif settings.product_card_layout == '08'
+        assign product_card_layout = 'product-card-layout-08'
+      else
+        assign product_card_layout = 'product-card-layout-01'
+      endif
+
+      case settings.quick_shop_type
+        when '1'
+          assign quick_shop_type = 'quick_shop_option_1'
+        when '2'
+          assign quick_shop_type = 'quick_shop_option_2'
+        when '3'
+          assign quick_shop_type = 'quick_shop_option_3'
+        when '4'
+          assign quick_shop_type = 'quick_shop_bulk'
+      endcase
+
+      if settings.style_text_size_varriant == '02'
+        assign style_text_size_varriant = 'size_varriant_style_2'
+      endif
+    -%}
+
+    <!-- FlexyPe -->
+    <script>
+      window.FlexyPeFX = {
+        config: {
+          theme: 'light',
+          position: 'left-bottom',
+          offset: { x: 24, y: 72 },
+          supportedCurrencies: ["INR","USD","EUR","GBP","CAD","AED","SGD","AUD","MYR","JPY","SAR","NZD","QAR","ZAR","LKR"],
+          enableGeolocation: true,
+        },
+      };
+    </script>
+    <script src="https://static.flexype.in/scripts/fx.min.js"></script>
+    <script src="https://static.flexype.in/scripts/flexype-v2.min.js" type="module" defer></script>
+    <style>
+      .flexy-root {
+        z-index: 20 !important;
+      }
+      .flexy-header {
+        display: inline-block !important;
+      }
+      .flexy-sidebar {
+        justify-content: start !important;
+        background: transparent !important;
+        border: 0 !important;
+        padding: 0 !important;
+      }
+    </style>
+    {% render 'flexype-checkout' %}
+    <!-- FlexyPe -->
+
+    {% render 'KiwiSizing' %}
+
+    <script type="text/javascript">
+      (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "rmi1uj19es");
+    </script>
+
+
+    {%- comment -%} === CURRENCY SETTINGS (merged store, no India/International split) === {%- endcomment -%}
+    {%- assign intl_markup     = settings.intl_markup     | default: 20 -%}
+    {%- assign rates_url       = settings.rates_url       | default: 'https://storage.googleapis.com/lagorii-exchange-rates/exchange-rates.json' -%}
+
+    {%- assign switcher_bg     = settings.switcher_bg     | default: '#FFFFFF' -%}
+    {%- assign switcher_text   = settings.switcher_text   | default: '#111111' -%}
+    {%- assign switcher_border = settings.switcher_border | default: '#E5E5E5' -%}
+    {%- assign switcher_radius = settings.switcher_radius | default: 12 -%}
+    {%- assign switcher_z      = settings.switcher_z      | default: 96 -%}
+
+    {%- assign supported_raw   = settings.supported_currencies | default: 'INR,USD,EUR,GBP,CAD,AED,SGD,AUD,MYR,JPY,SAR,NZD,QAR,ZAR,LKR' -%}
+
+    <!-- Shopify Markets meta so JS can align with the active country/currency -->
+    <meta name="lagorii-country"  content="{{ localization.country.iso_code }}">
+    <meta name="lagorii-currency" content="{{ localization.country.currency.iso_code }}">
+
+    <script>
+      // Global markup (applied only when converting to non-INR currencies)
+      window.LAG_BACKOFF_MARKET_MARKUP = window.LAG_BACKOFF_MARKET_MARKUP ?? false;
+      window.LAG_MARKUP = {{ intl_markup | json }};
+
+      // Markets info (no store mode; single merged store)
+      window.LAG_MARKETS = {
+        country: {{ localization.country.iso_code | json }},
+        currency: {{ localization.country.currency.iso_code | json }}
+      };
+
+      // Rates + supported currencies
+      window.LAG_RATES_URL = {{ rates_url | json }};
+      window.LAG_SUPPORTED = ({{ supported_raw | json }} || '')
+        .split(',')
+        .map(function (s) { return s.trim().toUpperCase(); })
+        .filter(Boolean);
+
+      // UI config only for the switcher pill (used by CSS/JS)
+      window.LAG_UI = {
+        switcher: {
+          bg:     {{ switcher_bg | json }},
+          text:   {{ switcher_text | json }},
+          border: {{ switcher_border | json }},
+          radius: {{ switcher_radius | json }},
+          z:      {{ switcher_z | json }},
+          offsetX: {{ settings.switcher_offset_x | default: 12 | json }},
+          offsetY: {{ settings.switcher_offset_y | default: 14 | json }}
+        }
+      };
+    </script>
+
+    <script>
+      // Preload saved currency into the hidden <select> for consistent first paint
+      (function () {
+        try {
+          var saved = localStorage.getItem("selectedCurrency");
+          if (!saved) return;
+          var sel = document.getElementById("CurrencySelectorSelect");
+          if (sel && sel.value !== saved) sel.value = saved;
+
+          var obs = new MutationObserver(function () {
+            var s = document.getElementById("CurrencySelectorSelect");
+            if (s && s.value !== saved) {
+              s.value = saved;
+              s.dispatchEvent(new Event("change", { bubbles: true }));
+            }
+          });
+          obs.observe(document.documentElement, { childList: true, subtree: true });
+          setTimeout(function () { obs.disconnect(); }, 2000);
+        } catch (e) {
+          console.warn("currency preload error", e);
+        }
+      })();
+    </script>
+
+    {%- comment -%} Core scripts (order matters: geo → converter → switcher) {%- endcomment -%}
+    {% comment %} <script src="{{ 'merged-currency-converter.js' | asset_url }}" defer></script> {% endcomment %}
+    {% comment %} <script src="{{ 'currency-switcher.js' | asset_url }}" defer></script> {% endcomment %}
+    {% if handle contains 'lagorii-play' or handle contains 'product-handle' %}
+  <style>
+    .header, .footer {
+      display: none !important;
+    }
+
+    /* Add the following to ensure the mobile header is hidden as well */
+    .header-mobile {
+      display: none !important;
+    }
+  </style>
+{% endif %}
+  </head>
+
+  <body
+    class="template-{{ request.page_type }} {{layout_body}} {{style_dots}} {{style_text_size_varriant}} {{style_arrows}} {{product_card_layout}} {% if settings.enable_button_disable_arrows %} enable_button_disable_arrows{% endif %}{% if settings.display_text_color_title %} enable_text_color_title{% if settings.style_text_color_varriant == '02' %} style_2_text_color_varriant{% endif %}{% endif %}{% if settings.hide_compare_homepage %} hide_compare_homepage{% endif %} {{ quick_shop_type }}{% if settings.show_image_loading %} show_image_loading{% endif %}{% if settings.show_effect_close %} show_effect_close{% endif %}{% if settings.enable_layout_rtl and enable_iso_rtl %} layout_rtl{% endif %}{% if request.design_mode %} shopify-design-mode{% endif %}{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}{% if settings.enable_following_cursor and settings.following_cursor_style == 'default' %} cursor-fixed__show{% endif %}{% unless settings.enable_currencies %} disable_currencies{% endunless %}{% if settings.enable_button_1_border_outside %} btn_1_br_outside{% endif %}{% if settings.enable_button_2_border_outside %} btn_2_br_outside{% endif %}{% if settings.enable_button_3_border_outside %} btn_3_br_outside{% endif %}{% if settings.show_price_percent %} show_price_percent{% endif %}{% if settings.show_wishlist_full_icon %} icon_wishlist_full{% endif %}"
+    allow-transparency
+  >
+    {{ 'pc02-quick-add.js' | asset_url | script_tag }}
+    {% comment %} {%- render 'currency-switcher' -%} {% endcomment %}
+    <div class="body-content-wrapper">
+      <a class="skip-to-content-link button visually-hidden" href="#MainContent">
+        {{- 'accessibility.skip_to_text' | t -}}
+      </a>
+      {% render 'preload-screen' %}
+      {% sections 'header-group' %}
+      {% render 'wrapper-header' %}
+
+      {%- if settings.layout_body == 'boxed' -%}
+        <div class="wrapper-hasbanner-adv">
+      {%- endif -%}
+      {% render 'halo-banner-adv-left' %}
+      {% render 'halo-banner-adv-right' %}
+      <main id="MainContent" class="wrapper-body content-for-layout focus-none" role="main" tabindex="-1">
+        {{ content_for_layout }}
+      </main>
+      {%- if settings.layout_body == 'boxed' -%}
+        </div>
+      {%- endif -%}
+
+      <div class="wrapper-footer">{% sections 'footer-group' %}</div>
+
+      {% section 'halo-toolbar-mobile' %}
+
+      <ul hidden>
+        <li id="a11y-refresh-page-message">{{ 'accessibility.refresh_page' | t }}</li>
+      </ul>
+
+      {% render 'global-script-2' %}
+    </div>
+    {% render 'halo-popup' %}
+
+    {%- if settings.enable_view_documentation -%}
+      {% render 'theme-editor-notification' %}
+    {%- endif -%}
+
+    {%- if settings.use_custom_js -%}
+      <script src="{{ 'custom.js' | asset_url }}" defer></script>
+    {%- endif -%}
+
+    <div class="background-overlay">
+      {%- if settings.show_effect_close -%}
+        <div class="background-cursor-wrapper">
+          <div class="background-cursor-wrapper_outer">
+            <div class="background-cursor-wrapper_inner">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="20" height="20">
+                <g class="nc-icon-wrapper" fill="#ffffff" transform="translate(0.5, 0.5)"><line fill="none" stroke-width="6" x1="46" y1="2" x2="2" y2="46"/> <line fill="none" stroke-width="6" x1="46" y1="46" x2="2" y2="2"/></g>
+              </svg>
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {% render 'halo-sidebar' %}
+
+    {%- if settings.enable_following_cursor -%}
+      {% render 'cursor-fixed', style_cursor: settings.following_cursor_style %}
+    {%- endif -%}
+    
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const el = document.getElementById("greeting-text");
+        const now = new Date();
+        const hours = now.getHours();
+        let greeting = "Hello";
+
+        if (hours >= 5 && hours < 12) {
+          greeting = "Good Morning!";
+        } else if (hours >= 12 && hours < 17) {
+          greeting = "Good Afternoon!";
+        } else {
+          greeting = "Good Evening!";
+        }
+
+        if (el) el.textContent = greeting;
+      });
+    </script>
+    <script>
+      function updateClock() {
+        const clockElement = document.getElementById('liveClock');
+        if (!clockElement) {
+          // Element not found, do nothing
+          return;
+        }
+
+        const now = new Date();
+        const hours = now.getHours();
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        const formattedTime = `${String((hours % 12) || 12)}:${minutes}:${seconds} ${ampm}`;
+
+        clockElement.textContent = formattedTime;
+      }
+
+      updateClock(); // Initial call
+      setInterval(updateClock, 1000); // Update every second
+    </script>
+
+    <script>
+    (function () {
+      function ready(fn){document.readyState!=='loading'?fn():document.addEventListener('DOMContentLoaded',fn);}
+      function waitForSlick(cb, tries=60){
+        if (window.jQuery && jQuery.fn && typeof jQuery.fn.slick === 'function') return cb();
+        if (tries <= 0) return console.warn('[Lagorii] Slick never became available');
+        setTimeout(function(){ waitForSlick(cb, tries-1); }, 100);
+      }
+
+      ready(function () {
+        waitForSlick(function () {
+          var $ = jQuery;
+
+          // Brands slider (data-brands-slider)
+          $('[data-brands-slider]').each(function () {
+            var $s = $(this);
+            if ($s.hasClass('slick-initialized')) return;
+
+            var itemsToShow  = parseInt($s.data('rows')) || 5;
+            var autoplay     = (String($s.data('autoplay')) === 'true');
+            var autoplaySpec = parseInt($s.data('autoplay-speed'), 10) || 3000;
+            var dots         = (String($s.data('dots')) === 'true');
+            var arrows       = (String($s.data('arrows')) === 'true');
+            var centerMode   = (String($s.data('center-mode')) === 'true');
+            var itemTotal    = $s.find('.halo-item').length;
+
+            $s.slick({
+              slidesToShow: itemsToShow,
+              slidesToScroll: 1,
+              arrows: arrows,
+              dots: dots && itemTotal > itemsToShow,
+              centerMode: centerMode,
+              centerPadding: '10%',
+              speed: 800,
+              autoplay: autoplay,
+              autoplaySpeed: autoplaySpec,
+              rtl: window.rtl_slick,
+              nextArrow: (window.arrows && window.arrows.icon_next) || '<button class="slick-next" type="button">Next</button>',
+              prevArrow: (window.arrows && window.arrows.icon_prev) || '<button class="slick-prev" type="button">Prev</button>',
+              responsive: [
+                { breakpoint: 1200, settings: { infinite: false, centerMode: false, slidesToShow: 4, slidesToScroll: 4, arrows: arrows, dots: dots && itemTotal > 4 } },
+                { breakpoint:  992, settings: { slidesToShow: 3, slidesToScroll: 3, arrows: arrows, dots: dots && itemTotal > 3 } },
+                { breakpoint:  768, settings: { slidesToShow: 2, slidesToScroll: 2, arrows: arrows, dots: dots && itemTotal > 2 } },
+                { breakpoint:  480, settings: {
+                    slidesToShow: parseInt($s.data('rows-mobile'), 10) || 1,
+                    slidesToScroll: parseInt($s.data('rows-mobile'), 10) || 1,
+                    arrows: arrows,
+                    dots: dots && itemTotal > (parseInt($s.data('rows-mobile'), 10) || 1)
+                } }
+              ]
+            });
+          });
+
+          // Image banner slider (data-image-banner-slide)
+          $('[data-image-banner-slide]').each(function () {
+            var $b = $(this);
+            if ($b.hasClass('slick-initialized')) return;
+
+            var arrows = (String($b.data('arrows')) === 'true');
+            var dots = (String($b.data('dots')) === 'true');
+            var autoplay = (String($b.data('autoplay')) === 'true');
+            var autoplaySpeed = parseInt($b.data('autoplay-speed'), 10) || 3000;
+
+            $b.slick({
+              slidesToShow: 1,
+              slidesToScroll: 1,
+              arrows: arrows,
+              dots: dots,
+              autoplay: autoplay,
+              autoplaySpeed: autoplaySpeed,
+              infinite: true,
+              fade: true,
+              rtl: window.rtl_slick,
+              nextArrow: (window.arrows && window.arrows.icon_next) || '<button class="slick-next" type="button">Next</button>',
+              prevArrow: (window.arrows && window.arrows.icon_prev) || '<button class="slick-prev" type="button">Prev</button>'
+            });
+          });
+        });
+      });
+    })();
+    </script>
+
+    {% if template.name == 'product' %}
+      {% section 'sticky-add-to-cart' %}
+    {% endif %}
+
+    <script>
+    (() => {
+      // Try to detect the current product id from common places
+      const detectProductId = () => {
+        // 1) Look for a form with data-product-id
+        const el = document.querySelector('[data-product-id]');
+        if (el && el.getAttribute('data-product-id')) return el.getAttribute('data-product-id');
+
+        // 2) Infer from a main product form id like #product-form-123456789
+        const main = document.querySelector('[id^="product-form-"]');
+        if (main) {
+          const m = main.id.match(/^product-form-(\d+)/);
+          if (m) return m[1];
+        }
+        return null;
+      };
+
+      const productId = detectProductId();
+      if (!productId) return;
+
+      const mainForm   = document.getElementById(`product-form-${productId}`);
+      const stickyForm = document.getElementById(`product-form-sticky-${productId}`);
+
+      if (!mainForm || !stickyForm) return;
+
+      const srcIdInput = mainForm.querySelector('input[name="id"]');
+      const dstIdInput = stickyForm.querySelector('input[name="id"]');
+
+      if (!srcIdInput || !dstIdInput) return;
+
+      const sync = (newId) => {
+        const idToSet = String(newId || srcIdInput.value || '').trim();
+        if (!idToSet) return;
+        if (dstIdInput.value !== idToSet) {
+          dstIdInput.value = idToSet;
+          // Bubble change so any listeners re-compute states (availability, prices, etc.)
+          dstIdInput.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      };
+
+      // 1) Keep in sync when the main form changes
+      ['change', 'input'].forEach(evt => {
+        mainForm.addEventListener(evt, () => sync());
+      });
+
+      // 2) Watch hidden input value changes (some themes update it programmatically)
+      const mo = new MutationObserver(() => sync());
+      mo.observe(srcIdInput, { attributes: true, attributeFilter: ['value'] });
+
+      // 3) Listen for common custom events fired by many themes
+      document.addEventListener('variant:change', (e) => {
+        const id = e?.detail?.variant?.id;
+        if (id) sync(id);
+      });
+      document.addEventListener('product:variant:change', (e) => {
+        const id = e?.detail?.variant?.id;
+        if (id) sync(id);
+      });
+
+      // Initial sync on load
+      sync();
+    })();
+    </script>
+    {{ 'component-sticky-add-to-cart.css' | asset_url | stylesheet_tag }}
+    {{ 'sticky-add-to-cart.js'            | asset_url | script_tag }}
+
+    {% section 'sticky-bottom-nav' %}
+
+    <script>
+    (function () {
+      // ---- tune these selectors to match your theme if needed ----
+      // Anything in this list will be pushed up when visible.
+      const CLEAR_TARGETS = [
+        '[data-clear-with-sbn]',                 // <— opt-in hook you can add anywhere
+        '.productView-stickyCart',               // your sticky add-to-cart (adjust if different)
+        'sticky-add-to-cart.productView-stickyCart', // alternate selector seen in your theme
+        '#CurrencySelectorWrap',                 // currency switcher wrapper (adjust if different)
+        '.currency-switcher-pill',               // your pill (adjust if different)
+        '#spur-chat-widget-container',           // example: chat widget if you want
+      ];
+
+      const GAP = 8; // extra breathing room above the bar, in px
+
+      const nav = document.getElementById('sticky-bottom-nav');
+      if (!nav) return;
+
+      function calcSafeAreaBottomPx() {
+        // Read computed env(safe-area-inset-bottom) from the nav (more reliable cross-webview)
+        const val = getComputedStyle(nav).getPropertyValue('padding-bottom');
+        // We already include safe-area in nav’s padding-bottom; no separate env calc needed.
+        // Return numeric GAP only; clearance uses nav height + GAP.
+        return 0;
+      }
+
+      function updateVars() {
+        const rect = nav.getBoundingClientRect();
+        const navH = Math.max(0, rect.height);
+        const clearance = Math.round(navH + GAP + calcSafeAreaBottomPx());
+
+        document.documentElement.style.setProperty('--sbn-height', navH + 'px');
+        document.documentElement.style.setProperty('--sbn-clearance', clearance + 'px');
+
+        // Push known fixed elements up (only those actually bottom-anchored)
+        CLEAR_TARGETS.forEach(sel => {
+          document.querySelectorAll(sel).forEach(el => {
+            try {
+              // Only adjust if it's position:fixed and bottom-anchored (or we just want to force it)
+              const cs = getComputedStyle(el);
+              const isFixed = cs.position === 'fixed';
+              const hasBottomAnchor = isFixed && (cs.bottom !== 'auto');
+              if (isFixed && hasBottomAnchor) {
+                el.classList.add('sbn-clear-bottom');
+              }
+            } catch(e) {}
+          });
+        });
+      }
+
+      // Run once now
+      updateVars();
+
+      // Keep up with nav size changes
+      if ('ResizeObserver' in window) {
+        new ResizeObserver(updateVars).observe(nav);
+      } else {
+        window.addEventListener('resize', updateVars, { passive: true });
+        window.addEventListener('orientationchange', updateVars, { passive: true });
+      }
+
+      // Watch DOM for late-loaded widgets; apply class when they appear
+      const mo = new MutationObserver((muts) => {
+        let needs = false;
+        for (const m of muts) {
+          if (m.type === 'childList' && m.addedNodes && m.addedNodes.length) {
+            for (const n of m.addedNodes) {
+              if (!(n instanceof HTMLElement)) continue;
+              if (CLEAR_TARGETS.some(sel => n.matches?.(sel) || n.querySelector?.(sel))) {
+                needs = true; break;
+              }
+            }
+          }
+        }
+        if (needs) updateVars();
+      });
+      mo.observe(document.documentElement, { childList: true, subtree: true });
+
+      // Also adjust when your store toggle changes market (since some widgets appear/disappear)
+      window.addEventListener('lag:store', updateVars, { passive: true });
+
+      // If you have your own events (e.g., sticky ATC show/hide), listen and recalc:
+      ['show-sticky','hide-sticky','ajaxProduct:added'].forEach(evt =>
+        document.addEventListener(evt, updateVars, { passive: true })
+      );
+    })();
+    </script>
+
+    {% if page.handle == 'collection-page' %}
+      <style>
+        @media (min-width: 1024px){
+          #MainContent { display: none !important; }
+        }
+      </style>
+    {% endif %}
+
+    <script>
+    (() => {
+      const LABEL = "Order Estimation"; // text without the trailing colon
+
+      // Mark matching nodes so CSS can hide them
+      const markOrderEstimations = (root = document) => {
+        const options = root.querySelectorAll('.product-option');
+        options.forEach(opt => {
+          if (opt.classList.contains('is-order-estimation')) return;
+
+          const keyEl = opt.querySelector('.definitionList-key');
+          if (!keyEl) return;
+
+          // Normalize: drop colon & trailing spaces, compare case-sensitively
+          const label = keyEl.textContent.trim().replace(/[:\s]+$/, '');
+          if (label === LABEL) {
+            opt.classList.add('is-order-estimation');
+          }
+        });
+      };
+
+      // Run immediately + when Shopify sections (or Ajax cart) change the DOM
+      const init = () => markOrderEstimations(document);
+      document.addEventListener('DOMContentLoaded', init);
+      document.addEventListener('shopify:section:load', e => markOrderEstimations(e.target));
+      document.addEventListener('shopify:section:select', e => markOrderEstimations(e.target));
+
+      // Catch dynamic updates (Ajax cart, quick add, etc.)
+      const mo = new MutationObserver(muts => {
+        for (const m of muts) {
+          if (m.type === 'childList' && (m.addedNodes?.length || m.removedNodes?.length)) {
+            markOrderEstimations(document);
+            break;
+          }
+        }
+      });
+      mo.observe(document.documentElement, { subtree: true, childList: true });
+    })();
+    </script>
+
+    {%- comment -%} In theme.liquid, before </body> {%- endcomment -%}
+    <script>
+      window.LAG_ETA_URL = "{{ 'estimate-delivery.json' | asset_url }}?v={{ 'now' | date: '%s' }}";
+
+      {% if customer and customer.default_address and customer.default_address.zip %}
+        window.LAG_CUSTOMER_PIN = {{ customer.default_address.zip | json }};
+      {% endif %}
+
+      // Shared text for ETA widgets / hero
+      window.LAG_ETA_TEXT = {
+        invalidPin: {{ settings.lag_eta_invalid_pin_msg | default: "Not a valid pincode. Please enter a 6-digit PIN." | json }},
+        unserviceablePin: {{ settings.lag_eta_unserviceable_pin_msg | default: "We couldn’t find this pincode. Please enter a valid Indian PIN code." | json }}
+      };
+
+      // Popular countries for international selector
+      window.LAG_ETA_INTL_POPULAR = {{ settings.lag_eta_intl_popular_countries | default: "US,CA,AE,SG,AU,GB" | json }};
+
+      // Simple toggle for international view
+      window.LAG_ETA_INTL_ENABLE = {{ settings.lag_eta_intl_enable | default: true | json }};
+    </script>
+
+    <script src="{{ 'lag-eta.js' | asset_url }}" defer></script>
+    
+    {%- if settings.lagorii_now_enable
+      and request.page_type == 'collection'
+      and collection
+      and collection.handle == 'lagorii-now'
+    -%}
+
+      {%- assign badge_text = settings.lagorii_now_text | default: 'Lagorii Now' -%}
+      {%- assign badge_position = settings.lagorii_now_position | default: 'top_left' -%}
+
+      <style>
+        /* Ensure product card is a positioning context */
+        .product-item .card-product__wrapper{
+          position: relative;
+        }
+
+        .lagorii-now-badge{
+          position: absolute;
+          z-index: 5;
+
+          /* POSITIONING BASED ON SETTINGS */
+          {%- if badge_position == 'top_left' -%}
+            top: {{ settings.lagorii_now_offset_y | default: 8 }}px;
+            left: {{ settings.lagorii_now_offset_x | default: 8 }}px;
+          {%- elsif badge_position == 'top_right' -%}
+            top: {{ settings.lagorii_now_offset_y | default: 8 }}px;
+            right: {{ settings.lagorii_now_offset_x | default: 8 }}px;
+          {%- elsif badge_position == 'bottom_left' -%}
+            bottom: {{ settings.lagorii_now_offset_y | default: 8 }}px;
+            left: {{ settings.lagorii_now_offset_x | default: 8 }}px;
+          {%- elsif badge_position == 'bottom_right' -%}
+            bottom: {{ settings.lagorii_now_offset_y | default: 8 }}px;
+            right: {{ settings.lagorii_now_offset_x | default: 8 }}px;
+          {%- else -%}
+            top: 8px;
+            left: 8px;
+          {%- endif -%}
+
+          /* OUTER MARGINS (around badge box itself) */
+          margin-top:    {{ settings.lagorii_now_margin_top    | default: 0 }}px;
+          margin-right:  {{ settings.lagorii_now_margin_right  | default: 0 }}px;
+          margin-bottom: {{ settings.lagorii_now_margin_bottom | default: 0 }}px;
+          margin-left:   {{ settings.lagorii_now_margin_left   | default: 0 }}px;
+
+          /* INNER PADDING (inside badge) */
+          padding: {{ settings.lagorii_now_pad_y | default: 4 }}px {{ settings.lagorii_now_pad_x | default: 10 }}px;
+
+          display:inline-flex;
+          align-items:center;
+          gap:6px;
+
+          background: {{ settings.lagorii_now_bg | default: '#E87529' }};
+          color: {{ settings.lagorii_now_text_color | default: '#ffffff' }};
+          border:1px solid {{ settings.lagorii_now_border_color | default: settings.lagorii_now_bg | default: '#E87529' }};
+          border-radius: {{ settings.lagorii_now_radius | default: 999 }}px;
+
+          font-size: {{ settings.lagorii_now_font_size | default: 12 }}px;
+          line-height: 1.2;
+
+          /* WIDTH / HEIGHT CONTROLS */
+          max-width: {{ settings.lagorii_now_max_width | default: 200 }}px;
+          min-width: {{ settings.lagorii_now_min_width | default: 0 }}px;
+          min-height: {{ settings.lagorii_now_min_height | default: 0 }}px;
+
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        {% if settings.lagorii_now_badge_font != blank %}
+          {{ settings.lagorii_now_badge_font | font_face }}
+          .lagorii-now-badge{
+            font-family: {{ settings.lagorii_now_badge_font.family }};
+            font-weight: {{ settings.lagorii_now_badge_font.weight | default: 700 }};
+          }
+        {% endif %}
+
+        .lagorii-now-badge__icon img{
+          display:block;
+          width: {{ settings.lagorii_now_icon_size | default: 16 }}px;
+          height: {{ settings.lagorii_now_icon_size | default: 16 }}px;
+          object-fit: contain;
+        }
+      </style>
+
+      <template id="lagorii-now-badge-template">
+        <div class="lagorii-now-badge">
+          {% if settings.lagorii_now_icon != blank %}
+            <span class="lagorii-now-badge__icon" aria-hidden="true">
+              <img
+                src="{{ settings.lagorii_now_icon | image_url: width: settings.lagorii_now_icon_size }}"
+                alt=""
+                loading="lazy">
+            </span>
+          {% endif %}
+          <span class="lagorii-now-badge__label">
+            {{ badge_text }}
+          </span>
+        </div>
+      </template>
+
+    <script>
+      (function(){
+        function injectLagoriiNowBadges(){
+          try {
+            var tpl = document.getElementById('lagorii-now-badge-template');
+            if (!tpl || !tpl.content || !tpl.content.firstElementChild) {
+              return;
+            }
+
+            var cards = document.querySelectorAll(
+              '.product-item .card-product__wrapper, .product-item.usf-card-6 .card-product__wrapper'
+            );
+
+            cards.forEach(function (wrapper) {
+              if (!wrapper) return;
+              // prevent duplicates
+              if (wrapper.querySelector('.lagorii-now-badge')) return;
+
+              var clone = tpl.content.firstElementChild.cloneNode(true);
+              var firstChild = wrapper.firstElementChild;
+              if (firstChild) wrapper.insertBefore(clone, firstChild);
+              else wrapper.appendChild(clone);
+            });
+          } catch (e) {
+            console.error('LagoriiNowBadge error:', e);
+          }
+        }
+
+        function initLagoriiNow(){
+          // run once immediately
+          injectLagoriiNowBadges();
+
+          // then watch for grid changes (filters, infinite scroll, theme JS, etc.)
+          try {
+            if (window.__LAG_NOW_OBS) return; // singleton guard
+            var mo = new MutationObserver(function(muts){
+              // debounced-ish: just reinject on any DOM change
+              injectLagoriiNowBadges();
+            });
+            mo.observe(document.body, { childList: true, subtree: true });
+            window.__LAG_NOW_OBS = mo;
+          } catch (e) {
+            console.warn('LagoriiNowBadge: observer failed', e);
+          }
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', initLagoriiNow);
+        } else {
+          initLagoriiNow();
+        }
+      })();
+    </script>
+    {%- endif -%}
+
+    {% if template.name == 'product' and customer %}
+      <script>
+        window.LAG_CUSTOMER = {
+          email: {{ customer.email | json }},
+          phone: {{ customer.phone | json }}
+        };
+      </script>
+    {% endif %}
+
+    <script>
+      (() => {
+      const SELECTOR = ".wrapper-item-size.card-product__group";
+
+      const isClearanceSalePage = () => {
+        const p = location.pathname.replace(/\/+$/, ""); // trim trailing slash
+        return p === "/collections/clearance-sale" || p.startsWith("/collections/clearance-sale/");
+      };
+
+      const apply = (root = document) => {
+        // On clearance sale page: DO NOTHING (keep visible)
+        if (isClearanceSalePage()) return;
+
+        root.querySelectorAll(SELECTOR).forEach((el) => {
+          el.style.setProperty("display", "none", "important");
+        });
+      };
+
+      // 1) Initial pass
+      apply();
+
+      // 2) Catch dynamically injected/updated product cards
+      const obs = new MutationObserver((mutations) => {
+        if (isClearanceSalePage()) return;
+
+        for (const m of mutations) {
+          for (const node of m.addedNodes) {
+            if (!(node instanceof HTMLElement)) continue;
+
+            if (node.matches?.(SELECTOR)) {
+              node.style.setProperty("display", "none", "important");
+            }
+            node.querySelectorAll?.(SELECTOR).forEach((el) => {
+              el.style.setProperty("display", "none", "important");
+            });
+          }
+        }
+      });
+
+      obs.observe(document.documentElement, { childList: true, subtree: true });
+
+      // 3) Shopify theme editor / section reloads (optional but helpful)
+      document.addEventListener("shopify:section:load", () => apply());
+    })();
+
+    </script>
+        
+    {% comment %}
+      ==========================
+      Product Card 02 - Carousel styles (inline)
+      ==========================
+    {% endcomment %}
+    <style>
+      /* Scope variables to each product card instance */
+      .product-item{
+        --pc02-dot-bar-bg: {{ settings.pc02_dots_bg_color | default: '#E5E5E5' }};
+        --pc02-dot-active: {{ settings.pc02_dots_active_color | default: '#FF7A00' }};
+        --pc02-dot-inactive: {{ settings.pc02_dots_inactive_color | default: '#9B9B9B' }};
+
+        --pc02-dot-bar-height: {{ settings.pc02_dots_bar_height | default: 18 }}px;
+        --pc02-dot-bar-padding-x: {{ settings.pc02_dots_bar_padding_x | default: 10 }}px;
+        --pc02-dot-bar-padding-y: {{ settings.pc02_dots_bar_padding_y | default: 6 }}px;
+        --pc02-dot-bar-radius: {{ settings.pc02_dots_bar_radius | default: 999 }}px;
+
+        --pc02-dot-size: {{ settings.pc02_dots_dot_size | default: 6 }}px;
+        --pc02-dot-gap: {{ settings.pc02_dots_dot_gap | default: 6 }}px;
+        --pc02-dot-bar-bottom: {{ settings.pc02_dots_margin_top | default: 10 }}px;
+
+        --pc02-dot-bar-inset-x: {{ settings.pc02_dots_inset_x | default: 10 }}px;
+
+
+        --pc02-age-btn-bg: {{ settings.pc02_age_btn_bg_color | default: '#F3F4F6' }};
+        --pc02-age-btn-text: {{ settings.pc02_age_btn_text_color | default: '#111827' }};
+        --pc02-age-btn-border: {{ settings.pc02_age_btn_border_color | default: '#D1D5DB' }};
+        --pc02-age-btn-radius: {{ settings.pc02_age_btn_border_radius | default: 999 }}px;
+        --pc02-age-btn-height: {{ settings.pc02_age_btn_height | default: 32 }}px;
+        --pc02-age-btn-width: {{ settings.pc02_age_btn_width | default: 'auto' }};
+        --pc02-age-btn-padding-x: {{ settings.pc02_age_btn_padding_x | default: 10 }}px;
+        --pc02-age-btn-padding-y: {{ settings.pc02_age_btn_padding_y | default: 6 }}px;
+        --pc02-age-btn-font-size: {{ settings.pc02_age_btn_font_size | default: 12 }}px;
+        --pc02-age-btn-margin-top: {{ settings.pc02_age_btn_margin_top | default: 8 }}px;
+      }
+
+      .card-media.pc02-has-carousel{
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Disable overlay link while carousel is enabled, so swipe/drag works */
+      .card-media[data-pc02-carousel-enabled="true"] > .card-link{
+      }
+
+      .pc02-carousel{
+        position: absolute;
+        inset: 0;
+        display: flex;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        touch-action: pan-y;
+        cursor: grab;
+      }
+      .pc02-carousel::-webkit-scrollbar{ display: none; }
+      .pc02-carousel.is-dragging{ cursor: grabbing; }
+
+      .pc02-slide{
+        flex: 0 0 100%;
+        width: 100%;
+        height: 100%;
+        scroll-snap-align: start;
+      }
+      .pc02-slide-link{
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      .pc02-img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      /* Dot bar (overlay on image) */
+      .pc02-dot-bar-wrap{
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: var(--pc02-dot-bar-bottom);
+        padding: 0 var(--pc02-dot-bar-inset-x);
+        display: flex;
+        width: 100%;
+        z-index: 3;
+        pointer-events: auto;
+      }
+      .pc02-dot-bar-wrap.align-left{ justify-content: flex-start; }
+      .pc02-dot-bar-wrap.align-center{ justify-content: center; }
+      .pc02-dot-bar-wrap.align-right{ justify-content: flex-end; }
+
+      .pc02-dot-bar{
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--pc02-dot-gap);
+        background: var(--pc02-dot-bar-bg);
+        padding: var(--pc02-dot-bar-padding-y) var(--pc02-dot-bar-padding-x);
+        border-radius: var(--pc02-dot-bar-radius);
+        min-height: var(--pc02-dot-bar-height);
+        line-height: 1;
+      }
+
+      .pc02-dot{
+        width: var(--pc02-dot-size);
+        height: var(--pc02-dot-size);
+        border-radius: 999px;
+        background: var(--pc02-dot-inactive);
+        border: 0;
+        padding: 0;
+        cursor: pointer;
+        appearance: none;
+      }
+      .pc02-dot.is-active{
+        background: var(--pc02-dot-active);
+      }
+
+      /* Age range button (from Age metafield) */
+      .pc02-age-range-wrap{
+        margin-top: var(--pc02-age-btn-margin-top);
+        display: flex;
+        width: 100%;
+      }
+      .pc02-age-range-wrap.align-left{ justify-content: flex-start; }
+      .pc02-age-range-wrap.align-center{ justify-content: center; }
+      .pc02-age-range-wrap.align-right{ justify-content: flex-end; }
+
+      .pc02-age-range-btn{
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: var(--pc02-age-btn-height);
+        width: var(--pc02-age-btn-width);
+        padding: var(--pc02-age-btn-padding-y) var(--pc02-age-btn-padding-x);
+        background: var(--pc02-age-btn-bg);
+        color: var(--pc02-age-btn-text);
+        border: 1px solid var(--pc02-age-btn-border);
+        border-radius: var(--pc02-age-btn-radius);
+        font-size: var(--pc02-age-btn-font-size);
+        line-height: 1;
+        text-decoration: none;
+        box-sizing: border-box;
+        max-width: 100%;
+        white-space: nowrap;
+      }
+
+    </style>
+
+    {% comment %}
+      ==========================
+      Product Card 02 - Carousel JS (no slick dependency)
+      ==========================
+    {% endcomment %}
+    <script>
+    (function(){
+      if (window.__pc02CarouselLoaded) return;
+      window.__pc02CarouselLoaded = true;
+
+      function easeInOutCubic(t){
+        return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3)/2;
+      }
+
+      function animateScrollLeft(el, to, duration){
+        duration = Math.max(0, parseInt(duration || 0, 10));
+        if (!duration){
+          el.scrollLeft = to;
+          return;
+        }
+        var start = el.scrollLeft;
+        var change = to - start;
+        var startTime = performance.now();
+
+        function step(now){
+          var elapsed = now - startTime;
+          var t = Math.min(1, elapsed / duration);
+          var eased = easeInOutCubic(t);
+          el.scrollLeft = start + change * eased;
+          if (t < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }
+
+      function getSlideIndex(carousel){
+        var w = carousel.clientWidth || 1;
+        return Math.round(carousel.scrollLeft / w);
+      }
+
+      function setActiveDot(dotsWrap, idx){
+        if (!dotsWrap) return;
+        var dots = dotsWrap.querySelectorAll('[data-pc02-dot]');
+        if (!dots || !dots.length) return;
+        for (var i=0; i<dots.length; i++){
+          if (i === idx) dots[i].classList.add('is-active');
+          else dots[i].classList.remove('is-active');
+        }
+      }
+
+      window.initOne = function (card){
+        if (!card || card.__pc02Init) return;
+
+        var carousel = card.querySelector('[data-pc02-carousel]');
+        if (!carousel) return;
+
+        var slides = carousel.querySelectorAll('[data-pc02-slide]');
+        if (!slides || slides.length <= 1) return;
+
+        card.__pc02Init = true;
+
+        var dotsWrap = card.querySelector('[data-pc02-dots]');
+        var duration = parseInt(carousel.getAttribute('data-pc02-duration') || '650', 10);
+        var dragThreshold = parseInt(carousel.getAttribute('data-pc02-drag-threshold') || '45', 10);
+        dragThreshold = isNaN(dragThreshold) ? 45 : Math.max(0, dragThreshold);
+        var loop = carousel.getAttribute('data-pc02-loop') === 'true';
+
+        function goTo(idx, animate){
+          if (loop){
+            idx = ((idx % slides.length) + slides.length) % slides.length;
+          } else {
+            idx = Math.max(0, Math.min(idx, slides.length - 1));
+          }
+          var target = idx * carousel.clientWidth;
+          if (animate) animateScrollLeft(carousel, target, duration);
+          else carousel.scrollLeft = target;
+          setActiveDot(dotsWrap, idx);
+          carousel.dataset.pc02Index = String(idx);
+        }
+
+        // Dots click
+        if (dotsWrap){
+          dotsWrap.addEventListener('click', function(e){
+            var btn = e.target && e.target.closest ? e.target.closest('[data-pc02-dot]') : null;
+            if (!btn) return;
+            e.preventDefault();
+            var idx = parseInt(btn.getAttribute('data-pc02-dot') || '0', 10);
+            goTo(idx, true);
+          }, { passive: false });
+        }
+
+        // Update dots on scroll (debounced)
+        var scrollTimer = null;
+        carousel.addEventListener('scroll', function(){
+          if (scrollTimer) clearTimeout(scrollTimer);
+          scrollTimer = setTimeout(function(){
+            setActiveDot(dotsWrap, getSlideIndex(carousel));
+          }, 80);
+        }, { passive: true });
+
+        // Resize => keep current slide aligned
+        if (window.ResizeObserver){
+          new ResizeObserver(function(){
+            var idx = parseInt(carousel.dataset.pc02Index || '0', 10);
+            goTo(idx, false);
+          }).observe(carousel);
+        } else {
+          window.addEventListener('resize', function(){
+            var idx = parseInt(carousel.dataset.pc02Index || '0', 10);
+            goTo(idx, false);
+          });
+        }
+
+        // Drag / swipe (sensitivity controlled by dragThreshold)
+        var isDown = false;
+        var startX = 0;
+        var startScroll = 0;
+        var startIdx = 0;
+        var suppressClick = false;
+
+        function onPointerDown(e){
+          // Keep swipe inside the image carousel (prevents outer product sliders from hijacking)
+          if (e && e.stopPropagation) e.stopPropagation();
+          if (e && e.stopImmediatePropagation) e.stopImmediatePropagation();
+
+          if (e.button != null && e.button !== 0) return;
+          isDown = true;
+          suppressClick = false;
+          startX = e.clientX;
+          startY = e.clientY;
+          lockAxis = null;
+          startScroll = carousel.scrollLeft;
+          startIdx = getSlideIndex(carousel);
+          carousel.classList.add('is-dragging');
+          // Temporarily disable snap while dragging
+          carousel.style.scrollSnapType = 'none';
+          if (carousel.setPointerCapture && e.pointerId != null){
+            try { carousel.setPointerCapture(e.pointerId); } catch(_){}
+          }
+        }
+
+        function onPointerMove(e){
+          if (!isDown) return;
+          // Prevent outer sliders/scroll layouts from hijacking this swipe
+          if (e && e.stopPropagation) e.stopPropagation();
+
+          var dx = e.clientX - startX;
+          var dy = e.clientY - startY;
+
+          // Determine gesture direction (helps on mobile + nested carousels)
+          if (!lockAxis){
+            var ax = Math.abs(dx);
+            var ay = Math.abs(dy);
+            if (ax > 6 || ay > 6){
+              lockAxis = ax >= ay ? 'x' : 'y';
+            }
+          }
+
+          // If user is scrolling vertically, abort drag and let the page/parent handle it
+          if (lockAxis === 'y'){
+            isDown = false;
+            carousel.classList.remove('is-dragging');
+            carousel.style.scrollSnapType = '';
+            if (carousel.releasePointerCapture && e.pointerId != null){
+              try { carousel.releasePointerCapture(e.pointerId); } catch(_){}
+            }
+            return;
+          }
+
+          if (Math.abs(dx) > 5) suppressClick = true;
+          if (e.cancelable) e.preventDefault();
+          carousel.scrollLeft = startScroll - dx;
+        }
+
+        function onPointerUp(e){
+          if (!isDown) return;
+          isDown = false;
+          carousel.classList.remove('is-dragging');
+          carousel.style.scrollSnapType = '';
+
+          var endX = (e && e.clientX != null) ? e.clientX : startX;
+          var dx = endX - startX;
+          var targetIdx = getSlideIndex(carousel);
+
+          if (Math.abs(dx) >= dragThreshold){
+            targetIdx = startIdx + (dx < 0 ? 1 : -1);
+          }
+
+          goTo(targetIdx, true);
+        }
+
+        carousel.addEventListener('pointerdown', onPointerDown, { passive: true });
+        carousel.addEventListener('pointermove', onPointerMove, { passive: false });
+        carousel.addEventListener('pointerup', onPointerUp, { passive: true });
+        carousel.addEventListener('pointercancel', onPointerUp, { passive: true });
+
+        if (dotsWrap){
+          dotsWrap.addEventListener('pointerdown', function(e){ e.stopPropagation(); }, true);
+          dotsWrap.addEventListener('click', function(e){ e.stopPropagation(); }, true);
+        }
+
+        // Prevent accidental click when user was dragging
+        carousel.addEventListener('click', function(e){
+          if (!suppressClick) return;
+          var a = e.target && e.target.closest ? e.target.closest('a') : null;
+          if (!a) return;
+          e.preventDefault();
+          e.stopPropagation();
+        }, true);
+
+
+        // Init first state
+        goTo(0, false);
+      }
+
+      function initAll(root){
+        root = root || document;
+        var cards = root.querySelectorAll('.product-item');
+        for (var i=0; i<cards.length; i++) initOne(cards[i]);
+      }
+
+      if (document.readyState === 'loading'){
+        document.addEventListener('DOMContentLoaded', function(){ initAll(document); });
+      } else {
+        initAll(document);
+      }
+
+      // For Shopify dynamic section loads
+      document.addEventListener('shopify:section:load', function(e){
+        initAll(e.target);
+      });
+
+      
+
+      // Shopify product recommendations commonly fire this event when injected
+      document.addEventListener('product-recommendations:loaded', function(e){
+        initAll(e.target);
+      });
+
+    // MutationObserver for AJAX/quick view injected cards
+      if (window.MutationObserver){
+        var mo = new MutationObserver(function(muts){
+          for (var i=0; i<muts.length; i++){
+            var m = muts[i];
+            for (var j=0; j<m.addedNodes.length; j++){
+              var node = m.addedNodes[j];
+              if (node && node.querySelectorAll) initAll(node);
+            }
+          }
+        });
+        mo.observe(document.documentElement, { childList: true, subtree: true });
+      }
+    })();
+    </script>
+    <script>
+      window.LAG_CUSTOMER_ID = {{ customer.id | default: nil | json }};
+      window.LAG_CUSTOMER_NAME = {% if customer %}{{ customer.name | json }}{% else %}null{% endif %};
+      window.LAG_WISHLIST_PATH = {{ routes.root_url | append: 'pages/wish-list' | json }};
+
+      // Set this when your Cloud Run is live:
+      window.LAG_API_BASE = 'https://lagorii-tracking-service-psf43m5w6a-uc.a.run.app';
+    </script>
+    <script src="{{ 'lag-share.js' | asset_url }}" defer></script>
+    <script src="{{ 'lag-wishlist-sync.js' | asset_url }}" defer></script>
+
+    <script>
+    (function () {
+      // -------- Cart Count Sync (single source of truth) --------
+      const CACHE_KEY = 'lag_cart_count_v1';
+      const CACHE_TTL = 8000; // ms (fast enough for UX, light enough for performance)
+
+      function getTargets() {
+        return {
+          headerCounts: Array.from(document.querySelectorAll('[data-cart-count]')),
+          badges: Array.from(document.querySelectorAll('[data-cart-badge]'))
+        };
+      }
+
+      function applyCount(count) {
+        const n = Number(count) || 0;
+        const { headerCounts, badges } = getTargets();
+
+        headerCounts.forEach(el => { el.textContent = String(n); });
+
+        badges.forEach(el => {
+          el.textContent = String(n);
+          el.style.display = n > 0 ? 'inline-block' : 'none';
+        });
+      }
+
+      function readCache() {
+        try {
+          const raw = sessionStorage.getItem(CACHE_KEY);
+          if (!raw) return null;
+          const obj = JSON.parse(raw);
+          if (!obj || (Date.now() - obj.t) > CACHE_TTL) return null;
+          return obj.c;
+        } catch (_) { return null; }
+      }
+
+      function writeCache(count) {
+        try {
+          sessionStorage.setItem(CACHE_KEY, JSON.stringify({ c: Number(count) || 0, t: Date.now() }));
+        } catch (_) {}
+      }
+
+      async function fetchCartCount() {
+        const res = await fetch('/cart.js', {
+          credentials: 'same-origin',
+          headers: { 'Accept': 'application/json' }
+        });
+        if (!res.ok) throw new Error('cart.js failed');
+        const cart = await res.json();
+        return Number(cart.item_count) || 0;
+      }
+
+      let inFlight = null;
+      async function refreshCount({ force = false } = {}) {
+        const cached = readCache();
+        if (!force && cached !== null) {
+          applyCount(cached);
+          // SWR: refresh in idle so it stays accurate
+          if ('requestIdleCallback' in window) {
+            requestIdleCallback(() => refreshCount({ force: true }), { timeout: 1500 });
+          } else {
+            setTimeout(() => refreshCount({ force: true }), 0);
+          }
+          return cached;
+        }
+
+        if (inFlight) return inFlight;
+
+        inFlight = (async () => {
+          try {
+            const c = await fetchCartCount();
+            writeCache(c);
+            applyCount(c);
+            return c;
+          } finally {
+            inFlight = null;
+          }
+        })();
+
+        return inFlight;
+      }
+
+      // Initial paint
+      refreshCount();
+
+      // Listen to your existing custom events (keep compatibility)
+      ['cart:refresh','cart:updated','ajaxProduct:added','quantity:change','lineItem:remove'].forEach(evt => {
+        document.addEventListener(evt, () => refreshCount({ force: true }), { passive: true });
+      });
+
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') refreshCount({ force: true });
+      }, { passive: true });
+
+      window.addEventListener('pageshow', (e) => {
+        if (e.persisted) refreshCount({ force: true });
+      }, { passive: true });
+
+      // ---- Auto-detect Shopify cart mutations via fetch() interception ----
+      const CART_MUTATION_RE = /\/cart\/(add|change|update|clear)\.js(\?|$)/i;
+      const _fetch = window.fetch;
+      if (typeof _fetch === 'function') {
+        window.fetch = function(input, init) {
+          const url = (typeof input === 'string') ? input : (input && input.url) || '';
+          const isCartMutation = CART_MUTATION_RE.test(url);
+
+          return _fetch.apply(this, arguments).then(async (res) => {
+            if (isCartMutation) {
+              // Let Shopify update settle, then refresh once
+              try { document.dispatchEvent(new Event('cart:updated')); } catch(_) {}
+              // force refresh (don’t rely on cache)
+              refreshCount({ force: true });
+            }
+            return res;
+          });
+        };
+      }
+
+      // Optional: expose manual trigger
+      window.LAG_refreshCartCount = refreshCount;
+    })();
+    </script>
+  </body>
+</html>

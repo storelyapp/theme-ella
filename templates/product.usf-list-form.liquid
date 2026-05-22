@@ -1,0 +1,71 @@
+{% layout none %}
+
+{%- liquid
+    assign product_swatch_option = settings.swatch | downcase
+    assign isColor = false
+    assign variant_img = ''
+    for option in product.options_with_values
+        assign option_name = option.name | downcase
+        if product_swatch_option contains option_name
+            assign isColor = true
+            assign index = forloop.index0
+            assign position = forloop.index | minus: 1
+            assign variant_selected = option.selected_value
+            if settings.show_quick_shop
+                for variant in product.variants limit: 1
+                    if variant.image != null  
+                        assign variant_img = variant.image
+                    endif
+                endfor
+            endif
+          break
+        else 
+            assign position = 0
+            assign variant_selected = nil
+        endif
+    endfor
+
+    assign media_size = settings.product_block_image_ratio
+    if media_size == 'portrait'
+        assign portrait_aspect_ratio = settings.portrait_height
+    endif 
+
+    assign featured_media_aspect_ratio = product.featured_media.aspect_ratio
+    if product.featured_media.aspect_ratio == nil
+        assign featured_media_aspect_ratio = 1
+    endif
+
+    assign product_action_group = false
+    
+    assign show_quick_view = false
+    if settings.show_quick_view
+        if settings.product_quick_view_type == 'icon' or settings.show_quick_view_mb
+            assign show_quick_view = true
+        endif
+    endif
+
+    assign show_wishlist = false
+    if settings.show_wishlist_card and settings.show_wishlist
+        assign show_wishlist = true
+    endif
+
+    assign show_compare = false
+    if settings.show_compare and settings.product_compare_type == 'icon'
+        assign show_compare = true
+    endif
+
+    if show_quick_view or show_wishlist or show_compare
+        assign product_action_group = true
+    endif
+
+    assign has_video = product.media | where: 'media_type','video'
+
+    assign show_price = settings.show_price
+-%}
+ {% render 'add-to-cart-form-category-list',
+                    product: product,
+                    id: 'form',
+                    list: 'list',
+                    position: position,
+                    sectionId: 'usf-template'
+                %}

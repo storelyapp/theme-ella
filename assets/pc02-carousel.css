@@ -1,0 +1,444 @@
+/* Product Card 02 — Carousel + Quick-add panel (global stylesheet)
+   ─────────────────────────────────────────────────────────────────
+   What lives here:
+     • Carousel track, slides, dots  (structural only — no card theming)
+     • Quick-add overlay + panel     (drawer & popup, with proper slide animation)
+     • Quick-add icon button + loading state
+     • Title-row layout helper
+
+   What does NOT live here (moved to <style> in product-card-02.liquid):
+     • .product-item CSS-variable defaults  (dot colors, age-btn sizing, etc.)
+     • .card-media.pc02-has-carousel        (card container)
+     • .pc02-age-range-wrap / -btn          (age badge)
+   ─────────────────────────────────────────────────────────────────────────── */
+
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/*  CAROUSEL                                                                    */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Block theme overlay links from swallowing carousel taps */
+.card-media[data-pc02-carousel-enabled="true"] > .card-link {
+  pointer-events: none !important;
+}
+
+/* Carousel track */
+.pc02-carousel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  overflow-x: scroll;           /* "scroll" > "auto" on iOS — compositor path */
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  touch-action: pan-x;          /* horizontal; vertical pass-through stays */
+  cursor: grab;
+  will-change: scroll-position;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  contain: strict;
+  z-index: 2;
+}
+.pc02-carousel::-webkit-scrollbar { display: none; }
+.pc02-carousel.is-dragging { cursor: grabbing; }
+
+/* Slides */
+.pc02-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  scroll-snap-align: start;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.pc02-slide-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: auto !important;
+}
+
+/* Images */
+.pc02-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  content-visibility: auto;
+}
+.pc02-slide:not(:first-child) .pc02-img { will-change: auto; }
+
+/* Block theme overlays from eating carousel clicks */
+.card-media.pc02-has-carousel::before,
+.card-media.pc02-has-carousel::after,
+.card-media.pc02-has-carousel .media--loading-effect::before,
+.card-media.pc02-has-carousel .media--loading-effect::after {
+  pointer-events: none !important;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/*  DOT BAR                                                                     */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.pc02-dot-bar-wrap {
+  position: absolute;
+  left: 0; right: 0;
+  bottom: var(--pc02-dot-bar-bottom, 10px);
+  padding: 0 var(--pc02-dot-bar-inset-x, 10px);
+  display: flex;
+  width: 100%;
+  z-index: 3;
+  pointer-events: auto;
+}
+.pc02-dot-bar-wrap.align-left   { justify-content: flex-start; }
+.pc02-dot-bar-wrap.align-center { justify-content: center; }
+.pc02-dot-bar-wrap.align-right  { justify-content: flex-end; }
+
+.pc02-dot-bar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pc02-dot-gap, 6px);
+  background: var(--pc02-dot-bar-bg, #E5E5E5);
+  padding: var(--pc02-dot-bar-padding-y, 6px) var(--pc02-dot-bar-padding-x, 10px);
+  border-radius: var(--pc02-dot-bar-radius, 999px);
+  min-height: var(--pc02-dot-bar-height, 18px);
+  line-height: 1;
+}
+
+.pc02-dot {
+  width: var(--pc02-dot-size, 6px);
+  height: var(--pc02-dot-size, 6px);
+  border-radius: 999px;
+  background: var(--pc02-dot-inactive, #9B9B9B);
+  border: 0; padding: 0;
+  cursor: pointer;
+  appearance: none;
+  transition: background 160ms ease;
+}
+.pc02-dot.is-active { background: var(--pc02-dot-active, #FF7A00); }
+
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/*  TITLE ROW + QUICK-ADD ICON BUTTON                                          */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.pc02-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.pc02-qa-icon {
+  width: var(--pc02-qa-size, 30px);
+  height: var(--pc02-qa-size, 30px);
+  border-radius: var(--pc02-qa-radius, 999px);
+  border: 1px solid var(--pc02-qa-border, rgba(0,0,0,.14));
+  background: var(--pc02-qa-bg, transparent);
+  color: var(--pc02-qa-color, #111);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform .15s ease, background-color .15s ease,
+              border-color .15s ease, opacity .15s ease;
+}
+.pc02-qa-icon:hover  { transform: translateY(-1px); }
+.pc02-qa-icon:active { transform: translateY(0); }
+
+.pc02-qa-icon__svg {
+  width: var(--pc02-qa-icon-size, 16px);
+  height: var(--pc02-qa-icon-size, 16px);
+  display: block;
+}
+
+/* Loading dots */
+.pc02-qa-icon__dots {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+.pc02-qa-icon__dots i {
+  width: 4px; height: 4px;
+  border-radius: 999px;
+  background: currentColor;
+  display: inline-block;
+  animation: pc02DotBounce .9s infinite ease-in-out;
+}
+.pc02-qa-icon__dots i:nth-child(2) { animation-delay: .12s; }
+.pc02-qa-icon__dots i:nth-child(3) { animation-delay: .24s; }
+
+.pc02-qa-icon.is-loading { opacity: .7; pointer-events: none; }
+.pc02-qa-icon.is-loading .pc02-qa-icon__svgwrap { display: none; }
+.pc02-qa-icon.is-loading .pc02-qa-icon__dots    { display: inline-flex; }
+
+@keyframes pc02DotBounce {
+  0%, 80%, 100% { transform: translateY(0);    opacity: .55; }
+  40%            { transform: translateY(-4px); opacity: 1; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/*  QUICK-ADD OVERLAY + PANEL                                                   */
+/*  CSS lives here (not injected by JS) so it's parsed once at page-load.      */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.pc02-qa-overlay[hidden],
+.pc02-qa-panel[hidden] { display: none !important; }
+
+/* ── Overlay ── */
+.pc02-qa-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.42);
+  /*
+    9990 clears all Shopify sticky headers (typically z-index 100–200).
+    JS (suppressHeaders) also neutralises any header with z-index:auto
+    that sits above via a new stacking context.
+  */
+  z-index: 9990;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  /* CLOSE: visibility delay matches longest panel exit (300ms drawer) */
+  transition: opacity 300ms cubic-bezier(.25,.46,.45,.94),
+              visibility 0s linear 300ms;
+}
+html.pc02-qa-open .pc02-qa-overlay {
+  opacity: 1; visibility: visible; pointer-events: auto;
+  transition: opacity 300ms cubic-bezier(.25,.46,.45,.94),
+              visibility 0s linear 0s;
+}
+
+/* ── Panel base (popup on desktop / tablet) ── */
+.pc02-qa-panel {
+  position: fixed;
+  z-index: 9991;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.22);
+  overflow: hidden;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  will-change: transform, opacity;
+  font-family: Montserrat, var(--font-body-family, sans-serif);
+  color: #1f2937;
+
+  /* Popup positioning */
+  top: 50%; left: 50%;
+  width: 520px;
+  max-width: calc(100vw - 28px);
+  max-height: calc(100vh - 28px);
+
+  /*
+    POPUP CLOSED: nudged 14px down + slightly scaled.
+    OPEN (450ms): cubic-bezier(.32,.72,0,1) = fast start, smooth deceleration.
+    This is the same curve iOS uses for sheet presentations.
+  */
+  transform: translate3d(-50%, calc(-50% + 14px), 0) scale(.97);
+  transition:
+    opacity    450ms cubic-bezier(.32,.72,0,1),
+    transform  450ms cubic-bezier(.32,.72,0,1),
+    visibility 0s linear 450ms;
+}
+
+html.pc02-qa-open .pc02-qa-panel {
+  opacity: 1; visibility: visible; pointer-events: auto;
+  transform: translate3d(-50%, -50%, 0) scale(1);
+  transition:
+    opacity    450ms cubic-bezier(.32,.72,0,1),
+    transform  450ms cubic-bezier(.32,.72,0,1),
+    visibility 0s linear 0s;
+}
+
+/*
+  .is-closing is added by JS the moment close() is called.
+  Uses a snappier ease-in exit — things leave faster than they arrive.
+  CLOSE_DURATION_MS in pc02-quick-add.js = 300 (covers both drawer & popup).
+*/
+.pc02-qa-panel.is-closing {
+  transition:
+    opacity    260ms cubic-bezier(.4,0,1,1),
+    transform  260ms cubic-bezier(.55,0,1,.8),
+    visibility 0s linear 260ms !important;
+}
+
+/* ── Drawer (mobile / touch devices) ── */
+.pc02-qa-panel.is-drawer {
+  top: auto; left: 0; right: 0; bottom: 0;
+  width: 100%; max-width: 100%; max-height: 82vh;
+  border-bottom-left-radius: 0; border-bottom-right-radius: 0;
+  border-top-left-radius: 16px; border-top-right-radius: 16px;
+
+  /*
+    DRAWER CLOSED: 100% below the viewport (full height, fully hidden).
+    Not 40px — that was why it was "fading" instead of sliding.
+    Using translate3d(0, 100%, 0) guarantees the panel is completely
+    off-screen no matter how tall it is.
+
+    OPEN (500ms): cubic-bezier(.32,.72,0,1) — iOS sheet decelerate curve.
+    Drawer travels its full height so 500ms keeps the perceived speed
+    the same as the popup (which only nudges 14px).
+  */
+  transform: translate3d(0, 100%, 0);
+  transition:
+    transform  500ms cubic-bezier(.32,.72,0,1),
+    opacity    500ms cubic-bezier(.32,.72,0,1),
+    visibility 0s linear 500ms;
+}
+
+html.pc02-qa-open .pc02-qa-panel.is-drawer {
+  opacity: 1; visibility: visible; pointer-events: auto;
+  /* Lands at exactly Y=0 — fully on screen */
+  transform: translate3d(0, 0, 0);
+  transition:
+    transform  500ms cubic-bezier(.32,.72,0,1),
+    opacity    500ms cubic-bezier(.32,.72,0,1),
+    visibility 0s linear 0s;
+}
+
+/*
+  Drawer close: slides back DOWN off screen.
+  300ms = fast enough to feel intentional, long enough to be legible.
+  cubic-bezier(.4,0,.6,1) = standard accelerate-out (ease-in-out).
+  The !important overrides the open transition on the .is-drawer base rule.
+*/
+.pc02-qa-panel.is-drawer.is-closing {
+  transform: translate3d(0, 100%, 0) !important;
+  transition:
+    transform  300ms cubic-bezier(.4,0,.6,1),
+    opacity    300ms cubic-bezier(.4,0,.6,1),
+    visibility 0s linear 300ms !important;
+}
+
+/* ── Drawer grab handle ── */
+.pc02-qa-grab {
+  display: none;
+  align-items: center; justify-content: center;
+  padding: 14px 0 10px;
+  background: transparent;
+  cursor: grab;
+  touch-action: none;
+}
+.pc02-qa-panel.is-drawer .pc02-qa-grab { display: flex !important; }
+
+.pc02-qa-grabbar {
+  display: block !important;
+  width: 56px; height: 4px;
+  border-radius: 999px;
+  background: rgba(0,0,0,.28);
+}
+
+/* ── Panel body ── */
+.pc02-qa-body {
+  padding: 10px 16px 16px;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* ── Panel content ── */
+.pc02-qa-top { display: flex; gap: 12px; align-items: flex-start; }
+
+.pc02-qa-thumb-link { display: block; width: 82px; flex: 0 0 auto; text-decoration: none; }
+.pc02-qa-thumb {
+  width: 82px; aspect-ratio: 3/4; height: auto;
+  border-radius: 10px; object-fit: cover; background: #f3f4f6; display: block;
+}
+
+.pc02-qa-meta { min-width: 0; flex: 1 1 auto; }
+
+.pc02-qa-title-link { text-decoration: none; color: inherit; display: block; }
+.pc02-qa-title {
+  font-size: 15px; line-height: 1.25; font-weight: 600;
+  margin: 2px 0 6px; color: #111827;
+}
+.pc02-qa-title-link:hover .pc02-qa-title {
+  text-decoration: underline; text-underline-offset: 2px;
+}
+
+.pc02-qa-price { font-size: 14px; font-weight: 600; margin: 0; color: #1f2937; }
+
+.pc02-qa-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; margin-top: 12px;
+}
+.pc02-qa-label { font-size: 12.5px; font-weight: 600; letter-spacing: .02em; color: #374151; }
+
+/* Size pills */
+.pc02-qa-sizes { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 5px; }
+.pc02-qa-size {
+  border: 1px solid rgba(17,24,39,.14);
+  background: #fff;
+  border-radius: 7px;
+  padding: 8px 5px;
+  font-size: 12.5px; font-weight: 600;
+  cursor: pointer; min-width: 84px; text-align: center;
+  user-select: none; color: #111827;
+  will-change: border-color, box-shadow;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+.pc02-qa-size.is-active {
+  border-color: #F97316;
+  box-shadow: 0 0 0 1px rgba(249,115,22,.18) inset;
+}
+.pc02-qa-size.is-oos { opacity: .45; text-decoration-line: line-through; }
+
+.pc02-qa-divider { margin-top: 12px; height: 1px; background: rgba(0,0,0,.08); }
+.pc02-qa-cta { margin-top: 12px; }
+
+/* CTA buttons */
+.pc02-qa-atc, .pc02-qa-soldout {
+  width: 100%; min-height: 54px; border-radius: 14px; border: 0;
+  font-size: 14.5px; font-weight: 700; cursor: pointer;
+  text-transform: uppercase; letter-spacing: .04em;
+  font-family: Montserrat, var(--font-body-family, sans-serif);
+}
+.pc02-qa-atc { background: #F97316; color: #fff; }
+.pc02-qa-atc:disabled { opacity: .7; cursor: not-allowed; }
+.pc02-qa-soldout { background: #111827; color: #fff; opacity: .75; cursor: not-allowed; }
+
+/* Skeleton loader */
+.pc02-qa-skel { display: flex; gap: 12px; align-items: flex-start; }
+.pc02-qa-skel__thumb { width: 82px; aspect-ratio: 3/4; border-radius: 10px; background: #f3f4f6; }
+.pc02-qa-skel__lines { flex: 1; }
+.pc02-qa-skel__line {
+  height: 12px; border-radius: 8px; margin: 6px 0;
+  background: linear-gradient(90deg, #f3f4f6 25%, #e9eaec 50%, #f3f4f6 75%);
+  background-size: 200% 100%;
+  animation: pc02Shimmer 1.4s infinite;
+}
+@keyframes pc02Shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.pc02-qa-skel__line.w1 { width: 80%; }
+.pc02-qa-skel__line.w2 { width: 55%; }
+.pc02-qa-skel__line.w3 { width: 35%; }
+
+/* Kiwi sizing chart */
+.pc02-qa-kiwi { display: flex; align-items: center; justify-content: flex-end; }
+.pc02-qa-kiwi #KiwiSizingChart { margin: 0; padding: 0; }
+.pc02-qa-kiwi .ks-chart-modal-link,
+.pc02-qa-kiwi .sizing-chart-modal-link {
+  cursor: pointer; color: #F97316; font-weight: 700; font-size: 12.5px;
+}
+
+/* Reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .pc02-qa-overlay,
+  .pc02-qa-panel,
+  .pc02-qa-panel.is-drawer,
+  .pc02-qa-panel.is-closing,
+  .pc02-qa-panel.is-drawer.is-closing,
+  html.pc02-qa-open .pc02-qa-panel,
+  html.pc02-qa-open .pc02-qa-panel.is-drawer,
+  .pc02-dot,
+  .pc02-qa-size,
+  .pc02-qa-skel__line {
+    transition: none !important;
+    animation: none !important;
+  }
+}

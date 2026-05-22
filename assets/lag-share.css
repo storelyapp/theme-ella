@@ -1,0 +1,156 @@
+/* assets/lag-share.css */
+#lagShareOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+}
+#lagShareOverlay.is-open { display: block; }
+
+#lagShareOverlay .lagShareBackdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.32);
+}
+
+#lagShareOverlay .lagShareSheet {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  width: min(520px, calc(100% - 24px));
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.10);
+  border-radius: 18px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+  padding: 14px 14px 12px;
+}
+
+#lagShareOverlay .lagShareTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+#lagShareOverlay .lagShareTitle {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+}
+
+#lagShareOverlay .lagShareClose {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.10);
+  background: #fff;
+  cursor: pointer;
+}
+
+#lagShareOverlay .lagShareRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+#lagShareOverlay .lagShareItem {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.10);
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+#lagShareOverlay .lagShareToast {
+  margin-top: 10px;
+  font-size: 13px;
+  color: rgba(0,0,0,0.72);
+}
+
+/* ------------------------------
+   Wishlist share button (native share)
+   Minimal: no hover effects
+-------------------------------- */
+
+.lag-wlShareWrap{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.lag-wlShareBtn{
+  --lag-wl-btn-bg: var(--lag-wl-btn-bg, #ffffff);
+  --lag-wl-btn-border: var(--lag-wl-btn-border, #e5e5e5);
+  --lag-wl-btn-border-w: var(--lag-wl-btn-border-w, 1px);
+  --lag-wl-btn-radius: var(--lag-wl-btn-radius, 12px);
+  --lag-wl-btn-text: var(--lag-wl-btn-text, #111111);
+  --lag-wl-btn-font-size: var(--lag-wl-btn-font-size, 14px);
+  --lag-wl-btn-font-weight: var(--lag-wl-btn-font-weight, 600);
+  --lag-wl-btn-icon-size: var(--lag-wl-btn-icon-size, 18px);
+
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+
+  padding:10px 12px;
+  background: var(--lag-wl-btn-bg);
+  color: var(--lag-wl-btn-text);
+  border: var(--lag-wl-btn-border-w) solid var(--lag-wl-btn-border);
+  border-radius: var(--lag-wl-btn-radius);
+
+  font-size: var(--lag-wl-btn-font-size);
+  font-weight: var(--lag-wl-btn-font-weight);
+  line-height:1;
+
+  cursor:pointer;
+  user-select:none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lag-wlShareBtn:focus{
+  outline: none;
+}
+
+.lag-wlShareIcon{
+  width: var(--lag-wl-btn-icon-size);
+  height: var(--lag-wl-btn-icon-size);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex: 0 0 auto;
+}
+
+.lag-wlShareIcon img,
+.lag-wlShareIcon svg{
+  width: 100%;
+  height: 100%;
+  display:block;
+  object-fit: contain;
+}
+
+/* Tiny inline toast (optional) */
+.lag-share-inlineToast{
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  z-index: 9999;
+  padding: 10px 12px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.82);
+  color: #fff;
+  font-size: 13px;
+  line-height: 1;
+  display:none;
+}
+.lag-share-inlineToast.is-open{ display:block; }

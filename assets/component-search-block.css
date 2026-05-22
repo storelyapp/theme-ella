@@ -1,0 +1,181 @@
+.search-block-section .form-fieldInline {
+    display: flex;
+    position: relative;
+    overflow: hidden;
+}
+
+.search-block-section .search-form {
+    width: 100%;
+    max-width: unset;
+}
+
+.search-block-section .search-form .button {
+    position: absolute;
+    right: 0;
+    background-color: transparent;
+    color: currentColor;
+    border: none;
+    width: 63px;
+    height: 100%;
+    transition: background-color var(--duration-short) ease;
+}
+
+.search-block-section .search-form .button:hover {
+    background-color: rgba(0,0,0,0.2);
+}
+
+.search-block-section .search-form .button svg {
+    fill: currentColor;
+    transform: scale(1.5) rotate(-90deg);
+    position: relative;
+    top: -1px;
+}
+
+.search-block-section .search-block {
+    max-width: var(--content-max-width);
+}
+
+.search-block-section .search-block .block-header {
+    width: 100%;
+}
+
+.search-block-section .search-block.align-center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.search-block-section .search-block.align-left {
+    margin-right: auto;
+}
+
+.search-block-section .search-block.align-right {
+    margin-left: auto;
+}
+
+.search-block-section .search-block-title {
+    color: var(--title-color);
+    font-size: var(--title-fs);
+    margin-bottom: var(--title-margin-bottom);
+    text-transform: var(--title-transform);
+}
+
+.search-block-section .search-block-des {
+    color: var(--desc-color);
+    margin-bottom: var(--desc-margin-bottom);
+    font-size: var(--des-fs);
+}
+
+.search-block-section .search-form .search__input {
+    --side-padding: 55px;
+    color: var(--input-color);
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    padding-right: var(--side-padding);
+    width: 100%;
+    padding-top: var(--input-padding-top);
+    padding-bottom: var(--input-padding-bottom);
+}
+
+.search-block-section .search-form .search__input::placeholder {
+    color: var(--input-color);
+}
+
+.search-block-section .search-form .search__input.input-align-left {
+    text-align: left;
+}
+
+.search-block-section .search-form .search__input.input-align-center {
+    text-align: center;
+    padding-left: var(--side-padding);
+}
+
+.search-block-section .search-form .search__input.input-align-right {
+    text-align: right;
+}
+
+.search-block-section .search-form input[type="search"]::-webkit-search-decoration,
+.search-block-section .search-form input[type="search"]::-webkit-search-cancel-button,
+.search-block-section .search-form input[type="search"]::-webkit-search-results-button,
+.search-block-section .search-form input[type="search"]::-webkit-search-results-decoration {
+  -webkit-appearance:none;
+}
+
+/* === Pill Search – height + outer paddings controllable ================= */
+
+/* Pill wrapper */
+.search-block-section .search-pill{
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;  /* left icon, input, right icons (optional) */
+  align-items: center;
+  gap: 10px;
+
+  /* SIZE */
+  height: var(--pill-h, 56px);
+  padding: 0 var(--pill-pad-x, 18px);        /* Y comes from height; X is adjustable */
+  margin: var(--pill-outer-top, 0)
+          var(--pill-outer-right, 0)
+          var(--pill-outer-bottom, 0)
+          var(--pill-outer-left, 0);
+
+  /* COSMETICS */
+  border: none;
+  background: var(--pill-bg, #eee);
+  border-radius: var(--pill-radius, 28px);
+}
+
+/* Left submit icon */
+.search-block-section .pill-ico-left{
+  all: unset;
+  display: grid; place-items: center;
+  width: calc(var(--pill-icon-size, 22px) + 6px);
+  height: calc(var(--pill-icon-size, 22px) + 6px);
+  color: var(--pill-icon-color, #111);
+  cursor: pointer;
+}
+.search-block-section .pill-ico-left svg{
+  width: var(--pill-icon-size, 22px);
+  height: var(--pill-icon-size, 22px);
+}
+
+/* Input looks like text inside pill */
+.search-block-section .search-pill .search__input{
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  font-size: var(--pill-font-size, 20px);
+  color: var(--pill-text-color, #4b5563);
+  line-height: 1.25;
+  padding: 0 !important;
+  height: auto;                                 /* let the container define height */
+}
+.search-block-section .search-pill .search__input::placeholder{
+  color: var(--pill-text-color, #4b5563);
+  font-weight: 700;                              /* bold placeholder like the mock */
+  opacity: 1;
+}
+
+/* Right icons */
+.search-block-section .pill-ico-right{
+  all: unset;
+  display: grid; place-items: center;
+  width: calc(var(--pill-icon-size, 22px) + 10px);
+  height: calc(var(--pill-icon-size, 22px) + 10px);
+  color: var(--pill-icon-color, #111);
+  cursor: pointer;
+  border-radius: 6px;
+}
+.search-block-section .pill-ico-right svg{
+  width: var(--pill-icon-size, 22px);
+  height: var(--pill-icon-size, 22px);
+}
+
+/* Hide old orange submit button (we use the left icon) */
+.search-block-section .search-form .search__button.button{
+  display: none !important;
+}
+
+/* Keep your adjustable max width */
+.search-block-section .search-block{
+  max-width: var(--content-max-width, 600px);
+}

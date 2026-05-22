@@ -1,0 +1,455 @@
+{% doc %}
+  @prompt
+    Create a video section that only displays on mobile devices with 1:1 aspect ratio. Include the following customization settings: padding controls for all sides (top, right, bottom, left), corner radius control, text overlay on top of the video with customizable text content, text color picker, text size control, font weight options, font family selector, text position options (top-left, top-center, top-right, center-left, center, center-right, bottom-left, bottom-center, bottom-right), and a clickable link that can be set to any collection page. The video should be clickable and navigate to the selected collection when clicked., add a option for video uploading, hide the video in desktop, give a on/off button to hide videon on desktop, the hide button isn't working, i want to hide the video on desktop.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-mobile-video-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+  }
+
+  @media screen and (min-width: 750px) {
+    {% if block.settings.hide_on_desktop %}
+      .ai-mobile-video-{{ ai_gen_id }} {
+        display: none !important;
+      }
+    {% endif %}
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-mobile-video-{{ ai_gen_id }} {
+      padding-top: {{ block.settings.padding_top }}px;
+      padding-right: {{ block.settings.padding_right }}px;
+      padding-bottom: {{ block.settings.padding_bottom }}px;
+      padding-left: {{ block.settings.padding_left }}px;
+    }
+  }
+
+  .ai-mobile-video-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: {{ block.settings.corner_radius }}px;
+  }
+
+  .ai-mobile-video-link-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    text-decoration: none;
+  }
+
+  .ai-mobile-video-element-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .ai-mobile-video-overlay-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    pointer-events: none;
+  }
+
+  .ai-mobile-video-text-{{ ai_gen_id }} {
+    color: {{ block.settings.text_color }};
+    font-size: {{ block.settings.text_size }}px;
+    font-weight: {{ block.settings.font_weight }};
+    font-family: {{ block.settings.font_family.family }}, {{ block.settings.font_family.fallback_families }};
+    text-align: center;
+    padding: 16px;
+    word-wrap: break-word;
+  }
+
+  .ai-mobile-video-overlay-{{ ai_gen_id }}--top-left {
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .ai-mobile-video-overlay-{{ ai_gen_id }}--top-center {
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .ai-mobile-video-overlay-{{ ai_gen_id }}--top-right {
+    justify-content: flex-end;
+    align-items: flex-start;
+  }
+
+  .ai-mobile-video-overlay-{{ ai_gen_id }}--center-left {
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .ai-mobile-video-overlay-{{ ai_gen_id }}--center {
+    justify-content: center;
+    align-items: center;
+  }
+
+  .ai-mobile-video-overlay-{{ ai_gen_id }}--center-right {
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .ai-mobile-video-overlay-{{ ai_gen_id }}--bottom-left {
+    justify-content: flex-start;
+    align-items: flex-end;
+  }
+
+  .ai-mobile-video-overlay-{{ ai_gen_id }}--bottom-center {
+    justify-content: center;
+    align-items: flex-end;
+  }
+
+  .ai-mobile-video-overlay-{{ ai_gen_id }}--bottom-right {
+    justify-content: flex-end;
+    align-items: flex-end;
+  }
+
+  .ai-mobile-video-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .ai-mobile-video-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    max-width: 200px;
+    max-height: 200px;
+  }
+
+  .ai-mobile-video-empty-state-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    pointer-events: none;
+  }
+{% endstyle %}
+
+<mobile-video-{{ ai_gen_id }} class="ai-mobile-video-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-mobile-video-wrapper-{{ ai_gen_id }}">
+    {% if block.settings.collection_link %}
+      <a href="{{ block.settings.collection_link.url }}" class="ai-mobile-video-link-{{ ai_gen_id }}">
+        {% if block.settings.video_upload %}
+          <video
+            class="ai-mobile-video-element-{{ ai_gen_id }}"
+            autoplay
+            muted
+            loop
+            playsinline
+          >
+            {% for source in block.settings.video_upload.sources %}
+              <source src="{{ source.url }}" type="{{ source.mime_type }}">
+            {% endfor %}
+          </video>
+        {% elsif block.settings.video_url %}
+          <video
+            class="ai-mobile-video-element-{{ ai_gen_id }}"
+            autoplay
+            muted
+            loop
+            playsinline
+          >
+            <source src="{{ block.settings.video_url }}" type="video/mp4">
+          </video>
+        {% else %}
+          <div class="ai-mobile-video-placeholder-{{ ai_gen_id }}">
+            {{ 'image' | placeholder_svg_tag }}
+            <div class="ai-mobile-video-empty-state-{{ ai_gen_id }}">
+              Next, add a video
+            </div>
+          </div>
+        {% endif %}
+
+        {% if block.settings.text_content != blank %}
+          <div class="ai-mobile-video-overlay-{{ ai_gen_id }} ai-mobile-video-overlay-{{ ai_gen_id }}--{{ block.settings.text_position }}">
+            <div class="ai-mobile-video-text-{{ ai_gen_id }}">
+              {{ block.settings.text_content }}
+            </div>
+          </div>
+        {% endif %}
+      </a>
+    {% else %}
+      {% if block.settings.video_upload %}
+        <video
+          class="ai-mobile-video-element-{{ ai_gen_id }}"
+          autoplay
+          muted
+          loop
+          playsinline
+        >
+          {% for source in block.settings.video_upload.sources %}
+            <source src="{{ source.url }}" type="{{ source.mime_type }}">
+          {% endfor %}
+        </video>
+      {% elsif block.settings.video_url %}
+        <video
+          class="ai-mobile-video-element-{{ ai_gen_id }}"
+          autoplay
+          muted
+          loop
+          playsinline
+        >
+          <source src="{{ block.settings.video_url }}" type="video/mp4">
+        </video>
+      {% else %}
+        <div class="ai-mobile-video-placeholder-{{ ai_gen_id }}">
+          {{ 'image' | placeholder_svg_tag }}
+          <div class="ai-mobile-video-empty-state-{{ ai_gen_id }}">
+            Next, add a video
+          </div>
+        </div>
+      {% endif %}
+
+      {% if block.settings.text_content != blank %}
+        <div class="ai-mobile-video-overlay-{{ ai_gen_id }} ai-mobile-video-overlay-{{ ai_gen_id }}--{{ block.settings.text_position }}">
+          <div class="ai-mobile-video-text-{{ ai_gen_id }}">
+            {{ block.settings.text_content }}
+          </div>
+        </div>
+      {% endif %}
+    {% endif %}
+  </div>
+</mobile-video-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class MobileVideo{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.style.display = 'block';
+      }
+    }
+
+    customElements.define('mobile-video-{{ ai_gen_id }}', MobileVideo{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Mobile video",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Video"
+    },
+    {
+      "type": "video",
+      "id": "video_upload",
+      "label": "Upload video"
+    },
+    {
+      "type": "video_url",
+      "id": "video_url",
+      "label": "Video URL",
+      "accept": ["youtube", "vimeo"],
+      "info": "Used if no video is uploaded"
+    },
+    {
+      "type": "collection",
+      "id": "collection_link",
+      "label": "Collection link"
+    },
+    {
+      "type": "header",
+      "content": "Visibility"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_on_desktop",
+      "label": "Hide on desktop",
+      "default": true,
+      "info": "When enabled, video only shows on mobile devices"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Right",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Left",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "label": "Corner radius",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Text overlay"
+    },
+    {
+      "type": "text",
+      "id": "text_content",
+      "label": "Text"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "min": 12,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Text size",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "font_weight",
+      "label": "Font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        },
+        {
+          "value": "800",
+          "label": "Extra bold"
+        }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "font_picker",
+      "id": "font_family",
+      "label": "Font family",
+      "default": "sans-serif"
+    },
+    {
+      "type": "select",
+      "id": "text_position",
+      "label": "Text position",
+      "options": [
+        {
+          "value": "top-left",
+          "label": "Top left"
+        },
+        {
+          "value": "top-center",
+          "label": "Top center"
+        },
+        {
+          "value": "top-right",
+          "label": "Top right"
+        },
+        {
+          "value": "center-left",
+          "label": "Center left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "center-right",
+          "label": "Center right"
+        },
+        {
+          "value": "bottom-left",
+          "label": "Bottom left"
+        },
+        {
+          "value": "bottom-center",
+          "label": "Bottom center"
+        },
+        {
+          "value": "bottom-right",
+          "label": "Bottom right"
+        }
+      ],
+      "default": "center"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Mobile video"
+    }
+  ]
+}
+{% endschema %}

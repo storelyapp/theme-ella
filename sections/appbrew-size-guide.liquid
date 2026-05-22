@@ -1,0 +1,119 @@
+{% schema %}
+{
+  "name": "appbrew-size-guide",
+  "settings": []
+}
+{% endschema %}
+
+<div
+  id="product-data"
+  data-id="{{ product.id }}"
+  data-title="{{ product.title | escape }}"
+  data-url="{{ product.url | escape }}"
+  data-type="{{ product.type | escape }}"
+  data-vendor="{{ product.vendor | escape }}"
+  data-tags="{{ product.tags | join: ', ' | escape }}"
+  data-images="{{ product.images | map: 'src' | join: ', ' | escape }}"
+  data-collection-ids="{{ product.collections | map: 'id' | join: ',' }}"
+>
+  <div class="loader-wrapper">
+    <style>
+      .lag-pill{
+        display:none
+      }
+      /* HTML: <div class="loader"></div> */
+      .loader-wrapper {
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .loader {
+        width: 50px;
+        padding: 8px;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: #aaaaaa;
+        --_m:
+          conic-gradient(#0000 10%,#000),
+          linear-gradient(#000 0 0) content-box;
+        -webkit-mask: var(--_m);
+                mask: var(--_m);
+        -webkit-mask-composite: source-out;
+                mask-composite: subtract;
+        animation: l3 1s infinite linear;
+      }
+      @keyframes l3 {to{transform: rotate(1turn)}}
+    </style>
+    <div class="loader"></div>
+  </div>
+  <div id="size-chart-wrapper"></div>
+  <script>
+    const productDataDiv = document.getElementById('product-data');
+
+    if (productDataDiv) {
+        const productError = productDataDiv.getAttribute('data-error');
+        if (productError) {
+            console.error(productError);
+        } else {
+            // Retrieve product details from data attributes
+            const productId = productDataDiv.getAttribute('data-id');
+            const productTitle = productDataDiv.getAttribute('data-title');
+            const productType = productDataDiv.getAttribute('data-type');
+            const productTags = productDataDiv.getAttribute('data-tags');
+            const productImages = productDataDiv.getAttribute('data-images').split(', ');
+            const productUrl = productDataDiv.getAttribute('data-url');
+            const vendor = productDataDiv.getAttribute('data-vendor');
+            const collections = productDataDiv.getAttribute('data-collection-ids');
+            const elementToInject = document.getElementById('kiwi-sizing-placeholder');
+            window.ks_load_async = 1
+            !function(t,n,s,e,i){function r(t){try{var s="; "+n.cookie,e=s.split("; "+t+"=");if(2==e.length)return e.pop().split(";").shift()}catch(i){}return null}t[i]=t[i]||{},t[i]._queue=[];const o="on setShopID setUserID setUserEmail setLanguage loadSizing".split(" ");for(var a=0;a<o.length;a++){const c=o[a];t[i][c]=function(){var n=Array.prototype.slice.call(arguments);return n.unshift(c),t[i]._queue.push(n),t[i]}}const l=r("_ks_scriptVersion")||t.ks_version||"";var u=n.createElement(s);n=n.getElementsByTagName(s)[0],u.async=1,void 0!==t.ks_load_async&&(u.async=t.ks_load_async),u.src=e+"?v="+l,u.id="ks-integration",n.parentNode.insertBefore(u,n)}(window,document,"script","https://cdn.static.kiwisizing.com/SizingPlugin.prod.js","ks");
+             ks.setShopID("lagorii-kids.myshopify.com");
+             ks.loadSizing({
+              productData: {
+                  productID: productId,
+                  collections: collections,
+                  type: productType,
+                  vendor:vendor,
+                  tags:productTags,
+                  title: productTitle,
+                  "images": productImages,
+              }, // (required) see below
+              options: {
+                  "injectionSelector": "#size-chart-wrapper",
+                  "el": elementToInject,
+                  "displayMode": 0,
+                  "injectionOrder": 0,
+                  "buttonText":"Size"
+              }, // (optional) see below
+               loaded: function(success) {
+                 if(!success){
+                    console.log('hiding loader')
+                    // Select all elements with the class name 'example-class'
+                    const elements = document.querySelectorAll('.loader-wrapper');
+                    // Loop through and hide each element
+                    elements.forEach(element => {
+                        element.style.display = 'none';
+                    });
+                    const newElement = document.createElement('div');
+                    newElement.textContent = 'Size chart not Available for this product';
+                    document.getElementById('size-chart-wrapper').appendChild(newElement);
+                 }else{
+                    console.log('hiding loader')
+                    // Select all elements with the class name 'example-class'
+                    const elements = document.querySelectorAll('.loader-wrapper');
+                    // Loop through and hide each element
+                    elements.forEach(element => {
+                      element.style.display = 'none';
+                    });
+                   }
+                },
+              });
+              ks.on("sizing_loaded", function(data) {
+                console.log("Event is triggered", data);
+              });
+        }
+    }
+  </script>
+</div>

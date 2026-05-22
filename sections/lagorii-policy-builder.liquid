@@ -1,0 +1,419 @@
+{% comment %}
+  Lagorii — Policy Builder (Generic, No-code)
+  Drop-in section with blocks:
+  - Banner (desktop + mobile)
+  - Heading
+  - Rich text (main content)
+  - Key takeaway (bulleted chip)
+  - Note card / Tip
+  - Steps list (1–6)
+  - Two-column text
+  - Image (single)
+  - Image row / carousel (up to 8; horizontal scroll, no JS)
+  - CTA button
+
+  Add this file to: /sections/lagorii-policy-builder.liquid
+{% endcomment %}
+
+<section class="lpb" aria-label="{{ section.settings.policy_title | escape }}">
+  <div class="lpb-wrap page-width">
+    {%- if section.settings.show_title -%}
+      <h1 class="lpb-title">{{ section.settings.policy_title }}</h1>
+    {%- endif -%}
+
+    {%- if section.settings.subtitle != blank -%}
+      <p class="lpb-subtitle">{{ section.settings.subtitle }}</p>
+    {%- endif -%}
+  </div>
+
+  {%- if section.settings.banner_desktop or section.settings.banner_mobile -%}
+    <div class="lpb-banner">
+      {%- if section.settings.banner_desktop != blank -%}
+        <img class="lpb-banner-img lpb-banner-desktop" src="{{ section.settings.banner_desktop | image_url: width: 2000 }}" alt="{{ section.settings.banner_alt | escape }}" loading="lazy">
+      {%- endif -%}
+      {%- if section.settings.banner_mobile != blank -%}
+        <img class="lpb-banner-img lpb-banner-mobile" src="{{ section.settings.banner_mobile | image_url: width: 1200 }}" alt="{{ section.settings.banner_alt | escape }}" loading="lazy">
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="lpb-wrap page-width">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'shipping_currency' -%}
+
+        <div class="lpb-card" {{ block.shopify_attributes }}>
+          <span class="lpb-eyebrow">{{ block.settings.label | default: 'Shipping charges' }}</span>
+
+          <div class="rte">
+            {%- if block.settings.show_domestic -%}
+            <h3>{{ block.settings.domestic_heading | default: 'India' }}</h3>
+            <ul>
+              {%- if block.settings.domestic_threshold_inr != blank -%}
+                <li>
+                  Free shipping on orders above
+                  <span class="money"
+                        data-original-price="{{ block.settings.domestic_threshold_inr | round }}">
+                    ₹{{ block.settings.domestic_threshold_inr }}
+                  </span>.
+                </li>
+              {%- endif -%}
+              {%- if block.settings.domestic_fee_below_inr != blank -%}
+              <li>
+                Standard shipping fee applies for orders below
+                &nbsp;<span class="money"
+                      data-original-price="{{ block.settings.domestic_threshold_inr | default: 0 | round }}">
+                  ₹{{ block.settings.domestic_threshold_inr | default: 0 }}
+                </span>
+                &nbsp;—&nbsp;final amount shown at checkout.
+              </li>
+            {%- endif -%}
+
+            </ul>
+            {%- endif -%}
+
+            {%- if block.settings.show_international -%}
+            <h3>{{ block.settings.international_heading | default: 'International' }}</h3>
+            <ul>
+              {%- if block.settings.intl_standard_inr != blank -%}
+                <li>
+                  <strong>Standard</strong>:
+                  {%- if block.settings.intl_standard_usd != blank -%}
+                    {{ block.settings.intl_standard_usd }}
+                  {%- endif -%}
+                  <!-- removed () and added spacing -->
+                  <span class="money" data-original-price="{{ block.settings.intl_standard_inr | round }}">
+                    ₹{{ block.settings.intl_standard_inr }}
+                  </span>
+                  {%- if block.settings.intl_free_above_inr != blank -%}
+                    &nbsp;—&nbsp;<em>Free for orders above</em>
+                    {%- if block.settings.intl_free_above_usd != blank -%}
+                      &nbsp;{{ block.settings.intl_free_above_usd }}
+                    {%- endif -%}
+                    &nbsp;<span class="money" data-original-price="{{ block.settings.intl_free_above_inr | round }}">
+                      ₹{{ block.settings.intl_free_above_inr }}
+                    </span>
+                  {%- endif -%}.
+                </li>
+              {%- endif -%}
+
+              {%- if block.settings.intl_express_inr != blank -%}
+                <li>
+                  <strong>Express</strong>:
+                  {%- if block.settings.intl_express_usd != blank -%}
+                    {{ block.settings.intl_express_usd }}
+                  {%- endif -%}
+                  <!-- removed () and added spacing -->
+                  <span class="money" data-original-price="{{ block.settings.intl_express_inr | round }}">
+                    ₹{{ block.settings.intl_express_inr }}
+                  </span>.
+                </li>
+              {%- endif -%}
+              {%- if block.settings.intl_note != blank -%}
+                <li>{{ block.settings.intl_note }}</li>
+              {%- endif -%}
+            </ul>
+            {%- endif -%}
+          </div>
+        </div>
+
+
+        {%- when 'heading' -%}
+          <h2 class="lpb-h2" {{ block.shopify_attributes }}>
+            {{ block.settings.text }}
+          </h2>
+
+        {%- when 'richtext' -%}
+          <div class="lpb-rte rte" {{ block.shopify_attributes }}>
+            {{ block.settings.content }}
+          </div>
+
+        {%- when 'takeaway' -%}
+          <div class="lpb-card" {{ block.shopify_attributes }}>
+            <span class="lpb-eyebrow">{{ block.settings.label | default: 'Key takeaways' }}</span>
+            <ul class="lpb-bullets" role="list">
+              {%- if block.settings.item1 != blank -%}<li><span class="ico">{{ block.settings.icon1 }}</span>{{ block.settings.item1 }}</li>{%- endif -%}
+              {%- if block.settings.item2 != blank -%}<li><span class="ico">{{ block.settings.icon2 }}</span>{{ block.settings.item2 }}</li>{%- endif -%}
+              {%- if block.settings.item3 != blank -%}<li><span class="ico">{{ block.settings.icon3 }}</span>{{ block.settings.item3 }}</li>{%- endif -%}
+              {%- if block.settings.item4 != blank -%}<li><span class="ico">{{ block.settings.icon4 }}</span>{{ block.settings.item4 }}</li>{%- endif -%}
+              {%- if block.settings.item5 != blank -%}<li><span class="ico">{{ block.settings.icon5 }}</span>{{ block.settings.item5 }}</li>{%- endif -%}
+              {%- if block.settings.item6 != blank -%}<li><span class="ico">{{ block.settings.icon6 }}</span>{{ block.settings.item6 }}</li>{%- endif -%}
+            </ul>
+          </div>
+
+        {%- when 'note' -%}
+          <div class="lpb-note" {{ block.shopify_attributes }}>
+            <div class="lpb-note-badge">{{ block.settings.badge | default: 'Note' }}</div>
+            <div class="lpb-note-text">{{ block.settings.text }}</div>
+          </div>
+
+        {%- when 'steps' -%}
+          <ol class="lpb-steps" {{ block.shopify_attributes }}>
+            {%- if block.settings.step1 != blank -%}<li><span>{{ block.settings.step1 }}</span></li>{%- endif -%}
+            {%- if block.settings.step2 != blank -%}<li><span>{{ block.settings.step2 }}</span></li>{%- endif -%}
+            {%- if block.settings.step3 != blank -%}<li><span>{{ block.settings.step3 }}</span></li>{%- endif -%}
+            {%- if block.settings.step4 != blank -%}<li><span>{{ block.settings.step4 }}</span></li>{%- endif -%}
+            {%- if block.settings.step5 != blank -%}<li><span>{{ block.settings.step5 }}</span></li>{%- endif -%}
+            {%- if block.settings.step6 != blank -%}<li><span>{{ block.settings.step6 }}</span></li>{%- endif -%}
+          </ol>
+
+        {%- when 'two_col' -%}
+          <div class="lpb-two" {{ block.shopify_attributes }}>
+            <div class="col">
+              {%- if block.settings.h1 != blank -%}<h3>{{ block.settings.h1 }}</h3>{%- endif -%}
+              <div class="rte">{{ block.settings.c1 }}</div>
+            </div>
+            <div class="col">
+              {%- if block.settings.h2 != blank -%}<h3>{{ block.settings.h2 }}</h3>{%- endif -%}
+              <div class="rte">{{ block.settings.c2 }}</div>
+            </div>
+          </div>
+
+        {%- when 'image' -%}
+          {%- if block.settings.img != blank -%}
+            <figure class="lpb-image" {{ block.shopify_attributes }}>
+              <img src="{{ block.settings.img | image_url: width: 1600 }}" alt="{{ block.settings.alt | escape }}" loading="lazy">
+              {%- if block.settings.caption != blank -%}<figcaption>{{ block.settings.caption }}</figcaption>{%- endif -%}
+            </figure>
+          {%- endif -%}
+
+        {%- when 'image_row' -%}
+          <div class="lpb-row" {{ block.shopify_attributes }} aria-label="{{ block.settings.row_label | escape }}">
+            {%- for i in (1..8) -%}
+              {%- assign key = 'img' | append: i -%}
+              {%- assign alt = 'alt' | append: i -%}
+              {%- if block.settings[key] != blank -%}
+                <div class="lpb-row-item">
+                  <img src="{{ block.settings[key] | image_url: width: 1000 }}" alt="{{ block.settings[alt] | escape }}" loading="lazy">
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+
+        {%- when 'cta' -%}
+          {%- if block.settings.label != blank -%}
+            <div class="lpb-cta-wrap" {{ block.shopify_attributes }}>
+              <a class="lpb-cta" href="{{ block.settings.link | default: routes.contact_url }}">{{ block.settings.label }}</a>
+            </div>
+          {%- endif -%}
+
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+
+  <style>
+    :root{
+      --brand: {{ section.settings.brand_color | default: '#E87529' }};
+      --ink:#141414; --muted:#6F6F6F; --soft:#F7F7F8; --bg:#fff; --radius:14px;
+    }
+    .lpb{background:var(--bg); padding: clamp(24px,4vw,56px) 0}
+    .lpb-wrap{max-width: 960px; margin:0 auto; padding:0 20px; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; line-height:1.7}
+    .lpb-title{font-size:clamp(28px,4.6vw,44px); line-height:1.15; font-weight:800; letter-spacing:-.02em; margin:6px 0}
+    .lpb-subtitle{color:var(--muted); margin:6px 0 18px}
+
+    /* Banner */
+    .lpb-banner{position:relative; margin:10px 0 24px}
+    .lpb-banner-img{width:100%; height:auto; border-radius:16px}
+    .lpb-banner-mobile{display:none}
+    @media (max-width: 680px){ .lpb-banner-desktop{display:none} .lpb-banner-mobile{display:block} }
+
+    /* Card + bullets */
+    .lpb-card{background:var(--soft); border:1px solid #eee; border-radius:var(--radius); padding:18px; margin: 8px 0 20px}
+    .lpb-eyebrow{display:inline-block; font-size:.78rem; letter-spacing:.06em; text-transform:uppercase; font-weight:700; color:var(--brand); margin-bottom:8px}
+    .lpb-bullets{list-style:none; display:grid; gap:10px; padding:0; margin:0}
+    .lpb-bullets li{display:flex; gap:10px; align-items:flex-start; background:#fff; border:1px solid #eee; border-radius:12px; padding:10px 12px}
+    .lpb-bullets .ico{display:inline-grid; place-items:center; min-width:26px; height:26px; border-radius:50%; background: color-mix(in srgb, var(--brand) 16%, white); font-size:14px}
+
+    /* RTE */
+    .lpb-rte{margin: 8px 0 20px}
+    .lpb-rte h3{margin-top:18px}
+    .lpb-rte ul{padding-left:18px}
+
+    /* Note */
+    .lpb-note{display:flex; gap:10px; align-items:center; border:1px dashed color-mix(in srgb, var(--brand) 40%, white); border-radius:var(--radius); padding:12px 14px; margin: 8px 0 16px}
+    .lpb-note-badge{background:var(--brand); color:#fff; border-radius:10px; padding:6px 10px; font-weight:700; font-size:.86rem}
+    .lpb-note-text{color:var(--ink)}
+
+    /* Steps */
+    .lpb-steps{counter-reset: s; display:grid; gap:10px; padding-left:0; margin: 10px 0 20px}
+    .lpb-steps li{list-style:none; display:flex; gap:12px; align-items:flex-start; background:#fff; border:1px solid #eee; border-radius:12px; padding:12px 14px}
+    .lpb-steps li::before{counter-increment:s; content: counter(s); display:inline-grid; place-items:center; min-width:28px; height:28px; border-radius:50%; background: color-mix(in srgb, var(--brand) 18%, white); font-weight:700}
+
+    /* Two column */
+    .lpb-two{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin: 6px 0 18px}
+    .lpb-two h3{margin:0 0 6px}
+    @media (max-width: 720px){ .lpb-two{grid-template-columns:1fr} }
+
+    /* Image */
+    .lpb-image{margin: 10px 0 18px}
+    .lpb-image img{width:100%; height:auto; border-radius:14px}
+    .lpb-image figcaption{color:var(--muted); font-size:.92rem; margin-top:6px}
+
+    /* Image row / carousel (no JS; swipe/scroll) */
+    .lpb-row{display:grid; grid-auto-flow:column; grid-auto-columns: minmax(220px, 1fr); gap:12px; overflow:auto; padding-bottom:4px; scroll-snap-type:x mandatory}
+    .lpb-row-item{scroll-snap-align:start}
+    .lpb-row-item img{width:100%; height:auto; border-radius:12px; display:block}
+
+    /* CTA */
+    .lpb-cta-wrap{display:flex; justify-content:center; margin: 16px 0 0}
+    .lpb-cta{background:var(--brand); color:#fff; text-decoration:none; font-weight:700; padding:12px 16px; border-radius:12px}
+    .lpb-cta:hover{opacity:.92}
+    .lpb-eyebrow {
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  </style>
+</section>
+
+{% schema %}
+{
+  "name": "Policy Builder (Generic)",
+  "settings": [
+    { "type": "checkbox", "id": "show_title", "label": "Show title", "default": true },
+    { "type": "text", "id": "policy_title", "label": "Page title", "default": "Policy" },
+    { "type": "textarea", "id": "subtitle", "label": "Short intro", "default": "Simple, parent-friendly policy overview." },
+    { "type": "image_picker", "id": "banner_desktop", "label": "Banner image (desktop)" },
+    { "type": "image_picker", "id": "banner_mobile", "label": "Banner image (mobile)" },
+    { "type": "text", "id": "banner_alt", "label": "Banner alt text" },
+    { "type": "color", "id": "brand_color", "label": "Brand accent", "default": "#E87529" }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Heading", "default": "Section title" }
+      ]
+    },
+    {
+      "type": "richtext",
+      "name": "Rich text",
+      "settings": [
+        { "type": "richtext", "id": "content", "label": "Content", "default": "<p>Write your policy content here. You can add lists, links, and subheadings.</p>" }
+      ]
+    },
+    {
+      "type": "takeaway",
+      "name": "Key takeaways",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Block label", "default": "Key takeaways" },
+        { "type": "text", "id": "icon1", "label": "Icon 1 (emoji)", "default": "🗓️" },
+        { "type": "text", "id": "item1", "label": "Item 1", "default": "Return window: 7 days" },
+        { "type": "text", "id": "icon2", "label": "Icon 2 (emoji)", "default": "🏷️" },
+        { "type": "text", "id": "item2", "label": "Item 2", "default": "Tags & packaging intact" },
+        { "type": "text", "id": "icon3", "label": "Icon 3 (emoji)", "default": "🚚" },
+        { "type": "text", "id": "item3", "label": "Item 3", "default": "Reverse pickup on select pincodes" },
+        { "type": "text", "id": "icon4", "label": "Icon 4 (emoji)" },
+        { "type": "text", "id": "item4", "label": "Item 4" },
+        { "type": "text", "id": "icon5", "label": "Icon 5 (emoji)" },
+        { "type": "text", "id": "item5", "label": "Item 5" },
+        { "type": "text", "id": "icon6", "label": "Icon 6 (emoji)" },
+        { "type": "text", "id": "item6", "label": "Item 6" }
+      ]
+    },
+    {
+      "type": "note",
+      "name": "Note / Tip",
+      "settings": [
+        { "type": "text", "id": "badge", "label": "Badge", "default": "Note" },
+        { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Keep tags &amp; original packing for an easy return.</p>" }
+      ]
+    },
+    {
+      "type": "steps",
+      "name": "Steps",
+      "settings": [
+        { "type": "text", "id": "step1", "label": "Step 1", "default": "Initiate request from your order page." },
+        { "type": "text", "id": "step2", "label": "Step 2", "default": "Choose item(s) and reason." },
+        { "type": "text", "id": "step3", "label": "Step 3", "default": "Pack with tags & original bag/box." },
+        { "type": "text", "id": "step4", "label": "Step 4" },
+        { "type": "text", "id": "step5", "label": "Step 5" },
+        { "type": "text", "id": "step6", "label": "Step 6" }
+      ]
+    },
+    {
+      "type": "two_col",
+      "name": "Two column text",
+      "settings": [
+        { "type": "text", "id": "h1", "label": "Left heading", "default": "For India orders" },
+        { "type": "richtext", "id": "c1", "label": "Left content", "default": "<p>Details for domestic shipments.</p>" },
+        { "type": "text", "id": "h2", "label": "Right heading", "default": "For international orders" },
+        { "type": "richtext", "id": "c2", "label": "Right content", "default": "<p>Details for international shipments.</p>" }
+      ]
+    },
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        { "type": "image_picker", "id": "img", "label": "Image" },
+        { "type": "text", "id": "alt", "label": "Alt text" },
+        { "type": "text", "id": "caption", "label": "Caption" }
+      ]
+    },
+    {
+      "type": "image_row",
+      "name": "Image row / Carousel",
+      "settings": [
+        { "type": "text", "id": "row_label", "label": "Aria label", "default": "Policy images" },
+        { "type": "image_picker", "id": "img1", "label": "Image 1" },
+        { "type": "text", "id": "alt1", "label": "Alt 1" },
+        { "type": "image_picker", "id": "img2", "label": "Image 2" },
+        { "type": "text", "id": "alt2", "label": "Alt 2" },
+        { "type": "image_picker", "id": "img3", "label": "Image 3" },
+        { "type": "text", "id": "alt3", "label": "Alt 3" },
+        { "type": "image_picker", "id": "img4", "label": "Image 4" },
+        { "type": "text", "id": "alt4", "label": "Alt 4" },
+        { "type": "image_picker", "id": "img5", "label": "Image 5" },
+        { "type": "text", "id": "alt5", "label": "Alt 5" },
+        { "type": "image_picker", "id": "img6", "label": "Image 6" },
+        { "type": "text", "id": "alt6", "label": "Alt 6" },
+        { "type": "image_picker", "id": "img7", "label": "Image 7" },
+        { "type": "text", "id": "alt7", "label": "Alt 7" },
+        { "type": "image_picker", "id": "img8", "label": "Image 8" },
+        { "type": "text", "id": "alt8", "label": "Alt 8" }
+      ]
+    },
+    {
+      "type": "shipping_currency",
+      "name": "Shipping charges",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Block label", "default": "Shipping charges" },
+
+        { "type": "checkbox", "id": "show_domestic", "label": "Show domestic (India)", "default": true },
+        { "type": "text", "id": "domestic_heading", "label": "Domestic heading", "default": "India" },
+        { "type": "number", "id": "domestic_threshold_inr", "label": "Free shipping threshold (INR)", "default": 999 },
+        { "type": "number", "id": "domestic_fee_below_inr", "label": "Standard fee below threshold (INR)", "default": 0 },
+
+        { "type": "checkbox", "id": "show_international", "label": "Show international", "default": true },
+        { "type": "text", "id": "international_heading", "label": "International heading", "default": "International" },
+
+        { "type": "text", "id": "intl_standard_usd", "label": "Standard (USD text)", "default": "$11" },
+        { "type": "number", "id": "intl_standard_inr", "label": "Standard (INR)", "default": 999 },
+
+        { "type": "text", "id": "intl_free_above_usd", "label": "Free above (USD text)", "default": "$175" },
+        { "type": "number", "id": "intl_free_above_inr", "label": "Free above (INR)", "default": 14999 },
+
+        { "type": "text", "id": "intl_express_usd", "label": "Express (USD text)", "default": "$30" },
+        { "type": "number", "id": "intl_express_inr", "label": "Express (INR)", "default": 2499 },
+
+        { "type": "textarea", "id": "intl_note", "label": "International footer note", "default": "Exact availability & rates appear at checkout." }
+      ]
+    },
+
+    {
+      "type": "cta",
+      "name": "CTA",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Button label", "default": "Need help? Contact us" },
+        { "type": "url", "id": "link", "label": "Button link" }
+      ]
+    }
+  ],
+  "max_blocks": 30,
+  "presets": [
+    { "name": "Policy Builder (Generic)" }
+  ]
+}
+{% endschema %}

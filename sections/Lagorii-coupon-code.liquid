@@ -1,0 +1,993 @@
+{% comment %}
+  Lagorii Coupon Copy Slider
+  Mobile only
+  Add multiple cards as blocks
+  Auto sliding cards
+{% endcomment %}
+
+<section class="lag-coupon-slider lag-coupon-slider--{{ section.id }}">
+  <style>
+    .lag-coupon-slider--{{ section.id }}{
+      padding-top: {{ section.settings.section_padding_top }}px;
+      padding-bottom: {{ section.settings.section_padding_bottom }}px;
+    }
+
+    @media (min-width: 990px){
+      .lag-coupon-slider--{{ section.id }}{
+        display: none !important;
+      }
+    }
+
+    .lag-coupon-slider--{{ section.id }} .lag-coupon-slider__outer{
+      padding: {{ section.settings.outer_pad_top }}px {{ section.settings.outer_pad_right }}px {{ section.settings.outer_pad_bottom }}px {{ section.settings.outer_pad_left }}px;
+    }
+
+    .lag-coupon-slider--{{ section.id }} .lag-coupon-slider__viewport{
+      overflow: hidden;
+      width: 100%;
+      position: relative;
+    }
+
+    .lag-coupon-slider--{{ section.id }} .lag-coupon-slider__track{
+      display: flex;
+      transition: transform 0.45s ease;
+      will-change: transform;
+    }
+
+    .lag-coupon-slider--{{ section.id }} .lag-coupon-slider__slide{
+      min-width: 100%;
+      width: 100%;
+      flex: 0 0 100%;
+    }
+
+    .lag-coupon-slider--{{ section.id }} .lag-coupon__mobile-image-wrap{
+      width: 100%;
+      line-height: 0;
+      overflow: hidden;
+      border-radius: {{ section.settings.image_radius }}px;
+      background: {{ section.settings.image_bg_color }};
+    }
+
+    .lag-coupon-slider--{{ section.id }} .lag-coupon__mobile-image{
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .lag-coupon-slider--{{ section.id }} .lag-coupon__card{
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: {{ section.settings.card_gap }}px;
+      padding: {{ section.settings.card_pad_top }}px {{ section.settings.card_pad_right }}px {{ section.settings.card_pad_bottom }}px {{ section.settings.card_pad_left }}px;
+      border-radius: {{ section.settings.card_radius }}px;
+      border: {{ section.settings.card_border_width }}px solid {{ section.settings.card_border_color }};
+      box-shadow: {{ section.settings.card_shadow }};
+      background-color: {{ section.settings.card_bg_color }};
+      font-family: {{ section.settings.font_family }};
+      overflow: hidden;
+      min-height: {{ section.settings.card_min_height }}px;
+    }
+
+    .lag-coupon-slider--{{ section.id }} .lag-coupon__left{
+      display: flex;
+      align-items: center;
+      gap: {{ section.settings.left_gap }}px;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+
+    .lag-coupon-slider--{{ section.id }} .lag-coupon__badge{
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: {{ section.settings.badge_pad_y }}px {{ section.settings.badge_pad_x }}px;
+      border-radius: {{ section.settings.badge_radius }}px;
+      border: {{ section.settings.badge_border_width }}px dashed {{ section.settings.badge_border_color }};
+      background: {{ section.settings.badge_bg_color }};
+      color: {{ section.settings.badge_text_color }};
+      flex: 0 0 auto;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .lag-coupon-slider--{{ section.id }} .lag-coupon__badge-text{
+      font-size: {{ section.settings.badge_font_size }}px;
+      font-weight: {{ section.settings.badge_font_weight }};
+      letter-spacing: 0.3px;
+    }
+
+    .lag-coupon-slider--{{ section.id }} .lag-coupon__title{
+      margin: 0;
+      color: {{ section.settings.title_color }};
+      font-size: {{ section.settings.title_size_mobile }}px;
+      font-weight: {{ section.settings.title_weight }};
+      line-height: 1.2;
+    }
+
+    .lag-coupon-slider--{{ section.id }} .lag-coupon__subtitle{
+      margin: {{ section.settings.subtitle_margin_top }}px 0 0 0;
+      color: {{ section.settings.subtitle_color }};
+      font-size: {{ section.settings.subtitle_size_mobile }}px;
+      font-weight: {{ section.settings.subtitle_weight }};
+      line-height: 1.35;
+    }
+
+    .lag-coupon-slider--{{ section.id }} .lag-coupon__copy{
+      appearance: none;
+      border: {{ section.settings.copy_border_width }}px solid {{ section.settings.copy_border_color }};
+      background: {{ section.settings.copy_bg }};
+      color: {{ section.settings.copy_color }};
+      border-radius: {{ section.settings.copy_radius }}px;
+      padding: {{ section.settings.copy_pad_y_mobile }}px {{ section.settings.copy_pad_x_mobile }}px;
+      font-family: {{ section.settings.font_family }};
+      font-size: {{ section.settings.copy_font_size_mobile }}px;
+      font-weight: {{ section.settings.copy_font_weight }};
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .lag-coupon-slider--{{ section.id }} .lag-coupon__copy svg{
+      width: {{ section.settings.copy_icon_size }}px;
+      height: {{ section.settings.copy_icon_size }}px;
+      display: block;
+    }
+
+    .lag-coupon-slider--{{ section.id }} .lag-coupon__toast{
+      position: absolute;
+      right: 14px;
+      top: 14px;
+      background: {{ section.settings.toast_bg }};
+      color: {{ section.settings.toast_color }};
+      border-radius: {{ section.settings.toast_radius }}px;
+      padding: {{ section.settings.toast_pad_y }}px {{ section.settings.toast_pad_x }}px;
+      font-size: {{ section.settings.toast_font_size }}px;
+      font-weight: {{ section.settings.toast_font_weight }};
+      opacity: 0;
+      transform: translateY(-6px);
+      pointer-events: none;
+      transition: opacity .18s ease, transform .18s ease;
+      z-index: 2;
+    }
+
+    .lag-coupon-slider--{{ section.id }} .lag-coupon__toast.is-visible{
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .lag-coupon-slider--{{ section.id }} .lag-coupon-slider__dots{
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: {{ section.settings.dots_margin_top }}px;
+    }
+
+    .lag-coupon-slider--{{ section.id }} .lag-coupon-slider__dot{
+      width: {{ section.settings.dot_size }}px;
+      height: {{ section.settings.dot_size }}px;
+      border-radius: 50%;
+      background: {{ section.settings.dot_color }};
+      opacity: .35;
+      border: 0;
+      padding: 0;
+    }
+
+    .lag-coupon-slider--{{ section.id }} .lag-coupon-slider__dot.is-active{
+      opacity: 1;
+      background: {{ section.settings.dot_active_color }};
+    }
+  </style>
+
+  <div class="page-width">
+    <div class="lag-coupon-slider__outer">
+      <div class="lag-coupon-slider__viewport">
+        <div class="lag-coupon-slider__track">
+          {% for block in section.blocks %}
+            <div class="lag-coupon-slider__slide" {{ block.shopify_attributes }}>
+              {% if block.settings.coupon_display_mode == 'image' %}
+                {% if block.settings.mobile_banner_image != blank %}
+                  <div class="lag-coupon__mobile-image-wrap">
+                    <img
+                      class="lag-coupon__mobile-image"
+                      src="{{ block.settings.mobile_banner_image | image_url: width: 1400 }}"
+                      alt="{{ block.settings.mobile_banner_alt | escape }}"
+                      loading="lazy"
+                      width="{{ block.settings.mobile_banner_image.width }}"
+                      height="{{ block.settings.mobile_banner_image.height }}"
+                    >
+                  </div>
+                {% endif %}
+              {% else %}
+                <div class="lag-coupon__card" role="region" aria-label="Coupon">
+                  <div class="lag-coupon__left">
+                    {% if block.settings.show_badge %}
+                      <div class="lag-coupon__badge">
+                        <span class="lag-coupon__badge-text">{{ block.settings.badge_text }}</span>
+                      </div>
+                    {% endif %}
+
+                    <div class="lag-coupon__text">
+                      {% if block.settings.title != blank %}
+                        <p class="lag-coupon__title">{{ block.settings.title }}</p>
+                      {% endif %}
+                      {% if block.settings.subtitle != blank %}
+                        <p class="lag-coupon__subtitle">{{ block.settings.subtitle }}</p>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  {% if section.settings.show_copy_button %}
+                    <div class="lag-coupon__right">
+                      <button
+                        class="lag-coupon__copy"
+                        type="button"
+                        data-coupon-code="{{ block.settings.coupon_code | escape }}"
+                        aria-label="Copy coupon code"
+                      >
+                        <span class="lag-coupon__code">{{ block.settings.coupon_code }}</span>
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                          <path d="M16 1H6a2 2 0 0 0-2 2v12h2V3h10V1zm3 4H10a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H10V7h9v14z"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  {% endif %}
+
+                  <div class="lag-coupon__toast" aria-live="polite">{{ section.settings.toast_text }}</div>
+                </div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      {% if section.settings.show_dots and section.blocks.size > 1 %}
+        <div class="lag-coupon-slider__dots">
+          {% for block in section.blocks %}
+            <button class="lag-coupon-slider__dot{% if forloop.first %} is-active{% endif %}" type="button" aria-label="Go to coupon {{ forloop.index }}"></button>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      var root = document.querySelector('.lag-coupon-slider--{{ section.id }}');
+      if(!root) return;
+
+      var track = root.querySelector('.lag-coupon-slider__track');
+      var slides = root.querySelectorAll('.lag-coupon-slider__slide');
+      var dots = root.querySelectorAll('.lag-coupon-slider__dot');
+      var index = 0;
+      var timer = null;
+      var speed = {{ section.settings.autoplay_speed }};
+      var autoplay = {{ section.settings.enable_autoplay | json }};
+
+      function goToSlide(i){
+        if(!track || slides.length === 0) return;
+        index = i;
+        track.style.transform = 'translateX(-' + (index * 100) + '%)';
+
+        dots.forEach(function(dot, dotIndex){
+          dot.classList.toggle('is-active', dotIndex === index);
+        });
+      }
+
+      function nextSlide(){
+        var next = index + 1;
+        if(next >= slides.length) next = 0;
+        goToSlide(next);
+      }
+
+      function startAutoplay(){
+        if(!autoplay || slides.length <= 1) return;
+        stopAutoplay();
+        timer = window.setInterval(nextSlide, speed);
+      }
+
+      function stopAutoplay(){
+        if(timer) window.clearInterval(timer);
+      }
+
+      dots.forEach(function(dot, dotIndex){
+        dot.addEventListener('click', function(){
+          goToSlide(dotIndex);
+          startAutoplay();
+        });
+      });
+
+      root.addEventListener('mouseenter', stopAutoplay);
+      root.addEventListener('mouseleave', startAutoplay);
+
+      root.querySelectorAll('.lag-coupon__copy').forEach(function(copyBtn){
+        copyBtn.addEventListener('click', async function(e){
+          e.preventDefault();
+
+          var code = copyBtn.getAttribute('data-coupon-code') || '';
+          var card = copyBtn.closest('.lag-coupon__card');
+          var toast = card ? card.querySelector('.lag-coupon__toast') : null;
+
+          if(!code) return;
+
+          try{
+            if(navigator.clipboard && window.isSecureContext){
+              await navigator.clipboard.writeText(code);
+            }else{
+              var ta = document.createElement('textarea');
+              ta.value = code;
+              ta.setAttribute('readonly','');
+              ta.style.position = 'absolute';
+              ta.style.left = '-9999px';
+              document.body.appendChild(ta);
+              ta.select();
+              document.execCommand('copy');
+              document.body.removeChild(ta);
+            }
+
+            if(toast){
+              toast.classList.add('is-visible');
+              window.clearTimeout(toast.__t);
+              toast.__t = window.setTimeout(function(){
+                toast.classList.remove('is-visible');
+              }, {{ section.settings.toast_duration_ms }});
+            }
+          }catch(err){}
+        });
+      });
+
+      goToSlide(0);
+      startAutoplay();
+    })();
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "Lagorii Coupon Slider",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Slider controls"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_autoplay",
+      "label": "Enable auto slide",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "label": "Auto slide speed",
+      "min": 1500,
+      "max": 7000,
+      "step": 500,
+      "default": 3000
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show dots",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_copy_button",
+      "label": "Show copy code button",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "outer_pad_top",
+      "label": "Outer padding top",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "outer_pad_right",
+      "label": "Outer padding right",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "outer_pad_bottom",
+      "label": "Outer padding bottom",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "outer_pad_left",
+      "label": "Outer padding left",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Image card style"
+    },
+    {
+      "type": "range",
+      "id": "image_radius",
+      "label": "Image corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "image_bg_color",
+      "label": "Image background color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Text card style"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card background color",
+      "default": "#E9F8F2"
+    },
+    {
+      "type": "range",
+      "id": "card_min_height",
+      "label": "Card minimum height",
+      "min": 40,
+      "max": 180,
+      "step": 2,
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Card corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "card_border_width",
+      "label": "Card border width",
+      "min": 0,
+      "max": 6,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card border color",
+      "default": "#CFEDE2"
+    },
+    {
+      "type": "text",
+      "id": "card_shadow",
+      "label": "Card shadow",
+      "default": "0 6px 18px rgba(0,0,0,0.06)"
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "label": "Card gap",
+      "min": 6,
+      "max": 40,
+      "step": 1,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_pad_top",
+      "label": "Card padding top",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "card_pad_right",
+      "label": "Card padding right",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "card_pad_bottom",
+      "label": "Card padding bottom",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "card_pad_left",
+      "label": "Card padding left",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "default": 18
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "text",
+      "id": "font_family",
+      "label": "Font family",
+      "default": "inherit"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#111111"
+    },
+    {
+      "type": "range",
+      "id": "title_size_mobile",
+      "label": "Title size mobile",
+      "min": 10,
+      "max": 28,
+      "step": 1,
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "title_weight",
+      "label": "Title font weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "default": 700
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle color",
+      "default": "#3A3A3A"
+    },
+    {
+      "type": "range",
+      "id": "subtitle_size_mobile",
+      "label": "Subtitle size mobile",
+      "min": 10,
+      "max": 22,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "subtitle_weight",
+      "label": "Subtitle font weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "default": 500
+    },
+    {
+      "type": "range",
+      "id": "subtitle_margin_top",
+      "label": "Subtitle margin top",
+      "min": 0,
+      "max": 16,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "header",
+      "content": "Badge style"
+    },
+    {
+      "type": "range",
+      "id": "left_gap",
+      "label": "Gap badge to text",
+      "min": 6,
+      "max": 26,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "badge_pad_x",
+      "label": "Badge padding X",
+      "min": 6,
+      "max": 26,
+      "step": 1,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "badge_pad_y",
+      "label": "Badge padding Y",
+      "min": 6,
+      "max": 22,
+      "step": 1,
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "badge_radius",
+      "label": "Badge radius",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "badge_border_width",
+      "label": "Badge border width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "color",
+      "id": "badge_border_color",
+      "label": "Badge border color",
+      "default": "#1E6B4F"
+    },
+    {
+      "type": "color",
+      "id": "badge_bg_color",
+      "label": "Badge background",
+      "default": "rgba(255,255,255,0.65)"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge text color",
+      "default": "#1E6B4F"
+    },
+    {
+      "type": "range",
+      "id": "badge_font_size",
+      "label": "Badge font size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "badge_font_weight",
+      "label": "Badge font weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "default": 700
+    },
+    {
+      "type": "header",
+      "content": "Copy button style"
+    },
+    {
+      "type": "range",
+      "id": "right_gap",
+      "label": "Gap next to copy button",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "copy_bg",
+      "label": "Copy button background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "copy_color",
+      "label": "Copy button text color",
+      "default": "#111111"
+    },
+    {
+      "type": "range",
+      "id": "copy_border_width",
+      "label": "Copy border width",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "color",
+      "id": "copy_border_color",
+      "label": "Copy border color",
+      "default": "#D9D9D9"
+    },
+    {
+      "type": "range",
+      "id": "copy_radius",
+      "label": "Copy radius",
+      "min": 0,
+      "max": 28,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "copy_pad_x_mobile",
+      "label": "Copy padding X mobile",
+      "min": 8,
+      "max": 30,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "copy_pad_y_mobile",
+      "label": "Copy padding Y mobile",
+      "min": 8,
+      "max": 22,
+      "step": 1,
+      "default": 11
+    },
+    {
+      "type": "range",
+      "id": "copy_font_size_mobile",
+      "label": "Copy font size mobile",
+      "min": 10,
+      "max": 22,
+      "step": 1,
+      "default": 13
+    },
+    {
+      "type": "range",
+      "id": "copy_font_weight",
+      "label": "Copy font weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "default": 700
+    },
+    {
+      "type": "range",
+      "id": "copy_icon_size",
+      "label": "Copy icon size",
+      "min": 0,
+      "max": 26,
+      "step": 1,
+      "default": 18
+    },
+    {
+      "type": "header",
+      "content": "Dots style"
+    },
+    {
+      "type": "range",
+      "id": "dots_margin_top",
+      "label": "Dots top spacing",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "dot_size",
+      "label": "Dot size",
+      "min": 4,
+      "max": 14,
+      "step": 1,
+      "default": 7
+    },
+    {
+      "type": "color",
+      "id": "dot_color",
+      "label": "Dot color",
+      "default": "#999999"
+    },
+    {
+      "type": "color",
+      "id": "dot_active_color",
+      "label": "Active dot color",
+      "default": "#E87529"
+    },
+    {
+      "type": "header",
+      "content": "Toast"
+    },
+    {
+      "type": "text",
+      "id": "toast_text",
+      "label": "Toast text",
+      "default": "Coupon copied"
+    },
+    {
+      "type": "color",
+      "id": "toast_bg",
+      "label": "Toast background",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "toast_color",
+      "label": "Toast text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "toast_radius",
+      "label": "Toast radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "toast_pad_x",
+      "label": "Toast padding X",
+      "min": 8,
+      "max": 22,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "toast_pad_y",
+      "label": "Toast padding Y",
+      "min": 6,
+      "max": 18,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "toast_font_size",
+      "label": "Toast font size",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "toast_font_weight",
+      "label": "Toast font weight",
+      "min": 300,
+      "max": 900,
+      "step": 100,
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "toast_duration_ms",
+      "label": "Toast duration",
+      "min": 600,
+      "max": 5000,
+      "step": 100,
+      "default": 1400
+    }
+  ],
+  "blocks": [
+    {
+      "type": "coupon_card",
+      "name": "Coupon card",
+      "settings": [
+        {
+          "type": "select",
+          "id": "coupon_display_mode",
+          "label": "Coupon display type",
+          "default": "text",
+          "options": [
+            {
+              "value": "text",
+              "label": "Show text card"
+            },
+            {
+              "value": "image",
+              "label": "Show image card"
+            }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_banner_image",
+          "label": "Image card"
+        },
+        {
+          "type": "text",
+          "id": "mobile_banner_alt",
+          "label": "Image alt text",
+          "default": "Coupon banner"
+        },
+        {
+          "type": "text",
+          "id": "coupon_code",
+          "label": "Coupon code",
+          "default": "GET10"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Flat 10% off"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle",
+          "default": "Use code GET10 on your order."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_badge",
+          "label": "Show badge",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge text",
+          "default": "GET10"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Lagorii Coupon Slider",
+      "blocks": [
+        {
+          "type": "coupon_card"
+        },
+        {
+          "type": "coupon_card"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

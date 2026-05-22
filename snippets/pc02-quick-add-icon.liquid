@@ -1,0 +1,50 @@
+{%- comment -%}
+  PC02 Quick Add Icon (independent)
+  Depends ONLY on pc02_* settings.
+  Params:
+    - product
+    - aria_label (optional)
+{%- endcomment -%}
+
+{%- if settings.pc02_quick_add_icon_enable and product != blank -%}
+ <button
+  type="button"
+  class="pc02-qa-icon"
+  data-pc02-quickadd
+  data-product-handle="{{ product.handle }}"
+
+  data-kiwi-product="{{ product.id }}"
+  data-kiwi-product-name="{{ product.title | escape }}"
+  data-kiwi-vendor="{{ product.vendor | escape }}"
+  data-kiwi-type="{{ product.type | escape }}"
+  data-kiwi-tags="{{ product.tags | join: ',' | escape }}"
+  data-kiwi-collections="{{ product.collections | map: 'id' | join: ',' }}"
+  data-kiwi-images="{{ product.images | json | escape }}"
+
+  aria-haspopup="dialog"
+  aria-label="{{ aria_label | default: 'Quick add' }}"
+  style="
+    --pc02-qa-size: {{ settings.pc02_quick_add_size }}px;
+    --pc02-qa-icon-size: {{ settings.pc02_quick_add_icon_size }}px;
+    --pc02-qa-color: {{ settings.pc02_quick_add_icon_color }};
+    --pc02-qa-bg: {{ settings.pc02_quick_add_bg }};
+    --pc02-qa-border: {{ settings.pc02_quick_add_border }};
+    --pc02-qa-radius: {{ settings.pc02_quick_add_radius }}px;
+  "
+>
+  <span class="pc02-qa-icon__dots" aria-hidden="true">
+    <i></i><i></i><i></i>
+  </span>
+
+  <span class="pc02-qa-icon__svgwrap" aria-hidden="true">
+        {%- if settings.pc02_quick_add_icon_type == 'cart' -%}
+      <svg class="pc02-qa-icon__svg" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 902.86 902.86" xml:space="preserve" transform="matrix(-1, 0, 0, 1, 0, 0)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M671.504,577.829l110.485-432.609H902.86v-68H729.174L703.128,179.2L0,178.697l74.753,399.129h596.751V577.829z M685.766,247.188l-67.077,262.64H131.199L81.928,246.756L685.766,247.188z"></path> <path d="M578.418,825.641c59.961,0,108.743-48.783,108.743-108.744s-48.782-108.742-108.743-108.742H168.717 c-59.961,0-108.744,48.781-108.744,108.742s48.782,108.744,108.744,108.744c59.962,0,108.743-48.783,108.743-108.744 c0-14.4-2.821-28.152-7.927-40.742h208.069c-5.107,12.59-7.928,26.342-7.928,40.742 C469.675,776.858,518.457,825.641,578.418,825.641z M209.46,716.897c0,22.467-18.277,40.744-40.743,40.744 c-22.466,0-40.744-18.277-40.744-40.744c0-22.465,18.277-40.742,40.744-40.742C191.183,676.155,209.46,694.432,209.46,716.897z M619.162,716.897c0,22.467-18.277,40.744-40.743,40.744s-40.743-18.277-40.743-40.744c0-22.465,18.277-40.742,40.743-40.742 S619.162,694.432,619.162,716.897z"></path> </g> </g> </g></svg>
+    {%- else -%}
+    <svg class="pc02-qa-icon__svg" viewBox="0 0 511.808 511.808" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M477.511,491.424l-26.48-348.832c-0.624-8.336-7.584-14.784-15.952-14.784H76.391c-8.368,0-15.328,6.448-15.952,14.8 l-26.704,352c-0.336,4.432,1.2,8.816,4.224,12.08c3.024,3.264,7.28,5.12,11.728,5.12h412.112c0.096,0,0.208,0,0.32,0 c8.832,0,16-7.168,16-16.016C478.119,494.288,477.911,492.816,477.511,491.424z M66.935,479.808l24.288-320h329.024l24.288,320 H66.935z"></path>
+        <path fill="currentColor" d="M255.735,0c-70.576,0-128,57.44-128,128.032v63.776c0,8.832,7.168,16,16,16c8.832,0,16-7.168,16-16v-63.776 c0-52.96,43.056-96.032,96-96.032c52.944,0,96,43.072,96,96.032v63.776c0,8.832,7.168,16,16,16c8.832,0,16-7.168,16-16v-63.776 C383.735,57.44,326.311,0,255.735,0z"></path>
+    </svg>
+    {%- endif -%}
+  </span>
+</button>
+{%- endif -%}

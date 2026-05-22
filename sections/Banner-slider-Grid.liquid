@@ -1,0 +1,1059 @@
+{% comment %}
+  Banner + Slider/Grid Section
+  - Full-width responsive banner (desktop + mobile)
+  - Cards area: Grid or Slider
+  - Two modes:
+      1) Manual image cards (blocks)
+      2) Product cards from a collection
+  - Manual card overlay text is fully customizable
+{% endcomment %}
+
+<section class="lag-bsg lag-bsg--{{ section.id }}">
+  {% style %}
+    .lag-bsg--{{ section.id }} {
+      background-color: {{ section.settings.bg_color }};
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+      --lag-bsg-mobile-cards-visible: {{ section.settings.slider_cards_visible_mobile | default: 1.5 }};
+      --lag-bsg-mobile-card-width:
+        {% case section.settings.slider_cards_visible_mobile %}
+          {% when '1' %}92%
+          {% when '1.5' %}72%
+          {% when '2' %}52%
+          {% when '2.5' %}44%
+          {% when '3' %}36%
+          {% when '3.5' %}30%
+          {% else %}72%
+        {% endcase %};
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__inner {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding-left: {{ section.settings.section_side_padding }}px;
+    padding-right: {{ section.settings.section_side_padding }}px;
+   }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__banner {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      display: block;
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__banner-media {
+      width: 100%;
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__banner-media img,
+    .lag-bsg--{{ section.id }} .lag-bsg__banner-media video {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__banner-desktop {
+      display: block;
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__banner-mobile {
+      display: none;
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__cards-wrap {
+      position: relative;
+      margin-top: {{ section.settings.cards_margin_top }}px;
+      background-color: {{ section.settings.cards_bg_color }};
+      padding: {{ section.settings.cards_bg_padding }}px;
+      border-radius: {{ section.settings.cards_bg_radius }}px;
+      width: 100%;
+      box-sizing: border-box;
+
+      {% if section.settings.cards_bg_image != blank %}
+        background-image: url({{ section.settings.cards_bg_image | image_url: width: 2000 }});
+        background-size: {{ section.settings.cards_bg_image_size }};
+        background-position: center;
+        background-repeat: no-repeat;
+      {% endif %}
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__cards-inner {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__cards-inner--grid {
+      display: grid;
+      grid-template-columns: repeat({{ section.settings.grid_cols_desktop }}, minmax(0, 1fr));
+      gap: {{ section.settings.cards_gap }}px;
+      align-items: start;
+      width: 100%;
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__slider-wrap {
+      position: relative;
+      width: 100%;
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__cards-inner--slider {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: {{ section.settings.cards_gap }}px;
+      overflow-x: auto;
+      overflow-y: visible;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 4px;
+      justify-content: flex-start;
+      align-items: flex-start;
+      width: 100%;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__cards-inner--slider::-webkit-scrollbar {
+      display: none;
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__cards-inner--slider {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__card {
+      position: relative;
+      border-radius: {{ section.settings.card_radius }}px;
+      overflow: hidden;
+      scroll-snap-align: start;
+      background-color: {{ section.settings.card_bg_color }};
+      padding: {{ section.settings.card_inner_padding }}px;
+      box-sizing: border-box;
+      min-width: 0;
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__card > * {
+      border-radius: inherit;
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__card:not(.lag-bsg__card--product) > * {
+      overflow: hidden;
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__card-link {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      height: 100%;
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__card-media {
+      position: relative;
+      width: 100%;
+      padding-top: {{ section.settings.card_aspect_ratio }}%;
+      overflow: hidden;
+      border-radius: inherit;
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__card-media img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: {{ section.settings.card_image_fit }};
+      display: block;
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__card-overlay {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      padding: {{ section.settings.overlay_padding }}px;
+      border-radius: {{ section.settings.overlay_radius }}px;
+      background-color: {{ section.settings.overlay_bg_color | color_modify: 'alpha', section.settings.overlay_bg_opacity | divided_by: 100.0 }};
+      color: {{ section.settings.overlay_text_color }};
+      font-size: {{ section.settings.overlay_font_size_desktop }}px;
+      font-weight: {{ section.settings.overlay_font_weight }};
+      font-family: {{ section.settings.overlay_font_family | default: 'inherit' }};
+      text-align: {{ section.settings.overlay_text_align }};
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__cards-inner--slider .lag-bsg__card {
+      flex: 0 0 auto;
+      min-width: {{ section.settings.slider_card_width }}%;
+      max-width: {{ section.settings.slider_card_width }}%;
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 42px;
+      height: 42px;
+      border: none;
+      border-radius: 999px;
+      background: {{ section.settings.arrow_bg }};
+      color: {{ section.settings.arrow_color }};
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 4;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__arrow:hover {
+      transform: translateY(-50%) scale(1.04);
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__arrow[disabled] {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__arrow svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__arrow--prev {
+      left: {{ section.settings.arrow_side_offset }}px;
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__arrow--next {
+      right: {{ section.settings.arrow_side_offset }}px;
+    }
+
+    /* DESKTOP FULL WIDTH CONTROL */
+    @media (min-width: 990px) {
+      .lag-bsg--{{ section.id }} .lag-bsg__cards-wrap {
+        overflow: visible;
+      }
+
+      {% if section.settings.desktop_cards_full_width %}
+        .lag-bsg--{{ section.id }} .lag-bsg__cards-wrap {
+          padding-left: {{ section.settings.desktop_cards_side_padding }}px;
+          padding-right: {{ section.settings.desktop_cards_side_padding }}px;
+        }
+
+        .lag-bsg--{{ section.id }} .lag-bsg__cards-inner--slider,
+        .lag-bsg--{{ section.id }} .lag-bsg__cards-inner--grid {
+          max-width: 100%;
+          width: 100%;
+          margin: 0;
+        }
+
+        .lag-bsg--{{ section.id }} .lag-bsg__cards-inner--slider {
+          padding-left: 0;
+          padding-right: 0;
+          scroll-padding-left: 0;
+          scroll-padding-right: 0;
+        }
+
+        .lag-bsg--{{ section.id }} .lag-bsg__cards-inner--slider::after {
+          content: none;
+        }
+
+        .lag-bsg--{{ section.id }} .lag-bsg__cards-inner--slider .lag-bsg__card {
+          min-width: min({{ section.settings.slider_card_width }}%, 320px);
+          max-width: min({{ section.settings.slider_card_width }}%, 320px);
+          scroll-snap-align: start;
+        }
+
+        {% unless section.settings.enable_arrows and section.settings.show_arrows_desktop %}
+          .lag-bsg--{{ section.id }} .lag-bsg__arrow {
+            display: none;
+          }
+        {% endunless %}
+      {% else %}
+        .lag-bsg--{{ section.id }} .lag-bsg__cards-wrap {
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+          overflow: visible;
+        }
+
+        .lag-bsg--{{ section.id }} .lag-bsg__cards-inner--slider {
+          max-width: 1120px;
+          margin: 0 auto;
+          padding-left: {{ section.settings.cards_bg_padding }}px;
+          padding-right: {{ section.settings.cards_bg_padding }}px;
+          scroll-padding-left: {{ section.settings.cards_bg_padding }}px;
+          scroll-padding-right: {{ section.settings.cards_bg_padding }}px;
+        }
+
+        .lag-bsg--{{ section.id }} .lag-bsg__cards-inner--slider .lag-bsg__card {
+          min-width: min({{ section.settings.slider_card_width }}%, 260px);
+          max-width: min({{ section.settings.slider_card_width }}%, 260px);
+          scroll-snap-align: start;
+        }
+
+        .lag-bsg--{{ section.id }} .lag-bsg__cards-inner--slider::after {
+          content: "";
+          flex: 0 0 {{ section.settings.cards_bg_padding }}px;
+        }
+
+        {% unless section.settings.enable_arrows and section.settings.show_arrows_desktop %}
+          .lag-bsg--{{ section.id }} .lag-bsg__arrow {
+            display: none;
+          }
+        {% endunless %}
+      {% endif %}
+    }
+
+    @media (min-width: 1200px) {
+      .lag-bsg--{{ section.id }} .lag-bsg__cards-inner--grid .lag-bsg__card {
+        {% if section.settings.desktop_cards_full_width %}
+          max-width: 100%;
+        {% else %}
+          max-width: 260px;
+          margin-left: auto;
+          margin-right: auto;
+        {% endif %}
+      }
+    }
+
+    @media (max-width: 989px) {
+      .lag-bsg--{{ section.id }} .lag-bsg__cards-inner--grid {
+        grid-template-columns: repeat({{ section.settings.grid_cols_tablet }}, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 749px) {
+      .lag-bsg--{{ section.id }} .lag-bsg__banner-desktop {
+        display: none;
+      }
+
+      .lag-bsg--{{ section.id }} .lag-bsg__banner-mobile {
+        display: block;
+      }
+
+      .lag-bsg--{{ section.id }} .lag-bsg__cards-inner--grid {
+        grid-template-columns: repeat({{ section.settings.grid_cols_mobile }}, minmax(0, 1fr));
+        gap: {{ section.settings.cards_gap }}px;
+      }
+
+      .lag-bsg--{{ section.id }} .lag-bsg__card-overlay {
+        font-size: {{ section.settings.overlay_font_size_mobile }}px;
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+      }
+
+      .lag-bsg--{{ section.id }} .lag-bsg__cards-inner--slider .lag-bsg__card {
+        min-width: var(--lag-bsg-mobile-card-width);
+        max-width: var(--lag-bsg-mobile-card-width);
+      }
+
+      .lag-bsg--{{ section.id }} .lag-bsg__arrow {
+        width: 36px;
+        height: 36px;
+      }
+
+      {% unless section.settings.enable_arrows and section.settings.show_arrows_mobile %}
+        .lag-bsg--{{ section.id }} .lag-bsg__arrow {
+          display: none;
+        }
+      {% endunless %}
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__view-all {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__view-all-link {
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 999px;
+      background-color: {{ section.settings.view_all_bg }};
+      color: {{ section.settings.view_all_text }};
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* Product card wrapper reset so theme card stays exact */
+    .lag-bsg--{{ section.id }} .lag-bsg__card--product {
+      background: transparent !important;
+      padding: 0 !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      overflow: visible !important;
+      box-shadow: none !important;
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__card--product > * {
+      border-radius: 0 !important;
+      overflow: visible !important;
+      background: transparent !important;
+      border: 0 !important;
+      box-shadow: none !important;
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__card--product .card,
+    .lag-bsg--{{ section.id }} .lag-bsg__card--product .card-wrapper,
+    .lag-bsg--{{ section.id }} .lag-bsg__card--product .product-card,
+    .lag-bsg--{{ section.id }} .lag-bsg__card--product .card-information,
+    .lag-bsg--{{ section.id }} .lag-bsg__card--product .card__information,
+    .lag-bsg--{{ section.id }} .lag-bsg__card--product .card-information__wrapper,
+    .lag-bsg--{{ section.id }} .lag-bsg__card--product .card__content {
+      width: 100%;
+      max-width: 100%;
+      overflow: visible !important;
+      background: transparent !important;
+      border: 0 !important;
+      box-shadow: none !important;
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__card--product .card,
+    .lag-bsg--{{ section.id }} .lag-bsg__card--product .card-wrapper,
+    .lag-bsg--{{ section.id }} .lag-bsg__card--product .card__inner,
+    .lag-bsg--{{ section.id }} .lag-bsg__card--product .card__content,
+    .lag-bsg--{{ section.id }} .lag-bsg__card--product .card__information,
+    .lag-bsg--{{ section.id }} .lag-bsg__card--product .card-information,
+    .lag-bsg--{{ section.id }} .lag-bsg__card--product .card-information__wrapper {
+      overflow: visible !important;
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__cards-inner--grid .lag-bsg__card--product,
+    .lag-bsg--{{ section.id }} .lag-bsg__cards-inner--slider .lag-bsg__card--product {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    .lag-bsg--{{ section.id }} .lag-bsg__card--product .badge,
+    .lag-bsg--{{ section.id }} .lag-bsg__card--product .card__badge,
+    .lag-bsg--{{ section.id }} .lag-bsg__card--product .size-badge,
+    .lag-bsg--{{ section.id }} .lag-bsg__card--product .product-card__sizes,
+    .lag-bsg--{{ section.id }} .lag-bsg__card--product .card-sizes,
+    .lag-bsg--{{ section.id }} .lag-bsg__card--product .variant-pill,
+    .lag-bsg--{{ section.id }} .lag-bsg__card--product .pill {
+      position: relative;
+      z-index: 2;
+      overflow: visible !important;
+    }
+  {% endstyle %}
+
+  <div class="lag-bsg__inner">
+    {%- assign banner_link = section.settings.banner_link -%}
+
+    {%- if banner_link != blank -%}
+      <a href="{{ banner_link }}" class="lag-bsg__banner lag-bsg__banner-link">
+    {%- else -%}
+      <div class="lag-bsg__banner">
+    {%- endif -%}
+
+      <div class="lag-bsg__banner-media lag-bsg__banner-desktop">
+        {% if section.settings.banner_desktop_image != blank %}
+          {{
+            section.settings.banner_desktop_image
+            | image_url: width: 2400
+            | image_tag:
+              loading: 'lazy',
+              sizes: '100vw',
+              widths: '750, 1100, 1500, 1800, 2100, 2400',
+              alt: section.settings.banner_alt | escape
+          }}
+        {% endif %}
+      </div>
+
+      <div class="lag-bsg__banner-media lag-bsg__banner-mobile">
+        {% if section.settings.banner_mobile_image != blank %}
+          {{
+            section.settings.banner_mobile_image
+            | image_url: width: 1400
+            | image_tag:
+              loading: 'lazy',
+              sizes: '100vw',
+              widths: '375, 550, 750, 1000, 1200, 1400',
+              alt: section.settings.banner_alt | escape
+          }}
+        {% endif %}
+      </div>
+
+    {%- if banner_link != blank -%}
+      </a>
+    {%- else -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.show_cards -%}
+      <div class="lag-bsg__cards-wrap">
+        {%- assign layout_class = 'lag-bsg__cards-inner--' | append: section.settings.cards_layout -%}
+        {%- assign is_slider = false -%}
+        {%- if section.settings.cards_layout == 'slider' -%}
+          {%- assign is_slider = true -%}
+        {%- endif -%}
+
+        {%- if is_slider -%}
+          <div class="lag-bsg__slider-wrap">
+            {% if section.settings.enable_arrows %}
+              <button class="lag-bsg__arrow lag-bsg__arrow--prev" type="button" aria-label="Previous" data-slider-prev>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M14.5 5L8 11.5L14.5 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <button class="lag-bsg__arrow lag-bsg__arrow--next" type="button" aria-label="Next" data-slider-next>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M9.5 5L16 11.5L9.5 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+            {% endif %}
+        {%- endif -%}
+
+        {%- if section.settings.cards_source == 'manual' and section.blocks.size > 0 -%}
+          <div class="lag-bsg__cards-inner {{ layout_class }}" {% if is_slider %}data-slider-track{% endif %}>
+            {% for block in section.blocks %}
+              {% if block.type == 'card' %}
+                {%- assign card_link = block.settings.card_link -%}
+                <div class="lag-bsg__card" {{ block.shopify_attributes }}>
+                  {% if card_link != blank %}
+                    <a href="{{ card_link }}" class="lag-bsg__card-link">
+                  {% endif %}
+
+                  <div class="lag-bsg__card-media">
+                    {% if block.settings.card_image != blank %}
+                      <img
+                        src="{{ block.settings.card_image | image_url: width: 1200 }}"
+                        alt="{{ block.settings.card_text | escape }}"
+                        loading="lazy"
+                      >
+                    {% endif %}
+
+                    {% if block.settings.card_text != blank %}
+                      <div class="lag-bsg__card-overlay">
+                        {{ block.settings.card_text }}
+                      </div>
+                    {% endif %}
+                  </div>
+
+                  {% if card_link != blank %}
+                    </a>
+                  {% endif %}
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+
+        {%- elsif section.settings.cards_source == 'collection' and section.settings.cards_collection != blank -%}
+          {% assign coll = section.settings.cards_collection %}
+
+          <div class="lag-bsg__cards-inner {{ layout_class }}" {% if is_slider %}data-slider-track{% endif %}>
+            {% for product in coll.products limit: section.settings.products_limit %}
+              <div class="lag-bsg__card lag-bsg__card--product">
+                {% render 'product-card',
+                  product_card_product: product,
+                  media_size: 'portrait',
+                  show_secondary_image: true,
+                  add_image_padding: false,
+                  show_vendor: false,
+                  show_image_outline: false,
+                  show_rating: false,
+                  lazy_load: true,
+                  section_id: section.id,
+                  show_quick_add: false
+                %}
+              </div>
+            {% endfor %}
+          </div>
+
+          {% if section.settings.show_view_all and coll != blank %}
+            <div class="lag-bsg__view-all">
+              <a href="{{ coll.url }}" class="lag-bsg__view-all-link">
+                {{ section.settings.view_all_label }}
+              </a>
+            </div>
+          {% endif %}
+        {%- endif -%}
+
+        {%- if is_slider -%}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% if section.settings.enable_arrows and section.settings.cards_layout == 'slider' %}
+  <script>
+    (function() {
+      var sectionEl = document.querySelector('.lag-bsg--{{ section.id }}');
+      if (!sectionEl) return;
+
+      var track = sectionEl.querySelector('[data-slider-track]');
+      var prevBtn = sectionEl.querySelector('[data-slider-prev]');
+      var nextBtn = sectionEl.querySelector('[data-slider-next]');
+      if (!track || !prevBtn || !nextBtn) return;
+
+      function getStep() {
+        var firstCard = track.querySelector('.lag-bsg__card');
+        if (!firstCard) return 300;
+        var styles = window.getComputedStyle(track);
+        var gap = parseFloat(styles.columnGap || styles.gap || 0);
+        return firstCard.offsetWidth + gap;
+      }
+
+      function updateArrows() {
+        var maxScrollLeft = track.scrollWidth - track.clientWidth;
+        prevBtn.disabled = track.scrollLeft <= 4;
+        nextBtn.disabled = track.scrollLeft >= maxScrollLeft - 4;
+      }
+
+      prevBtn.addEventListener('click', function() {
+        track.scrollBy({ left: -getStep(), behavior: 'smooth' });
+      });
+
+      nextBtn.addEventListener('click', function() {
+        track.scrollBy({ left: getStep(), behavior: 'smooth' });
+      });
+
+      track.addEventListener('scroll', updateArrows, { passive: true });
+      window.addEventListener('resize', updateArrows);
+      updateArrows();
+    })();
+  </script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Banner + Slider/Grid",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "banner_desktop_image",
+      "label": "Banner desktop image"
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_mobile_image",
+      "label": "Banner mobile image"
+    },
+    {
+      "type": "text",
+      "id": "banner_alt",
+      "label": "Banner alt text",
+      "default": "Lagorii banner"
+    },
+    {
+      "type": "url",
+      "id": "banner_link",
+      "label": "Banner link (optional)"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section background colour",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top (px)",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom (px)",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 0
+    },
+    {
+    "type": "range",
+    "id": "section_side_padding",
+    "label": "Left / Right padding",
+    "min": 0,
+    "max": 80,
+    "step": 4,
+    "default": 20
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cards",
+      "label": "Show slider/grid area",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "cards_source",
+      "label": "Cards source",
+      "options": [
+        { "value": "manual", "label": "Custom image cards (blocks)" },
+        { "value": "collection", "label": "Product cards from a collection" }
+      ],
+      "default": "manual"
+    },
+    {
+      "type": "select",
+      "id": "cards_layout",
+      "label": "Cards layout",
+      "options": [
+        { "value": "grid", "label": "Grid" },
+        { "value": "slider", "label": "Slider (horizontal scroll)" }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_arrows",
+      "label": "Enable slider arrows",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows_desktop",
+      "label": "Show arrows on desktop",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows_mobile",
+      "label": "Show arrows on mobile",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "arrow_bg",
+      "label": "Arrow background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "arrow_color",
+      "label": "Arrow icon color",
+      "default": "#111111"
+    },
+    {
+      "type": "range",
+      "id": "arrow_side_offset",
+      "label": "Arrow side offset (px)",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "default": 8
+    },
+    {
+      "type": "checkbox",
+      "id": "desktop_cards_full_width",
+      "label": "Desktop cards full width",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "desktop_cards_side_padding",
+      "label": "Desktop cards side padding (px)",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "cards_margin_top",
+      "label": "Space above cards (px)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "cards_bg_color",
+      "label": "Cards area background colour",
+      "default": "#ffffff"
+    },
+    {
+      "type": "image_picker",
+      "id": "cards_bg_image",
+      "label": "Cards area background image"
+    },
+    {
+      "type": "select",
+      "id": "cards_bg_image_size",
+      "label": "Cards background image fit",
+      "options": [
+        { "value": "cover", "label": "Cover" },
+        { "value": "contain", "label": "Contain" },
+        { "value": "auto", "label": "Original size" }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "range",
+      "id": "cards_bg_padding",
+      "label": "Cards area padding (px)",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "cards_bg_radius",
+      "label": "Cards area corner radius (px)",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "cards_gap",
+      "label": "Space between cards (px)",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Card corner radius (px)",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "card_inner_padding",
+      "label": "Card inner padding (px)",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card background colour (fallback)",
+      "default": "#ffffff"
+    },
+    {
+      "type": "select",
+      "id": "card_image_fit",
+      "label": "Manual card image fit",
+      "options": [
+        { "value": "cover", "label": "Full width crop" },
+        { "value": "contain", "label": "Show full image" }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "range",
+      "id": "grid_cols_desktop",
+      "label": "Grid columns (desktop)",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "grid_cols_tablet",
+      "label": "Grid columns (tablet)",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "grid_cols_mobile",
+      "label": "Grid columns (mobile)",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "slider_card_width",
+      "label": "Slider card width (% of viewport)",
+      "min": 30,
+      "max": 100,
+      "step": 5,
+      "default": 45
+    },
+    {
+      "type": "select",
+      "id": "slider_cards_visible_mobile",
+      "label": "Cards visible on mobile (slider)",
+      "options": [
+        { "value": "1", "label": "1 card" },
+        { "value": "1.5", "label": "1.5 cards" },
+        { "value": "2", "label": "2 cards" },
+        { "value": "2.5", "label": "2.5 cards" },
+        { "value": "3", "label": "3 cards" },
+        { "value": "3.5", "label": "3.5 cards" }
+      ],
+      "default": "1.5"
+    },
+    {
+      "type": "range",
+      "id": "card_aspect_ratio",
+      "label": "Card image aspect ratio (%)",
+      "min": 80,
+      "max": 180,
+      "step": 5,
+      "default": 140
+    },
+    {
+      "type": "text",
+      "id": "overlay_font_family",
+      "label": "Overlay font family",
+      "default": "inherit",
+      "info": "Example: 'Inter, sans-serif'"
+    },
+    {
+      "type": "select",
+      "id": "overlay_font_weight",
+      "label": "Overlay font weight",
+      "options": [
+        { "value": "400", "label": "Regular" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semi-bold" },
+        { "value": "700", "label": "Bold" }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "range",
+      "id": "overlay_font_size_desktop",
+      "label": "Overlay font size (desktop px)",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "overlay_font_size_mobile",
+      "label": "Overlay font size (mobile px)",
+      "min": 10,
+      "max": 30,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "overlay_text_color",
+      "label": "Overlay text colour",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "overlay_bg_color",
+      "label": "Overlay background colour",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "overlay_bg_opacity",
+      "label": "Overlay background opacity (%)",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "overlay_padding",
+      "label": "Overlay padding (px)",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "overlay_radius",
+      "label": "Overlay corner radius (px)",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "default": 8
+    },
+    {
+      "type": "select",
+      "id": "overlay_text_align",
+      "label": "Overlay text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "collection",
+      "id": "cards_collection",
+      "label": "Collection for product cards"
+    },
+    {
+      "type": "range",
+      "id": "products_limit",
+      "label": "Number of products to show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View all' button to collection",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "'View all' button label",
+      "default": "View all"
+    },
+    {
+      "type": "color",
+      "id": "view_all_bg",
+      "label": "View all button background",
+      "default": "#E87529"
+    },
+    {
+      "type": "color",
+      "id": "view_all_text",
+      "label": "View all button text colour",
+      "default": "#ffffff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "settings": [
+        { "type": "image_picker", "id": "card_image", "label": "Card image" },
+        { "type": "text", "id": "card_text", "label": "Overlay text", "default": "Partywear" },
+        { "type": "url", "id": "card_link", "label": "Card link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Banner + Slider/Grid",
+      "blocks": [
+        { "type": "card" },
+        { "type": "card" },
+        { "type": "card" }
+      ]
+    }
+  ]
+}
+{% endschema %}

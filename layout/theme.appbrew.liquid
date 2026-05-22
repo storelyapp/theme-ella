@@ -1,0 +1,627 @@
+<!doctype html>
+{%- liquid
+  if settings.list_iso_rtl != blank
+    assign locale_iso_code = request.locale.iso_code
+    assign arr_list_rtl = settings.list_iso_rtl | remove: ' ' | split: ','
+
+    if arr_list_rtl contains locale_iso_code
+      assign enable_iso_rtl = true
+    else
+      assign enable_iso_rtl = false
+    endif
+  else
+    assign enable_iso_rtl = false
+  endif
+-%}
+<html
+  class="no-js"
+  lang="{{ request.locale.iso_code }}"
+  {% if settings.enable_layout_rtl and enable_iso_rtl %}
+    dir="rtl"
+  {% endif %}
+>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="">
+    <link
+      rel="canonical"
+      href="{{ canonical_url }}"
+      canonical-shop-url="{{ shop.url }}/"
+    >
+    {%- if settings.favicon != blank -%}
+      <link
+        rel="shortcut icon"
+        href="{{ settings.favicon | image_url: width:32 }}"
+        type="image/png"
+      >
+    {%- endif -%}
+
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+    <title>
+      {{ page_title }}
+      {%- if current_tags %}
+        &ndash; tagged "{{ current_tags | join: ', ' }}"
+      {%- endif -%}
+      {%- if current_page != 1 %}
+        &ndash; Page {{ current_page -}}
+      {%- endif -%}
+      {%- unless page_title contains shop.name %}
+        &ndash; {{ shop.name -}}
+      {%- endunless -%}
+    </title>
+
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+    {% render 'meta-tags' %}
+    {{ content_for_header }}
+    {% render 'usf' %}
+    {% render 'currency-switcher' %}
+    {{ 'currency-switcher.css' | asset_url | stylesheet_tag }}
+
+    {% render 'variable' %}
+    {% render 'global-style' %}
+
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/imagesloaded@5/imagesloaded.pkgd.min.js"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/masonry-layout@4/dist/masonry.pkgd.min.js"
+    ></script>
+
+    {% render 'global-script' %}
+    {% if template.name == 'product' %}
+      {{ 'estimate-delivery.css' | asset_url | stylesheet_tag }}
+    {% endif %}
+
+    <script defer>
+      document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+    </script>
+
+    {% if template.name == 'product' %}
+      <!-- Load the delivery-estimate logic only on product pages -->
+      <script src="{{ 'estimate-delivery.js' | asset_url }}" defer></script>
+    {% endif %}
+    {%- liquid
+      if settings.layout_body == 'full'
+        assign layout_body = 'body-full-width'
+      elsif settings.layout_body == 'boxed'
+        assign layout_body = 'body-boxed'
+      elsif settings.layout_body == 'custom_width'
+        assign layout_body = 'body-custom-width'
+      endif
+
+      if settings.style_dots == '02'
+        assign style_dots = 'style-dots-2'
+      endif
+
+      if settings.style_arrows == '02'
+        assign style_arrows = 'style-arrows-2'
+      elsif settings.style_arrows == '05'
+        assign style_arrows = 'style-arrows-5'
+      elsif settings.style_arrows == '06'
+        assign style_arrows = 'style-arrows-6'
+      elsif settings.style_arrows == '07'
+        assign style_arrows = 'style-arrows-7'
+      endif
+
+      if settings.product_card_layout == '02'
+        assign product_card_layout = 'product-card-layout-02'
+      elsif settings.product_card_layout == '03'
+        assign product_card_layout = 'product-card-layout-03'
+      elsif settings.product_card_layout == '04'
+        assign product_card_layout = 'product-card-layout-04'
+      elsif settings.product_card_layout == '05'
+        assign product_card_layout = 'product-card-layout-05'
+      elsif settings.product_card_layout == '06'
+        assign product_card_layout = 'product-card-layout-06'
+      elsif settings.product_card_layout == '07'
+        assign product_card_layout = 'product-card-layout-07'
+      elsif settings.product_card_layout == '08'
+        assign product_card_layout = 'product-card-layout-08'
+      else
+        assign product_card_layout = 'product-card-layout-01'
+      endif
+
+      case settings.quick_shop_type
+        when '1'
+          assign quick_shop_type = 'quick_shop_option_1'
+        when '2'
+          assign quick_shop_type = 'quick_shop_option_2'
+        when '3'
+          assign quick_shop_type = 'quick_shop_option_3'
+        when '4'
+          assign quick_shop_type = 'quick_shop_bulk'
+      endcase
+
+      if settings.style_text_size_varriant == '02'
+        assign style_text_size_varriant = 'size_varriant_style_2'
+      endif
+    -%}
+    <!-- FlexyPe -->
+    <script
+      src="https://static.flexype.in/scripts/flexype-v2.min.js"
+      type="module"
+      defer
+    ></script>
+    {% render 'flexype-checkout' %}
+    <!-- FlexyPe -->
+
+    {% render 'KiwiSizing' %}
+
+    <script type="text/javascript">
+      (function (c, l, a, r, i, t, y) {
+        c[a] =
+          c[a] ||
+          function () {
+            (c[a].q = c[a].q || []).push(arguments);
+          };
+        t = l.createElement(r);
+        t.async = 1;
+        t.src = 'https://www.clarity.ms/tag/' + i;
+        y = l.getElementsByTagName(r)[0];
+        y.parentNode.insertBefore(t, y);
+      })(window, document, 'clarity', 'script', 'rmi1uj19es');
+    </script>
+    <script>
+      (function () {
+        try {
+          const savedCurrency = localStorage.getItem('selectedCurrency');
+          if (!savedCurrency) return;
+
+          const sel = document.querySelector('select#CurrencySelectorSelect');
+          if (sel && sel.value !== savedCurrency) {
+            sel.value = savedCurrency;
+          }
+
+          // Watch until dropdown loads fully and fix it
+          const observer = new MutationObserver(() => {
+            const s = document.querySelector('select#CurrencySelectorSelect');
+            if (s && s.value !== savedCurrency) {
+              s.value = savedCurrency;
+              s.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+          });
+
+          observer.observe(document.documentElement, {
+            childList: true,
+            subtree: true,
+          });
+
+          // Stop watching after 2 seconds
+          setTimeout(() => observer.disconnect(), 2000);
+        } catch (e) {
+          console.error('Currency preload error:', e);
+        }
+      })();
+    </script>
+  </head>
+
+  <body
+    class="
+      template-{{ request.page_type }} {{ layout_body }} {{
+        style_dots
+      }} {{ style_text_size_varriant }} {{ style_arrows }} {{
+        product_card_layout
+      }} {% if settings.enable_button_disable_arrows %} enable_button_disable_arrows{% endif %}{% if settings.display_text_color_title %} enable_text_color_title{% if settings.style_text_color_varriant == '02' %} style_2_text_color_varriant{% endif %}{% endif %}{% if settings.hide_compare_homepage %} hide_compare_homepage{% endif %} {{
+        quick_shop_type
+      }}{% if settings.show_image_loading %} show_image_loading{% endif %}{% if settings.show_effect_close %} show_effect_close{% endif %}{% if settings.enable_layout_rtl and enable_iso_rtl %} layout_rtl{% endif %}{% if request.design_mode %} shopify-design-mode{% endif %}{% if settings.animations_hover_elements != 'none' %} animate--hover-{{
+        settings.animations_hover_elements
+      }}{% endif %}{% if settings.enable_following_cursor and settings.following_cursor_style == 'default' %} cursor-fixed__show{% endif %}{% unless settings.enable_currencies %} disable_currencies{% endunless %}{% if settings.enable_button_1_border_outside %} btn_1_br_outside{% endif %}{% if settings.enable_button_2_border_outside %} btn_2_br_outside{% endif %}{% if settings.enable_button_3_border_outside %} btn_3_br_outside{% endif %}{% if settings.show_price_percent %} show_price_percent{% endif %}{% if settings.show_wishlist_full_icon %} icon_wishlist_full{% endif %}
+    "
+    allow-transparency
+  >
+    <div class="body-content-wrapper">
+      <a
+        class="skip-to-content-link button visually-hidden"
+        href="#MainContent"
+      >
+        {{- 'accessibility.skip_to_text' | t -}}
+      </a>
+      {% comment %}
+        {% render 'preload-screen' %} {% sections 'header-group' %}
+        {% render 'wrapper-header' %}
+      {% endcomment %}
+      {%- if settings.layout_body == 'boxed' -%}
+        <div class="wrapper-hasbanner-adv">
+      {%- endif -%}
+      {% render 'halo-banner-adv-left' %}
+      {% render 'halo-banner-adv-right' %}
+      <main
+        id="MainContent"
+        class="wrapper-body content-for-layout focus-none"
+        role="main"
+        tabindex="-1"
+      >
+        {{ content_for_layout }}
+      </main>
+      {%- if settings.layout_body == 'boxed' -%}
+        </div>
+      {%- endif -%}
+      {% comment %}
+        <div class="wrapper-footer">{% sections 'footer-group' %}</div>
+      {% endcomment %}
+      {% section 'halo-toolbar-mobile' %}
+
+      <ul hidden>
+        <li id="a11y-refresh-page-message">
+          {{ 'accessibility.refresh_page' | t }}
+        </li>
+      </ul>
+
+      {% render 'global-script-2' %}
+    </div>
+    {% render 'halo-popup' %}
+    {%- if settings.enable_view_documentation -%}
+      {% render 'theme-editor-notification' %}
+    {%- endif -%}
+    {%- if settings.use_custom_js -%}
+      <script src="{{ 'custom.js' | asset_url }}" defer></script>
+    {%- endif -%}
+
+    <div class="background-overlay">
+      {%- if settings.show_effect_close -%}
+        <div class="background-cursor-wrapper">
+          <div class="background-cursor-wrapper_outer">
+            <div class="background-cursor-wrapper_inner">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 48 48"
+                width="20"
+                height="20"
+              >
+                <g
+                  class="nc-icon-wrapper"
+                  fill="#ffffff"
+                  transform="translate(0.5, 0.5)"
+                >
+                  <line
+                    fill="none"
+                    stroke-width="6"
+                    x1="46"
+                    y1="2"
+                    x2="2"
+                    y2="46"
+                  />
+                  <line
+                    fill="none"
+                    stroke-width="6"
+                    x1="46"
+                    y1="46"
+                    x2="2"
+                    y2="2"
+                  />
+                </g>
+              </svg>
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {% render 'halo-sidebar' %}
+    {%- if settings.enable_following_cursor -%}
+      {% render 'cursor-fixed', style_cursor: settings.following_cursor_style %}
+    {%- endif -%}
+    <script
+      src="{{ 'merged_currency_converter.js' | asset_url }}"
+      defer
+    ></script>
+    <script src="{{ 'currency-switcher.js' | asset_url }}" defer></script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const greetingElement = document.getElementById('greeting-text');
+        const now = new Date();
+        const hours = now.getHours();
+        let greeting = 'Hello';
+
+        if (hours >= 5 && hours < 12) {
+          greeting = 'Good Morning!';
+        } else if (hours >= 12 && hours < 17) {
+          greeting = 'Good Afternoon!';
+        } else {
+          greeting = 'Good Evening!';
+        }
+
+        greetingElement.textContent = greeting;
+      });
+    </script>
+    <script>
+      function updateClock() {
+        const clockElement = document.getElementById('liveClock');
+        if (!clockElement) {
+          // Element not found, do nothing
+          return;
+        }
+
+        const now = new Date();
+        const hours = now.getHours();
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        const formattedTime = `${String(hours % 12 || 12)}:${minutes}:${seconds} ${ampm}`;
+
+        clockElement.textContent = formattedTime;
+      }
+
+      updateClock(); // Initial call
+      setInterval(updateClock, 1000); // Update every second
+    </script>
+
+    <script>
+      (function () {
+        function ready(fn) {
+          document.readyState !== 'loading' ? fn() : document.addEventListener('DOMContentLoaded', fn);
+        }
+        function waitForSlick(cb, tries = 60) {
+          if (window.jQuery && jQuery.fn && typeof jQuery.fn.slick === 'function') return cb();
+          if (tries <= 0) return console.warn('[Lagorii] Slick never became available');
+          setTimeout(function () {
+            waitForSlick(cb, tries - 1);
+          }, 100);
+        }
+
+        ready(function () {
+          waitForSlick(function () {
+            var $ = jQuery;
+
+            // Brands slider (data-brands-slider)
+            $('[data-brands-slider]').each(function () {
+              var $s = $(this);
+              if ($s.hasClass('slick-initialized')) return;
+
+              var itemsToShow = parseInt($s.data('rows')) || 5;
+              var autoplay = String($s.data('autoplay')) === 'true';
+              var autoplaySpec = parseInt($s.data('autoplay-speed'), 10) || 3000;
+              var dots = String($s.data('dots')) === 'true';
+              var arrows = String($s.data('arrows')) === 'true';
+              var centerMode = String($s.data('center-mode')) === 'true';
+              var itemTotal = $s.find('.halo-item').length;
+
+              $s.slick({
+                slidesToShow: itemsToShow,
+                slidesToScroll: 1,
+                arrows: arrows,
+                dots: dots && itemTotal > itemsToShow,
+                centerMode: centerMode,
+                centerPadding: '10%',
+                speed: 800,
+                autoplay: autoplay,
+                autoplaySpeed: autoplaySpec,
+                rtl: window.rtl_slick,
+                nextArrow:
+                  (window.arrows && window.arrows.icon_next) ||
+                  '<button class="slick-next" type="button">Next</button>',
+                prevArrow:
+                  (window.arrows && window.arrows.icon_prev) ||
+                  '<button class="slick-prev" type="button">Prev</button>',
+                responsive: [
+                  {
+                    breakpoint: 1200,
+                    settings: {
+                      infinite: false,
+                      centerMode: false,
+                      slidesToShow: 4,
+                      slidesToScroll: 4,
+                      arrows: arrows,
+                      dots: dots && itemTotal > 4,
+                    },
+                  },
+                  {
+                    breakpoint: 992,
+                    settings: {
+                      slidesToShow: 3,
+                      slidesToScroll: 3,
+                      arrows: arrows,
+                      dots: dots && itemTotal > 3,
+                    },
+                  },
+                  {
+                    breakpoint: 768,
+                    settings: {
+                      slidesToShow: 2,
+                      slidesToScroll: 2,
+                      arrows: arrows,
+                      dots: dots && itemTotal > 2,
+                    },
+                  },
+                  {
+                    breakpoint: 480,
+                    settings: {
+                      slidesToShow: parseInt($s.data('rows-mobile'), 10) || 1,
+                      slidesToScroll: parseInt($s.data('rows-mobile'), 10) || 1,
+                      arrows: arrows,
+                      dots: dots && itemTotal > (parseInt($s.data('rows-mobile'), 10) || 1),
+                    },
+                  },
+                ],
+              });
+            });
+
+            // Image banner slider (data-image-banner-slide)
+            $('[data-image-banner-slide]').each(function () {
+              var $b = $(this);
+              if ($b.hasClass('slick-initialized')) return;
+
+              var arrows = String($b.data('arrows')) === 'true';
+              var dots = String($b.data('dots')) === 'true';
+              var autoplay = String($b.data('autoplay')) === 'true';
+              var autoplaySpeed = parseInt($b.data('autoplay-speed'), 10) || 3000;
+
+              $b.slick({
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                arrows: arrows,
+                dots: dots,
+                autoplay: autoplay,
+                autoplaySpeed: autoplaySpeed,
+                infinite: true,
+                fade: true,
+                rtl: window.rtl_slick,
+                nextArrow:
+                  (window.arrows && window.arrows.icon_next) ||
+                  '<button class="slick-next" type="button">Next</button>',
+                prevArrow:
+                  (window.arrows && window.arrows.icon_prev) ||
+                  '<button class="slick-prev" type="button">Prev</button>',
+              });
+            });
+          });
+        });
+      })();
+    </script>
+    {% comment %}
+      {%- unless template.name == 'product' -%}
+      <script
+        async
+        src="https://r2.spurnow.com/lc-widget/embed.js"
+        data-embed-token="52dd4af7-ab6a-433b-bb8e-14a2419d223b"
+      ></script>
+      {%- endunless -%}
+
+      <script>
+        ;(() => {
+          const TARGET_Z = 90 // below sticky ATC (98) & mobile menu (101)
+          const MIN_BOTTOM = 20 // px when sticky ATC is hidden
+          const EXTRA_GAP = 12 // extra gap above sticky bar
+
+          function onceHostReady(cb, timeoutMs = 10000) {
+            const t0 = performance.now()
+            ;(function loop() {
+              const host = document.getElementById('spur-chat-widget-container')
+              if (host && host.shadowRoot) return cb(host)
+              if (performance.now() - t0 > timeoutMs) return
+              requestAnimationFrame(loop)
+            })()
+          }
+
+          function applyInline(sr) {
+            const panel = sr.querySelector('.widget-container')
+            const button = sr.querySelector('.floating-button')
+            const wrap = sr.querySelector('.widget-wrapper')
+
+            ;[panel, button, wrap].forEach((el) => {
+              if (el) el.style.zIndex = String(TARGET_Z)
+            })
+          }
+
+          function injectShadowStyle(sr) {
+            // append as the LAST style so it wins on order
+            const tag = document.createElement('style')
+            tag.textContent = `
+            :host { z-index: ${TARGET_Z} !important; }
+            .widget-wrapper,
+            .widget-container,
+            .floating-button,
+            .widget-container.svelte-pf27nb,
+            .floating-button.svelte-3kqunn,
+            .spur-chat-widget-root .widget-container,
+            .spur-chat-widget-root .floating-button {
+              z-index: ${TARGET_Z} !important;
+            }
+          `
+            sr.appendChild(tag)
+          }
+
+          function updateBottomOffset(host) {
+            const sticky = document.querySelector(
+              'sticky-add-to-cart.productView-stickyCart'
+            )
+            let bottom = MIN_BOTTOM
+
+            if (sticky) {
+              const visible =
+                sticky.classList.contains('show-sticky') ||
+                getComputedStyle(sticky).display !== 'none' ||
+                sticky.offsetHeight > 0
+              if (visible) {
+                const h = sticky.offsetHeight || 56
+                bottom = Math.max(MIN_BOTTOM, h + EXTRA_GAP)
+              }
+            }
+            host.style.setProperty('--spur-button-bottom', bottom + 'px')
+          }
+
+          function init(host) {
+            // ensure host participates in stacking context
+            host.style.position = host.style.position || 'relative'
+            host.style.zIndex = String(TARGET_Z)
+
+            const sr = host.shadowRoot
+
+            const boot = () => {
+              if (
+                !sr.querySelector('.widget-container') &&
+                !sr.querySelector('.floating-button')
+              )
+                return
+
+              applyInline(sr)
+              injectShadowStyle(sr) // appended last → overrides 999999 rules
+              updateBottomOffset(host)
+
+              // watch for rerenders and re-apply cheaply
+              new MutationObserver(() => {
+                applyInline(sr)
+                updateBottomOffset(host)
+              }).observe(sr, {
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['class', 'style'],
+              })
+            }
+
+            // wait up to ~3s for the inner nodes, no aggressive polling
+            const t0 = performance.now()
+            ;(function waitInner() {
+              if (
+                sr.querySelector('.widget-container') ||
+                sr.querySelector('.floating-button')
+              )
+                return boot()
+              if (performance.now() - t0 > 3000) return
+              requestAnimationFrame(waitInner)
+            })()
+
+            // update when your UI changes
+            const watch = (sel) => {
+              const el = document.querySelector(sel)
+              if (!el) return
+              new MutationObserver(() => updateBottomOffset(host)).observe(el, {
+                attributes: true,
+                attributeFilter: ['class', 'style'],
+              })
+            }
+            watch('sticky-add-to-cart.productView-stickyCart')
+            watch('.halo-sidebar.custom-mobile-menu')
+
+            window.addEventListener('resize', () => updateBottomOffset(host), {
+              passive: true,
+            })
+          }
+
+          const onReady = () => onceHostReady(init)
+          if (document.readyState === 'loading')
+            document.addEventListener('DOMContentLoaded', onReady, { once: true })
+          else onReady()
+        })()
+      </script>
+
+      <style>
+        #spur-chat-widget-container {
+          z-index: 90;
+        }
+      </style>
+    {% endcomment %}
+  </body>
+</html>

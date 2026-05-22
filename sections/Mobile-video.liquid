@@ -1,0 +1,481 @@
+{% comment %}
+  Mobile Video with Shop Now Button
+{% endcomment %}
+
+<section
+  id="lagorii-video-{{ section.id }}"
+  class="lagorii-mobile-video-section"
+>
+  <div class="lagorii-video-wrapper lagorii-ratio-{{ section.settings.video_ratio }}">
+    {% if section.settings.video != blank %}
+      {{ section.settings.video | video_tag:
+        autoplay: section.settings.autoplay,
+        loop: section.settings.loop_video,
+        muted: true,
+        playsinline: true,
+        controls: false,
+        class: 'lagorii-custom-video'
+      }}
+    {% elsif section.settings.video_url != blank %}
+      <video
+        class="lagorii-custom-video"
+        {% if section.settings.autoplay %}autoplay{% endif %}
+        {% if section.settings.loop_video %}loop{% endif %}
+        muted
+        playsinline
+      >
+        <source src="{{ section.settings.video_url }}" type="video/mp4">
+      </video>
+    {% else %}
+      <div class="lagorii-video-placeholder">
+        Add video from section settings
+      </div>
+    {% endif %}
+
+    {% if section.settings.show_mute_button %}
+      <button
+        type="button"
+        class="lagorii-mute-btn"
+        aria-label="Mute or unmute video"
+      >
+        🔇
+      </button>
+    {% endif %}
+
+    {% if section.settings.show_shop_button %}
+      {% assign final_link = section.settings.button_link %}
+      {% if section.settings.collection_link != blank %}
+        {% assign final_link = section.settings.collection_link.url %}
+      {% endif %}
+
+      {% if final_link != blank %}
+        <a href="{{ final_link }}" class="lagorii-shop-btn">
+          {{ section.settings.button_text }}
+        </a>
+      {% endif %}
+    {% endif %}
+  </div>
+</section>
+
+<style>
+  #lagorii-video-{{ section.id }} {
+    display: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    #lagorii-video-{{ section.id }} {
+      display: block;
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-right: {{ section.settings.padding_right }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+      padding-left: {{ section.settings.padding_left }}px;
+      background: {{ section.settings.section_bg }};
+    }
+
+    #lagorii-video-{{ section.id }} .lagorii-video-wrapper {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      border-radius: {{ section.settings.corner_radius }}px;
+      background: #f5f5f5;
+    }
+
+    #lagorii-video-{{ section.id }} .lagorii-ratio-4-5 {
+      aspect-ratio: 4 / 5;
+    }
+
+    #lagorii-video-{{ section.id }} .lagorii-ratio-1-1 {
+      aspect-ratio: 1 / 1;
+    }
+
+    #lagorii-video-{{ section.id }} .lagorii-ratio-16-9 {
+      aspect-ratio: 16 / 9;
+    }
+
+    #lagorii-video-{{ section.id }} .lagorii-custom-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    #lagorii-video-{{ section.id }} .lagorii-video-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: {{ section.settings.font_family }};
+      font-size: 14px;
+      color: #777;
+      background: #f2f2f2;
+    }
+
+    #lagorii-video-{{ section.id }} .lagorii-shop-btn {
+      position: absolute;
+      left: 50%;
+      bottom: {{ section.settings.button_bottom }}px;
+      transform: translateX(-50%);
+      z-index: 3;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: {{ section.settings.button_width }}px;
+      padding: {{ section.settings.button_padding_y }}px {{ section.settings.button_padding_x }}px;
+      border-radius: {{ section.settings.button_radius }}px;
+      background: {{ section.settings.button_bg }};
+      color: {{ section.settings.button_text_color }};
+      opacity: {{ section.settings.button_opacity | divided_by: 100.0 }};
+      font-family: {{ section.settings.font_family }};
+      font-size: {{ section.settings.button_font_size }}px;
+      font-weight: {{ section.settings.button_font_weight }};
+      line-height: 1;
+      text-decoration: none;
+      text-align: center;
+      transition: 0.25s ease;
+    }
+
+    #lagorii-video-{{ section.id }} .lagorii-shop-btn:hover {
+      opacity: 1;
+    }
+
+    #lagorii-video-{{ section.id }} .lagorii-mute-btn {
+      position: absolute;
+      top: {{ section.settings.mute_top }}px;
+      right: {{ section.settings.mute_right }}px;
+      z-index: 4;
+      width: {{ section.settings.mute_size }}px;
+      height: {{ section.settings.mute_size }}px;
+      border-radius: 50%;
+      border: none;
+      background: {{ section.settings.mute_bg }};
+      color: {{ section.settings.mute_color }};
+      opacity: {{ section.settings.mute_opacity | divided_by: 100.0 }};
+      font-size: {{ section.settings.mute_icon_size }}px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const section = document.querySelector('#lagorii-video-{{ section.id }}');
+    if (!section) return;
+
+    const video = section.querySelector('video');
+    const muteBtn = section.querySelector('.lagorii-mute-btn');
+
+    if (!video || !muteBtn) return;
+
+    video.muted = true;
+    muteBtn.textContent = '🔇';
+
+    muteBtn.addEventListener('click', function () {
+      video.muted = !video.muted;
+      muteBtn.textContent = video.muted ? '🔇' : '🔊';
+
+      if (!video.paused) return;
+
+      video.play().catch(function () {});
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Mobile Video Shop Now",
+  "settings": [
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Upload video"
+    },
+    {
+      "type": "url",
+      "id": "video_url",
+      "label": "Video MP4 URL"
+    },
+    {
+      "type": "select",
+      "id": "video_ratio",
+      "label": "Video ratio",
+      "default": "4-5",
+      "options": [
+        {
+          "value": "4-5",
+          "label": "4:5"
+        },
+        {
+          "value": "1-1",
+          "label": "1:1"
+        },
+        {
+          "value": "16-9",
+          "label": "16:9"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto play video",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "loop_video",
+      "label": "Loop video",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_mute_button",
+      "label": "Show mute button",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_shop_button",
+      "label": "Show Shop Now button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "collection",
+      "id": "collection_link",
+      "label": "Collection link"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Custom button link"
+    },
+    {
+      "type": "color",
+      "id": "section_bg",
+      "label": "Section background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "label": "Padding right",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "label": "Padding left",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "label": "Video corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "default": 18
+    },
+    {
+      "type": "text",
+      "id": "font_family",
+      "label": "Font family",
+      "default": "Montserrat, sans-serif"
+    },
+    {
+      "type": "color",
+      "id": "button_bg",
+      "label": "Button background color",
+      "default": "#E87529"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "button_opacity",
+      "label": "Button opacity",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "default": 95
+    },
+    {
+      "type": "range",
+      "id": "button_bottom",
+      "label": "Button bottom position",
+      "min": 8,
+      "max": 80,
+      "step": 2,
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "button_width",
+      "label": "Button minimum width",
+      "min": 80,
+      "max": 240,
+      "step": 10,
+      "default": 140
+    },
+    {
+      "type": "range",
+      "id": "button_padding_y",
+      "label": "Button vertical padding",
+      "min": 6,
+      "max": 24,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "button_padding_x",
+      "label": "Button horizontal padding",
+      "min": 10,
+      "max": 40,
+      "step": 2,
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "button_radius",
+      "label": "Button corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "label": "Button font size",
+      "min": 10,
+      "max": 22,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "select",
+      "id": "button_font_weight",
+      "label": "Button font weight",
+      "default": "600",
+      "options": [
+        {
+          "value": "400",
+          "label": "Regular"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "mute_bg",
+      "label": "Mute button background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "mute_color",
+      "label": "Mute icon color",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "mute_opacity",
+      "label": "Mute button opacity",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "default": 85
+    },
+    {
+      "type": "range",
+      "id": "mute_size",
+      "label": "Mute button size",
+      "min": 28,
+      "max": 54,
+      "step": 2,
+      "default": 38
+    },
+    {
+      "type": "range",
+      "id": "mute_icon_size",
+      "label": "Mute icon size",
+      "min": 12,
+      "max": 28,
+      "step": 1,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "mute_top",
+      "label": "Mute button top position",
+      "min": 8,
+      "max": 60,
+      "step": 2,
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "mute_right",
+      "label": "Mute button right position",
+      "min": 8,
+      "max": 60,
+      "step": 2,
+      "default": 14
+    }
+  ],
+  "presets": [
+    {
+      "name": "Mobile Video Shop Now"
+    }
+  ]
+}
+{% endschema %}

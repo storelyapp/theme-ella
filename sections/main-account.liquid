@@ -1,0 +1,936 @@
+{{ 'customer.css' | asset_url | stylesheet_tag }}
+{%- liquid
+    assign container = section.settings.container
+    assign padding_full_width = section.settings.padding_full_width
+-%}
+<!-- Desktop accounts page -->
+
+<div class="lagorii-account-wrapper">
+  <!-- Sidebar -->
+  <aside class="lagorii-account-sidebar">
+  <div class="profile-box">
+    <div class="profile-initials">
+      {{ customer.first_name | slice: 0, 1 }}{{ customer.last_name | slice: 0, 1 }}
+    </div>
+    <div class="profile-info">
+      <div class="profile-name">{{ customer.first_name }} {{ customer.last_name }}</div>
+      <div class="profile-time" id="liveClock"></div>
+    </div>
+  </div>
+
+    <ul class="account-menu">
+    <li>
+      <a href="#" data-tab="profile" class="active">
+        <span class="icon-wrapper">{% render 'icon-user' %}</span>
+        <span>My Profile</span>
+      </a>
+    </li>
+    <li><a href="#" data-tab="orders"><span class="icon-wrapper">{% render 'icon-order' %}</span> <span>Order History</span></a></li>
+    <li><a href="#" data-tab="addresses"><span class="icon-wrapper">{% render 'icon-address' %}</span> <span>Delivery Address</span></a></li>
+    <li><a href="#" data-tab="wishlist"><span class="icon-wrapper">{% render 'icon-heart' %}</span> <span>Wishlist</span></a></li>
+    <li><a href="#" data-tab="credits"><span class="icon-wrapper">{% render 'icon-gift-card' %}</span><span>Store Credits</span></a></li>
+    <li><a href="{{ routes.account_logout_url }}"><span class="icon-wrapper">{% render 'icon-logout' %}</span> <span>Log Out</span></a></li>
+    </ul>
+
+    <div class="scrollable-tabs-wrapper">
+      <ul class="mobile-account-menu scrollable-tabs">
+        <li>
+          <a href="#" data-tab="profile" class="active">
+            <span class="icon-wrapper">{% render 'icon-user' %}</span>
+            <span>My Profile</span>
+          </a>
+        </li>
+        <li><a href="#" data-tab="orders"><span class="icon-wrapper">{% render 'icon-order' %}</span> <span>Order History</span></a></li>
+        <li><a href="#" data-tab="addresses"><span class="icon-wrapper">{% render 'icon-address' %}</span> <span>Delivery Address</span></a></li>
+        <li><a href="#" data-tab="wishlist"><span class="icon-wrapper">{% render 'icon-heart' %}</span> <span>Wishlist</span></a></li>
+        <li><a href="#" data-tab="credits"><span class="icon-wrapper">{% render 'icon-gift-card' %}</span><span>Store Credits</span></a></li>
+        <li><a href="{{ routes.account_logout_url }}"><span class="icon-wrapper">{% render 'icon-logout' %}</span> <span>Log Out</span></a></li>
+      </ul>
+      <div class="scroll-dots" id="tabsDots" aria-label="Tabs pagination"></div>
+    </div>
+
+  </aside>
+
+  <!-- Main Content -->
+<section class="lagorii-account-main">
+  <div class="account-greeting">
+    <span id="greeting-text"></span> <span class="greeting-name">{{ customer.first_name }}</span>
+  </div>
+    <div class="tab-content" id="tab-profile">
+      <div class="profile-fields">
+
+        <div class="form-group-row">
+          <div class="form-group half">
+            <label>First Name</label>
+            <input type="text" value="{{ customer.first_name }}" disabled />
+          </div>
+          <div class="form-group half">
+            <label>Last Name</label>
+            <input type="text" value="{{ customer.last_name }}" disabled />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" value="{{ customer.email }}" disabled />
+        </div>
+
+        <div class="form-group">
+          <label>Mobile Number</label>
+          <input type="text" value="{{ customer.phone | default: 'Not Provided' }}" disabled />
+        </div>
+
+        <!-- Profile: Product Strips -->
+        <div class="acc-strips">
+
+          <!-- Saved from cart -->
+          <section class="acc-strip" id="acc-cart">
+            <header class="acc-strip__head">
+              <h3 class="acc-strip__title">Saved from cart</h3>
+              <a class="acc-strip__cta" href="{{ routes.cart_url }}">Open cart →</a>
+            </header>
+            <div class="acc-strip__scroller" data-role="cart-list">
+              <!-- skeletons -->
+              {% for i in (1..6) %}
+                <article class="acc-card is-skel"></article>
+              {% endfor %}
+            </div>
+          </section>
+
+          <!-- Recently viewed -->
+          <section class="acc-strip" id="acc-recent">
+            <header class="acc-strip__head">
+              <h3 class="acc-strip__title">Recently viewed</h3>
+              <a class="acc-strip__cta" href="{{ routes.all_products_collection_url }}">Browse all →</a>
+            </header>
+            <div class="acc-strip__scroller" data-role="recent-list">
+              {% for i in (1..6) %}
+                <article class="acc-card is-skel"></article>
+              {% endfor %}
+            </div>
+          </section>
+
+        </div>
+
+
+      </div>
+    </div>
+
+    <div class="tab-content" id="tab-orders" style="display: none;">
+      {% paginate customer.orders by 5 %}
+        {% if customer.orders.size > 0 %}
+          <div class="order-cards-wrapper">
+            {% for order in customer.orders %}
+            <div class="order-card">
+              <div class="order-card-header">
+                <div><strong>{{ order.created_at | date: "%B %d %Y" }}</strong></div>
+                <div>Order no.: <strong>{{ order.name | remove: '#' | strip }}</strong></div>
+                <div>Total items: <strong>{{ order.line_items.size }}</strong></div>
+                <div>Status: <strong>{{ order.financial_status_label }}</strong></div>
+                <a class="view-details" href="{{ order.order_status_url }}">View details &rsaquo;</a>
+              </div>
+              <div class="order-card-body">
+                <div class="order-buttons">
+                  <a href="#"
+                    class="btn-contact"
+                    data-order="{{ order.name | remove: '#' | strip }}"
+                    data-email="{{ customer.email | strip }}"
+                    rel="nofollow">Need Help?</a>
+
+
+                  <a href="#"
+                    class="btn-track"
+                    data-order="{{ order.name | remove: '#' | strip }}"
+                    data-email="{{ customer.email | strip }}"
+                    rel="nofollow">Track Order</a>
+
+                  {% assign phone_prefill = customer.default_address.phone | default: customer.phone %}
+
+                  <a href="#"
+                    class="btn-return"
+                    data-order="{{ order.name | remove: '#' | strip }}"
+                    data-email="{{ customer.email | strip }}"
+                    data-phone="{{ phone_prefill | strip }}"
+                    rel="nofollow">Returns</a>
+                </div>
+              </div>
+              <div class="order-card-footer">
+                Grand total: <strong>{{ order.total_price | money }}</strong>
+              </div>
+            </div>
+            {% endfor %}
+          </div>-
+        {% else %}
+          <p class="no-orders">You haven't placed any orders yet.</p>
+        {% endif %}
+
+        {% if paginate.pages > 1 %}
+          <div class="pagination">
+            {% render 'pagination', paginate: paginate %}
+          </div>
+        {% endif %}
+      {% endpaginate %}
+    </div>
+    <div class="tab-content" id="tab-addresses" style="display: none;">
+      {% if customer.addresses.size > 0 %}
+      <div class="address-card-wrapper">
+
+        {%- assign default_address = customer.default_address -%}
+
+        <!-- Default address first -->
+        <div class="address-card default">
+          <div class="address-name">{{ default_address.first_name }} {{ default_address.last_name }}</div>
+
+          {% if default_address.address1 %}
+          <div class="address-line">{{ default_address.address1 }}</div>
+          {% endif %}
+
+          {% if default_address.address2 %}
+          <div class="address-line">{{ default_address.address2 }}</div>
+          {% endif %}
+
+          {% if default_address.city or default_address.province or default_address.zip %}
+          <div class="address-line">
+            {{ default_address.city }}{% if default_address.city and default_address.province %}, {% endif %}{{ default_address.province }}{% if default_address.zip %} - {{ default_address.zip }}{% endif %}
+          </div>
+          {% endif %}
+
+          {% if default_address.country %}
+          <div class="address-line">{{ default_address.country }}</div>
+          {% endif %}
+
+          {% if default_address.phone %}
+          <div class="address-line">{{ default_address.phone }}</div>
+          {% endif %}
+
+          <div class="address-default">Default address</div>
+        </div>
+
+        <!-- Other addresses -->
+        {% for address in customer.addresses %}
+          {% unless address == customer.default_address %}
+          <div class="address-card">
+            <div class="address-name">{{ address.first_name }} {{ address.last_name }}</div>
+
+            {% if address.address1 %}
+            <div class="address-line">{{ address.address1 }}</div>
+            {% endif %}
+
+            {% if address.address2 %}
+            <div class="address-line">{{ address.address2 }}</div>
+            {% endif %}
+
+            {% if address.city or address.province or address.zip %}
+            <div class="address-line">
+              {{ address.city }}{% if address.city and address.province %}, {% endif %}{{ address.province }}{% if address.zip %} - {{ address.zip }}{% endif %}
+            </div>
+            {% endif %}
+
+            {% if address.country %}
+            <div class="address-line">{{ address.country }}</div>
+            {% endif %}
+
+            {% if address.phone %}
+            <div class="address-line">{{ address.phone }}</div>
+            {% endif %}
+
+            <form method="post" action="{{ routes.account_addresses_url }}/{{ address.id }}">
+              <input type="hidden" name="_method" value="put">
+              <input type="hidden" name="address[default]" value="true">
+              <button type="submit" class="default-btn">Mark as Default</button>
+            </form>
+          </div>
+          {% endunless %}
+        {% endfor %}
+
+      </div>
+
+      <a href="{{ routes.account_addresses_url }}" class="button manage-address-btn">Manage All Addresses</a>
+      {% else %}
+      <p>No addresses saved yet.</p>
+      <a href="{{ routes.account_addresses_url }}" class="button">Add Address</a>
+      {% endif %}
+    </div>
+
+    <div class="tab-content" id="tab-wishlist" style="display: none;">
+    {% render 'account-wishlist' %}
+    </div>
+
+    <div class="tab-content" id="tab-credits" style="display:none;">
+      <div class="giftcard-lookup">
+
+      <!-- TOP: KPIs + Chart -->
+      <div class="gc-top">
+        <div class="gc-kpi"><div class="gc-kpi-label">Total Balance</div><div class="gc-kpi-value" id="kpiBalance">–</div></div>
+        <div class="gc-kpi"><div class="gc-kpi-label">Used so far</div><div class="gc-kpi-value" id="kpiUsed">–</div></div>
+        <div class="gc-kpi"><div class="gc-kpi-label">Gift cards</div><div class="gc-kpi-value" id="kpiCount">–</div></div>
+      </div>
+
+        <!-- List -->
+        <div id="creditsList">Loading your gift cards…</div>
+
+        <p class="gc-note">
+          <small>Note: For security, Shopify only shares the last 4 digits of a gift card. To get the full code, use the original gift card email.</small>
+        </p>
+      </div>
+    </div>
+
+  </section>
+</div>
+
+<script>
+(function(){
+  // ===== helpers =====
+  const $ = (s) => document.querySelector(s);
+  const addWidth = (url, w) => {
+    if (!url) return '';
+    try {
+      const u = new URL(url, location.origin);
+      if (!u.searchParams.has('width')) u.searchParams.set('width', String(w||360));
+      return u.toString();
+    } catch(_){
+      // fallback for bare CDN paths
+      return url + (url.includes('?') ? '&' : '?') + 'width=' + (w||360);
+    }
+  };
+  const money = (cents, cur) => {
+    try {
+      return (Shopify && Shopify.formatMoney)
+        ? Shopify.formatMoney(cents, "{{ shop.money_format }}")
+        : (cur || '₹') + (Number(cents||0)/100).toFixed(2);
+    } catch(_){
+      return (cur || '₹') + (Number(cents||0)/100).toFixed(2);
+    }
+  };
+  const card = (p) => `
+    <article class="acc-card">
+      <a href="${p.url}" class="acc-card__link" aria-label="${p.title}">
+        <div class="acc-card__media">
+          <img loading="lazy" src="${p.image}" alt="${p.title}">
+        </div>
+        <div class="acc-card__meta">
+          <div class="acc-card__title">${p.title}</div>
+          <div class="acc-card__price">${p.price_html}</div>
+        </div>
+      </a>
+    </article>`;
+
+  const renderList = (root, products, emptyText) => {
+    if (!root) return;
+    if (products.length) {
+      root.innerHTML = products.map(card).join('');
+    } else {
+      root.innerHTML = `<p class="acc-empty">${emptyText}</p>`;
+    }
+  };
+
+  // ===== Saved from cart =====
+  async function loadCart(){
+    const root = $('[data-role="cart-list"]');
+    if (!root) return;
+    try {
+      const res = await fetch('/cart.js', { credentials: 'same-origin' });
+      const cart = await res.json();
+      const items = (cart.items || []).slice(0, 12).map(i => {
+        const unit = (i.final_price ?? i.price ?? 0); // price per item (cents)
+        return {
+          title: i.product_title,
+          url: i.url || `/products/${i.handle || i.product_handle || ''}`,
+          image: addWidth(i.image, 360),
+          price_html: money(unit, cart.currency)
+        };
+      });
+      renderList(root, items, 'Nothing saved in cart yet.');
+    } catch (e){
+      console.warn('[Account] Cart load failed:', e);
+      renderList(root, [], 'Couldn’t load your cart.');
+    }
+  }
+
+  // ===== Recently viewed =====
+  function pickRecentHandles(){
+    // Look for common/local keys; we also add our own (lag_recent) in tracker snippet
+    const keys = ['lag_recent','recentlyViewed','shopify_recent','recent-products'];
+    for (const k of keys){
+      try {
+        const raw = localStorage.getItem(k);
+        if (!raw) continue;
+        let arr = JSON.parse(raw);
+        if (Array.isArray(arr)) {
+          arr = arr.map(x => typeof x === 'string' ? x : (x?.handle ?? x)).filter(Boolean);
+        } else if (arr && Array.isArray(arr.items)) {
+          arr = arr.items.map(x => x?.handle ?? x).filter(Boolean);
+        } else {
+          continue;
+        }
+        if (arr.length) return Array.from(new Set(arr));
+      } catch(_){}
+    }
+    // Nothing tracked yet
+    return [];
+  }
+
+  async function fetchProduct(handle){
+    try {
+      const r = await fetch(`/products/${handle}.js`);
+      if (!r.ok) throw 0;
+      const p = await r.json();
+      const img = (p.images && p.images[0]) ? p.images[0] : (p.featured_image || '');
+      return {
+        title: p.title,
+        url: `/products/${p.handle}`,
+        image: addWidth(img, 360),
+        price_html: money(p.price, p.currency)
+      };
+    } catch(_){ return null; }
+  }
+
+  async function loadRecent(){
+    const root = $('[data-role="recent-list"]');
+    if (!root) return;
+    const handles = pickRecentHandles().slice(0, 12);
+    if (!handles.length) {
+      renderList(root, [], 'Browse a few products to see them here.');
+      return;
+    }
+    const prods = (await Promise.all(handles.map(fetchProduct))).filter(Boolean);
+    renderList(root, prods, 'Browse a few products to see them here.');
+  }
+
+  // Run
+  loadCart();
+  loadRecent();
+})();
+</script>
+
+<script>
+(function(){
+  function initStrip(scroller){
+    if (!scroller) return;
+
+    // build track if not already
+    const items = Array.from(scroller.children).filter(el => el.classList.contains('acc-card'));
+    if (!items.length) return;
+    let track = scroller.querySelector('.acc-track');
+    if (!track){
+      track = document.createElement('div');
+      track.className = 'acc-track';
+      items.forEach(el => track.appendChild(el));
+      scroller.innerHTML = '';
+      scroller.appendChild(track);
+    }
+
+    // dots container (bottom-right)
+    const strip = scroller.closest('.acc-strip');
+    let dotsWrap = strip.querySelector('.acc-dots');
+    if (!dotsWrap){
+      dotsWrap = document.createElement('div');
+      dotsWrap.className = 'acc-dots';
+      strip.appendChild(dotsWrap);
+    }
+
+    let per = 3, page = 0, pages = 1;
+
+  function calcPer(){
+    const w = scroller.clientWidth;
+
+    // Desktop: keep the slider math and 4-up
+    if (w > 900) {
+      scroller.style.setProperty('--per', 4);
+    } else {
+      // Mobile/tablet: let CSS decide 2 or 3 per row
+      scroller.style.removeProperty('--per');
+    }
+  }
+
+
+    function buildDots(){
+      pages = Math.max(1, Math.ceil(items.length / per));
+      dotsWrap.innerHTML = '';
+      if (pages <= 1) return;
+      for (let i=0; i<pages; i++){
+        const b = document.createElement('button');
+        b.className = 'acc-dot';
+        b.type = 'button';
+        b.setAttribute('aria-label', `Go to page ${i+1}`);
+        if (i === page) b.setAttribute('aria-current','true');
+        b.addEventListener('click', ()=> go(i));
+        dotsWrap.appendChild(b);
+      }
+    }
+
+    function updateDots(){
+      dotsWrap.querySelectorAll('.acc-dot').forEach((d,i)=>{
+        if (i === page) d.setAttribute('aria-current','true');
+        else d.removeAttribute('aria-current');
+      });
+    }
+
+    // Slide by exact viewport width (prevents right-side negative space)
+    function go(p){
+      page = Math.max(0, Math.min(p, pages-1));
+      const offset = -page * scroller.clientWidth;
+      track.style.transform = `translateX(${offset}px)`;
+      updateDots();
+    }
+
+    function layout(){
+      const leftIndex = page * per;   // keep first visible item on resize
+      calcPer();
+      pages = Math.max(1, Math.ceil(items.length / per));
+      page = Math.min(Math.floor(leftIndex / per), pages - 1);
+      buildDots();
+      go(page);
+    }
+
+    // init + resize
+    layout();
+    let rid = null;
+    window.addEventListener('resize', ()=>{
+      cancelAnimationFrame(rid);
+      rid = requestAnimationFrame(layout);
+    });
+  }
+
+  // run after content is rendered
+  document.querySelectorAll('.acc-strip__scroller').forEach(initStrip);
+})();
+</script>
+
+<script>
+(function(){
+  // Key used to remember which orders we've nudged (or reviewed).
+  const KEY = 'lag_reviewed_orders';
+
+  function loadReviewedMap(){
+    try { return JSON.parse(localStorage.getItem(KEY) || '{}'); }
+    catch(e){ return {}; }
+  }
+  function saveReviewedMap(map){
+    localStorage.setItem(KEY, JSON.stringify(map || {}));
+  }
+
+  const reviewed = loadReviewedMap();
+
+  // Hide nudges for orders already marked as reviewed
+  document.querySelectorAll('.order-review-nudge').forEach(nudge => {
+    const orderId = (nudge.getAttribute('data-order') || '').trim();
+    if (!orderId) return;
+
+    if (reviewed[orderId]) {
+      nudge.remove();
+      return;
+    }
+
+    const link = nudge.querySelector('.review-link');
+    if (!link) return;
+
+    link.addEventListener('click', function(ev){
+      ev.preventDefault();
+
+      // Open the first product's review widget anchor.
+      const linksStr = nudge.getAttribute('data-links') || '';
+      const links = linksStr.split('|').filter(Boolean);
+
+      if (links.length) {
+        // Open in a new tab so they can come back easily
+        window.open(links[0] + (links[0].includes('?') ? '&' : '?') + 'judgeme_open=1', '_blank');
+
+        // Mark this order as reviewed to avoid future asks
+        reviewed[orderId] = true;
+        saveReviewedMap(reviewed);
+
+        // Give immediate visual feedback
+        nudge.classList.add('is-acknowledged');
+        nudge.innerHTML = '<span class="ornament">✓</span><span> Thanks for sharing your experience.</span>';
+      }
+    }, {passive:false});
+  });
+})();
+</script>
+
+<script>
+(function(){
+  // utils
+  function cleanOrder(s){ return String(s||'').replace('#','').trim(); }
+  function b64utf8(s){
+    try { return btoa(unescape(encodeURIComponent(s))); }
+    catch(e){ return btoa(String(s||'')); }
+  }
+
+  // Try to read Returns Prime session id (if the app already set it)
+  function findReturnPrimeSid(){
+    const keys = [
+      'rp_sid','rpSession','return_prime_sid','returnPrimeSid',
+      'rp:session','return-prime:sid'
+    ];
+    try {
+      for (const k of keys){
+        const v = localStorage.getItem(k) || sessionStorage.getItem(k);
+        if (v && v.length > 8) return v;
+      }
+      // cookies
+      const m = document.cookie.match(/(?:^|;\s*)(rp_?sid|return.*prime.*sid)=([^;]+)/i);
+      if (m && m[2]) return decodeURIComponent(m[2]);
+    } catch(_) {}
+    return null;
+  }
+
+  // One delegated handler for all three buttons, same-tab navigation
+  document.addEventListener('click', function(e){
+    const el = e.target.closest('.btn-track, .btn-return, .btn-contact');
+    if (!el) return;
+    e.preventDefault();
+
+    const order = cleanOrder(el.dataset.order || '');
+    const email = (el.dataset.email || '').trim();
+    const phone = (el.dataset.phone || '').trim();
+
+    // 1) Track123
+    if (el.classList.contains('btn-track')){
+      // final form you requested: /apps/track123?order=3930&id=BASE64(email)
+      const id = b64utf8(email);
+      const url = `/apps/track123?order=${encodeURIComponent(order)}&id=${encodeURIComponent(id)}`;
+      window.location.assign(url);
+      return;
+    }
+
+    // 2) Returns Prime
+    if (el.classList.contains('btn-return')){
+      // If the app session id (sid) is already present, jump straight to list:
+      const sid = findReturnPrimeSid();
+      if (sid){
+        window.location.assign(`/apps/return_prime/orderlist?sid=${encodeURIComponent(sid)}`);
+        return;
+      }
+      // Otherwise, go to the official prefill route (no iframe, same tab).
+      // The app should show the next step with the data pre-populated.
+      const url = `/apps/return_prime`
+        + `?autofill=true`
+        + `&order=${encodeURIComponent(order)}`
+        + `&order_number=${encodeURIComponent(order)}`
+        + `&order_id=${encodeURIComponent(order)}`
+        + `&email=${encodeURIComponent(email)}`
+        + `&phone=${encodeURIComponent(phone)}`;
+      window.location.assign(url);
+      return;
+    }
+
+    // 3) Need help? (WhatsApp same tab)
+    if (el.classList.contains('btn-contact')){
+      const msg = `Hi Lagorii, I need help with order #${order}. My email: ${email}`;
+      const wa = `https://wa.me/919620237728?text=${encodeURIComponent(msg)}`;
+      window.location.assign(wa);
+    }
+  }, { passive:false });
+})();
+</script>
+
+<style>
+/* =========================================
+   Account strips — grid + natural aspect
+   ========================================= */
+
+/* Force grid whether or not .acc-track exists */
+.lagorii-account-wrapper .acc-strip__scroller,
+.lagorii-account-wrapper .acc-strip__scroller .acc-track{
+  display: grid !important;
+  grid-template-columns: repeat(var(--per, 4), minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  transform: none !important;   /* kill slider translate */
+  width: auto !important;       /* kill forced widths */
+  height: auto !important;      /* no fixed viewport height */
+  overflow: visible !important;
+}
+
+/* default columns + breakpoints */
+.lagorii-account-wrapper .acc-strip__scroller{ --per: 4; }       /* desktop */
+@media (max-width: 399.98px){
+  .lagorii-account-wrapper .acc-strip__scroller{ --per: 2 !important; }
+}
+@media (min-width: 400px) and (max-width: 549.99px){
+  .lagorii-account-wrapper .acc-strip__scroller{ --per: 3 !important; }
+}
+
+@media (min-width: 550px) and (max-width: 767.98px){
+  .lagorii-account-wrapper .acc-strip__scroller{ --per: 4 !important; }
+}
+
+/* Hide any slider dots */
+.lagorii-account-wrapper .acc-strip .acc-dots{ display: none !important; }
+
+/* ---- Images: keep natural aspect ratio, never crop ---- */
+.lagorii-account-wrapper .acc-card__media{
+  width: 100%;
+  height: auto !important;          /* not fixed */
+  aspect-ratio: auto !important;    /* don't force 3/4 or any ratio */
+  overflow: visible;                 /* prevent hidden crop */
+}
+.lagorii-account-wrapper .acc-card__media img{
+  display: block;
+  width: 100%;
+  height: auto !important;           /* natural aspect ratio */
+  object-fit: contain !important;    /* never crop */
+  object-position: center center !important;
+}
+
+/* Make sure grid items can shrink and not force extra columns */
+.lagorii-account-wrapper .acc-strip__scroller > .acc-card,
+.lagorii-account-wrapper .acc-strip__scroller .acc-track > .acc-card{
+  min-width: 0;
+}
+</style>
+
+
+<script>
+(function(){
+  const listPane = document.getElementById('creditsList');
+  if (!listPane) return;
+
+  const kpiBalance = document.getElementById('kpiBalance');
+  const kpiUsed    = document.getElementById('kpiUsed');
+  const kpiCount   = document.getElementById('kpiCount');
+
+  {% if customer %}
+    const customerId = '{{ customer.id }}';
+    const api = 'https://store-credit-576084571817.us-central1.run.app/public/store-credits?customer_id=' + encodeURIComponent(customerId);
+
+    const money = (val, cur) => {
+      const n = Number(val||0);
+      return `<span class="money">${(cur || 'INR')} ${n.toFixed(2)}</span>`;
+    };
+
+    const daysLeft = (d) => { if(!d) return null; const t=new Date(), e=new Date(d+'T23:59:59Z'); return Math.ceil((e-t)/86400000); };
+
+    // Treat these as "not usable"
+    const isInactive = (status) => {
+      const s = String(status||'').toLowerCase();
+      return s === 'expired' || s === 'deactivated' || s === 'inactive' || s === 'disabled';
+    };
+
+    fetch(api, { headers: { 'Accept':'application/json' } })
+      .then(r => r.text()).then(t => { try { return JSON.parse(t) } catch { return { error:'bad_json' } } })
+      .then(data => {
+        if (data?.error === 'rate_limited') { listPane.innerHTML = '<p>Please try again in a moment.</p>'; return; }
+
+        const cards = Array.isArray(data?.cards) ? data.cards : [];
+        let currency = cards[0]?.currency || 'INR';
+
+        if (!cards.length) {
+          kpiBalance.innerHTML = money(0, currency);
+          kpiUsed.innerHTML    = money(0, currency);
+          kpiCount.textContent = '0';
+          listPane.innerHTML   = '<p>No store credits found for your account.</p>';
+          return;
+        }
+
+        // === Totals with active/inactive split ===
+        let totalInit = 0, totalBalActive = 0, totalBalInactive = 0;
+        cards.forEach(c => {
+          const init = Number(c.initialAmount||0);
+          const bal  = Number(c.balanceAmount||0);
+          totalInit += init;
+          if (isInactive(c.status)) totalBalInactive += bal;
+          else                      totalBalActive   += bal;
+        });
+        const totalUsed = Math.max(0, totalInit - (totalBalActive + totalBalInactive));
+
+        // === KPIs ===
+        // 1) Total Balance = ACTIVE ONLY
+        let balanceHTML = money(totalBalActive, currency);
+        // Add a red subline for expired/deactivated if any
+        if (totalBalInactive > 0) {
+          balanceHTML += `<div class="gc-kpi-sub bad">Expired/Deactivated: ${money(totalBalInactive, currency)}</div>`;
+        }
+        kpiBalance.innerHTML = balanceHTML;
+
+        // 2) Used so far (keep as total used from all cards)
+        kpiUsed.innerHTML    = money(totalUsed, currency);
+
+        // 3) Count
+        kpiCount.textContent = String(cards.length);
+
+        // === List ===
+        listPane.classList.add('gc-list');
+        listPane.innerHTML = cards.map(c=>{
+          const init = Number(c.initialAmount||0);
+          const bal  = Number(c.balanceAmount||0);
+          const used = Math.max(0, init - bal);
+          const pct  = init > 0 ? Math.round((used / init) * 100) : 0;
+
+          const d = daysLeft(c.expiresOn);
+          const expiry = c.expiresOn
+            ? `${c.expiresOn} (${Math.abs(d)} day${Math.abs(d)===1?'':'s'} ${d>=0?'left':'past'})`
+            : 'No expiry';
+
+          const last4 = String(c.lastCharacters || '----').toUpperCase();
+          const inactive = isInactive(c.status);
+
+          return `
+            <div class="gc-card">
+              <div class="gc-card-head">
+                <div class="gc-card-title">Gift Card</div>
+                <div class="gc-pill">•••• ${last4}</div>
+              </div>
+
+              <div class="gc-usage">
+                <div class="gc-usage-bar" style="width:${Math.min(100, Math.max(0, pct))}%"></div>
+              </div>
+              <div class="gc-usage-legend">
+                <span>Used ${pct}%</span>
+                <span>Remaining ${100 - pct}%</span>
+              </div>
+
+              <div class="gc-row"><span>Initial</span><span>${money(init, c.currency)}</span></div>
+              <div class="gc-row"><span>Used so far</span><span>${money(used, c.currency)}</span></div>
+
+              <!-- Balance: show normal if active; if inactive, show a dash -->
+              <div class="gc-row">
+                <span>Balance</span>
+                <span>${inactive ? '—' : money(bal, c.currency)}</span>
+              </div>
+
+              <div class="gc-row"><span>Issued on</span><span>${c.createdAt || '-'}</span></div>
+              <div class="gc-row"><span>Expires on</span><span>${expiry}</span></div>
+
+              <div class="gc-row gc-status">
+                <span>Status</span>
+                <span class="badge ${inactive ? 'bad' : 'good'}">${c.status}</span>
+              </div>
+            </div>`;
+        }).join('');
+      })
+      .catch(()=>{ listPane.innerHTML = '<p>We couldn’t fetch your store credits. Please try again later.</p>'; });
+  {% else %}
+    listPane.innerHTML = '<p>Please sign in to view your store credits.</p>';
+  {% endif %}
+})();
+</script>
+
+<script>
+(function(){
+  const list = document.querySelector('.mobile-account-menu.scrollable-tabs');
+  const dotsWrap = document.getElementById('tabsDots');
+  if (!list || !dotsWrap) return;
+
+  const items = Array.from(list.querySelectorAll('li'));
+  dotsWrap.innerHTML = items.map((_,i)=>`<button class="dot${i===0?' active':''}" type="button" aria-label="Go to tab ${i+1}"></button>`).join('');
+  const dots = Array.from(dotsWrap.querySelectorAll('.dot'));
+
+  // click dot -> scroll to item
+  dots.forEach((btn,i)=>{
+    btn.addEventListener('click', ()=> items[i].scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' }));
+  });
+
+  // update active on scroll
+  let ticking = false;
+  const updateActive = () => {
+    const listRect = list.getBoundingClientRect();
+    let best = 0; let bestDist = Infinity;
+    items.forEach((li,i)=>{
+      const r = li.getBoundingClientRect();
+      const centerDist = Math.abs((r.left + r.right)/2 - (listRect.left + listRect.right)/2);
+      if (centerDist < bestDist){ best = i; bestDist = centerDist; }
+    });
+    dots.forEach(d=>d.classList.remove('active'));
+    dots[best]?.classList.add('active');
+  };
+  list.addEventListener('scroll', ()=>{
+    if (!ticking){ window.requestAnimationFrame(()=>{ updateActive(); ticking=false; }); ticking=true; }
+  });
+  // run once
+  updateActive();
+})();
+</script>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const allTabLinks = document.querySelectorAll('.account-menu a[data-tab], .mobile-account-menu a[data-tab]');
+      const allTabContents = document.querySelectorAll('.tab-content');
+
+      function activateTab(tabName) {
+        // hide
+        allTabContents.forEach(tab => tab.style.display = 'none');
+        // remove active everywhere
+        allTabLinks.forEach(link => link.classList.remove('active'));
+        // show the selected panel
+        const activeContent = document.getElementById('tab-' + tabName);
+        if (activeContent) activeContent.style.display = 'block';
+        // add active to *both* sidebar and mobile items
+        document.querySelectorAll(`[data-tab="${tabName}"]`).forEach(l => l.classList.add('active'));
+      }
+
+      // Click on tab link -> set hash + switch
+      allTabLinks.forEach(link => {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          const tabName = this.getAttribute('data-tab');
+          // setting hash keeps it across page loads
+          window.location.hash = tabName;
+          activateTab(tabName);
+        });
+      });
+
+      // On load, use hash if present; else default to profile
+      const initialTab = window.location.hash ? window.location.hash.substring(1) : 'profile';
+      activateTab(initialTab);
+
+      // ✅ Robust pagination hash preservation
+      // Use a delegated listener so it also works after any rerender.
+      document.addEventListener('click', function (e) {
+        const a = e.target.closest('.pagination a, .pagination__item a');
+        if (!a) return;
+        const h = window.location.hash;         // e.g. "#orders"
+        if (h && !a.hash) {                      // only add if the link has no hash yet
+          a.href = a.href.split('#')[0] + h;     // ensure exactly one hash is present
+        }
+      }, { capture: true });
+    });
+    </script>
+
+{% schema %}
+{
+  "name": "Account",
+  "settings": [
+  {
+      "type": "header",
+      "content": "t:settings_schema.general.name"
+  },
+  {
+      "type": "select",
+      "id": "container",
+      "label": "t:sections.layout.container.option",
+      "default": "container",
+      "options": [
+          {
+              "value": "container",
+              "label": "t:sections.layout.container.option1"
+          },
+          {
+              "value": "1170",
+              "label": "t:sections.layout.container.option4"
+          },
+          {
+              "value": "1770",
+              "label": "t:sections.layout.container.option3"
+          },
+          {
+              "value": "fullwidth",
+              "label": "t:sections.layout.container.option2"
+          }
+      ]
+  },
+  {
+      "type": "range",
+      "id": "padding_full_width",
+      "label": "t:sections.layout.container.padding_full_width",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+      "default": 0,
+      "info": "t:sections.layout.container.info_full_width"
+  }
+  ]
+}
+{% endschema %}

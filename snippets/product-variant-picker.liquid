@@ -1,0 +1,297 @@
+{%- liquid 
+  assign picker_type = block.settings.picker_type
+
+  # Layout: show all vs carousel
+  assign variant_values_layout = block.settings.variant_values_layout | default: 'all'
+
+  # Carousel tuning (only used when layout = carousel)
+  assign pv_hint_desktop = block.settings.carousel_hint_desktop | default: 'peek'
+  assign pv_hint_mobile  = block.settings.carousel_hint_mobile  | default: 'peek'
+
+  assign pv_peek_desktop = block.settings.carousel_peek_desktop | default: 4.5
+  assign pv_peek_mobile  = block.settings.carousel_peek_mobile  | default: 3.5
+
+  assign pv_gap_desktop  = block.settings.carousel_gap_desktop | default: 8
+  assign pv_gap_mobile   = block.settings.carousel_gap_mobile  | default: 8
+
+  assign enable_border_top = block.settings.enable_border_top
+  assign enable_border_bottom = block.settings.enable_border_bottom
+  assign color_border = block.settings.color_border
+-%}
+
+{%- comment -%}
+  Variant picker carousel (no slick dependency):
+  - Smooth native horizontal scroll
+  - Optional "peek" (3.5 / 4.5 items visible) OR minimal scrollbar
+  - Keeps labels clickable (no drag handlers that block page scroll)
+{%- endcomment -%}
+
+<style>
+  /* Only affects the carousel layout */
+  .pv-values{
+    display:flex;
+    align-items:stretch;
+    gap: var(--pv-gap, 8px);
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    padding-top: 5px;
+    padding-bottom: 2px;
+  }
+  .pv-values .product-form__value{ flex: 0 0 auto; scroll-snap-align: start; }
+  .pv-values .product-form__radio{ position:absolute; opacity:0; pointer-events:none; }
+
+  /* Prevent wrapping inside the button so it stays one-line */
+  .pv-values .product-form__label .text{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    display:block;
+  }
+
+  /* Hide scrollbars by default (peek mode uses no bar) */
+  .pv-values::-webkit-scrollbar{ height: 0; }
+  .pv-values{ scrollbar-width: none; }
+
+  /* Desktop: show a tiny scrollbar when requested */
+  @media (min-width: 768px){
+    .pv-values{
+      --pv-gap: var(--pv-gap-d, 8px);
+      --pv-peek: var(--pv-peek-d, 4.5);
+    }
+
+    .pv-values[data-hint-desktop="scrollbar"]{
+      scrollbar-width: thin;
+      scrollbar-color: #E87529 transparent;
+      padding-bottom: 6px;
+    }
+    .pv-values[data-hint-desktop="scrollbar"]::-webkit-scrollbar{
+      height: 4px;
+    }
+    .pv-values[data-hint-desktop="scrollbar"]::-webkit-scrollbar-thumb{
+      background: #E87529;
+      border-radius: 999px;
+    }
+    .pv-values[data-hint-desktop="scrollbar"]::-webkit-scrollbar-track{
+      background: transparent;
+    }
+
+    /* Desktop peek mode: show partial next item by equal-width cards */
+    .pv-values[data-hint-desktop="peek"] .product-form__value{
+      flex: 0 0 calc((100% - ((var(--pv-peek) - 1) * var(--pv-gap))) / var(--pv-peek));
+      min-width: 0;
+    }
+  }
+
+  /* Mobile: always keep it clean (no scrollbar), and allow natural page scroll */
+  @media (max-width: 767px){
+    .pv-values{
+      --pv-gap: var(--pv-gap-m, 8px);
+      --pv-peek: var(--pv-peek-m, 3.5);
+    }
+
+    /* Hide hint bar under 768 even if selected */
+    .pv-values[data-hint-mobile="scrollbar"]::-webkit-scrollbar{ height: 0; }
+    .pv-values[data-hint-mobile="scrollbar"]{ scrollbar-width: none; }
+
+    .pv-values[data-hint-mobile="peek"] .product-form__value{
+      flex: 0 0 calc((100% - ((var(--pv-peek) - 1) * var(--pv-gap))) / var(--pv-peek));
+      min-width: 0;
+    }
+  }
+</style>
+
+<div class="productView-options{% if enable_border_top %} has-border-top{% endif %}{% if enable_border_bottom %} has-border-bottom{% endif %}" style="--color-border: {{ color_border }}">
+  {%- if variantCount > 0 and product.has_only_default_variant != true -%}
+    <div class="productView-variants halo-productOptions" id="product-option-{{ product.id }}-{{ section.id }}" data-type="{{ picker_type }}">
+      {%- if picker_type == 'button' -%}
+        {%- assign product_swatch_option = settings.swatch | downcase -%}
+        <variant-radios class="no-js-hidden product-option has-default" data-product="{{ product.id }}" data-section="{{ section.id }}" data-url="{{ product.url }}">
+          {%- for option in product.options_with_values -%}
+            {%- liquid
+              assign is_swatch = false
+              assign option_name = option.name | downcase
+              if product_swatch_option contains option_name
+                assign is_swatch = true
+              endif
+              assign swatch_type = settings.swatch_type
+              assign option_index = forloop.index0
+            -%}
+
+            <fieldset class="js product-form__input{% if is_swatch %} product-form__swatch{% endif %} clearfix" data-product-attribute="set-rectangle" data-option-index="{{ option_index }}">
+              <legend class="form__label">
+                {{ option.name | append: ':' }}
+                <span data-header-option>{{ option.selected_value }}</span>
+              </legend>
+
+              {%- assign values = '' -%}
+              {%- liquid
+                assign variants_available_arr = product.variants | map: 'available'
+                assign variants_option1_arr = product.variants | map: 'option1'
+                assign variants_option2_arr = product.variants | map: 'option2'
+                assign variants_option3_arr = product.variants | map: 'option3'
+              -%}
+
+              {%- if variant_values_layout == 'carousel' -%}
+                <div
+                  class="product-form__values pv-values"
+                  data-hint-mobile="{{ pv_hint_mobile }}"
+                  data-hint-desktop="{{ pv_hint_desktop }}"
+                  style="--pv-gap-m: {{ pv_gap_mobile | append: 'px' }}; --pv-gap-d: {{ pv_gap_desktop | append: 'px' }}; --pv-peek-m: {{ pv_peek_mobile }}; --pv-peek-d: {{ pv_peek_desktop }};"
+                  role="list"
+                >
+              {%- endif -%}
+
+              {%- for variant in product.variants -%}
+                {%- assign value = variant.options[option_index] -%}
+                {%- unless values contains value -%}
+                  {%- liquid
+                    assign values = values | join: ';'
+                    assign values = values | append: ';' | append: value
+                    assign values = values | split: ';'
+                    assign option_stock = 'soldout'
+
+                    for option1_name in variants_option1_arr
+                      case option.position
+                        when 1
+                          if variants_option1_arr[forloop.index0] == value and variants_available_arr[forloop.index0]
+                            assign option_stock = 'available'
+                          endif
+                        when 2
+                          if option1_name == product.selected_or_first_available_variant.option1 and variants_option2_arr[forloop.index0] == value and variants_available_arr[forloop.index0]
+                            assign option_stock = 'available'
+                          endif
+                        when 3
+                          if option1_name == product.selected_or_first_available_variant.option1 and variants_option2_arr[forloop.index0] == product.selected_or_first_available_variant.option2 and variants_option3_arr[forloop.index0] == value and variants_available_arr[forloop.index0]
+                            assign option_stock = 'available'
+                          endif
+                      endcase
+                    endfor
+                  -%}
+
+                  {%- if variant_values_layout == 'carousel' -%}<div class="product-form__value" role="listitem">{%- endif -%}
+
+                  <input
+                    class="product-form__radio"
+                    type="radio"
+                    id="option-{{ product.id }}-{{ option.name }}-{{ forloop.index0 }}-{{ section.id }}"
+                    name="{{ option.name }}"
+                    value="{{ value | escape }}"
+                    {% if option.selected_value == value %}checked{% endif %}
+                    {% if is_swatch and show_variant_image_group %}data-filter=".filter-{{ value | handle }}"{% endif %}
+                    data-variant-id="{{ variant.id }}"
+                  >
+
+                  {%- if is_swatch -%}
+                    {%- liquid
+                      assign enable_variant_image = false
+                      case swatch_type
+                        when 'variant_image'
+                          assign background_image = variant.image.src | product_img_url: '130x'
+                          if variant.image
+                            assign enable_variant_image = true
+                          endif
+                        when 'color'
+                          assign background_image = value | handle | append: '.png' | file_url
+                          assign enable_variant_image = true
+                        when 'metafields'
+                          assign variant_color = variant.metafields.custom.variant_color
+                          assign color_codes = false
+                          if variant_color
+                            assign enable_variant_image = true
+                            if variant_color contains '#' or variant_color contains 'rgb' or variant_color contains 'hsl'
+                              assign color_codes = true
+                              assign background_color = variant_color
+                            else
+                              assign background_image = variant_color | append: '.png' | file_url
+                            endif
+                          elsif variant.image
+                            assign enable_variant_image = true
+                            assign background_image = variant.image.src | product_img_url: '130x'
+                          endif
+                      endcase
+                    -%}
+                    <label class="product-form__label {{ option_stock }}" name="{{ option.name }}" for="option-{{ product.id }}-{{ option.name }}-{{ forloop.index0 }}-{{ section.id }}" data-variant-id="{{ variant.id }}">
+                      <span
+                        class="pattern"
+                        style="background-color: {{ value | split: ' ' | last | handle }};{% if enable_variant_image %}{% if swatch_type == 'metafields' %}{% if color_codes %} background: {{ background_color }}{% else %} background: url({{ background_image }}); background-size: cover;{% endif %}{% else %} background-image: url({{ background_image }});{% endif %}{% endif %}"
+                      ></span>
+                      {% if swatch_type == 'variant_image' and variant.image %}
+                        <span class="expand">
+                          <img srcset="{{ variant.image.src | product_img_url: '75x' }}" src="{{ variant.image.src | product_img_url: '75x' }}" sizes="75px" loading="lazy">
+                        </span>
+                      {% endif %}
+                    </label>
+                  {%- else -%}
+                    <label class="product-form__label {{ option_stock }}" for="option-{{ product.id }}-{{ option.name }}-{{ forloop.index0 }}-{{ section.id }}" data-variant-id="{{ variant.id }}">
+                      <span class="text">{{ value }}</span>
+                    </label>
+                  {%- endif -%}
+
+                  {%- if variant_values_layout == 'carousel' -%}</div>{%- endif -%}
+                {%- endunless -%}
+              {%- endfor -%}
+
+              {%- if variant_values_layout == 'carousel' -%}
+                </div>
+              {%- endif -%}
+            </fieldset>
+          {%- endfor -%}
+
+          <script type="application/json">
+            {{ product.variants | json }}
+          </script>
+        </variant-radios>
+      {%- else -%}
+        <variant-selects class="no-js-hidden product-option has-default" data-product="{{ product.id }}" data-section="{{ section.id }}" data-url="{{ product.url }}">
+          {%- for option in product.options_with_values -%}
+            <div class="product-form__input product-form__input--dropdown" data-product-attribute="set-select" data-option-index="{{ forloop.index0 }}">
+              <label class="form__label" for="option-{{ forloop.index0 }}-{{ section.id }}">
+                {{ option.name | append: ':' }}
+                <span data-header-option>{{ option.selected_value }}</span>
+              </label>
+              <div class="form__select select">
+                <select id="option-{{ forloop.index0 }}-{{ section.id }}" class="select__select" name="options[{{ option.name | escape }}]">
+                  {%- for value in option.values -%}
+                    <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{% endif %}>
+                      {{ value }}
+                    </option>
+                  {%- endfor -%}
+                </select>
+              </div>
+            </div>
+          {%- endfor -%}
+          <script type="application/json">
+            {{ product.variants | json }}
+          </script>
+        </variant-selects>
+      {%- endif -%}
+    </div>
+
+    <noscript>
+      <div class="product-form__input{% if product.has_only_default_variant %} hidden{% endif %}">
+        <label class="form__label" for="Variants-{{ section.id }}">
+          {{ 'products.product.product_variants' | t }}
+        </label>
+        <div class="select">
+          <select name="id" id="Variants-{{ section.id }}" class="select__select" form="product-form">
+            {%- for variant in product.variants -%}
+              <option
+                {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
+                {% if variant.available == false %}disabled{% endif %}
+                value="{{ variant.id }}"
+              >
+                {{ variant.title }}
+                {%- if variant.available == false %} - {{ 'products.product.sold_out' | t }}{% endif %}
+                - {{ variant.price | money | strip_html }}
+              </option>
+            {%- endfor -%}
+          </select>
+        </div>
+      </div>
+    </noscript>
+  {%- endif -%}
+</div>

@@ -1,0 +1,68 @@
+/* Lagorii – Product gallery dots v3 (scoped)
+   This avoids conflicts with base.css slick-dots styles by:
+   - Hiding slick dots only inside .pvd-gallery-v3
+   - Styling our own .pvd-dots with CSS variables set by JS per section
+*/
+
+.pvd-gallery-v3 .slick-dots{
+  display:none !important;
+}
+
+/* Track perf hints (scoped) */
+.pvd-gallery-v3 .slick-track{
+  will-change: transform;
+  transform: translate3d(0,0,0);
+}
+.pvd-gallery-v3 .slick-slide{
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Custom dots */
+.pvd-gallery-v3 .pvd-dots{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap: var(--pvd-gap, 8px);
+  margin-top: 12px;
+  padding: 0;
+}
+
+.pvd-gallery-v3 .pvd-dot{
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  background: var(--pvd-color, #111);
+  opacity: var(--pvd-opacity, .35);
+  transition: transform 140ms ease, opacity 140ms ease, background-color 140ms ease;
+}
+
+.pvd-gallery-v3[data-pvd-style="circle"] .pvd-dot{
+  width: var(--pvd-size, 8px);
+  height: var(--pvd-size, 8px);
+  border-radius: 999px;
+}
+
+.pvd-gallery-v3[data-pvd-style="pill"] .pvd-dot{
+  width: var(--pvd-width, 18px);
+  height: var(--pvd-size, 8px);
+  border-radius: var(--pvd-radius, 6px);
+}
+
+.pvd-gallery-v3 .pvd-dot.is-active{
+  background: var(--pvd-active, #E87529);
+  opacity: 1;
+  transform: scale(1.08);
+}
+
+/* Device visibility controlled by wrapper classes toggled from JS */
+@media (min-width: 990px){
+  .pvd-gallery-v3.pvd-hide-dots-desktop .pvd-dots{ display:none; }
+}
+@media (max-width: 989px){
+  .pvd-gallery-v3.pvd-hide-dots-mobile .pvd-dots{ display:none; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .pvd-gallery-v3 .pvd-dot{ transition: none; }
+}

@@ -1,0 +1,106 @@
+.sb_edd_div {
+  border: 0;
+  border-radius: 10px;
+  padding: 5px;
+  max-width: 600px;
+  background: #fff;
+  font-family: "Helvetica Neue", sans-serif;
+  margin: 0;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+.sb_edd_formTitle span {
+  font-size: 16px;
+  font-weight: 600;
+  color: #222;
+  margin: 0 0 4px;
+  display: block;
+  text-align: left;
+}
+.sb_edd_formFields {
+  display: flex;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+  margin: 0;
+}
+.sb_edd_pincode_input {
+  flex: 1;
+  padding: 10px 14px;
+  font-size: 15px;
+  background: #f5f5f5;
+  border: none;
+  outline: none;
+  height: 40px;
+  color: #333;
+  box-sizing: border-box;
+}
+.sb_edd_check_btn {
+  background: #e87529;
+  color: #fff;
+  border: none;
+  padding: 0 18px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  height: 40px;
+  transition: background 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sb_edd_check_btn:hover {
+  background: #e6731d;
+}
+.sb_edd_msgs span {
+  display: none;
+  margin-top: 4px;
+  font-size: 13px;
+  color: #d32f2f;
+}
+.sb_edd_loader {
+  display: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #fff;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.sb_edd_div br,
+.share-button.halo-socialShare {
+  display: none !important;
+}
+.deliverydate.sb_delivery {
+  background: none;
+  color: #000;
+  border: none;
+  font-weight: normal;
+  font-style: normal;
+  text-transform: none;
+  text-align: left;
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+  display: block;
+  width: 100%;
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.productView-moreItem.scroll-trigger {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.sb_edd_div,
+.sb_edd_div fieldset {
+  border: 0 !important;
+  box-shadow: none !important;
+}

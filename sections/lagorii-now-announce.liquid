@@ -1,0 +1,918 @@
+{% assign is_domestic = false %}
+{% if localization.country.iso_code == 'IN' %}
+  {% assign is_domestic = true %}
+{% endif %}
+
+{% if is_domestic %}
+
+<section id="lagorii-quick-announce-{{ section.id }}" class="lagorii-quick-announce" data-template="{{ template.name }}" data-mode="{{ section.settings.bar_mode }}">
+  <style>
+    #lagorii-quick-announce-{{ section.id }}{
+      --bar-bg: {{ section.settings.bar_bg | default: '#000000' }};
+      --bar-text: {{ section.settings.bar_text | default: '#FFFFFF' }};
+      --msg-text-color: {{ section.settings.msg_text_color | default: section.settings.bar_text | default: '#FFFFFF' }};
+      --bar-accent: {{ section.settings.link_color | default: '#E87529' }};
+      --bar-radius: {{ section.settings.bar_radius | default: 12 }}px;
+      --bar-pad-y: {{ section.settings.pad_y | default: 10 }}px;
+      --bar-pad-x: {{ section.settings.pad_x | default: 14 }}px;
+      --row-h: {{ section.settings.row_height | default: 28 }}px;
+
+      --msg-font: {{ section.settings.msg_font | default: "system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif" }};
+      --msg-fs-m: {{ section.settings.msg_font_size_mobile | default: 14 }}px;
+      --msg-fs-d: {{ section.settings.msg_font_size_desktop | default: 15 }}px;
+      --msg-fw: {{ section.settings.msg_font_weight | default: 500 }};
+      --msg-style: {% if section.settings.msg_italic %}italic{% else %}normal{% endif %};
+      --msg-ls: {{ section.settings.msg_letter_spacing | default: 0 }}px;
+      --msg-transform: {{ section.settings.msg_transform | default: 'none' }};
+      --msg-deco: {{ section.settings.msg_decoration | default: 'none' }};
+
+      --bar-border-w: {{ section.settings.bar_border_thickness | default: 0 }}px;
+      --bar-border-color: {{ section.settings.bar_border_color | default: '#E5E5E5' }};
+
+      --dl-btn-bg: {{ section.settings.dl_btn_bg | default: '#E87529' }};
+      --dl-btn-text: {{ section.settings.dl_btn_text | default: '#FFFFFF' }};
+      --dl-btn-bd-w: {{ section.settings.dl_btn_bd_w | default: 0 }}px;
+      --dl-btn-bd-c: {{ section.settings.dl_btn_bd_c | default: '#E87529' }};
+      --dl-btn-r: {{ section.settings.dl_btn_radius | default: 100 }}px;
+      --dl-btn-py: {{ section.settings.dl_btn_py | default: 6 }}px;
+      --dl-btn-px: {{ section.settings.dl_btn_px | default: 12 }}px;
+      --dl-btn-fs: {{ section.settings.dl_btn_fs | default: 13 }}px;
+      --dl-btn-fw: {{ section.settings.dl_btn_fw | default: 600 }};
+      --dl-btn-font: {{ section.settings.dl_btn_font | default: 'inherit' }};
+    }
+
+    #lagorii-quick-announce-{{ section.id }} .bar{
+      background: var(--bar-bg);
+      color: var(--bar-text);
+      border-radius: var(--bar-radius);
+      padding: var(--bar-pad-y) var(--bar-pad-x);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow: visible;
+      position: relative;
+      {% if section.settings.show_bar_border %}
+        border-bottom: var(--bar-border-w) solid var(--bar-border-color);
+      {% endif %}
+    }
+
+    #lagorii-quick-announce-{{ section.id }} .vticker{
+      overflow: hidden;
+      height: var(--row-h);
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    #lagorii-quick-announce-{{ section.id }} .vwrap{ will-change: transform; }
+
+    #lagorii-quick-announce-{{ section.id }} .vmsg{
+      height: var(--row-h);
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      line-height: 1;
+      font-family: var(--msg-font);
+      font-size: var(--msg-fs-m);
+      font-weight: var(--msg-fw);
+      font-style: var(--msg-style);
+      letter-spacing: var(--msg-ls);
+      text-transform: var(--msg-transform);
+      text-decoration: var(--msg-deco);
+      color: var(--msg-text-color);
+      min-width: 0;
+    }
+
+    #lagorii-quick-announce-{{ section.id }} .vmsg .qa-msg-text{
+      display: inline-block;
+      white-space: nowrap;
+      color: inherit !important;
+      font: inherit;
+      letter-spacing: inherit;
+      text-transform: inherit;
+      text-decoration: inherit;
+    }
+
+    @media (min-width: 992px){
+      #lagorii-quick-announce-{{ section.id }} .vmsg{ font-size: var(--msg-fs-d); }
+    }
+
+    #lagorii-quick-announce-{{ section.id }} .qa-hl{
+      font-weight: 700;
+      color: var(--bar-accent);
+    }
+
+    #lagorii-quick-announce-{{ section.id }} .qa-action{
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex: 0 0 auto;
+      position: relative;
+    }
+
+    #lagorii-quick-announce-{{ section.id }} .know-more{
+      cursor: pointer;
+      color: var(--bar-accent);
+      background: none;
+      border: 0;
+      padding: 0;
+      font: inherit;
+      text-decoration: underline;
+      font-weight: {{ section.settings.link_fw | default: 600 }};
+      white-space: nowrap;
+    }
+
+    #lagorii-quick-announce-{{ section.id }} .qa-close{
+      cursor: pointer;
+      color: var(--bar-text);
+      background: transparent;
+      border: 0;
+      width: 22px;
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      line-height: 1;
+      font-size: 20px;
+      font-weight: 700;
+      border-radius: 999px;
+      opacity: 0.95;
+    }
+
+    #lagorii-quick-announce-{{ section.id }} .qa-close:hover{ opacity: 0.85; }
+
+    #lagorii-quick-announce-{{ section.id }}[hidden]{ display: none !important; }
+
+    #lagorii-quick-announce-{{ section.id }} .qa-dl-btn{
+      cursor: pointer;
+      background: var(--dl-btn-bg);
+      color: var(--dl-btn-text);
+      border: var(--dl-btn-bd-w) solid var(--dl-btn-bd-c);
+      border-radius: var(--dl-btn-r);
+      padding: var(--dl-btn-py) var(--dl-btn-px);
+      font-family: var(--dl-btn-font);
+      font-size: var(--dl-btn-fs);
+      font-weight: var(--dl-btn-fw);
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    #lagorii-quick-announce-{{ section.id }} .qa-dl-btn:hover{ opacity: 0.92; }
+
+    #lagorii-quick-announce-{{ section.id }} .qa-dl-btn[aria-disabled="true"]{
+      opacity: 1;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    /* Download App mode: app-style layout (logo + title + subtitle) */
+    #lagorii-quick-announce-{{ section.id }} .qa-app-layout{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+
+    #lagorii-quick-announce-{{ section.id }} .qa-app-left{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+
+    #lagorii-quick-announce-{{ section.id }} .qa-app-logo{
+      width: {{ section.settings.app_logo_size | default: 38 }}px;
+      height: {{ section.settings.app_logo_size | default: 38 }}px;
+      min-width: {{ section.settings.app_logo_size | default: 38 }}px;
+      border-radius: {{ section.settings.app_logo_radius | default: 8 }}px;
+      overflow: hidden;
+      background: rgba(0,0,0,0.06);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #lagorii-quick-announce-{{ section.id }} .qa-app-logo img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    #lagorii-quick-announce-{{ section.id }} .qa-app-copy{
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      line-height: 1.15;
+    }
+
+    #lagorii-quick-announce-{{ section.id }} .qa-app-title{
+      color: var(--msg-text-color);
+      font-size: {{ section.settings.app_title_fs | default: 14 }}px;
+      font-weight: {{ section.settings.app_title_fw | default: 600 }};
+      font-family: var(--msg-font);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin: 0;
+    }
+
+    #lagorii-quick-announce-{{ section.id }} .qa-app-subtitle{
+      color: {{ section.settings.app_subtitle_color | default: '#666666' }};
+      font-size: {{ section.settings.app_subtitle_fs | default: 12 }}px;
+      font-weight: {{ section.settings.app_subtitle_fw | default: 500 }};
+      font-family: var(--msg-font);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 2px;
+    }
+
+    #lagorii-quick-announce-{{ section.id }} .qa-app-right{
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex: 0 0 auto;
+      margin-left: 8px;
+    }
+
+    #lagorii-quick-announce-{{ section.id }} .qa-app-right .qa-dl-btn{
+      border-radius: {{ section.settings.app_cta_radius | default: 4 }}px;
+      padding: var(--dl-btn-py) calc(var(--dl-btn-px) + 2px);
+      min-height: 30px;
+      justify-content: center;
+    }
+
+    #lagorii-quick-announce-{{ section.id }} .qa-app-right .qa-close{
+      color: {{ section.settings.app_close_color | default: '#222222' }};
+      width: 20px;
+      height: 20px;
+      font-size: 18px;
+      font-weight: 500;
+      opacity: 0.9;
+    }
+
+    @media (max-width: 767px){
+      #lagorii-quick-announce-{{ section.id }} .qa-app-title{
+        font-size: {{ section.settings.app_title_fs_mobile | default: 13 }}px;
+      }
+      #lagorii-quick-announce-{{ section.id }} .qa-app-subtitle{
+        font-size: {{ section.settings.app_subtitle_fs_mobile | default: 11 }}px;
+      }
+      #lagorii-quick-announce-{{ section.id }} .qa-app-right .qa-dl-btn{
+        font-size: {{ section.settings.app_cta_fs_mobile | default: 12 }}px;
+      }
+    }
+
+    .lagorii-qa-overlay{
+      position: fixed;
+      inset: 0;
+      display: none;
+      opacity: 0;
+      transition: opacity .18s ease-out;
+      z-index: 2147483000;
+    }
+    .lagorii-qa-overlay.active{
+      display: block;
+      opacity: 1;
+    }
+
+    html.shopify-design-mode .lagorii-qa-overlay{
+      pointer-events: none !important;
+    }
+
+    .lagorii-qa-sheet{
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      transform: translateY(100%);
+      background: #fff;
+      border-top-left-radius: {{ section.settings.sheet_radius | default: 20 }}px;
+      border-top-right-radius: {{ section.settings.sheet_radius | default: 20 }}px;
+      padding: {{ section.settings.sheet_pad | default: 22 }}px;
+      padding-bottom: calc({{ section.settings.sheet_pad | default: 22 }}px + env(safe-area-inset-bottom));
+      max-height: {{ section.settings.sheet_maxh | default: 70 }}vh;
+      overflow-y: auto;
+      transition: transform .18s ease-out;
+      z-index: 2147483001;
+      -webkit-overflow-scrolling: touch;
+      touch-action: none;
+      box-shadow: none;
+    }
+
+    .lagorii-qa-sheet.open{ transform: translateY(0); }
+
+    .lagorii-qa-sheet::before{
+      content: "";
+      display: block;
+      width: {{ section.settings.handle_w | default: 72 }}px;
+      height: {{ section.settings.handle_h | default: 8 }}px;
+      background: {{ section.settings.handle_color | default: '#C8C8C8' }};
+      border-radius: 999px;
+      margin: 0 auto 12px auto;
+    }
+
+    .lagorii-qa-sheet .grabber{
+      position: absolute;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+      width: {{ section.settings.handle_w | default: 72 }}px;
+      height: 28px;
+      cursor: grab;
+      z-index: 2;
+      background: transparent;
+      border: 0;
+      padding: 0;
+    }
+
+    .lagorii-qa-sheet .grabber:active{ cursor: grabbing; }
+
+    .lagorii-qa-sheet h3{
+      font-size: {{ section.settings.sheet_title_fs | default: 18 }}px;
+      margin: 0 0 12px;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .lagorii-qa-sheet .content{
+      font-size: {{ section.settings.sheet_text_fs | default: 15 }}px;
+      color: #333;
+      line-height: 1.65;
+    }
+
+    body.lagorii-qa-locked{
+      position: fixed;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    /* Hide the bar in Download App mode on wide viewports (>900px) */
+    @media (min-width: 901px){
+      #lagorii-quick-announce-{{ section.id }}[data-mode="download_app"]{ display: none !important; }
+    }
+  </style>
+
+  {%- assign show_section = true -%}
+  {%- if section.settings.limit_to_collections and request.design_mode != true -%}
+    {%- assign show_section = false -%}
+    {%- if template.name contains 'collection' -%}{%- assign show_section = true -%}{%- endif -%}
+  {%- endif -%}
+
+  {% if show_section %}
+    <div class="bar" {{ section.shopify_attributes }}>
+      {% if section.settings.bar_mode == 'download_app' %}
+        <div class="qa-app-layout">
+          <div class="qa-app-left">
+            {% if section.settings.app_logo != blank %}
+              <div class="qa-app-logo">
+                <img
+                  src="{{ section.settings.app_logo | image_url: width: 120 }}"
+                  alt="{{ section.settings.app_title | escape | default: shop.name }}"
+                  loading="lazy"
+                  width="60"
+                  height="60">
+              </div>
+            {% endif %}
+
+            <div class="qa-app-copy">
+              {% if section.settings.app_title != blank %}
+                <div class="qa-app-title">{{ section.settings.app_title }}</div>
+              {% endif %}
+              {% if section.settings.app_subtitle != blank %}
+                <div class="qa-app-subtitle">{{ section.settings.app_subtitle }}</div>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="qa-app-right">
+            {% if section.settings.show_download_button %}
+              {% if section.settings.app_url != blank %}
+                <a
+                  class="qa-dl-btn"
+                  id="qa-dl-btn-{{ section.id }}"
+                  href="{{ section.settings.app_url }}"
+                  {% if section.settings.app_link_new_tab %}target="_blank" rel="noopener"{% endif %}>
+                  {{ section.settings.dl_btn_label }}
+                </a>
+              {% else %}
+                <span class="qa-dl-btn" id="qa-dl-btn-{{ section.id }}" aria-disabled="true">
+                  {{ section.settings.dl_btn_label }}
+                </span>
+              {% endif %}
+            {% endif %}
+
+            {% if section.settings.show_close_icon %}
+              <button type="button" class="qa-close" id="qa-close-{{ section.id }}" aria-label="Close announcement">×</button>
+            {% endif %}
+          </div>
+        </div>
+      {% else %}
+        <div class="vticker" id="vt-{{ section.id }}" data-interval="{{ section.settings.interval_ms | default: 2500 }}">
+          <div class="vwrap">
+            {% assign first_text = '' %}
+            {% assign first_hl_enable = false %}
+            {% assign first_hl_term = '' %}
+            {% assign first_hl_color = '' %}
+            {% assign first_hl_weight = 700 %}
+            {% assign first_msg_color = '' %}
+            {% assign first_override_weight = false %}
+            {% assign first_msg_weight = 600 %}
+            {% assign first_override_size = false %}
+            {% assign first_msg_size = 16 %}
+            {% assign first_override_italic = false %}
+
+            {% for block in section.blocks %}
+              {% if block.type == 'message' %}
+                {% if first_text == '' %}
+                  {% assign first_text = block.settings.text %}
+                  {% assign first_hl_enable = block.settings.hl_enable %}
+                  {% assign first_hl_term = block.settings.hl_term %}
+                  {% assign first_hl_color = block.settings.hl_color %}
+                  {% assign first_hl_weight = block.settings.hl_weight %}
+                  {% assign first_msg_color = block.settings.msg_color_override %}
+                  {% assign first_override_weight = block.settings.override_weight %}
+                  {% assign first_msg_weight = block.settings.msg_weight %}
+                  {% assign first_override_size = block.settings.override_size %}
+                  {% assign first_msg_size = block.settings.msg_size %}
+                  {% assign first_override_italic = block.settings.override_italic %}
+                {% endif %}
+
+                <div class="vmsg"
+                  data-msg-text="{{ block.settings.text | escape }}"
+                  data-hl-enable="{% if block.settings.hl_enable %}true{% else %}false{% endif %}"
+                  data-hl-term="{{ block.settings.hl_term | escape }}"
+                  data-hl-color="{{ block.settings.hl_color }}"
+                  data-hl-weight="{{ block.settings.hl_weight | default: 700 }}"
+                  style="
+                    {% if block.settings.msg_color_override != blank %}color: {{ block.settings.msg_color_override }};{% endif %}
+                    {% if block.settings.override_weight and block.settings.msg_weight > 0 %}font-weight: {{ block.settings.msg_weight }};{% endif %}
+                    {% if block.settings.override_size and block.settings.msg_size > 0 %}font-size: {{ block.settings.msg_size }}px;{% endif %}
+                    {% if block.settings.override_italic %}font-style: italic;{% endif %}
+                  "
+                  {{ block.shopify_attributes }}>
+                  <span class="qa-msg-text">{{ block.settings.text }}</span>
+                </div>
+              {% endif %}
+            {% endfor %}
+
+            {% if first_text != '' %}
+              <div class="vmsg vclone"
+                data-msg-text="{{ first_text | escape }}"
+                data-hl-enable="{% if first_hl_enable %}true{% else %}false{% endif %}"
+                data-hl-term="{{ first_hl_term | escape }}"
+                data-hl-color="{{ first_hl_color }}"
+                data-hl-weight="{{ first_hl_weight | default: 700 }}"
+                style="
+                  {% if first_msg_color != blank %}color: {{ first_msg_color }};{% endif %}
+                  {% if first_override_weight and first_msg_weight > 0 %}font-weight: {{ first_msg_weight }};{% endif %}
+                  {% if first_override_size and first_msg_size > 0 %}font-size: {{ first_msg_size }}px;{% endif %}
+                  {% if first_override_italic %}font-style: italic;{% endif %}
+                ">
+                <span class="qa-msg-text">{{ first_text }}</span>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="qa-action">
+          {% if section.settings.bar_mode == 'know_more' and section.settings.show_link %}
+            <button type="button" class="know-more" id="know-more-{{ section.id }}">{{ section.settings.link_label }}</button>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+
+    <template id="qa-sheet-template-{{ section.id }}">
+      <button class="grabber" type="button" aria-label="Close"></button>
+      <h3>{{ section.settings.sheet_title | escape }}</h3>
+      <div class="content">{{ section.settings.sheet_richtext }}</div>
+    </template>
+  {% endif %}
+
+  <script>
+    (function(){
+      var id = '{{ section.id }}';
+      var root = document.getElementById('lagorii-quick-announce-' + id);
+      if(!root) return;
+
+      var mode = '{{ section.settings.bar_mode }}';
+      var sessionKey = 'lagorii_qa_hidden_' + id;
+      var isDesignMode = document.documentElement.classList.contains('shopify-design-mode');
+
+      function applyHighlights(){
+        var msgs = root.querySelectorAll('.vmsg');
+
+        msgs.forEach(function(el){
+          var text = el.getAttribute('data-msg-text') || '';
+          var hlEnable = (el.getAttribute('data-hl-enable') || '') === 'true';
+          var term = el.getAttribute('data-hl-term') || '';
+          var color = el.getAttribute('data-hl-color') || '{{ section.settings.link_color }}';
+          var weight = el.getAttribute('data-hl-weight') || '700';
+          var holder = el.querySelector('.qa-msg-text');
+
+          if(!holder) return;
+
+          holder.innerHTML = '';
+
+          if(!hlEnable || !term || text.indexOf(term) === -1){
+            holder.textContent = text;
+            return;
+          }
+
+          var parts = text.split(term);
+          for(var i = 0; i < parts.length; i++){
+            if(parts[i]) holder.appendChild(document.createTextNode(parts[i]));
+            if(i < parts.length - 1){
+              var span = document.createElement('span');
+              span.className = 'qa-hl';
+              span.style.color = color;
+              span.style.fontWeight = weight;
+              span.textContent = term;
+              holder.appendChild(span);
+            }
+          }
+        });
+      }
+
+      /* Session hide for download app mode (resets when browser session ends) */
+      if(mode === 'download_app' && !isDesignMode){
+        try{
+          if(sessionStorage.getItem(sessionKey) === '1'){
+            root.hidden = true;
+          }
+        }catch(e){}
+      }
+
+      applyHighlights();
+
+      /* Ticker (only for know_more mode) */
+      if(mode !== 'download_app'){
+        var vt = document.getElementById('vt-' + id);
+        if(vt){
+          var wrap = vt.querySelector('.vwrap');
+          var msgs = vt.querySelectorAll('.vmsg');
+          var interval = parseInt(vt.dataset.interval || '2500', 10);
+          var rowH = parseFloat(getComputedStyle(root).getPropertyValue('--row-h')) || vt.clientHeight;
+          var idx = 0;
+
+          if(msgs.length > 1){
+            function step(){
+              idx++;
+              wrap.style.transition = 'transform .32s ease-out';
+              wrap.style.transform = 'translateY(' + (-rowH * idx) + 'px)';
+              if(idx >= msgs.length - 1){
+                setTimeout(function(){
+                  wrap.style.transition = 'none';
+                  wrap.style.transform = 'translateY(0px)';
+                  idx = 0;
+                }, 340);
+              }
+            }
+            var t = setInterval(step, interval);
+
+            {% if section.settings.pause_hover %}
+            vt.addEventListener('mouseenter', function(){ clearInterval(t); });
+            vt.addEventListener('mouseleave', function(){ t = setInterval(step, interval); });
+            {% endif %}
+          }
+        }
+      }
+
+      /* Download app mode: close (session only) */
+      var closeBtn = document.getElementById('qa-close-' + id);
+      if(closeBtn){
+        closeBtn.addEventListener('click', function(){
+          root.hidden = true;
+          try{ sessionStorage.setItem(sessionKey, '1'); }catch(e){}
+        });
+      }
+
+      /* Know more mode drawer */
+      var trigger = document.getElementById('know-more-' + id);
+      if(!trigger) return;
+
+      var template = document.getElementById('qa-sheet-template-' + id);
+      if(!template) return;
+
+      var overlay = document.createElement('div');
+      overlay.className = 'lagorii-qa-overlay';
+      overlay.setAttribute('data-owner', id);
+      overlay.style.background = 'rgba(0,0,0,{{ section.settings.overlay_opacity | default: 0 | divided_by: 100.0 }})';
+
+      var sheet = document.createElement('div');
+      sheet.className = 'lagorii-qa-sheet';
+      sheet.setAttribute('data-owner', id);
+      sheet.innerHTML = template.innerHTML;
+
+      document.body.appendChild(overlay);
+      document.body.appendChild(sheet);
+
+      var body = document.body;
+      var docEl = document.documentElement;
+      var prevScrollY = 0, prevPaddingRight = '', prevTop = '';
+
+      function scrollbarWidth(){
+        return Math.max(0, window.innerWidth - docEl.clientWidth);
+      }
+
+      function lockScroll(){
+        prevScrollY = window.scrollY || 0;
+        prevPaddingRight = body.style.paddingRight;
+        prevTop = body.style.top;
+        body.classList.add('lagorii-qa-locked');
+        body.style.top = (-prevScrollY) + 'px';
+        var sw = scrollbarWidth();
+        if(sw > 0) body.style.paddingRight = sw + 'px';
+      }
+
+      function unlockScroll(){
+        body.classList.remove('lagorii-qa-locked');
+        body.style.paddingRight = prevPaddingRight || '';
+        body.style.top = prevTop || '';
+        window.scrollTo(0, prevScrollY || 0);
+      }
+
+      function openSheet(){
+        overlay.classList.add('active');
+        sheet.classList.add('open');
+        lockScroll();
+      }
+
+      function closeSheet(){
+        sheet.classList.remove('open');
+        overlay.classList.remove('active');
+        unlockScroll();
+      }
+
+      trigger.addEventListener('click', openSheet, { passive: true });
+      overlay.addEventListener('click', closeSheet, { passive: true });
+
+      var handle = sheet.querySelector('.grabber');
+      if(handle){
+        handle.addEventListener('click', closeSheet, { passive: true });
+      }
+
+      var startY = null, currentY = 0, pulling = false;
+      var maxPull = 180, closeThreshold = 90;
+
+      function getPoint(e){
+        return (e.touches && e.touches[0]) ? e.touches[0] : e;
+      }
+
+      function onStart(e){
+        if(!sheet.classList.contains('open')) return;
+        var p = getPoint(e);
+        startY = p.clientY;
+        currentY = startY;
+        pulling = true;
+        sheet.style.transition = 'none';
+      }
+
+      function onMove(e){
+        if(!pulling) return;
+        var p = getPoint(e);
+        currentY = p.clientY;
+        var dy = Math.max(0, currentY - startY);
+        var pull = Math.min(maxPull, dy);
+        sheet.style.transform = 'translateY(' + pull + 'px)';
+        overlay.style.opacity = String(Math.max(0, 1 - (pull / maxPull)));
+      }
+
+      function onEnd(){
+        if(!pulling) return;
+        pulling = false;
+        sheet.style.transition = 'transform .18s ease-out';
+        var dy = Math.max(0, currentY - startY);
+
+        if(dy > closeThreshold){
+          closeSheet();
+          sheet.style.transition = '';
+          sheet.style.transform = '';
+        }else{
+          sheet.style.transform = 'translateY(0)';
+          overlay.style.opacity = '';
+          setTimeout(function(){ sheet.style.transition = ''; }, 180);
+        }
+      }
+
+      if(handle){
+        ['touchstart','mousedown'].forEach(function(evt){
+          handle.addEventListener(evt, onStart, { passive: true });
+        });
+      }
+
+      ['touchmove','mousemove'].forEach(function(evt){
+        window.addEventListener(evt, onMove, { passive: true });
+      });
+
+      ['touchend','mouseup','mouseleave'].forEach(function(evt){
+        window.addEventListener(evt, onEnd, { passive: true });
+      });
+
+      sheet.addEventListener('click', function(e){ e.stopPropagation(); }, { passive: true });
+
+      document.addEventListener('shopify:section:load', function(ev){
+        if(ev.detail && ev.detail.sectionId === id){
+          applyHighlights();
+        }
+      });
+
+      document.addEventListener('shopify:block:select', function(){
+        applyHighlights();
+      });
+
+      document.addEventListener('shopify:block:deselect', function(){
+        applyHighlights();
+      });
+
+      document.addEventListener('shopify:section:unload', function(ev){
+        if(ev.detail && ev.detail.sectionId === id){
+          try{ overlay.remove(); }catch(e){}
+          try{ sheet.remove(); }catch(e){}
+        }
+      });
+    })();
+  </script>
+</section>
+
+{% endif %}
+
+{% schema %}
+{
+  "name": "Quick announcement",
+  "tag": "section",
+  "class": "lagorii-quick-announce",
+  "enabled_on": {
+    "groups": ["header"],
+    "templates": ["*"]
+  },
+  "settings": [
+    { "type": "checkbox", "id": "limit_to_collections", "label": "Show only on collection templates", "default": false },
+
+    {
+      "type": "select",
+      "id": "bar_mode",
+      "label": "Announcement mode",
+      "default": "know_more",
+      "options": [
+        { "value": "know_more", "label": "Know more mode" },
+        { "value": "download_app", "label": "Download App mode" }
+      ]
+    },
+
+    { "type": "color", "id": "bar_bg", "label": "Bar background", "default": "#000000" },
+    { "type": "color", "id": "bar_text", "label": "Bar text color", "default": "#FFFFFF" },
+    { "type": "color", "id": "msg_text_color", "label": "Message text color", "default": "#FFFFFF" },
+    { "type": "color", "id": "link_color", "label": "Action color", "default": "#E87529" },
+
+    { "type": "range", "id": "bar_radius", "label": "Bar corner radius", "min": 0, "max": 30, "step": 1, "default": 12 },
+    { "type": "range", "id": "pad_y", "label": "Vertical padding", "min": 6, "max": 24, "step": 1, "default": 10 },
+    { "type": "range", "id": "pad_x", "label": "Horizontal padding", "min": 8, "max": 32, "step": 1, "default": 14 },
+
+    { "type": "range", "id": "row_height", "label": "Ticker row height", "min": 20, "max": 48, "step": 1, "default": 28 },
+    { "type": "range", "id": "interval_ms", "label": "Ticker interval (ms)", "min": 1200, "max": 6000, "step": 100, "default": 2500 },
+    { "type": "checkbox", "id": "pause_hover", "label": "Pause ticker on hover", "default": true },
+
+    { "type": "header", "content": "Ticker text style (global)" },
+    { "type": "text", "id": "msg_font", "label": "Font family", "default": "system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif" },
+    { "type": "range", "id": "msg_font_size_mobile", "label": "Font size (mobile)", "min": 10, "max": 28, "step": 1, "default": 14 },
+    { "type": "range", "id": "msg_font_size_desktop", "label": "Font size (desktop)", "min": 12, "max": 32, "step": 1, "default": 15 },
+    { "type": "range", "id": "msg_font_weight", "label": "Font weight", "min": 100, "max": 900, "step": 50, "default": 500 },
+    { "type": "checkbox", "id": "msg_italic", "label": "Italic", "default": false },
+    { "type": "range", "id": "msg_letter_spacing", "label": "Letter spacing (px)", "min": -1, "max": 3, "step": 1, "default": 0 },
+    {
+      "type": "select",
+      "id": "msg_transform",
+      "label": "Text transform",
+      "default": "none",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "uppercase", "label": "UPPERCASE" },
+        { "value": "lowercase", "label": "lowercase" },
+        { "value": "capitalize", "label": "Capitalize" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "msg_decoration",
+      "label": "Text decoration",
+      "default": "none",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "underline", "label": "Underline" },
+        { "value": "line-through", "label": "Strikethrough" }
+      ]
+    },
+
+    { "type": "header", "content": "Bar bottom border" },
+    { "type": "checkbox", "id": "show_bar_border", "label": "Show bottom border on bar", "default": true },
+    { "type": "color", "id": "bar_border_color", "label": "Bar border color", "default": "#E5E5E5" },
+    { "type": "range", "id": "bar_border_thickness", "label": "Bar border thickness (px)", "min": 0, "max": 6, "step": 1, "default": 1 },
+
+    { "type": "header", "content": "Know more action + drawer" },
+    { "type": "checkbox", "id": "show_link", "label": "Show Know more button", "default": true },
+    { "type": "text", "id": "link_label", "label": "Know more label", "default": "Know more" },
+    { "type": "range", "id": "link_fw", "label": "Action font weight", "min": 400, "max": 900, "step": 50, "default": 600 },
+
+    { "type": "range", "id": "overlay_opacity", "label": "Overlay opacity (%)", "min": 0, "max": 60, "step": 5, "default": 0 },
+
+    { "type": "range", "id": "sheet_maxh", "label": "Sheet max height (vh)", "min": 50, "max": 90, "step": 1, "default": 70 },
+    { "type": "range", "id": "sheet_radius", "label": "Sheet top radius", "min": 0, "max": 30, "step": 1, "default": 20 },
+    { "type": "range", "id": "sheet_pad", "label": "Sheet padding (px)", "min": 12, "max": 36, "step": 1, "default": 22 },
+    { "type": "range", "id": "sheet_title_fs", "label": "Sheet title size", "min": 14, "max": 28, "step": 1, "default": 18 },
+    { "type": "range", "id": "sheet_text_fs", "label": "Sheet text size", "min": 12, "max": 22, "step": 1, "default": 15 },
+
+    { "type": "header", "content": "Handle (drag bar)" },
+    { "type": "color", "id": "handle_color", "label": "Handle color", "default": "#E87529" },
+    { "type": "range", "id": "handle_w", "label": "Handle width (px)", "min": 36, "max": 120, "step": 2, "default": 40 },
+    { "type": "range", "id": "handle_h", "label": "Handle height (px)", "min": 4, "max": 16, "step": 1, "default": 5 },
+
+    { "type": "text", "id": "sheet_title", "label": "Sheet title", "default": "Lagorii Now" },
+    { "type": "richtext", "id": "sheet_richtext", "label": "Sheet content", "default": "<p>Orders placed 10 AM to 7 PM (Mon to Sat) are delivered within 60 minutes.</p><p>Shipping fee applicable. Available across most Bangalore pincodes.</p>" },
+
+    { "type": "header", "content": "Download App mode" },
+    { "type": "image_picker", "id": "app_logo", "label": "App logo" },
+    { "type": "text", "id": "app_title", "label": "App title", "default": "Lagorii is better on the app" },
+    { "type": "text", "id": "app_subtitle", "label": "App subtitle", "default": "Extra 10% off | Code: APP10" },
+
+    { "type": "range", "id": "app_logo_size", "label": "Logo size (px)", "min": 24, "max": 64, "step": 1, "default": 38 },
+    { "type": "range", "id": "app_logo_radius", "label": "Logo corner radius", "min": 0, "max": 16, "step": 1, "default": 8 },
+
+    { "type": "range", "id": "app_title_fs", "label": "Title font size desktop", "min": 10, "max": 22, "step": 1, "default": 14 },
+    { "type": "range", "id": "app_title_fs_mobile", "label": "Title font size mobile", "min": 10, "max": 20, "step": 1, "default": 13 },
+    { "type": "range", "id": "app_title_fw", "label": "Title font weight", "min": 400, "max": 900, "step": 50, "default": 600 },
+
+    { "type": "range", "id": "app_subtitle_fs", "label": "Subtitle font size desktop", "min": 9, "max": 18, "step": 1, "default": 12 },
+    { "type": "range", "id": "app_subtitle_fs_mobile", "label": "Subtitle font size mobile", "min": 9, "max": 16, "step": 1, "default": 11 },
+    { "type": "range", "id": "app_subtitle_fw", "label": "Subtitle font weight", "min": 400, "max": 900, "step": 50, "default": 500 },
+    { "type": "color", "id": "app_subtitle_color", "label": "Subtitle color", "default": "#666666" },
+
+    { "type": "range", "id": "app_cta_radius", "label": "CTA button radius (App mode)", "min": 0, "max": 20, "step": 1, "default": 4 },
+    { "type": "range", "id": "app_cta_fs_mobile", "label": "CTA font size mobile", "min": 10, "max": 18, "step": 1, "default": 12 },
+    { "type": "color", "id": "app_close_color", "label": "Close icon color (App mode)", "default": "#222222" },
+
+    { "type": "checkbox", "id": "show_download_button", "label": "Show button", "default": true },
+    { "type": "text", "id": "dl_btn_label", "label": "Button label", "default": "Download App" },
+    { "type": "url", "id": "app_url", "label": "Button link" },
+    { "type": "checkbox", "id": "app_link_new_tab", "label": "Open link in new tab", "default": true },
+
+    { "type": "text", "id": "dl_btn_font", "label": "Button font family", "default": "inherit" },
+    { "type": "range", "id": "dl_btn_fs", "label": "Button font size (px)", "min": 10, "max": 24, "step": 1, "default": 13 },
+    { "type": "range", "id": "dl_btn_fw", "label": "Button font weight", "min": 400, "max": 900, "step": 50, "default": 600 },
+
+    { "type": "color", "id": "dl_btn_bg", "label": "Button background", "default": "#E87529" },
+    { "type": "color", "id": "dl_btn_text", "label": "Button text color", "default": "#FFFFFF" },
+    { "type": "range", "id": "dl_btn_bd_w", "label": "Button border thickness (px)", "min": 0, "max": 3, "step": 1, "default": 0 },
+    { "type": "color", "id": "dl_btn_bd_c", "label": "Button border color", "default": "#E87529" },
+
+    { "type": "range", "id": "dl_btn_radius", "label": "Button radius", "min": 0, "max": 100, "step": 1, "default": 100 },
+    { "type": "range", "id": "dl_btn_py", "label": "Button padding vertical (px)", "min": 2, "max": 18, "step": 1, "default": 6 },
+    { "type": "range", "id": "dl_btn_px", "label": "Button padding horizontal (px)", "min": 6, "max": 40, "step": 1, "default": 12 },
+
+    { "type": "checkbox", "id": "show_close_icon", "label": "Show X close icon", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "message",
+      "name": "Ticker message",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Message text", "default": "Delivered in 60 mins Bengaluru only" },
+
+        { "type": "header", "content": "Highlight (optional)" },
+        { "type": "checkbox", "id": "hl_enable", "label": "Enable highlight", "default": false },
+        { "type": "text", "id": "hl_term", "label": "Term to highlight", "default": "60 mins" },
+        { "type": "color", "id": "hl_color", "label": "Highlight color", "default": "#E87529" },
+        { "type": "range", "id": "hl_weight", "label": "Highlight font weight", "min": 400, "max": 900, "step": 50, "default": 700 },
+
+        { "type": "header", "content": "Per-message style (optional)" },
+        { "type": "checkbox", "id": "override_weight", "label": "Override weight", "default": false },
+        { "type": "range", "id": "msg_weight", "label": "Weight", "min": 100, "max": 900, "step": 50, "default": 600 },
+        { "type": "checkbox", "id": "override_size", "label": "Override font size", "default": false },
+        { "type": "range", "id": "msg_size", "label": "Font size (px)", "min": 10, "max": 32, "step": 1, "default": 16 },
+        { "type": "checkbox", "id": "override_italic", "label": "Italic", "default": false },
+        { "type": "color", "id": "msg_color_override", "label": "Message color (optional)" }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Quick announcement",
+      "blocks": [
+        { "type": "message", "settings": { "text": "Delivered in 60 mins Bengaluru only", "hl_enable": true, "hl_term": "60 mins" } },
+        { "type": "message", "settings": { "text": "Shipping fee ₹179 Know more" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

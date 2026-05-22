@@ -1,0 +1,68 @@
+<style>
+  .preload-html-wrap {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .preload-html-loader {
+    width: 100%;
+    height: 100%;
+  }
+
+  .preload-html-loader svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .logo-stroke-fill {
+    fill: none;
+    stroke: rgba(255, 138, 61, 0.2);
+    stroke-width: 36;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .logo-path {
+    fill: none;
+    stroke: #FF8A3D;
+    stroke-width: 36;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 0;
+    stroke-dashoffset: 0;
+    animation: draw 1.5s linear infinite;
+  }
+
+  @keyframes draw {
+    0% { stroke-dashoffset: var(--path-length); }
+    90% { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: 0; }
+  }
+</style>
+
+<div class="preload-html-wrap">
+  <div class="preload-html-loader">
+    <svg viewBox="0 0 359 232" xmlns="http://www.w3.org/2000/svg">
+      <path class="logo-stroke-fill"
+        d="M180.547 140.665C194.508 115.712 230.548 42.6602 268.048 26.1627C307.796 8.6764 340.547 31.7626 340.547 64.6856C340.547 99.3609 302.019 111.564 287.945 119.767C286.356 120.693 286.326 122.873 287.631 124.167C354.951 190.909 250.538 259.447 195.047 171.665C167.548 128.163 114.548 -8.83719 42.0487 22.6628C9.84261 36.656 16.0448 73.1646 26.0464 86.6646C41.0181 106.873 56.6547 115.013 64.053 118.12C65.9746 118.926 66.5971 121.319 65.2986 122.949C53.5158 137.741 39.7316 164.477 54.5473 190.165C75.2993 226.145 126.547 209.665 140.047 195.665C147.202 188.245 162.998 172.031 180.547 140.665Z" />
+
+      <path class="logo-path"
+        d="M180.547 140.665C194.508 115.712 230.548 42.6602 268.048 26.1627C307.796 8.6764 340.547 31.7626 340.547 64.6856C340.547 99.3609 302.019 111.564 287.945 119.767C286.356 120.693 286.326 122.873 287.631 124.167C354.951 190.909 250.538 259.447 195.047 171.665C167.548 128.163 114.548 -8.83719 42.0487 22.6628C9.84261 36.656 16.0448 73.1646 26.0464 86.6646C41.0181 106.873 56.6547 115.013 64.053 118.12C65.9746 118.926 66.5971 121.319 65.2986 122.949C53.5158 137.741 39.7316 164.477 54.5473 190.165C75.2993 226.145 126.547 209.665 140.047 195.665C147.202 188.245 162.998 172.031 180.547 140.665Z" />
+    </svg>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var path = document.querySelector('.preload-html-loader .logo-path');
+    if (!path) return;
+    var length = path.getTotalLength();
+    path.style.strokeDasharray = length;
+    path.style.strokeDashoffset = length;
+    path.style.setProperty('--path-length', length + 'px');
+  })();
+</script>

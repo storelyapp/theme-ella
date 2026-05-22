@@ -1,0 +1,508 @@
+{% comment %}
+Tabbed Login/Register + Recover (fixed)
+- Shopify forms preserved: customer_login, create_customer, recover_customer_password, guest_login
+- Recover opens as a focused card; hides tabbed UI (no overlap)
+- Success from recover shows in Login when you return
+- Password-eye toggles on login+register
+{% endcomment %}
+
+{{ 'customer.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign container = section.settings.container
+  assign padding_full_width = section.settings.padding_full_width
+-%}
+
+<div class="account-page login-page section-block-{{section.id}}">
+    {%- comment -%} Detect recover success globally (before panels render) {%- endcomment -%}
+    {% assign recover_success = false %}
+    {% form 'recover_customer_password' %}
+    {% if form.posted_successfully? %}
+        {% assign recover_success = true %}
+    {% endif %}
+    {% endform %}
+    <script>window.recoverSuccess = {{ recover_success | json }};</script>
+
+  <div class="{% if container == '1170' %}container-1170{% elsif container == '1770' %}container-1770{% elsif container == 'fullwidth'%}container-full{% else %}container{% endif %}">
+    <div class="halo-page-header">
+      {% render 'breadcrumb' %}
+      <h1 class="page-header">{{ 'customer.login_page.title' | t }}</h1>
+    </div>
+
+    <div class="halo-page-content">
+      <div class="auth-shell" id="authShell">
+        <!-- Card wrapper (soft shadow) -->
+        <div class="auth-card">
+          <!-- Tabs -->
+          <div class="auth-tabs" id="authTabs" data-active="login" aria-label="Authentication">
+            <button class="auth-tab is-active" data-tab="login" aria-selected="true">{{ 'customer.login_page.sign_in' | t }}</button>
+            <button class="auth-tab" data-tab="register" aria-selected="false">{{ 'customer.register.register' | t }}</button>
+          </div>
+
+          <!-- Panels (animated height) -->
+          <div class="auth-panels" id="authPanels">
+            {%- comment -%} LOGIN {%- endcomment -%}
+            <section class="auth-panel is-active" id="panel-login" role="tabpanel">
+              {%- if recover_success == true -%}
+                <div class="auth-alert auth-alert--success" role="status" aria-live="polite">
+                  {{ 'customer.recover_password.success' | t }}
+                </div>
+              {%- endif -%}
+
+              {%- form 'customer_login', class: 'customer-login-form', id: 'CustomerLoginForm' -%}
+                {%- if form.errors -%}
+                  <div class="auth-alert auth-alert--error" role="status" aria-live="polite">
+                    {{ form.errors | default_errors }}
+                  </div>
+                {%- endif -%}
+
+                <div class="auth-field{% if form.errors contains 'email' %} has-error{% endif %}">
+                  <label class="auth-label" for="CustomerEmail">{{ 'customer.login_page.email' | t }} <em>*</em></label>
+                  <input class="auth-input{% if form.errors contains 'email' %} error{% endif %}"
+                         type="email" id="CustomerEmail" name="customer[email]"
+                         placeholder="you@example.com"
+                         autocomplete="email" autocorrect="off" autocapitalize="off" required>
+                </div>
+
+                {%- if form.password_needed -%}
+                  <div class="auth-field auth-field--password{% if form.errors contains 'password' %} has-error{% endif %}">
+                    <label class="auth-label" for="CustomerPassword">{{ 'customer.login_page.password' | t }} <em>*</em></label>
+                    <div class="auth-password">
+                    <input class="auth-input{% if form.errors contains 'password' %} error{% endif %}"
+                            type="password" id="CustomerPassword" name="customer[password]"
+                            placeholder="enter password" autocomplete="current-password" required>
+                    <small id="note-CustomerPassword" class="auth-pass-note" hidden></small>
+                    </div>
+                  </div>
+                {%- endif -%}
+
+                <div class="auth-actions auth-actions--stack">
+                <button class="auth-link" type="button" id="showRecover">
+                    {{ 'customer.login_page.forgot_password' | t }}
+                </button>
+                <button class="auth-btn" type="submit">
+                    {{ 'customer.login_page.title' | t }}
+                </button>
+                </div>
+
+              {%- endform -%}
+
+              {%- if shop.checkout.guest_login -%}
+                <div class="auth-guest">
+                  <h3 class="auth-guest-title">{{ 'customer.login_page.guest_title' | t }}</h3>
+                  {%- form 'guest_login' -%}
+                    <button class="auth-btn auth-btn--secondary" type="submit">{{ 'customer.login_page.guest_continue' | t }}</button>
+                  {%- endform -%}
+                </div>
+              {%- endif -%}
+            </section>
+
+            {%- comment -%} REGISTER {%- endcomment -%}
+            <section class="auth-panel" id="panel-register" role="tabpanel" aria-hidden="true">
+              {%- form 'create_customer', class: 'create-customer-form', id: 'CreateCustomerForm' -%}
+                {%- if form.errors -%}
+                  <div class="auth-alert auth-alert--error" role="status" aria-live="polite">
+                    {{ form.errors | default_errors }}
+                  </div>
+                {%- endif -%}
+
+                <div class="auth-grid">
+                  <div class="auth-field{% if form.errors contains 'first_name' %} has-error{% endif %}">
+                    <label class="auth-label" for="RegisterForm-FirstName">{{ 'customer.register.first_name' | t }}</label>
+                    <input class="auth-input{% if form.errors contains 'first_name' %} error{% endif %}"
+                           type="text" id="RegisterForm-FirstName" name="customer[first_name]"
+                           value="{{ form.first_name | escape }}" autocomplete="given-name" required>
+                  </div>
+                  <div class="auth-field{% if form.errors contains 'last_name' %} has-error{% endif %}">
+                    <label class="auth-label" for="RegisterForm-LastName">{{ 'customer.register.last_name' | t }}</label>
+                    <input class="auth-input{% if form.errors contains 'last_name' %} error{% endif %}"
+                           type="text" id="RegisterForm-LastName" name="customer[last_name]"
+                           value="{{ form.last_name | escape }}" autocomplete="family-name" required>
+                  </div>
+                </div>
+
+                <div class="auth-field{% if form.errors contains 'email' %} has-error{% endif %}">
+                  <label class="auth-label" for="RegisterForm-email">{{ 'customer.register.you_email' | t }} <em>*</em></label>
+                  <input class="auth-input{% if form.errors contains 'email' %} error{% endif %}"
+                         type="email" id="RegisterForm-email" name="customer[email]"
+                         value="{{ form.email | escape }}" placeholder="you@example.com"
+                         spellcheck="false" autocapitalize="off" autocomplete="email" required>
+                </div>
+
+                <div class="auth-field auth-field--password{% if form.errors contains 'password' %} has-error{% endif %}">
+                  <label class="auth-label" for="RegisterForm-password">{{ 'customer.register.you_password' | t }} <em>*</em></label>
+                <div class="auth-password">
+                <input class="auth-input{% if form.errors contains 'password' %} error{% endif %}"
+                        type="password" id="RegisterForm-password" name="customer[password]"
+                        placeholder="create a password" required>
+                <small id="note-RegisterForm-password" class="auth-pass-note" hidden></small>
+                </div>
+                </div>
+
+                <div class="auth-actions">
+                  <button class="auth-btn" type="submit">{{ 'customer.register.submit' | t }}</button>
+                </div>
+              {%- endform -%}
+            </section>
+          </div><!-- /auth-panels -->
+
+          <!-- RECOVER (standalone card) -->
+          <div class="recover-wrap" id="recoverWrap" hidden>
+            <h2 class="auth-title">{{ 'customer.recover_password.title' | t }}</h2>
+            <p class="auth-sub">{{ 'customer.recover_password.subtext' | t }}</p>
+
+            {%- form 'recover_customer_password', id: 'RecoverPasswordForm' -%}
+              {% assign recover_success = form.posted_successfully? %}
+              {%- if form.posted_successfully? -%}
+                <div class="auth-alert auth-alert--success" role="status" aria-live="polite">
+                  {{ 'customer.recover_password.success' | t }}
+                </div>
+              {%- endif -%}
+              {%- if form.errors -%}
+                <div class="auth-alert auth-alert--error" role="status" aria-live="polite">
+                  {{ form.errors | default_errors }}
+                </div>
+              {%- endif -%}
+
+              <div class="auth-field{% if form.errors contains 'email' %} has-error{% endif %}">
+                <label class="auth-label" for="RecoverEmail">{{ 'customer.login_page.email' | t }}</label>
+                <input class="auth-input{% if form.errors contains 'email' %} error{% endif %}"
+                       type="email" id="RecoverEmail" name="email"
+                       placeholder="you@example.com"
+                       autocomplete="email" autocorrect="off" autocapitalize="off" required>
+              </div>
+
+              <div class="auth-actions">
+                <button class="auth-btn" type="submit">{{ 'customer.login_page.submit' | t }}</button>
+                <button class="auth-link" type="button" id="recoverBack">{{ 'customer.login_page.cancel' | t }}</button>
+              </div>
+            {%- endform -%}
+          </div>
+        </div><!-- /auth-card -->
+      </div><!-- /auth-shell -->
+    </div>
+  </div>
+</div>
+
+<style>
+  /* ---- Visuals to match your mock (image 2) ---- */
+  :root{
+    --brand:#E87529; --ink:#111; --muted:#666; --bg:#FAFAFA; --radius:28px;
+    --anim:240ms; --ease:cubic-bezier(.2,.7,.2,1);
+  }
+
+  .auth-shell{ display:grid; place-items:center; padding:8px; }
+  .auth-card{
+    width:min(720px, 96vw);
+    background:#fff; border-radius:24px;
+    box-shadow:0 16px 44px rgba(0,0,0,.08);
+    padding:22px;
+  }
+
+  /* Tabs as a pill group; NO underline bar */
+  .auth-tabs{
+    display:flex; gap:8px; padding:8px;
+    border:1px solid #f1e3d9; border-radius:40px; background:#fff; margin-bottom:18px;
+  }
+  .auth-tab{
+    flex:1; border:0; background:transparent; cursor:pointer;
+    padding:12px 10px; border-radius:28px; font-weight:800; color:#222;
+  }
+  .auth-tab.is-active{ background:var(--brand); color:#fff; box-shadow:0 6px 16px rgba(232,117,41,.25); }
+  /* remove underline completely */
+  .auth-tab-underline{ display:none !important; }
+
+  /* Panels & animation */
+  .auth-panels{ position:relative; transition:height var(--anim) var(--ease); }
+  .auth-panel{ position:absolute; inset:0; opacity:0; visibility:hidden; transform:translateY(6px);
+    transition:opacity var(--anim) var(--ease), transform var(--anim) var(--ease), visibility 0s var(--anim); }
+  .auth-panel.is-active{ opacity:1; visibility:visible; transform:translateY(0); transition:opacity var(--anim) var(--ease), transform var(--anim) var(--ease), visibility 0s; }
+
+  .auth-title{ margin:0 0 8px; font-weight:800; font-size:1.35rem; }
+  .auth-sub{ margin:0 0 14px; color:#444; }
+
+  .auth-field{ display:grid; gap:8px; margin-bottom:14px; }
+  .auth-label{ font-weight:600; color:#333; }
+  .auth-input{
+    width:100%; height:54px; padding:12px 14px; border:1px solid #E6E6EA;
+    border-radius:28px; background:#fff; font-size:1rem;
+  }
+  .auth-input:focus{ outline:none; border-color:var(--brand); box-shadow:0 0 0 3px rgba(232,117,41,.18); }
+  .has-error .auth-input{ border-color:#d22; }
+
+  .auth-actions{ display:flex; gap:14px; align-items:center; flex-wrap:wrap; }
+  .auth-btn{
+    flex:1; height:54px; border:0; border-radius:28px; background:var(--brand);
+    color:#fff; font-weight:800; cursor:pointer;
+  }
+  .auth-btn--secondary{ background:#222; }
+  .auth-link{ background:none; border:0; color:#666; font-weight:700; cursor:pointer; padding:0; }
+
+  .auth-alert{ border-radius:14px; padding:12px 14px; margin-bottom:14px; border:1px solid; font-weight:600; }
+  .auth-alert--success{ background:#e3f3e6; border-color:#c7e6ce; color:#2d6b3f; }
+  .auth-alert--error{ background:#fde7e7; border-color:#f3c7c7; color:#8e2f2f; }
+
+  .auth-grid{ display:grid; gap:12px; grid-template-columns:1fr; }
+  @media (min-width:640px){ .auth-grid{ grid-template-columns:1fr 1fr; } }
+
+  .auth-field--password .auth-password{ position:relative; }
+  .auth-eye{
+    position:absolute; right:10px; top:50%; transform:translateY(-50%);
+    width:40px; height:40px; border:0; background:transparent; cursor:pointer; display:grid; place-items:center;
+  }
+
+  /* Recover card */
+  .recover-wrap{
+    margin-top:10px; background:#fff; border:1px solid #f1f1f1; border-radius:20px; padding:16px;
+  }
+  .recover-wrap[hidden]{ display:none !important; }
+
+  /* When recover is open: hide tabs + panels to avoid overlap */
+  .recover-open .auth-tabs,
+  .recover-open .auth-panels{ display:none !important; }
+
+  /* Preserve your container paddings */
+  @media (min-width: 1025px) {
+    {%- if container == 'fullwidth' -%}
+    .section-block-{{section.id}} .container-full {padding-left: {{ padding_full_width | append: 'px' }};padding-right: {{ padding_full_width | append: 'px' }}}
+    {%- endif -%}
+  }
+  @media (max-width: 1024px) {
+    {%- if container == 'fullwidth' -%}
+    .section-block-{{section.id}} .container-full {overflow: hidden;}
+    .section-block-{{section.id}} .container-full .halo-page-header {padding-left: 25px;padding-right: 15px}
+    .section-block-{{section.id}} .container-full .halo-page-content {padding-left: 15px;padding-right: 15px}
+    {%- endif -%}
+  }
+  @media (max-width: 551px) {
+    {%- if container == 'fullwidth' -%}
+    .section-block-{{section.id}} .container-full .halo-page-header {padding-left: 0;padding-right: 0}
+    .section-block-{{section.id}} .container-full .halo-page-content {padding-left: 10px;padding-right: 10px}
+    {%- endif -%}
+  }
+
+  /* ---------- Parent-friendly sizing & reduced roundness ---------- */
+:root{
+  --auth-radius: 16px;      /* used below for inputs & buttons */
+  --auth-font: 16px;        /* base control text */
+  --auth-label: 15px;       /* field labels */
+  --auth-tab: 16px;         /* tab text */
+}
+
+.auth-card { padding: 24px; }
+.auth-tab { font-size: var(--auth-tab); }
+.auth-label { font-size: var(--auth-label); }
+.auth-input {
+  height: 52px;
+  font-size: var(--auth-font);
+  border-radius: var(--auth-radius);
+}
+.auth-btn {
+  height: 52px;
+  font-size: var(--auth-font);
+  border-radius: var(--auth-radius);
+}
+.auth-eye { width: 38px; height: 38px; }
+
+/* Stack actions vertically with comfy spacing (since link is first now) */
+.auth-actions--stack {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+}
+
+/* Slightly softer card radius to match */
+.auth-card { border-radius: 20px; }
+
+/* Inputs not too round on small screens either */
+@media (max-width: 480px){
+  .auth-input, .auth-btn { border-radius: 14px; height: 50px; }
+}
+
+/* Hide the default page title above the card */
+.halo-page-header .page-header { 
+  display: none !important;
+}
+
+/* Fix Sign in button shape/width */
+.auth-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; } /* keep */
+.auth-actions--stack { flex-direction: column; align-items: flex-start; gap: 10px; } /* link above, button below */
+
+/* Remove the full-width stretch caused by flex:1 */
+.auth-btn {
+  /* was: flex:1; height:54px; border-radius:28px; ... */
+  flex: 0 0 auto;              /* no stretching */
+  padding: 0 22px;             /* comfortable width */
+  min-width: 180px;            /* readable target */
+  height: 48px;                /* slightly shorter */
+  border-radius: 14px;         /* less rounded */
+  line-height: 48px;           /* fixes vertical centering if theme styles interfere */
+}
+
+/* Optional: make it full-width only on small screens */
+@media (max-width: 480px) {
+  .auth-actions--stack .auth-btn {
+    width: 100%;
+  }
+}
+
+/* 1) Remove bullets & extra spacing from Shopify default_errors */
+.auth-alert ul,
+.auth-alert ol { list-style: none; margin: 0; padding: 0; }
+.auth-alert li { margin: 0; padding: 0; }
+
+/* 2) Actions layout: link left, button right on desktop; stacked on mobile */
+.auth-actions--stack{
+  display: flex;            /* ensure flex even if prior rule changed it */
+  gap: 10px;
+  flex-direction: column;   /* mobile */
+  align-items: stretch;     /* mobile: full-width controls */
+}
+
+/* Desktop+ : same row, space-between, no stretching */
+@media (min-width: 640px){
+  .auth-actions--stack{
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .auth-actions--stack .auth-link{
+    order: 0;               /* link first on the left */
+    margin: 0;              /* kill any theme margins */
+    white-space: nowrap;    /* keep it on one line */
+  }
+  .auth-actions--stack .auth-btn{
+    flex: 0 0 auto;         /* do not stretch */
+    width: auto;            /* shrink-to-fit */
+    min-width: 180px;       /* nice target size */
+    height: 48px;
+    line-height: 48px;
+    border-radius: 14px;
+  }
+}
+
+/* 3) Keep the button inside the white card visually */
+.auth-card{ padding-bottom: 28px; }   /* a little extra breathing room */
+
+/* Tiny live password preview under inputs */
+.auth-pass-note{
+  margin-top:6px;
+  font-size:.85rem;
+  color:#666;
+  font-weight:600;
+  word-break:break-word;
+}
+.auth-pass-note[hidden]{ display:none !important; }
+
+/* Optional: you can keep .auth-eye styles or strip them: */
+.auth-eye{ display:none !important; }
+</style>
+
+<script>
+  (function(){
+    const shell = document.getElementById('authShell');
+    const tabs = document.getElementById('authTabs');
+    const wrap = document.getElementById('authPanels');
+    const loginP = document.getElementById('panel-login');
+    const regP   = document.getElementById('panel-register');
+    const showRec = document.getElementById('showRecover');
+    const recWrap = document.getElementById('recoverWrap');
+    const recBack = document.getElementById('recoverBack');
+
+    function setHeight(el){ if (wrap && el) wrap.style.height = el.scrollHeight + 'px'; }
+    if (loginP) setHeight(loginP);
+
+    function switchTab(which){
+      const next = which === 'register' ? regP : loginP;
+      const curr = document.querySelector('.auth-panel.is-active');
+      if (!next || !curr || next === curr) return;
+      curr.classList.remove('is-active');
+      curr.setAttribute('aria-hidden','true');
+      next.classList.add('is-active');
+      next.removeAttribute('aria-hidden');
+      tabs.dataset.active = which;
+      tabs.querySelectorAll('.auth-tab').forEach(b=>{
+        const on = b.dataset.tab === which;
+        b.classList.toggle('is-active', on);
+        b.setAttribute('aria-selected', on);
+      });
+      requestAnimationFrame(()=> setHeight(next));
+    }
+
+    if (tabs){
+      tabs.querySelectorAll('.auth-tab').forEach(b=>{
+        b.addEventListener('click', ()=> switchTab(b.dataset.tab), {passive:true});
+      });
+    }
+
+    function openRecover(){
+      if (!recWrap) return;
+      shell.classList.add('recover-open');        // hides tabs + panels
+      recWrap.hidden = false;
+      window.location.hash = '#recover';
+      document.getElementById('RecoverEmail')?.focus();
+    }
+    function closeRecover(){
+      if (!recWrap) return;
+      recWrap.hidden = true;
+      shell.classList.remove('recover-open');
+      if (location.hash === '#recover') history.replaceState(null,'', location.pathname + location.search);
+    }
+
+    if (showRec) showRec.addEventListener('click', openRecover, {passive:true});
+    if (recBack) recBack.addEventListener('click', closeRecover, {passive:true});
+    if (location.hash === '#recover') openRecover();
+
+ function hookPassPreview(inputId, noteId, label){
+      const el = document.getElementById(inputId);
+      const note = document.getElementById(noteId);
+      if(!el || !note) return;
+      const update = () => {
+        const v = el.value || '';
+        if (v.length){
+          note.hidden = false;
+          note.textContent = (label || 'Password') + ': ' + v;
+        } else {
+          note.hidden = true;
+          note.textContent = '';
+        }
+      };
+      el.addEventListener('input', update);
+      el.addEventListener('change', update);
+      update();
+    }
+
+    hookPassPreview('CustomerPassword','note-CustomerPassword','Password');
+    hookPassPreview('RegisterForm-password','note-RegisterForm-password','Password');
+  })();
+
+</script>
+
+{% schema %}
+{
+  "name": "Login",
+  "settings": [
+    { "type": "header", "content": "t:settings_schema.general.name" },
+    {
+      "type": "select",
+      "id": "container",
+      "label": "t:sections.layout.container.option",
+      "default": "container",
+      "options": [
+        { "value": "container", "label": "t:sections.layout.container.option1" },
+        { "value": "1170", "label": "t:sections.layout.container.option4" },
+        { "value": "1770", "label": "t:sections.layout.container.option3" },
+        { "value": "fullwidth", "label": "t:sections.layout.container.option2" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "padding_full_width",
+      "label": "t:sections.layout.container.padding_full_width",
+      "min": 0, "max": 100, "step": 5,
+      "unit": "t:sections.layout.fontsize.fontsize_title.unit",
+      "default": 0,
+      "info": "t:sections.layout.container.info_full_width"
+    }
+  ]
+}
+{% endschema %}

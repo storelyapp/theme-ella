@@ -1,0 +1,593 @@
+{% comment %}
+Lagorii – Category Grid
+Updated with:
+- Section background color
+- Section background image
+- Heading text option
+- Heading font size desktop
+- Heading font size mobile
+- Heading image upload for desktop
+- Heading image upload for mobile
+- Heading image top-bottom padding
+- Heading image left-right padding
+- Responsive heading image switch
+- Background image fits without cropping
+- Desktop columns option (supports up to 6)
+- Outer top and bottom padding without background
+- Inner section only left and right padding
+{% endcomment %}
+
+<section class="lag-cat-grid lag-cat-grid--{{ section.id }}">
+  <style>
+    .lag-cat-grid--{{ section.id }}{
+      position: relative;
+      --lag-gap-mobile: {{ section.settings.grid_gap_mobile }}px;
+      --lag-gap-desktop: {{ section.settings.grid_gap }}px;
+      --lag-mobile-cols: {{ section.settings.mobile_columns }};
+      --lag-desktop-cols: {{ section.settings.desktop_columns }};
+      --lag-pad-mobile: {{ section.settings.padding_m }}px;
+      --lag-pad-desktop: {{ section.settings.padding_d }}px;
+
+      background: transparent;
+      padding-top: {{ section.settings.outer_top_padding_mobile }}px;
+      padding-bottom: {{ section.settings.outer_bottom_padding_mobile }}px;
+      padding-left: 0;
+      padding-right: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    .lag-cat-grid--{{ section.id }} .lag-cat-grid__inner{
+      position: relative;
+      padding-left: var(--lag-pad-mobile);
+      padding-right: var(--lag-pad-mobile);
+      padding-top: 0;
+      padding-bottom: 0;
+      background-color: {{ section.settings.section_bg }};
+      overflow: hidden;
+      box-sizing: border-box;
+      {% if section.settings.section_bg_image != blank %}
+        background-image: url('{{ section.settings.section_bg_image | image_url: width: 3000 }}');
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: contain;
+      {% endif %}
+    }
+
+    .lag-cat-grid--{{ section.id }} .lag-cat-grid__header{
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: {{ section.settings.heading_image_gap }}px;
+      padding-top: {{ section.settings.heading_padding_tb }}px;
+      padding-bottom: {{ section.settings.heading_padding_tb }}px;
+      padding-left: {{ section.settings.heading_padding_lr }}px;
+      padding-right: {{ section.settings.heading_padding_lr }}px;
+      position: relative;
+      z-index: 2;
+      width: calc(100% + (var(--lag-pad-mobile) * 2));
+      margin-left: calc(var(--lag-pad-mobile) * -1);
+      margin-right: calc(var(--lag-pad-mobile) * -1);
+      box-sizing: border-box;
+      background: transparent;
+    }
+
+    .lag-cat-grid--{{ section.id }} .lag-cat-grid__heading{
+      margin: 0;
+      font-size: {{ section.settings.heading_size_m }}px;
+      line-height: 1.2;
+      color: {{ section.settings.heading_color }};
+      font-weight: {{ section.settings.heading_weight }};
+    }
+
+    .lag-cat-grid--{{ section.id }} .lag-heading-img{
+      display: block;
+      margin: 0 auto;
+      max-width: 100%;
+      width: 100%;
+      height: auto;
+      line-height: 0;
+    }
+
+    .lag-cat-grid--{{ section.id }} .lag-heading-img--mobile{
+      display: none;
+    }
+
+    .lag-cat-grid--{{ section.id }} .lag-cat-grid__grid{
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(var(--lag-mobile-cols), minmax(0, 1fr));
+      column-gap: var(--lag-gap-mobile);
+      row-gap: var(--lag-gap-mobile);
+      align-items: start;
+    }
+
+    .lag-cat-grid--{{ section.id }} .lag-cat-item{
+      text-align: center;
+      text-decoration: none;
+      display: block;
+      color: inherit;
+      align-self: start;
+    }
+
+    .lag-cat-grid--{{ section.id }} .lag-cat-img-wrap{
+      position: relative;
+      width: 100%;
+      border-radius: {{ section.settings.image_radius }}px;
+      overflow: hidden;
+      line-height: 0;
+      background: transparent;
+    }
+
+    .lag-cat-grid--{{ section.id }} .lag-cat-img{
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .lag-cat-grid--{{ section.id }} .lag-cat-img-wrap svg{
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 3 / 4;
+    }
+
+    .lag-cat-grid--{{ section.id }} .lag-cat-text{
+      margin-top: {{ section.settings.image_text_gap }}px;
+      min-height: {{ section.settings.cat_min_height }}px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .lag-cat-grid--{{ section.id }} .lag-cat-label{
+      font-size: {{ section.settings.cat_size_m }}px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-family: {{ section.settings.cat_font.family }}, {{ section.settings.cat_font.fallback_families }};
+      font-weight: {{ section.settings.cat_weight }};
+      line-height: 1.2;
+    }
+
+    .lag-cat-grid--{{ section.id }} .lag-cat-subtext{
+      font-size: {{ section.settings.subtext_size_m }}px;
+      line-height: 1.2;
+      color: {{ section.settings.subtext_color }};
+      opacity: 0.9;
+      text-align: center;
+    }
+
+    @media (max-width: 749px){
+      .lag-cat-grid--{{ section.id }} .lag-heading-img--desktop{
+        display: none;
+      }
+
+      .lag-cat-grid--{{ section.id }} .lag-heading-img--mobile{
+        display: block;
+      }
+    }
+
+    @media (min-width: 750px){
+      .lag-cat-grid--{{ section.id }}{
+        padding-top: {{ section.settings.outer_top_padding_desktop }}px;
+        padding-bottom: {{ section.settings.outer_bottom_padding_desktop }}px;
+      }
+
+      .lag-cat-grid--{{ section.id }} .lag-cat-grid__inner{
+        padding-left: var(--lag-pad-desktop);
+        padding-right: var(--lag-pad-desktop);
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+
+      .lag-cat-grid--{{ section.id }} .lag-cat-grid__header{
+        width: calc(100% + (var(--lag-pad-desktop) * 2));
+        margin-left: calc(var(--lag-pad-desktop) * -1);
+        margin-right: calc(var(--lag-pad-desktop) * -1);
+      }
+
+      .lag-cat-grid--{{ section.id }} .lag-cat-grid__heading{
+        font-size: {{ section.settings.heading_size_d }}px;
+      }
+
+      .lag-cat-grid--{{ section.id }} .lag-cat-label{
+        font-size: {{ section.settings.cat_size_d }}px;
+      }
+
+      .lag-cat-grid--{{ section.id }} .lag-cat-subtext{
+        font-size: {{ section.settings.subtext_size_d }}px;
+      }
+
+      .lag-cat-grid--{{ section.id }} .lag-cat-grid__grid{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: var(--lag-gap-desktop);
+        align-items: flex-start;
+      }
+
+      .lag-cat-grid--{{ section.id }} .lag-cat-item{
+        flex: 0 0 calc((100% - (var(--lag-desktop-cols) - 1) * var(--lag-gap-desktop)) / var(--lag-desktop-cols));
+        max-width: calc((100% - (var(--lag-desktop-cols) - 1) * var(--lag-gap-desktop)) / var(--lag-desktop-cols));
+      }
+    }
+  </style>
+
+  <div class="lag-cat-grid__inner">
+    {% if section.settings.heading != blank or section.settings.heading_image_desktop != blank or section.settings.heading_image_mobile != blank %}
+      <div class="lag-cat-grid__header">
+        {% if section.settings.heading_image_desktop != blank %}
+          <img
+            class="lag-heading-img lag-heading-img--desktop"
+            src="{{ section.settings.heading_image_desktop | image_url: width: 2000 }}"
+            alt="{{ section.settings.heading | escape | default: 'Heading Image' }}"
+            loading="lazy">
+        {% endif %}
+
+        {% if section.settings.heading_image_mobile != blank %}
+          <img
+            class="lag-heading-img lag-heading-img--mobile"
+            src="{{ section.settings.heading_image_mobile | image_url: width: 1000 }}"
+            alt="{{ section.settings.heading | escape | default: 'Heading Image' }}"
+            loading="lazy">
+        {% endif %}
+
+        {% if section.settings.heading_image_desktop == blank and section.settings.heading_image_mobile == blank and section.settings.heading != blank %}
+          <h2 class="lag-cat-grid__heading">{{ section.settings.heading }}</h2>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="lag-cat-grid__grid">
+      {% for block in section.blocks %}
+        <a
+          class="lag-cat-item"
+          href="{{ block.settings.link | default: '#' }}"
+          {{ block.shopify_attributes }}
+        >
+          <div class="lag-cat-img-wrap">
+            {% if block.settings.image != blank %}
+              <img
+                class="lag-cat-img"
+                src="{{ block.settings.image | image_url: width: 1200 }}"
+                alt="{{ block.settings.label | escape }}"
+                loading="lazy">
+            {% else %}
+              {{ 'collection-1' | placeholder_svg_tag }}
+            {% endif %}
+          </div>
+
+          {% if section.settings.show_category_text %}
+            <div class="lag-cat-text">
+              <div class="lag-cat-label">{{ block.settings.label }}</div>
+              {% if block.settings.subtext != blank %}
+                <div class="lag-cat-subtext">{{ block.settings.subtext }}</div>
+              {% endif %}
+            </div>
+          {% endif %}
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Lagorii - Category Grid",
+  "settings": [
+    {
+      "type": "color",
+      "id": "section_bg",
+      "label": "Section background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "image_picker",
+      "id": "section_bg_image",
+      "label": "Section background image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading text",
+      "default": "Featured Store"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#111111"
+    },
+    {
+      "type": "range",
+      "id": "heading_weight",
+      "label": "Heading weight",
+      "min": 400,
+      "max": 800,
+      "step": 100,
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "heading_size_m",
+      "label": "Heading size mobile",
+      "min": 12,
+      "max": 40,
+      "step": 1,
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "heading_size_d",
+      "label": "Heading size desktop",
+      "min": 14,
+      "max": 60,
+      "step": 1,
+      "default": 30
+    },
+    {
+      "type": "image_picker",
+      "id": "heading_image_desktop",
+      "label": "Heading image (Desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "heading_image_mobile",
+      "label": "Heading image (Mobile)"
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_tb",
+      "label": "Heading padding top & bottom",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_padding_lr",
+      "label": "Heading padding left & right",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "heading_image_gap",
+      "label": "Heading bottom spacing",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "default": 8
+    },
+    {
+      "type": "checkbox",
+      "id": "show_category_text",
+      "label": "Show category text",
+      "default": true
+    },
+    {
+      "type": "font_picker",
+      "id": "cat_font",
+      "label": "Category font",
+      "default": "sans-serif"
+    },
+    {
+      "type": "color",
+      "id": "subtext_color",
+      "label": "Subtext color",
+      "default": "#777777"
+    },
+    {
+      "type": "range",
+      "id": "cat_weight",
+      "label": "Category weight",
+      "min": 400,
+      "max": 700,
+      "step": 100,
+      "default": 500
+    },
+    {
+      "type": "range",
+      "id": "cat_size_m",
+      "label": "Category size mobile",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "default": 11
+    },
+    {
+      "type": "range",
+      "id": "cat_size_d",
+      "label": "Category size desktop",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "subtext_size_m",
+      "label": "Subtext size mobile",
+      "min": 9,
+      "max": 18,
+      "step": 1,
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "subtext_size_d",
+      "label": "Subtext size desktop",
+      "min": 10,
+      "max": 22,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "cat_min_height",
+      "label": "Text block height",
+      "min": 20,
+      "max": 90,
+      "step": 2,
+      "default": 38
+    },
+    {
+      "type": "range",
+      "id": "image_radius",
+      "label": "Image radius",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "image_text_gap",
+      "label": "Image to text gap",
+      "min": 0,
+      "max": 24,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "grid_gap_mobile",
+      "label": "Mobile gap",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "label": "Desktop gap",
+      "min": 4,
+      "max": 40,
+      "step": 2,
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "mobile_columns",
+      "label": "Mobile columns",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "desktop_columns",
+      "label": "Desktop columns",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "padding_m",
+      "label": "Inner padding mobile left & right",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_d",
+      "label": "Inner padding desktop left & right",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "outer_top_padding_mobile",
+      "label": "Outer top padding mobile",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "outer_bottom_padding_mobile",
+      "label": "Outer bottom padding mobile",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "outer_top_padding_desktop",
+      "label": "Outer top padding desktop",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "outer_bottom_padding_desktop",
+      "label": "Outer bottom padding desktop",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Category name",
+          "default": "Category"
+        },
+        {
+          "type": "text",
+          "id": "subtext",
+          "label": "Subtext",
+          "default": "Shop now"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Lagorii - Category Grid",
+      "blocks": [
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" },
+        { "type": "category" }
+      ]
+    }
+  ]
+}
+{% endschema %}

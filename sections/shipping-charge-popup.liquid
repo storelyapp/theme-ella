@@ -1,0 +1,1642 @@
+<div class="shiping_charge_popup {% if template contains 'product' %} has_popup{% endif %}"
+     role="dialog" aria-modal="true" aria-labelledby="shippingTitle">
+  
+  <div class="shiping_charge_popup_inner">
+    <!-- drag handle for mobile -->
+    <div class="sheet__handle" role="button" tabindex="0" aria-label="Close"></div>
+
+    {%- if template contains 'product' -%}
+      <a href="javascript:void(0);" class="close" id="close_shipping_charges_popup" aria-label="Close">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+          <path d="M 38.982422 6.9707031 A 2.0002 2.0002 0 0 0 37.585938 7.5859375 
+                   L 24 21.171875 L 10.414062 7.5859375 A 2.0002 2.0002 0 0 0 
+                   8.9785156 6.9804688 A 2.0002 2.0002 0 0 0 7.5859375 10.414062 
+                   L 21.171875 24 L 7.5859375 37.585938 A 2.0002 2.0002 0 1 0 
+                   10.414062 40.414062 L 24 26.828125 L 37.585938 40.414062 
+                   A 2.0002 2.0002 0 1 0 40.414062 37.585938 L 26.828125 24 
+                   L 40.414062 10.414062 A 2.0002 2.0002 0 0 0 
+                   38.982422 6.9707031 z"></path>
+        </svg>
+      </a>
+    {%- endif -%}
+
+    {% if section.settings.title != blank %}
+      <h3 class="popup_title" id="shippingTitle">{{ section.settings.title }}</h3>
+    {% endif %}
+
+    <div class="ship_to_container">
+      {% if section.settings.dropdown_txt != blank %}
+        <div class="cnt_label">{{ section.settings.dropdown_txt }}</div>
+      {% endif %}
+
+      {% assign list = '' %}
+      {% assign data = '' %}
+      {% assign count = 0 %}
+      {% assign first_country = '' %}
+      
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'charges' and block.settings.title != blank -%}
+          
+          {%- if block.settings.title contains ',' -%}
+            {% assign cnt_split = block.settings.title | split: ',' %}
+            {%- for i in cnt_split -%}
+              {%- capture cnt -%}
+                <option value="#ship-{{ block.settings.title | handle }}">{{ i }}</option>
+              {%- endcapture -%}
+              {% assign list = list | append: cnt %}
+              {% if count == 0 %}{% assign first_country = i %}{% endif %}
+              {% assign count = count | plus: 1 %}
+            {%- endfor -%}
+          {%- else -%}
+            {%- capture cnt -%}
+              <option value="#ship-{{ block.settings.title | handle }}">{{ block.settings.title }}</option>
+            {%- endcapture -%}
+            {% assign list = list | append: cnt %}
+            {% if count == 0 %}{% assign first_country = block.settings.title %}{% endif %}
+            {% assign count = count | plus: 1 %}
+          {%- endif -%}
+  
+          {% capture detail %}
+            <div class="ship-country" id="ship-{{ block.settings.title | handle }}" {% if count == 1 %}style="display:block;"{% endif %}>
+              <div class="shipping_charges_table_container">
+                <table class="shipping_charges_table">
+                  <thead>
+                    <tr>
+                      <td class="shipping_charges_table_header">{{ section.settings.order_txt }}</td>
+                      <td class="shipping_charges_table_header">{{ section.settings.ship_txt }}</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {%- for ii in (1..10) -%}
+                      {%- capture min -%}min{{ ii }}{%- endcapture -%}
+                      {%- capture max -%}max{{ ii }}{%- endcapture -%}
+                      {%- capture charge -%}charge{{ ii }}{%- endcapture -%}
+                      {%- if block.settings[min] != blank or block.settings[max] != blank and block.settings[charge] != blank -%}
+                        {% assign bmin = block.settings[min] | plus: 0 %}
+                        {% assign bmax = block.settings[max] | plus: 0 %}
+                        {% assign bcharge = block.settings[charge] | plus: 0 %}
+                        <tr>
+                          <td class="{{ bmin }}">
+                            {%- if bmin > 0 -%}{{ bmin | times: 100 | money_with_currency }}{%- else -%}Upto&nbsp;{%- endif -%}
+                            {%- if bmin > 0 and bmax > 0 -%} - {%- endif -%}
+                            {%- if bmax > 0 -%}{{ bmax | times: 100 | money_with_currency }}{%- else -%}+{%- endif -%}
+                          </td>
+                          <td>{% if bcharge == 0 %}Free{% else %}{{ bcharge | times: 100 | money_with_currency }}{% endif %}</td>
+                        </tr>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          {% endcapture %}
+          {% assign data = data | append: detail %}
+        {%- endif -%}
+      {%- endfor -%}
+
+      {% if list != blank %}
+        <div class="cnt_list">
+          <select id="ship_to" class="select__select" name="ship_to">
+            {{ list }}
+          </select>
+        </div>
+      {%- endif -%}
+    </div>
+  
+    <div class="charge_table">
+      <div class="country_name">{{ first_country }}</div>
+      {{ data }}
+    </div>
+  </div>
+</div>
+
+<script>
+$(function(){
+  const $popup = $('.shiping_charge_popup');
+  const $sheet = $('.shiping_charge_popup_inner');
+  const $close = $('#close_shipping_charges_popup');
+  let lastFocus = null;
+
+  // Open (your existing handler already adds the classes)
+  $('body').on('click','.open_charge_popup',function(e){
+    lastFocus = document.activeElement;
+    setTimeout(()=> {
+      // focus first interactive element
+      const $first = $sheet.find('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])').first();
+      $first.trigger('focus');
+    }, 10);
+  });
+
+  // Click backdrop to close
+  $popup.on('click', function(e){
+    // if click is outside the inner sheet
+    if(!$(e.target).closest('.shiping_charge_popup_inner').length){
+      $('#close_shipping_charges_popup').trigger('click');
+    }
+  });
+
+  // ESC to close + simple focus trap
+  $(document).on('keydown', function(e){
+    if(!$popup.hasClass('active_popup')) return;
+    if(e.key === 'Escape'){
+      e.preventDefault();
+      $('#close_shipping_charges_popup').trigger('click');
+    }
+    if(e.key === 'Tab'){
+      const $focusables = $sheet.find('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])').filter(':visible');
+      if(!$focusables.length) return;
+      const first = $focusables[0], last = $focusables[$focusables.length - 1];
+      if(e.shiftKey && document.activeElement === first){ e.preventDefault(); $(last).focus(); }
+      else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); $(first).focus(); }
+    }
+  });
+
+  // Restore focus on close
+  $('body').on('click','#close_shipping_charges_popup', function(){
+    if(lastFocus) $(lastFocus).focus();
+  });
+
+  // Swipe-to-close (mobile)
+  let startY=null, curY=null, dragging=false;
+  $sheet.on('touchstart', function(ev){
+    if(window.matchMedia('(min-width:768px)').matches) return;
+    dragging = true;
+    startY = ev.originalEvent.touches[0].clientY;
+    curY = startY;
+  });
+  $sheet.on('touchmove', function(ev){
+    if(!dragging) return;
+    curY = ev.originalEvent.touches[0].clientY;
+    const diff = Math.max(0, curY - startY);
+    $(this).css('transform', `translateY(${diff}px)`);
+  });
+  $sheet.on('touchend', function(){
+    if(!dragging) return;
+    const diff = Math.max(0, curY - startY);
+    dragging = false; startY = curY = null;
+    if(diff > 80){ $('#close_shipping_charges_popup').trigger('click'); }
+    else { $(this).css('transform', ''); }
+  });
+
+  // Tap/click/keyboard on the bar closes the sheet
+  $('body').on('click', '.sheet__handle', function(){
+    $('#close_shipping_charges_popup').trigger('click');
+  });
+  $('body').on('keydown', '.sheet__handle', function(e){
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      $('#close_shipping_charges_popup').trigger('click');
+    }
+  });
+
+
+});
+</script>
+<script>
+  $(document).ready(function(){
+    $('body').on('click','.open_charge_popup',function(e){
+      e.preventDefault();
+      $('.shiping_charge_popup').addClass('active_popup');
+      $('body').addClass('active_ship_charge');
+    });
+    $('body').on('click','#close_shipping_charges_popup',function(e){
+      e.preventDefault();
+      $('.shiping_charge_popup').removeClass('active_popup');
+      $('body').removeClass('active_ship_charge');
+    });
+    $('body').on('change','#ship_to',function(e){
+      e.preventDefault();
+      var id = $(this).val();
+      var txt = $(this).find('option:checked').text();
+      $('.ship-country').hide();
+      $('.shiping_charge_popup_inner .country_name').text(txt);
+      $(id).show();
+    });
+  });
+</script>
+{% schema %}
+  {
+    "name": "Shipping Charge",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Shipping Charges"
+      },
+      {
+        "type": "text",
+        "id": "dropdown_txt",
+        "label": "DropDown Label",
+        "default": "Ship To:"
+      },
+      {
+        "type": "text",
+        "id": "order_txt",
+        "label": "Order Value Field Title",
+        "default": "Total Order Value"
+      },
+      {
+        "type": "text",
+        "id": "ship_txt",
+        "label": "Shipping Charge Field Title",
+        "default": "Shipping Charges"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "charges",
+        "name": "charges",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Add Country Names",
+            "info": " Add country name with comma(,) seperate in which you want to display below charges detail" 
+          },
+          {
+            "type": "paragraph",
+            "content": "If you don't add any Min Value or if you add Min Value to 0 then it will display 'Upto' text. If you don't add any Max Value or if you add Max Value to 0 then it will display '+' sign."
+          },
+          {
+            "type": "header",
+            "content": "Charge 1"
+          },
+          {
+            "type": "number",
+            "id": "min1",
+            "label": "Min Value"
+          },
+          {
+            "type": "number",
+            "id": "max1",
+            "label": "Max Value"
+          },
+          {
+            "type": "number",
+            "id": "charge1",
+            "label": "Ship Charge"
+          },
+          {
+            "type": "header",
+            "content": "Charge 2"
+          },
+          {
+            "type": "number",
+            "id": "min2",
+            "label": "Min Value"
+          },
+          {
+            "type": "number",
+            "id": "max2",
+            "label": "Max Value"
+          },
+          {
+            "type": "number",
+            "id": "charge2",
+            "label": "Ship Charge"
+          },
+          {
+            "type": "header",
+            "content": "Charge 3"
+          },
+          {
+            "type": "number",
+            "id": "min3",
+            "label": "Min Value"
+          },
+          {
+            "type": "number",
+            "id": "max3",
+            "label": "Max Value"
+          },
+          {
+            "type": "number",
+            "id": "charge3",
+            "label": "Ship Charge"
+          },
+          {
+            "type": "header",
+            "content": "Charge 4"
+          },
+          {
+            "type": "number",
+            "id": "min4",
+            "label": "Min Value"
+          },
+          {
+            "type": "number",
+            "id": "max4",
+            "label": "Max Value"
+          },
+          {
+            "type": "number",
+            "id": "charge4",
+            "label": "Ship Charge"
+          },
+          {
+            "type": "header",
+            "content": "Charge 5"
+          },
+          {
+            "type": "number",
+            "id": "min5",
+            "label": "Min Value"
+          },
+          {
+            "type": "number",
+            "id": "max5",
+            "label": "Max Value"
+          },
+          {
+            "type": "number",
+            "id": "charge5",
+            "label": "Ship Charge"
+          },
+          {
+            "type": "header",
+            "content": "Charge 6"
+          },
+          {
+            "type": "number",
+            "id": "min6",
+            "label": "Min Value"
+          },
+          {
+            "type": "number",
+            "id": "max6",
+            "label": "Max Value"
+          },
+          {
+            "type": "number",
+            "id": "charge6",
+            "label": "Ship Charge"
+          },
+          {
+            "type": "header",
+            "content": "Charge 7"
+          },
+          {
+            "type": "number",
+            "id": "min7",
+            "label": "Min Value"
+          },
+          {
+            "type": "number",
+            "id": "max7",
+            "label": "Max Value"
+          },
+          {
+            "type": "number",
+            "id": "charge7",
+            "label": "Ship Charge"
+          },
+          {
+            "type": "header",
+            "content": "Charge 8"
+          },
+          {
+            "type": "number",
+            "id": "min8",
+            "label": "Min Value"
+          },
+          {
+            "type": "number",
+            "id": "max8",
+            "label": "Max Value"
+          },
+          {
+            "type": "number",
+            "id": "charge8",
+            "label": "Ship Charge"
+          },
+          {
+            "type": "header",
+            "content": "Charge 9"
+          },
+          {
+            "type": "number",
+            "id": "min9",
+            "label": "Min Value"
+          },
+          {
+            "type": "number",
+            "id": "max9",
+            "label": "Max Value"
+          },
+          {
+            "type": "number",
+            "id": "charge9",
+            "label": "Ship Charge"
+          },
+          {
+            "type": "header",
+            "content": "Charge 10"
+          },
+          {
+            "type": "number",
+            "id": "min10",
+            "label": "Min Value"
+          },
+          {
+            "type": "number",
+            "id": "max10",
+            "label": "Max Value"
+          },
+          {
+            "type": "number",
+            "id": "charge10",
+            "label": "Ship Charge"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}
+
+<style>
+:root{
+  --lag-brand: #E87529;
+  --lag-bg: #fff;
+  --lag-text: #222;
+  --lag-muted: #6b7280;
+  --lag-line: #e5e7eb;
+  --lag-radius: 18px;
+  --lag-shadow: 0 24px 48px rgba(0,0,0,.22);
+}
+
+/* Backdrop */
+.shiping_charge_popup{
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.42);
+  backdrop-filter: blur(2px);
+  opacity: 0; visibility: hidden;
+  transition: opacity .25s ease, visibility .25s step-end;
+  z-index: 9998;
+}
+.shiping_charge_popup.active_popup{
+  opacity: 1; visibility: visible;
+  transition: opacity .25s ease, visibility 0s;
+}
+
+/* SHEET CONTAINER (mobile bottom sheet by default) */
+.shiping_charge_popup_inner{
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  background: var(--lag-bg);
+  color: var(--lag-text);
+  border-top-left-radius: var(--lag-radius);
+  border-top-right-radius: var(--lag-radius);
+  box-shadow: var(--lag-shadow);
+  transform: translateY(100%);
+  transition: transform .28s ease;
+  max-height: 80vh;               /* scroll inside */
+  display: grid;
+  grid-template-rows: auto 1fr;   /* header + content */
+  overflow: hidden;
+}
+.shiping_charge_popup.active_popup .shiping_charge_popup_inner{
+  transform: translateY(0);
+}
+
+/* Drag handle */
+.sheet__handle{
+  width: 44px; height: 4px; border-radius: 999px;
+  background: #d1d5db; margin: 10px auto 2px;
+}
+.shiping_charge_popup_inner::before{
+  content: ""; display: none;     /* fallback if you remove .sheet__handle */
+}
+
+/* Header bits */
+.popup_title{
+  color: var(--lag-brand);
+  font-weight: 700;
+  font-size: 18px;
+  margin: 6px 16px 8px;
+}
+#close_shipping_charges_popup{
+  position: absolute; top: 10px; right: 10px;
+  width: 36px; height: 36px; display: grid; place-items: center;
+  border: 1px solid var(--lag-line); border-radius: 10px; background: #fff;
+}
+
+/* Content area */
+.ship_to_container,
+.charge_table{ padding: 8px 16px 16px; overflow: auto; }
+.cnt_label{ font-size: 13px; color: var(--lag-muted); margin: 6px 0; }
+
+.select__select{
+  width: 100%; padding: 12px 14px;
+  border: 1px solid var(--lag-line); border-radius: 10px;
+  background: #fff; font-size: 16px;
+}
+
+.country_name{
+  margin: 12px 0 8px; font-size: 14px; color: var(--lag-muted);
+}
+
+/* Table clean style */
+.shipping_charges_table_container{
+  border: 1px solid var(--lag-line); border-radius: 12px; overflow: hidden;
+}
+.shipping_charges_table{ width: 100%; border-collapse: collapse; }
+.shipping_charges_table_header{
+  font-weight: 700; background: #fafafa; border-bottom: 1px solid var(--lag-line);
+  padding: 12px 14px;
+}
+.shipping_charges_table td{
+  padding: 12px 14px; border-bottom: 1px solid var(--lag-line);
+}
+.shipping_charges_table td:last-child{ text-align: right; }
+.shipping_charges_table td .money{}
+.shipping_charges_table td:empty{ display:none; }
+.shipping_charges_table td, .shipping_charges_table_header{ font-size: 15px; }
+.shipping_charges_table td:contains("Free"), .shipping_charges_table td.is-free{ color: #239b56; font-weight: 700; }
+
+/* Desktop: center modal */
+@media (min-width: 768px){
+  .shiping_charge_popup_inner{
+    left: 50%; right: auto; bottom: auto; top: 50%;
+    transform: translate(-50%, 20%) scale(.98);
+    border-radius: var(--lag-radius);
+    width: min(560px, 92vw);
+    max-height: min(80vh, 640px);
+  }
+  .shiping_charge_popup.active_popup .shiping_charge_popup_inner{
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .sheet__handle{ display:none; }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce){
+  .shiping_charge_popup, .shiping_charge_popup_inner{ transition: none; }
+}
+
+/* Lock body scroll when open */
+body.active_ship_charge{ overflow: hidden; }
+
+/* --- 1) CLEAN SELECT: remove patterned bg, add neutral arrow --- */
+.shiping_charge_popup .select__select{
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: #fff !important;
+  background-image: none !important;              /* kill theme bg */
+  box-shadow: none !important;
+  border: 1px solid var(--lag-line);
+  border-radius: 10px;
+  padding: 12px 42px 12px 14px;                   /* space for arrow */
+  line-height: 1.25;
+}
+
+/* custom arrow */
+.shiping_charge_popup .cnt_list{ position: relative; }
+.shiping_charge_popup .cnt_list::after{
+  content: "";
+  position: absolute; inset: 0 14px 0 auto;       /* right side */
+  width: 12px; height: 12px; margin: auto 0;
+  pointer-events: none;
+  background: currentColor;
+  -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="%23222" d="M7 10l5 5 5-5z"/></svg>') no-repeat center / contain;
+          mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="%23222" d="M7 10l5 5 5-5z"/></svg>') no-repeat center / contain;
+  color: #8a8f98;
+}
+
+/* --- 2) SHEET REALLY AT THE BOTTOM (safe areas, admin preview) --- */
+.shiping_charge_popup_inner{
+  bottom: 0;
+  padding-bottom: max(16px, env(safe-area-inset-bottom)); /* iOS home indicator */
+}
+@supports not (padding-bottom: env(safe-area-inset-bottom)){
+  .shiping_charge_popup_inner{ padding-bottom: 16px; }
+}
+
+/* Sometimes preview bars add an offset; ensure backdrop always fills */
+.shopify-preview-bar .shiping_charge_popup{ inset: 0 !important; }
+
+/* --- 3) BETTER TABLE CONTRAST --- */
+.shiping_charges_table_header{
+  color: #111; background: #fafafa;
+  font-weight: 800; letter-spacing: .02em;
+}
+.shiping_charges_table td{ color: #222; }
+.shiping_charges_table tr:hover td{ background: #fcfcfc; } /* tiny hover hint */
+
+/* Optional: compact on very small screens */
+@media (max-width: 380px){
+  .shipping_charges_table td,
+  .shipping_charges_table_header{ font-size: 14px; padding: 10px 12px; }
+}
+
+/* --- Compact bottom-sheet (mobile-first) --- */
+.shiping_charge_popup{ background: rgba(0,0,0,.25); backdrop-filter: none; } /* lighter, less dark */
+
+.shiping_charge_popup_inner{
+  max-height: 68vh;                 /* take less vertical space */
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+/* tighten paddings */
+.ship_to_container{ padding: 4px 16px 8px; }
+.charge_table{ padding: 6px 16px 12px; }
+.cnt_label{ margin: 4px 0 6px; }
+
+/* remove duplicate country heading under the dropdown */
+.shiping_charge_popup_inner .country_name{ display:none !important; }
+
+/* dropdown smaller */
+.shiping_charge_popup .select__select{
+  padding: 10px 40px 10px 12px;
+  font-size: 15px;
+  min-height: 40px;
+}
+
+/* table compact + readable */
+.shipping_charges_table_container{ border-radius: 10px; }
+.shipping_charges_table_header{
+  background: #f8f8f8 !important;
+  color: #111 !important;                 /* force dark text */
+  font-weight: 700;
+  font-size: 12.5px;
+  white-space: nowrap;                    /* keep on one line */
+  padding: 10px 12px;
+}
+.shipping_charges_table td{
+  padding: 10px 12px;
+  font-size: 14.5px;
+}
+.shipping_charges_table td:last-child{ text-align: right; }
+
+/* slightly smaller title & close gap */
+.popup_title{
+  font-size: 16px;
+  margin: 8px 16px 6px;
+}
+#close_shipping_charges_popup{ top: 8px; right: 8px; width: 32px; height: 32px; }
+
+/* extra-compact on very small screens */
+@media (max-width: 360px){
+  .shiping_charge_popup_inner{ max-height: 64vh; }
+  .shipping_charges_table_header{ font-size: 12px; }
+  .shipping_charges_table td{ font-size: 14px; }
+}
+
+/* ============== Shipping Sheet — v2 compact, legible ============== */
+
+/* Softer backdrop (not too dark) */
+.shiping_charge_popup{
+  background: rgba(0,0,0,.18) !important;
+  backdrop-filter: none !important;
+}
+
+/* Container: cleaner, tighter, like your size chart */
+.shiping_charge_popup_inner{
+  max-height: 70vh;
+  padding: 8px 0 12px;                /* slim gutters, we’ll add inner padding below */
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  box-shadow: 0 16px 40px rgba(0,0,0,.18);
+}
+
+/* Header */
+.popup_title{
+  font-size: 18px; font-weight: 800; color: var(--lag-brand);
+  margin: 10px 20px 8px;
+}
+#close_shipping_charges_popup{
+  top: 8px; right: 8px; width: 34px; height: 34px;
+}
+.shiping_charge_popup_inner .sheet__handle{ margin-top: 8px; }
+
+/* Divider under title (like pic 3) */
+.popup_title + *{
+  position: relative;
+}
+.popup_title + *::before{
+  content: ""; position: absolute; left: 20px; right: 20px; top: -6px;
+  height: 1px; background: #e9ecef;
+}
+
+/* Content padding */
+.ship_to_container,
+.charge_table{
+  padding: 0 20px;
+}
+
+/* Label + dropdown — compact & neutral */
+.cnt_label{ font-size: 13px; color: #6b7280; margin: 10px 0 6px; }
+
+.shiping_charge_popup .select__select{
+  -webkit-appearance: none; appearance: none;
+  background-color: #fff !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border: 1px solid #e3e6ea !important;
+  border-radius: 10px; padding: 11px 40px 11px 12px; font-size: 15px;
+}
+.shiping_charge_popup .cnt_list{ position: relative; }
+.shiping_charge_popup .cnt_list::after{
+  content:""; position:absolute; right: 14px; top:0; bottom:0; margin:auto 0;
+  width: 12px; height: 12px; color:#8a8f98; pointer-events:none;
+  -webkit-mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%238a8f98" d="M7 10l5 5 5-5"/></svg>') no-repeat center/contain;
+          mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%238a8f98" d="M7 10l5 5 5-5"/></svg>') no-repeat center/contain;
+  background: currentColor;
+}
+
+/* Hide duplicate country label to save space */
+.shiping_charge_popup_inner .country_name{ display:none !important; }
+
+/* Table — like pic 3: clear header, subtle dividers, readable cells */
+.shipping_charges_table_container{
+  border: 1px solid #e9ecef; border-radius: 12px; overflow: hidden;
+  margin-top: 14px;
+}
+
+.shipping_charges_table{
+  width: 100%; border-collapse: collapse; table-layout: fixed;
+}
+
+.shipping_charges_table thead td{
+  background: #f7f8fa; color: #22303c; font-weight: 800;
+  font-size: 13px; letter-spacing: .02em; text-transform: none;
+  padding: 10px 12px; white-space: nowrap;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.shipping_charges_table tbody td{
+  padding: 11px 12px; font-size: 15px; color: #1f2937;
+  border-bottom: 1px solid #f0f2f5;
+}
+.shipping_charges_table tbody tr:last-child td{ border-bottom: 0; }
+.shipping_charges_table tbody td:last-child{ text-align: right; }
+
+/* “Free” highlight like pic 3 */
+.shipping_charges_table tbody td:contains("Free"),
+.shipping_charges_table tbody td.is-free{
+  color: #1fa463; font-weight: 700;
+}
+
+/* Make the two columns feel balanced */
+.shipping_charges_table td:first-child{ width: 56%; }
+.shipping_charges_table td:last-child{ width: 44%; }
+
+/* Compact on very small phones */
+@media (max-width: 360px){
+  .shiping_charge_popup_inner{ max-height: 64vh; }
+  .shipping_charges_table thead td{ font-size: 12px; padding: 8px 10px; }
+  .shipping_charges_table tbody td{ font-size: 14px; padding: 9px 10px; }
+}
+
+/* Desktop modal polish */
+@media (min-width: 768px){
+  .shiping_charge_popup_inner{
+    width: 560px; max-height: min(80vh, 640px);
+    left: 50%; right: auto; top: 50%; bottom: auto;
+    transform: translate(-50%, 20%) scale(.98);
+    border-radius: 16px;
+  }
+  .shiping_charge_popup.active_popup .shiping_charge_popup_inner{
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .sheet__handle{ display:none; }
+}
+/* ===== Mobile: full-width bottom sheet, no X, grab bar to close ===== */
+@media (max-width: 767px){
+  /* backdrop unchanged */
+
+  /* full width, edge-to-edge */
+  .shiping_charge_popup_inner{
+    left: 0 !important;
+    right: 0 !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    border-top-left-radius: 16px !important;
+    border-top-right-radius: 16px !important;
+    padding-left: 0;
+    padding-right: 0;
+    max-height: 86vh; /* a bit taller now */
+  }
+
+  /* hide the X button completely */
+  #close_shipping_charges_popup{
+    display: none !important;
+  }
+
+  /* grab bar zone (tap or drag to close) */
+  .sheet__handle{
+    height: 28px;               /* larger hit area */
+    margin: 6px auto 6px !important;
+    position: relative;
+    cursor: grab;
+    background: transparent !important;
+  }
+  .sheet__handle::after{
+    content:"";
+    position:absolute; left:50%; top:8px; transform:translateX(-50%);
+    width: 44px; height: 5px; border-radius: 999px;
+    background:#d5d9de;        /* the bar itself */
+  }
+
+  /* inner content paddings (since we removed outer left/right padding) */
+  .popup_title{ margin: 6px 20px 6px !important; }
+  .ship_to_container,
+  .charge_table{ padding: 0 20px 14px !important; }
+}
+
+/* ===== Table header: smaller and less bold ===== */
+.shipping_charges_table thead td,
+.shipping_charges_table_header{
+  font-size: 12px !important;      /* was ~13–15 */
+  font-weight: 600 !important;     /* lighter than 700/800 */
+  letter-spacing: .01em !important;
+}
+
+/* Slightly lighten row text to balance */
+.shipping_charges_table tbody td{
+  font-size: 14.5px;               /* keep readable */
+  color: #26323d;
+}
+
+/* Optional: even smaller headers on tiny phones */
+@media (max-width: 360px){
+  .shipping_charges_table thead td{ font-size: 11.5px !important; }
+}
+
+@media (max-width: 768px){
+/* ===== Visible grab bar (always shows) ===== */
+.sheet__handle{
+  height: 28px !important;         /* tap target */
+  margin: 8px auto 6px !important;
+  position: relative;
+  cursor: grab;
+  background: transparent !important;
+}
+.sheet__handle::after{
+  content:"";
+  position:absolute; left:50%; top:8px; transform:translateX(-50%);
+  width: 56px; height: 6px; border-radius: 999px;
+  background:#cbd5e1;              /* light gray bar */
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.8);
+}
+}
+/* ===== Table: minimal, centered, no orange box, clean corners ===== */
+.shipping_charges_table_container{
+  border: 1px solid #e9ecef !important;
+  border-radius: 12px !important;
+  overflow: hidden;                 /* keeps rounded corners */
+  background: #fff;                 /* prevents “whitening out” */
+  background-clip: padding-box;     /* no halo at corners */
+}
+
+/* collapse borders and use subtle row dividers */
+.shipping_charges_table{
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  background: #fff;                 /* match container */
+}
+
+.shipping_charges_table thead td{
+  background: #f7f8fa !important;
+  color: #243041;
+  font-weight: 600 !important;      /* lighter */
+  font-size: 12px !important;       /* smaller */
+  padding: 9px 10px !important;
+  border-bottom: 1px solid #e9ecef !important;
+  text-align: center;               /* header centered */
+  letter-spacing: .01em;
+  white-space: nowrap;
+}
+
+.shipping_charges_table tbody td{
+  padding: 11px 10px !important;
+  font-size: 14.5px;
+  color: #222;
+  border-bottom: 1px solid #f1f3f5 !important;
+  text-align: center;               /* center all values */
+}
+.shipping_charges_table tbody tr:last-child td{ border-bottom: 0 !important; }
+
+/* optional: make first column slightly wider */
+.shipping_charges_table td:first-child{ width: 60%; }
+
+/* Free highlight */
+.shipping_charges_table tbody td:contains("Free"),
+.shipping_charges_table tbody td.is-free{
+  color: #18a062; font-weight: 700;
+}
+
+/* reduce the heavy orange column rule (remove if present) */
+.shipping_charges_table td,
+.shipping_charges_table thead td{
+  border-left: none !important;
+  border-right: none !important;
+}
+
+/* on tiny phones, tighten just a bit more */
+@media (max-width: 360px){
+  .shipping_charges_table thead td{ font-size: 11.5px !important; }
+  .shipping_charges_table tbody td{ font-size: 14px !important; }
+}
+
+/* always show a centered grab bar on the sheet */
+.sheet__handle{
+  display:block !important;
+  position: relative !important;
+  height: 30px !important;               /* big tap area */
+  margin: 8px auto 2px !important;
+  background: transparent !important;
+  cursor: grab;
+  z-index: 2;                             /* sit above content */
+}
+.sheet__handle::after{
+  content:"";
+  position:absolute; left:50%; top:9px; transform:translateX(-50%);
+  width: 56px; height: 6px;
+  border-radius: 999px;
+  background: #cbd5e1;                    /* visible on white */
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.85);
+}
+
+/* container keeps rounded corners; no halo */
+.shipping_charges_table_container{
+  border: 1px solid #e9ecef !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  background: #fff;
+  background-clip: padding-box;
+}
+
+/* reset ALL borders coming from theme */
+.shipping_charges_table,
+.shipping_charges_table *{
+  border: 0 !important;
+}
+
+/* basic layout */
+.shipping_charges_table{
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse !important;
+}
+
+/* header: smaller, lighter, centered */
+.shipping_charges_table thead td{
+  background:#f7f8fa !important;
+  color:#243041 !important;
+  font-size:12px !important;
+  font-weight:600 !important;
+  text-align:center !important;
+  letter-spacing:.01em;
+  padding:10px 10px !important;
+  border-bottom:1px solid #e9ecef !important;
+}
+
+/* body: centered values, subtle row separators */
+.shipping_charges_table tbody td{
+  color:#222; font-size:14.5px;
+  text-align:center !important;
+  padding:12px 10px !important;
+}
+.shipping_charges_table tbody tr + tr td{
+  border-top:1px solid #f1f3f5 !important;
+}
+
+/* optional: mild column divider (neutral, not orange) */
+.shipping_charges_table thead td:first-child,
+.shipping_charges_table tbody td:first-child{
+  border-right:1px solid #eef1f4 !important;
+}
+
+/* highlight "Free" */
+.shipping_charges_table tbody td:contains("Free"),
+.shipping_charges_table tbody td.is-free{
+  color:#18a062 !important; font-weight:700 !important;
+}
+/* === Grab bar visible only on mobile === */
+@media (max-width: 767px){
+  .sheet__handle{ display:block !important; }
+}
+@media (min-width: 768px){
+  .sheet__handle{ display:none !important; }
+}
+
+/* === Equal padding under the table === */
+.charge_table{
+  padding: 0 20px 20px !important;   /* same L/R and bottom */
+}
+
+/* optional: match ship_to_container too */
+.ship_to_container{
+  padding: 0 20px 14px !important;
+}
+
+/* === Highlight "Free" in green === */
+/* Green highlight for Free */
+.shipping_charges_table td.is-free{
+  color:#16a34a !important;
+  font-weight:500 !important;
+}
+
+/* --- Fix orange outline & make spacing tidy --- */
+
+/* 1) Remove any orange outline/box-shadow around the table */
+.shipping_charges_table_container{
+  border: 1px solid #e9ecef !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+
+  /* equal padding inside the rounded box, no external margins */
+  padding: 8px !important;         /* same on all sides */
+  margin: 8px 0 0 !important;      /* small top gap only */
+  border-radius: 12px !important;
+  background: #fff;
+  background-clip: padding-box;
+}
+
+/* 2) Neutralize any theme borders that turn orange */
+.shipping_charges_table,
+.shipping_charges_table *{
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+/* 3) Table: keep only subtle separators; center everything */
+.shipping_charges_table{
+  width: 100%;
+  border-collapse: collapse !important;
+}
+.shipping_charges_table thead td{
+  border: 0 !important;            /* header edge uses container border */
+  background: #f7f8fa !important;
+  color: #243041 !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  text-align: center !important;
+  padding: 10px !important;
+}
+.shipping_charges_table tbody td{
+  text-align: center !important;
+  padding: 12px 10px !important;
+  border-top: 1px solid #f1f3f5 !important;  /* row dividers only */
+  border-left: 0 !important;
+  border-right: 0 !important;
+  border-bottom: 0 !important;
+}
+.shipping_charges_table td:first-child{
+  width: 60%;
+  border-right: 1px solid #eef1f4 !important; /* soft column divider */
+}
+
+/* 4) Reduce space between dropdown and table */
+.ship_to_container{ padding-bottom: 10px !important; }  /* was larger */
+.shipping_charges_table_container{ margin-top: 8px !important; }      /* tighter */
+
+/* ===== Close bar (grab handle) color ===== */
+.sheet__handle{ position:relative; height:28px; margin:8px auto 6px; background:transparent; }
+.sheet__handle::after{
+  content:""; position:absolute; left:50%; top:8px; transform:translateX(-50%);
+  width:56px; height:6px; border-radius:999px;
+  background: var(--lag-brand);          /* <- brand orange */
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.7);
+}
+
+/* ===== Hide the native select but keep it accessible ===== */
+.select__select.visually-hidden{
+  position:absolute !important; width:1px !important; height:1px !important;
+  padding:0 !important; margin:-1px !important; overflow:hidden !important;
+  clip:rect(0 0 0 0) !important; white-space:nowrap !important; border:0 !important;
+}
+
+/* ===== Custom country dropdown ===== */
+.country-select{ position:relative; }
+.country-trigger{
+  width:100%; display:flex; align-items:center; justify-content:space-between;
+  gap:8px; padding:11px 12px; border:1px solid #e3e6ea; border-radius:10px;
+  background:#fff; font-size:15px; line-height:1.25; color:#111;
+}
+.country-trigger::after{
+  content:""; width:12px; height:12px; flex:0 0 12px; background:#8a8f98;
+  -webkit-mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%238a8f98" d="M7 10l5 5 5-5"/></svg>') no-repeat center/contain;
+          mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%238a8f98" d="M7 10l5 5 5-5"/></svg>') no-repeat center/contain;
+}
+
+.country-menu{
+  position:absolute; left:0; right:0; top:calc(100% + 6px); z-index:10000;
+  background:#fff; border:1px solid #e5e7eb; border-radius:12px;
+  box-shadow:0 10px 24px rgba(0,0,0,.12);
+  max-height:264px; /* ~6 rows */ overflow:auto; padding:6px 0; display:none;
+}
+.country-select.is-open .country-menu{ display:block; }
+
+.country-option{
+  list-style:none; padding:10px 12px; cursor:pointer; font-size:15px; color:#1f2937;
+}
+.country-option:hover{ background:#f6f7f9; }
+.country-option.is-selected{ background:#fff7f1; color:var(--lag-brand); font-weight:600; }
+.country-option:focus{ outline:2px solid #dbe4ff; outline-offset:-2px; }
+
+/* tighten gap between label & table */
+.ship_to_container{ padding-bottom:10px !important; }
+.shipping_charges_table_container{ margin-top:8px !important; }
+
+/* Center values + keep "Free" green (already set elsewhere) */
+.shipping_charges_table thead td,
+.shipping_charges_table tbody td{ text-align:center !important; }
+
+/* The ship-to area must not clip the popover */
+.ship_to_container{ overflow: visible !important; }
+
+/* Custom dropdown popover when portaled to <body> */
+.country-menu {
+  max-height: 264px;               /* ~6 rows visible, scroll for the rest */
+  overflow: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 10px 24px rgba(0,0,0,.12);
+  padding: 6px 0;
+  display: none;                   /* shown via JS */
+}
+
+/* items */
+.country-option{ padding:10px 12px; cursor:pointer; font-size:15px; color:#1f2937; }
+.country-option:hover{ background:#f6f7f9; }
+.country-option.is-selected{ background:#fff7f1; color:var(--lag-brand); font-weight:600; }
+
+/* (optional) make the grab bar use brand color */
+.sheet__handle::after{ background: var(--lag-brand); }
+
+/* ===== Custom country list (compact) ===== */
+.lag-select-menu{
+  position:absolute;
+  left:20px; right:20px;            /* align with sheet padding */
+  margin-top:6px;
+  background:#fff;
+  border:1px solid #e9ecef;
+  border-radius:10px;
+  box-shadow:0 10px 28px rgba(0,0,0,.08);
+  z-index:10001;                    /* above the sheet content */
+  max-height: calc(44px * 6 + 8px); /* ~6 rows visible, rest scroll */
+  overflow:auto;
+}
+
+.lag-select-opt{
+  width:100%;
+  display:flex; align-items:center;
+  gap:8px;
+  padding:8px 12px;                 /* tighter */
+  font-size:14px;                   /* smaller */
+  line-height:1.25;
+  color:#1f2937;
+  background:#fff;
+  border:0;
+  text-align:left;
+  cursor:pointer;
+}
+.lag-select-opt + .lag-select-opt{ border-top:1px solid #f2f4f7; }
+
+.lag-select-opt:hover,
+.lag-select-opt:focus{ background:#f8fafc; outline:none; }
+
+/* Pin the selected row to the top */
+.lag-select-opt.is-selected{
+  position:sticky; top:0;
+  background:#fff;
+  font-weight:600;
+  z-index:1;
+  border-bottom:1px solid #eef1f4;
+}
+.lag-select-opt.is-selected::after{
+  content:"✓";
+  margin-left:auto;
+  opacity:.7;
+  font-weight:600;
+}
+
+/* Scrollbar (optional – keeps it subtle) */
+.lag-select-menu::-webkit-scrollbar{ width:8px; }
+.lag-select-menu::-webkit-scrollbar-thumb{
+  background:#e5e7eb; border-radius:6px;
+}
+
+/* trigger looks like the selected option */
+.country-trigger{
+  font-size: 15px;               /* same as list */
+  font-weight: 600 !important;   /* match .country-option.is-selected */
+  color: var(--lag-brand) !important;
+  font-family: Montserrat, sans-serif; 
+}
+
+/* scrollbar sits *inside* the rounded dropdown on desktop */
+@media (min-width: 768px){
+  .country-menu{
+    overflow: auto;
+    /* keep space for the scrollbar inside the box */
+    scrollbar-gutter: stable both-edges;
+    padding-right: 2px;
+
+    /* clip the scrollbar to the rounded corners */
+    border-radius: 12px;
+    background-clip: padding-box;
+    clip-path: inset(0 round 12px);
+
+    /* nicer, thinner scrollbars */
+    scrollbar-width: thin;                         /* Firefox */
+    scrollbar-color: #e5e7eb transparent;         /* Firefox */
+  }
+  .country-menu::-webkit-scrollbar{ width: 8px; }  /* Chrome/Edge/Safari */
+  .country-menu::-webkit-scrollbar-thumb{
+    background: #e5e7eb;
+    border-radius: 8px;
+    border: 2px solid #fff;                        /* keeps it off the edge */
+  }
+  .country-menu::-webkit-scrollbar-track{
+    background: transparent;
+    margin: 6px;                                   /* avoid corner bleed */
+  }
+}
+
+/* 1) Kill the extra grey divider under the title */
+.popup_title + *::before{ display:none !important; }
+
+/* 2) Center the title */
+.popup_title{
+  text-align:center;
+  margin: 10px 56px 8px;           /* leave room for the X on the right */
+  line-height:1.15;
+}
+
+/* 3) Close button: equal spacing, top-right, not touching the orange divider */
+#close_shipping_charges_popup{
+  position:absolute;
+  top:12px !important;             /* equal top/right spacing */
+  right:12px !important;
+  width:40px; height:40px;
+  display:grid; place-items:center;
+  border:1px solid #e6e8ec !important;
+  border-radius:12px;
+  background:#fff;
+  box-shadow:none !important;      /* no glow */
+  z-index:2;                       /* sits above the title line */
+}
+#close_shipping_charges_popup svg{ width:22px; height:22px; }
+
+/* 4) Table — ultra minimal, no orange glow anywhere */
+.shipping_charges_table_container{
+  border:1px solid #e6e8ec !important;
+  border-radius:20px !important;
+  background:#fff !important;
+  box-shadow:none !important;
+  outline:none !important;
+  overflow:hidden !important;
+}
+
+/* hard-reset any theme outlines/shadows that cause orange halos */
+.shipping_charges_table_container *,
+.shipping_charges_table_container *:focus{
+  outline:none !important;
+  box-shadow:none !important;
+}
+
+/* header: centered, clean */
+.shipping_charges_table thead td,
+.shipping_charges_table_header{
+  background:#f7f8fb !important;
+  color:#1f2a37 !important;
+  font-weight:800 !important;
+  text-align:center !important;
+  border:0 !important;                  /* rely on container border */
+  padding:14px 16px !important;
+  letter-spacing:.01em;
+}
+
+/* body cells: centered; only subtle row/column separators */
+.shipping_charges_table tbody td{
+  color:#222;
+  text-align:center !important;
+  padding:16px 16px !important;
+  border:0 !important;
+}
+.shipping_charges_table tbody tr + tr td{
+  border-top:1px solid #eef1f4 !important;   /* soft row divider */
+}
+.shipping_charges_table td:first-child{
+  border-right:1px solid #eef1f4 !important; /* soft column divider */
+}
+
+/* "Free" stays green */
+.shipping_charges_table td:contains("Free"),
+.shipping_charges_table td.is-free{
+  color:#16a34a !important; font-weight:700 !important;
+}
+
+/* Desktop scrollbar stays inside the dropdown (keeps things tidy) */
+@media (min-width:768px){
+  .country-menu{
+    scrollbar-gutter: stable both-edges;
+    border-radius:12px;
+    background-clip:padding-box;
+    clip-path: inset(0 round 12px);
+    scrollbar-width:thin;
+    scrollbar-color:#e5e7eb transparent;
+  }
+  .country-menu::-webkit-scrollbar{ width:8px; }
+  .country-menu::-webkit-scrollbar-thumb{
+    background:#e5e7eb; border-radius:8px; border:2px solid #fff;
+  }
+  .country-menu::-webkit-scrollbar-track{ background:transparent; margin:6px; }
+}
+
+/* Header: no fill, no borders (kills the orange lines too) */
+.shipping_charges_table thead td,
+.shipping_charges_table_header{
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+/* If the theme paints lines via pseudo-elements, disable them */
+.shipping_charges_table thead td::before,
+.shipping_charges_table thead td::after{
+  content: none !important;
+}
+/* Kill any colored fill/outline on the table header */
+.shipping_charges_table thead,
+.shipping_charges_table thead tr,
+.shipping_charges_table thead th,
+.shipping_charges_table thead td{
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+/* Also disable header pseudo-elements some themes use for a top bar */
+.shipping_charges_table thead::before,
+.shipping_charges_table thead::after,
+.shipping_charges_table thead th::before,
+.shipping_charges_table thead th::after,
+.shipping_charges_table thead td::before,
+.shipping_charges_table thead td::after{
+  content: none !important;
+}
+
+/* Make sure no inner vertical rule leaks in */
+.shipping_charges_table thead th + th,
+.shipping_charges_table thead td + td{
+  border-left: 0 !important;
+}
+
+/* If the container contributed a glow, neutralize it too */
+.shipping_charges_table_container{
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+/* ============ Table layout & spacing ============ */
+.shipping_charges_table{
+  width: 100%;
+  table-layout: fixed;              /* equal column widths */
+  border-collapse: separate;        /* so borders don’t double up */
+  border-spacing: 0;
+}
+
+.shipping_charges_table thead td,
+.shipping_charges_table tbody td{
+  text-align: center;
+  vertical-align: middle;
+  padding: 18px 16px;               /* uniform spacing for ALL cells */
+}
+
+/* Header typography (no background kept from your last change) */
+.shipping_charges_table thead td{
+  font-weight: 700;
+  color: #1f2937;                   /* dark neutral */
+  border-bottom: 1px solid #e9ecef; /* header bottom rule */
+}
+
+/* Equal column widths (prevents header jitter) */
+.shipping_charges_table thead td,
+.shipping_charges_table tbody td{
+  width: 50%;
+}
+
+/* Single vertical divider for BOTH header and body */
+.shipping_charges_table thead td:first-child,
+.shipping_charges_table tbody td:first-child{
+  border-right: 1px solid #e9ecef;
+}
+
+/* Row dividers (body only) */
+.shipping_charges_table tbody tr + tr td{
+  border-top: 1px solid #e9ecef;
+}
+
+/* Keep the table minimal: no other borders/glows anywhere */
+.shipping_charges_table td,
+.shipping_charges_table thead td{
+  border-left: 0 !important;
+  border-right: 0;                  /* right border only comes from :first-child rule above */
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+
+/* “Free” stays green (you already tag it) */
+.shipping_charges_table td.is-free{ color:#16a34a !important; }
+
+/* thead bottom divider */
+.shiping_charge_popup .shipping_charges_table thead{
+  border-bottom: 1px solid #e9ecef !important;
+}
+
+/* Close button: red X, no outline/border */
+.shiping_charge_popup #close_shipping_charges_popup{
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* make the X red (remove any black outline) */
+.shiping_charge_popup #close_shipping_charges_popup svg path{
+  fill: #ef4444 !important;   /* red */
+  stroke: none !important;    /* kill dark stroke if any */
+}
+
+/* optional hover/active shades */
+.shiping_charge_popup #close_shipping_charges_popup:hover svg path{ fill:#dc2626 !important; }
+.shiping_charge_popup #close_shipping_charges_popup:active svg path{ fill:#b91c1c !important; }
+
+/* remove focus ring */
+.shiping_charge_popup #close_shipping_charges_popup:focus{ outline: 1px solid #e9ecef !important; box-shadow:none !important; }
+</style>
+
+<script>
+$(function () {
+  const $popup = $('.shiping_charge_popup');
+  const $sheet = $('.shiping_charge_popup_inner');
+  const $native = $('#ship_to');
+
+  /* ---------- utils ---------- */
+  function markFree(scope){
+    (scope ? $(scope) : $(document))
+      .find('.shipping_charges_table td')
+      .each(function(){ if ($.trim($(this).text()).toLowerCase() === 'free') $(this).addClass('is-free'); });
+  }
+  markFree();
+
+  function resetSheet(){
+    $sheet.removeClass('is-dragging').css({ transform:'', transition:'' });
+    const closer = $native.data('closeCountryMenu');
+    if (typeof closer === 'function') closer();
+  }
+
+  /* ---------- popup open/close ---------- */
+  $('body').on('click','.open_charge_popup',function(e){
+    e.preventDefault();
+    resetSheet();
+    $popup.addClass('active_popup');
+    $('body').addClass('active_ship_charge');
+  });
+  $('body').on('click','#close_shipping_charges_popup',function(e){
+    e.preventDefault();
+    $popup.removeClass('active_popup');
+    $('body').removeClass('active_ship_charge');
+    resetSheet();
+  });
+  $popup.on('click', function(e){
+    if (!$(e.target).closest('.shiping_charge_popup_inner').length) resetSheet();
+  });
+  $(document).on('transitionend', '.shiping_charge_popup', function(){
+    if (!$(this).hasClass('active_popup')) resetSheet();
+  });
+
+  /* ---------- swipe to close (mobile) ---------- */
+  let startY=null, dragging=false;
+  $sheet.on('touchstart', function(ev){
+    if (window.matchMedia('(min-width:768px)').matches) return;
+    dragging = true;
+    startY = ev.originalEvent.touches[0].clientY;
+    $(this).addClass('is-dragging').css('transition','none');
+  });
+  $sheet.on('touchmove', function(ev){
+    if (!dragging) return;
+    const curY = ev.originalEvent.touches[0].clientY;
+    const diff = Math.max(0, curY - startY);
+    this.style.transform = `translateY(${diff}px)`;
+  });
+  $sheet.on('touchend touchcancel', function(ev){
+    if (!dragging) return;
+    dragging = false;
+    $(this).css('transition','');
+    const curY = (ev.originalEvent.changedTouches||[{clientY:startY}])[0].clientY;
+    const diff = Math.max(0, curY - startY);
+    if (diff > 80){ resetSheet(); $('#close_shipping_charges_popup').trigger('click'); }
+    else { this.style.transform = ''; }
+  });
+
+  /* ---------- compact country dropdown ---------- */
+  if ($native.length && !$native.data('enhanced')) {
+    const $wrap = $('<div class="country-select"></div>');
+    const $btn  = $('<button type="button" class="country-trigger" aria-haspopup="listbox" aria-expanded="false"></button>');
+    const $menu = $('<ul class="country-menu" role="listbox" id="ship_to_menu"></ul>');
+
+    $native.after($wrap); $wrap.append($btn, $menu);
+    $native.addClass('visually-hidden').attr({'aria-hidden':'true','tabindex':'-1'}).data('enhanced', true);
+
+    function rebuildMenu(){
+      $menu.empty();
+      const $opts = $native.find('option');
+      const $sel  = $opts.filter(':selected').first();
+
+      $('<li class="country-option is-selected" role="option" tabindex="-1"></li>')
+        .attr('data-value', $sel.val()).text($.trim($sel.text())).appendTo($menu);
+
+      $opts.each(function(){
+        if (this === $sel[0]) return;
+        $('<li class="country-option" role="option" tabindex="-1"></li>')
+          .attr('data-value', this.value).text($.trim($(this).text())).appendTo($menu);
+      });
+
+      $btn.text($.trim($sel.text()));
+    }
+    rebuildMenu();
+
+    let isOpen = false;
+    function positionMenu(){
+      if (!isOpen) return;
+      const br = $btn[0].getBoundingClientRect();
+      const sr = $sheet[0].getBoundingClientRect();
+      const margin = 8, width = br.width;
+
+      const left = Math.min(Math.max(sr.left + margin, br.left), sr.right - width - margin);
+      const top  = br.bottom + 6;
+      const spaceDown = sr.bottom - top - margin;
+      const maxH = Math.max(140, Math.min(320, spaceDown));   // ≥140px, ≤320px, never past sheet
+
+      $menu.css({ position:'fixed', zIndex:10050, left, top, width, maxHeight:maxH, overflowY:'auto', display:'block' });
+    }
+    function openMenu(){
+      if (isOpen) return;
+      isOpen = true;
+      $btn.attr('aria-expanded','true');
+      $('body').append($menu);           // portal so it isn't clipped
+      positionMenu();
+      $(window).on('resize.dropdown scroll.dropdown', positionMenu);
+      $sheet.on('scroll.dropdown', positionMenu);
+    }
+    function closeMenu(){
+      if (!isOpen) return;
+      isOpen = false;
+      $btn.attr('aria-expanded','false');
+      $menu.hide().appendTo($wrap);
+      $(window).off('.dropdown'); $sheet.off('.dropdown');
+    }
+    // expose so other code (resetSheet) can close it safely
+    $native.data('closeCountryMenu', closeMenu);
+
+    $btn.on('click', function(e){ e.preventDefault(); isOpen ? closeMenu() : openMenu(); });
+
+    $menu.on('click', '.country-option', function(){
+      const val = $(this).data('value'), txt = $(this).text();
+      $native.val(val).trigger('change');   // triggers your table swap
+      rebuildMenu(); $btn.text(txt); closeMenu();
+      markFree();                           // re-tag "Free" if table changed
+    });
+
+    $native.on('change', rebuildMenu);
+
+    // close on outside click / ESC
+    $(document).on('click', function(e){
+      if (!isOpen) return;
+      if (!$menu.is(e.target) && $menu.has(e.target).length === 0 &&
+          !$btn.is(e.target)  && $btn.has(e.target).length === 0) closeMenu();
+    });
+    $(document).on('keydown', function(e){ if (e.key === 'Escape') closeMenu(); });
+
+    // keyboard navigation inside menu
+    $btn.on('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown'){
+        e.preventDefault(); openMenu();
+        ($menu.find('.is-selected')[0] || $menu.find('.country-option')[0]).focus();
+      }
+    });
+    $menu.on('keydown', '.country-option', function(e){
+      const $items = $menu.find('.country-option'); let i = $items.index(this);
+      if (e.key === 'ArrowDown'){ e.preventDefault(); ($items[i+1]||$items[i]).focus(); }
+      if (e.key === 'ArrowUp'){   e.preventDefault(); ($items[i-1]||$items[i]).focus(); }
+      if (e.key === 'Enter'){     e.preventDefault(); $(this).click(); }
+      if (e.key === 'Escape'){    e.preventDefault(); closeMenu(); $btn.focus(); }
+    });
+
+    // also ensure the menu is closed whenever the popup is opened/closed/backdrop-clicked
+    $(document).on('click', '#close_shipping_charges_popup, .open_charge_popup', closeMenu);
+    $(document).on('transitionend', '.shiping_charge_popup', function(){ if (!$(this).hasClass('active_popup')) closeMenu(); });
+    $(document).on('click', '.shiping_charge_popup', function(e){
+      if (!$(e.target).closest('.shiping_charge_popup_inner').length) closeMenu();
+    });
+  }
+});
+</script>

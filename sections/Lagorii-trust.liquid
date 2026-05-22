@@ -1,0 +1,378 @@
+{% comment %}
+  Lagorii — Value Cards (Desktop Grid + Mobile Slider)
+  - Desktop: even alignment via min-height
+  - Mobile: 1 card per view, swipeable, auto-scroll, clean dots (never overlap)
+  - Per-card mobile padding overrides
+  - JS clamps auto_resume_after >= 10000ms; schema uses safe step/min
+{% endcomment %}
+
+<section id="lagorii-values-{{ section.id }}">
+  <style>
+    {{ section.settings.heading_font | font_face: font_display: 'swap' }}
+    {{ section.settings.body_font    | font_face: font_display: 'swap' }}
+
+    #lagorii-values-{{ section.id }}{
+      --brand: {{ section.settings.brand_color }};
+      --ink: {{ section.settings.text_color }};
+      --bg: {{ section.settings.bg_color }};
+      --w: min({{ section.settings.max_width }}px, 95vw);
+
+      /* layout */
+      --gap: {{ section.settings.gap }}px;
+      --radius: {{ section.settings.radius }}px;
+      --icon: {{ section.settings.icon_size }}px;
+
+      /* type */
+      --title-size: {{ section.settings.title_size }}px;
+      --sub-size: {{ section.settings.sub_size }}px;
+      --title-weight: {{ section.settings.title_weight }};
+      --sub-weight: {{ section.settings.sub_weight }};
+
+      /* section paddings */
+      --py-d: {{ section.settings.pad_y_desktop }}px;
+      --py-m: {{ section.settings.pad_y_mobile }}px;
+
+      /* inner card spacing (section defaults) */
+      --card-pad-y: {{ section.settings.card_pad_y }}px;
+      --card-pad-x: {{ section.settings.card_pad_x }}px;
+      --inner-gap:  {{ section.settings.inner_gap }}px;
+
+      /* even alignment */
+      --card-min-h-d: {{ section.settings.card_min_h_desktop }}px;
+      --card-min-h-m: {{ section.settings.card_min_h_mobile }}px;
+
+      /* dots (namespaced, with bottom space to avoid overlap) */
+      --dot: {{ section.settings.dot_color }};
+      --dot-active: {{ section.settings.dot_active_color }};
+      --dot-size: {{ section.settings.dot_size }}px;
+      --dot-gap:  {{ section.settings.dot_gap }}px;
+      --dots-mt:  {{ section.settings.dots_margin_top }}px;
+      --dots-mb:  {{ section.settings.dots_margin_bottom }}px;
+    }
+
+    #lagorii-values-{{ section.id }}{
+      background: var(--bg);
+      color: var(--ink);
+      font-family: {{ section.settings.body_font.family }}, system-ui, -apple-system, Segoe UI, Inter, Roboto, Arial, sans-serif;
+    }
+    #lagorii-values-{{ section.id }} .inner{
+      width: var(--w);
+      margin: 0 auto;
+      padding: var(--py-d) 0;
+    }
+
+    /* Desktop grid */
+    @media (min-width: 769px){
+      #lagorii-values-{{ section.id }} .cards{
+        display: grid;
+        grid-template-columns: repeat({{ section.settings.desktop_cols }}, 1fr);
+        gap: var(--gap);
+        align-items: stretch;
+      }
+      #lagorii-values-{{ section.id }} .dots{ display: none !important; }
+    }
+
+    /* Card */
+    #lagorii-values-{{ section.id }} .card{
+      box-sizing: border-box;
+      border: none;
+      border-radius: var(--radius);
+      padding: var(--card-pad-y) var(--card-pad-x);
+      text-align: center;
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      justify-items: center;
+      gap: var(--inner-gap);
+      min-height: var(--card-min-h-d);
+    }
+    #lagorii-values-{{ section.id }} .icon{ width: var(--icon); height: var(--icon); display: inline-grid; place-items: center; }
+    #lagorii-values-{{ section.id }} .icon img{ max-width:100%; max-height:100%; object-fit:contain; display:block; }
+    #lagorii-values-{{ section.id }} .title{
+      font-family: {{ section.settings.heading_font.family }}, inherit;
+      font-size: var(--title-size);
+      line-height: 1.2;
+      font-weight: var(--title-weight);
+      color: var(--brand);
+      text-transform: {{ section.settings.title_transform }};
+      letter-spacing: .2px;
+    }
+    #lagorii-values-{{ section.id }} .sub{
+      font-size: var(--sub-size);
+      line-height: 1.5;
+      font-weight: var(--sub-weight);
+      max-width: 52ch;
+    }
+
+    /* Mobile slider */
+    @media (max-width: 768.98px){
+      #lagorii-values-{{ section.id }} .inner{ padding: var(--py-m) 0; }
+      #lagorii-values-{{ section.id }} .viewport{ position: relative; overflow: hidden; width: 100%; }
+      #lagorii-values-{{ section.id }} .cards{
+        display: flex; gap: 0;
+        transform: translate3d(0,0,0);
+        transition: transform .45s ease;
+        touch-action: pan-y;
+      }
+      #lagorii-values-{{ section.id }} .card{
+        flex: 0 0 100%;
+        min-width: 100%;
+        min-height: var(--card-min-h-m);
+        padding: var(--card-pad-y-mobile, var(--card-pad-y)) var(--card-pad-x-mobile, var(--card-pad-x));
+        gap: var(--inner-gap-mobile, var(--inner-gap));
+      }
+
+      /* Dots — force static box model & add clear space */
+      #lagorii-values-{{ section.id }} .dots{
+        position: static !important;
+        inset: auto !important;
+        margin-top: var(--dots-mt) !important;
+        margin-bottom: var(--dots-mb) !important;
+        display: grid !important;
+        place-items: center;
+        z-index: 0 !important;
+      }
+      #lagorii-values-{{ section.id }} .dots .list{ display: inline-flex; gap: var(--dot-gap); }
+      #lagorii-values-{{ section.id }} .dots button{ background:none; border:0; padding:0; line-height:0; cursor:pointer; }
+      #lagorii-values-{{ section.id }} .dots .dot{
+        width: var(--dot-size); height: var(--dot-size);
+        border-radius: 999px; background: var(--dot); opacity: .45;
+        transition: transform .2s ease, opacity .2s ease, background-color .2s ease;
+        display: inline-block;
+      }
+      #lagorii-values-{{ section.id }} .dots .dot.active{ background: var(--dot-active); opacity: 1; transform: scale(1.1); }
+    }
+    /* --- tighten sub-text spacing (mobile + desktop) --- */
+#lagorii-values-{{ section.id }} .sub{
+  margin: 2px 0 0 !important;   /* less space above sub-text */
+  line-height: 1.35 !important; /* denser lines */
+}
+#lagorii-values-{{ section.id }} .sub p{
+  margin: 0 !important;         /* remove default <p> top/bottom margins */
+}
+#lagorii-values-{{ section.id }} .sub p + p{
+  margin-top: 6px !important;   /* tiny space if multiple paragraphs */
+}
+/* on desktop you might want a touch more breathing room */
+@media (min-width: 769px){
+  #lagorii-values-{{ section.id }} .sub{ line-height: 1.4 !important; }
+}
+
+  </style>
+
+  <div class="inner">
+    <div class="viewport" id="viewport-{{ section.id }}">
+      <div class="cards" id="cards-{{ section.id }}">
+        {% for block in section.blocks %}
+          {% assign t = block.settings %}
+          <article
+            class="card"
+            style="
+              background: {{ t.card_bg }};
+              --card-pad-y-mobile: {{ t.mobile_pad_y }}px;
+              --card-pad-x-mobile: {{ t.mobile_pad_x }}px;
+              --inner-gap-mobile:  {{ t.mobile_inner_gap }}px;"
+            {{ block.shopify_attributes }}>
+            <div class="icon">
+              {% if t.icon != blank %}
+                <img src="{{ t.icon | image_url: width: 256 }}" alt="{{ t.title | escape }}" loading="lazy">
+              {% else %}
+                <svg viewBox="0 0 24 24" aria-hidden="true" width="40" height="40"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"></circle></svg>
+              {% endif %}
+            </div>
+            <h3 class="title">{{ t.title | escape }}</h3>
+            <div class="sub">{{ t.subtext }}</div>
+          </article>
+        {% endfor %}
+      </div>
+
+      <div class="dots" id="dots-{{ section.id }}"><div class="list" aria-label="Pagination"></div></div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      var root     = document.getElementById('lagorii-values-{{ section.id }}');
+      var viewport = document.getElementById('viewport-{{ section.id }}');
+      var track    = document.getElementById('cards-{{ section.id }}');
+      var dotsWrap = document.getElementById('dots-{{ section.id }}');
+      if(!root || !viewport || !track) return;
+
+      var slides = Array.prototype.slice.call(track.children);
+      var count = slides.length;
+      var index = 0, width = 0;
+      var enabled = false;
+
+      var AUTO      = {{ section.settings.auto_enabled | default: true | json }};
+      var INTERVAL  = {{ section.settings.auto_interval | default: 3500 }};
+      // clamp to >= 10,000ms to satisfy your requirement regardless of editor input
+      var RESUME_MS = Math.max({{ section.settings.auto_resume_after | default: 12000 }}, 10000);
+      var THRESH    = 40;
+
+      function isMobile(){ return window.matchMedia('(max-width: 768.98px)').matches; }
+
+      function measure(){
+        width = viewport.clientWidth || 1;
+        track.style.transition = 'none';
+        track.style.transform = 'translate3d(' + (-index * width) + 'px,0,0)';
+        track.getBoundingClientRect();
+        track.style.transition = '';
+      }
+
+      function goTo(i){
+        index = (i + count) % count;
+        track.style.transform = 'translate3d(' + (-index * width) + 'px,0,0)';
+        updateDots();
+      }
+
+      function buildDots(){
+        var list = dotsWrap.querySelector('.list');
+        if(!list) return;
+        list.innerHTML = '';
+        for(var i=0;i<count;i++){
+          var btn = document.createElement('button'); btn.type = 'button'; btn.setAttribute('aria-label', 'Go to slide ' + (i+1));
+          var dot = document.createElement('span'); dot.className = 'dot' + (i===index ? ' active' : '');
+          btn.appendChild(dot);
+          (function(ii){ btn.addEventListener('click', function(){ stopAuto(); goTo(ii); resumeAuto(); }); })(i);
+          list.appendChild(btn);
+        }
+      }
+      function updateDots(){
+        var dots = dotsWrap.querySelectorAll('.dot');
+        for(var i=0;i<dots.length;i++){ dots[i].classList.toggle('active', i===index); }
+      }
+
+      var timer = null, resumeHandle = null;
+      function startAuto(){
+        if(!AUTO || !isMobile()) return;
+        stopAuto();
+        timer = setInterval(function(){ goTo(index+1); }, INTERVAL);
+      }
+      function stopAuto(){ if(timer){ clearInterval(timer); timer = null; } }
+      function resumeAuto(){
+        if(!AUTO || !isMobile()) return;
+        if(resumeHandle) clearTimeout(resumeHandle);
+        resumeHandle = setTimeout(startAuto, RESUME_MS);
+      }
+
+      // swipe
+      var startX = 0, dx = 0, dragging = false;
+      function onStart(e){ if(!isMobile()) return; dragging = true; dx = 0; startX = (e.touches? e.touches[0].clientX : e.clientX); track.style.transition = 'none'; stopAuto(); }
+      function onMove(e){ if(!dragging) return; var x = (e.touches? e.touches[0].clientX : e.clientX); dx = x - startX; track.style.transform = 'translate3d(' + (-(index*width) + dx) + 'px,0,0)'; }
+      function onEnd(){ if(!dragging) return; dragging = false; track.style.transition = ''; if(Math.abs(dx) > THRESH){ goTo(index + (dx < 0 ? 1 : -1)); } else { goTo(index); } resumeAuto(); }
+
+      function enableMobile(){
+        if(enabled) { measure(); return; }
+        enabled = true;
+        measure(); buildDots(); startAuto();
+        viewport.addEventListener('touchstart', onStart, {passive:true});
+        viewport.addEventListener('touchmove',  onMove,  {passive:true});
+        viewport.addEventListener('touchend',   onEnd,   {passive:true});
+        viewport.addEventListener('mousedown',  onStart);
+        window.addEventListener('mousemove',    onMove);
+        window.addEventListener('mouseup',      onEnd);
+        window.addEventListener('resize',       measure);
+      }
+      function disableMobile(){
+        if(!enabled) return;
+        enabled = false;
+        stopAuto();
+        track.style.transition = ''; track.style.transform = '';
+        index = 0;
+        var list = dotsWrap.querySelector('.list'); if(list) list.innerHTML = '';
+        viewport.removeEventListener('touchstart', onStart);
+        viewport.removeEventListener('touchmove',  onMove);
+        viewport.removeEventListener('touchend',   onEnd);
+        viewport.removeEventListener('mousedown',  onStart);
+        window.removeEventListener('mousemove',    onMove);
+        window.removeEventListener('mouseup',      onEnd);
+        window.removeEventListener('resize',       measure);
+      }
+
+      if(isMobile()) enableMobile();
+      window.addEventListener('resize', function(){ if(isMobile()) enableMobile(); else disableMobile(); });
+    })();
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "Lagorii • Value Cards",
+  "class": "section-lagorii-values",
+  "settings": [
+    { "type": "font_picker", "id": "heading_font", "label": "Heading font", "default": "montserrat_n7" },
+    { "type": "font_picker", "id": "body_font",    "label": "Body font",    "default": "montserrat_n4" },
+
+    { "type": "color", "id": "brand_color", "label": "Brand (accent) color", "default": "#E87529" },
+    { "type": "color", "id": "text_color",  "label": "Text color",           "default": "#1B1B1B" },
+    { "type": "color", "id": "bg_color",    "label": "Section background",   "default": "#F6F6F6" },
+
+    { "type": "range", "id": "max_width", "label": "Max content width (px)", "min": 720, "max": 1600, "step": 10, "default": 1200 },
+    { "type": "range", "id": "gap", "label": "Gap between cards (px, desktop)", "min": 8, "max": 40, "step": 1, "default": 20 },
+    { "type": "range", "id": "radius", "label": "Card corner radius (px)", "min": 0, "max": 24, "step": 1, "default": 12 },
+
+    { "type": "range", "id": "icon_size", "label": "Icon size (px)", "min": 24, "max": 96, "step": 2, "default": 40 },
+    { "type": "range", "id": "title_size", "label": "Title font size (px)", "min": 12, "max": 28, "step": 1, "default": 16 },
+    { "type": "range", "id": "sub_size", "label": "Subtext font size (px)", "min": 10, "max": 22, "step": 1, "default": 14 },
+
+    { "type": "select", "id": "title_weight", "label": "Title weight", "default": "700", "options": [ { "value": "500", "label": "Medium" }, { "value": "600", "label": "Semibold" }, { "value": "700", "label": "Bold" } ] },
+    { "type": "select", "id": "sub_weight", "label": "Subtext weight", "default": "400", "options": [ { "value": "300", "label": "Light" }, { "value": "400", "label": "Regular" }, { "value": "500", "label": "Medium" } ] },
+    { "type": "select", "id": "title_transform", "label": "Title transform", "default": "uppercase", "options": [ { "value": "none", "label": "None" }, { "value": "uppercase", "label": "Uppercase" } ] },
+
+    { "type": "range", "id": "pad_y_desktop", "label": "Section padding (Desktop Y px)", "min": 0, "max": 120, "step": 2, "default": 36 },
+    { "type": "range", "id": "pad_y_mobile",  "label": "Section padding (Mobile Y px)",  "min": 0, "max": 120, "step": 2, "default": 22 },
+
+    { "type": "range", "id": "desktop_cols", "label": "Desktop columns", "min": 2, "max": 6, "step": 1, "default": 4 },
+
+    /* Inner card defaults (section-wide) */
+    { "type": "range", "id": "card_pad_y", "label": "Card padding Y (px)", "min": 8, "max": 48, "step": 1, "default": 24 },
+    { "type": "range", "id": "card_pad_x", "label": "Card padding X (px)", "min": 8, "max": 48, "step": 1, "default": 20 },
+    { "type": "range", "id": "inner_gap",  "label": "Spacing between icon/title/text (px)", "min": 4, "max": 24, "step": 1, "default": 12 },
+
+    /* Even alignment */
+    { "type": "range", "id": "card_min_h_desktop", "label": "Card min-height (desktop, px)", "min": 120, "max": 360, "step": 4, "default": 220 },
+    { "type": "range", "id": "card_min_h_mobile",  "label": "Card min-height (mobile, px)",  "min": 140, "max": 360, "step": 4, "default": 200 },
+
+    /* Dots */
+    { "type": "checkbox", "id": "show_dots", "label": "Show dots on mobile", "default": true },
+    { "type": "color", "id": "dot_color", "label": "Dot color", "default": "#CFCFCF" },
+    { "type": "color", "id": "dot_active_color", "label": "Active dot color", "default": "#E87529" },
+    { "type": "range", "id": "dot_size", "label": "Dot size (px)", "min": 4, "max": 10, "step": 1, "default": 5 },
+    { "type": "range", "id": "dot_gap",  "label": "Dot gap (px)",  "min": 4, "max": 12, "step": 1, "default": 6 },
+    { "type": "range", "id": "dots_margin_top", "label": "Dots top margin (px)", "min": 8, "max": 40, "step": 1, "default": 18 },
+    { "type": "range", "id": "dots_margin_bottom", "label": "Dots bottom margin (px)", "min": 8, "max": 40, "step": 1, "default": 18 },
+
+    /* Auto-scroll — validator-safe; runtime enforces ≥ 10,000ms */
+    { "type": "checkbox", "id": "auto_enabled", "label": "Enable auto-scroll (mobile)", "default": true },
+    { "type": "range", "id": "auto_interval", "label": "Auto-scroll interval (ms)", "min": 1500, "max": 8000, "step": 250, "default": 3500 },
+    { "type": "range", "id": "auto_resume_after", "label": "Resume auto after interaction (ms) (min 10,000 enforced)", "min": 0, "max": 9000, "step": 500, "default": 7000 }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature card",
+      "settings": [
+        { "type": "image_picker", "id": "icon", "label": "Icon (PNG / SVG / WebP supported)" },
+        { "type": "text", "id": "title", "label": "Title", "default": "FREE SHIPPING" },
+        { "type": "richtext", "id": "subtext", "label": "Sub text", "default": "<p>Free shipping on orders of ₹2000 or more</p>" },
+        { "type": "color", "id": "card_bg", "label": "Card background color", "default": "#F6F6F6" },
+
+        /* Per-card MOBILE spacing overrides */
+        { "type": "range", "id": "mobile_pad_y", "label": "Mobile: card padding Y (px)", "min": 8, "max": 48, "step": 1, "default": 22 },
+        { "type": "range", "id": "mobile_pad_x", "label": "Mobile: card padding X (px)", "min": 8, "max": 48, "step": 1, "default": 18 },
+        { "type": "range", "id": "mobile_inner_gap", "label": "Mobile: spacing between items (px)", "min": 4, "max": 24, "step": 1, "default": 10 }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Lagorii • Value Cards",
+      "blocks": [
+        { "type": "feature", "settings": { "title": "FREE SHIPPING", "subtext": "<p>Free shipping on orders of ₹2000 or more</p>", "card_bg": "#F6F6F6" } },
+        { "type": "feature", "settings": { "title": "CUSTOMER SERVICE", "subtext": "<p>+91 96202 37728 · Mon–Sat · 10am–7pm IST</p>", "card_bg": "#F6F6F6" } },
+        { "type": "feature", "settings": { "title": "SECURE PAYMENT", "subtext": "<p>Your payment is processed securely</p>", "card_bg": "#F6F6F6" } },
+        { "type": "feature", "settings": { "title": "CONTACT US", "subtext": "<p>support@lagorii.com</p>", "card_bg": "#F6F6F6" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

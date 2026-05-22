@@ -1,0 +1,84 @@
+{%- liquid
+  assign show_preloader = settings.enable_preloading_screen
+
+  if settings.hide_on_product and template.name == 'product'
+    assign show_preloader = false
+  endif
+
+  if settings.hide_on_collection and template.name == 'collection'
+    assign show_preloader = false
+  endif
+
+  if request.design_mode
+    assign show_preloader = false
+  endif
+-%}
+
+{%- if show_preloader -%}
+
+<style>
+  :root {
+    --preload-size-desktop: {{ settings.preload_size_desktop | default: 120 }}px;
+    --preload-size-mobile: {{ settings.preload_size_mobile | default: 100 }}px;
+  }
+
+  .preload-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: {% if settings.preload_bg_enable %}{{ settings.preload_bg_color | default: '#ffffff' }}{% else %}transparent{% endif %};
+    pointer-events: none;
+  }
+
+  .preload-inner {
+    width: var(--preload-size-desktop);
+    height: var(--preload-size-desktop);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (max-width: 768px) {
+    .preload-inner {
+      width: var(--preload-size-mobile);
+      height: var(--preload-size-mobile);
+    }
+  }
+</style>
+
+<div class="preload-screen" data-preload-screen>
+  <div class="preload-inner">
+
+    {% case settings.preloading_screen_type %}
+      {% when 'svg' %}
+        {% render 'preload-svg' %}
+      {% when 'html' %}
+        {% render 'preload-html' %}
+      {% else %}
+        {% if settings.preloading_screen_image != blank %}
+          {{ settings.preloading_screen_image | image_url: width: 400 | image_tag: style: 'width:100%;height:auto;display:block;', alt: shop.name, preload: true }}
+        {% else %}
+          <span style="width:100%;height:4px;background:#ebebeb;border-radius:4px;display:block;position:relative;overflow:hidden;">
+            <span style="position:absolute;left:-40%;top:0;height:100%;width:40%;background:#212326;animation:preload-bar 1s ease infinite;"></span>
+          </span>
+          <style>
+            @keyframes preload-bar { 0% { transform: translateX(-100%); } 100% { transform: translateX(250%); } }
+          </style>
+        {% endif %}
+    {% endcase %}
+
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var el = document.querySelector('[data-preload-screen]');
+    if (!el) return;
+    el.parentNode.removeChild(el);
+  });
+</script>
+
+{%- endif -%}

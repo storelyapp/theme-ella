@@ -1,0 +1,199 @@
+/* Sticky Add to Cart — Mobile (fully variable-driven) */
+/* ====== TUNE ONLY THESE VARS ====== */
+.productView-stickyCart{
+  /* layout */
+  --s-container-pad: 8px;          /* top/bottom padding of the bar */
+  --s-gap: 10px;                   /* space between buttons */
+  --s-radius: 8px;                 /* button corner radius */
+  --s-divider-color: #e5e5e5;      /* thin divider line color */
+
+  /* typography & sizing */
+  --s-font-family: 'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  --s-font-weight: 700;
+  --s-font-size: 15px;
+  --s-letter: 0.5px;
+  --s-transform: UPPERCASE;
+  --s-height: 36px;                /* button height (slimmer look) */
+  --s-pad-x: 14px;                 /* left/right padding inside buttons */
+  --s-icon: 12px;                  /* heart icon size */
+
+  /* colors: wishlist (outline) */
+  --wl-text: #e87529;
+  --wl-bg: #fff;
+  --wl-border: #e87529;
+
+  /* colors: add to cart (filled) */
+  --atc-text: #fff;
+  --atc-bg: #e87529;
+  --atc-bg-hover: #ea8a4c;
+}
+
+/* Core container & reveal */
+.productView-stickyCart {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 98;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  background: #fff;
+  border-top: 1px solid var(--s-divider-color);  /* bottom divider */
+  box-shadow: 0 -4px 10px rgba(0,0,0,.06);
+  transition: opacity .18s ease, transform .18s ease, visibility .18s linear;
+  transform: translateY(10px);
+  font-family: var(--s-font-family);
+}
+.productView-stickyCart.show-sticky {
+  opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0);
+}
+
+/* Hide the close “×” */
+.productView-stickyCart .sticky-product-close { display: none !important; }
+
+/* Container padding */
+.productView-stickyCart .container,
+.productView-stickyCart .container-1170,
+.productView-stickyCart .container-1770,
+.productView-stickyCart .container-full {
+  padding: var(--s-container-pad);
+}
+
+/* Row layout */
+.productView-stickyCart .sticky-actions-row{
+  display:flex; align-items:center; gap:var(--s-gap); width:100%;
+}
+
+/* ====== Unified button box (wishlist + ATC) ====== */
+.productView-stickyCart .sticky-wishlist-inline .wishlist-toggle,
+.productView-stickyCart #product-sticky-add-to-cart{
+  display:inline-flex !important;
+  align-items:center; justify-content:center;
+  height:var(--s-height) !important;
+  line-height:normal !important;
+  padding:0 var(--s-pad-x) !important;
+  border-radius:var(--s-radius) !important;
+  font-family:var(--s-font-family) !important;
+  font-weight:var(--s-font-weight) !important;
+  font-size:var(--s-font-size) !important;
+  letter-spacing:var(--s-letter) !important;
+  text-transform:var(--s-transform) !important;
+  white-space:nowrap; box-sizing:border-box;
+}
+
+/* Wishlist (outline, static) */
+.productView-stickyCart .sticky-wishlist-inline .wishlist-toggle{
+  background:var(--wl-bg) !important;
+  color:var(--wl-text) !important;
+  border:1px solid var(--wl-border) !important;
+  text-decoration:none;
+  transition:none !important;
+}
+.productView-stickyCart .sticky-wishlist-inline .wishlist-toggle:hover,
+.productView-stickyCart .sticky-wishlist-inline .wishlist-toggle:active{
+  background:var(--wl-bg) !important;
+  color:var(--wl-text) !important;
+  border-color:var(--wl-border) !important;
+}
+.productView-stickyCart .sticky-wishlist-inline .wishlist-toggle:focus-visible{
+  outline:2px solid #aaa;
+  outline-offset:2px;
+}
+.productView-stickyCart .sticky-wishlist-inline .wishlist-toggle svg{
+  width:var(--s-icon); height:var(--s-icon);
+  display:block; flex:0 0 var(--s-icon);
+  margin-right:8px;
+  fill:currentColor; stroke:currentColor; stroke-width:0;
+  transition:none !important;
+  overflow:visible;
+}
+
+/* Add to cart (filled) */
+.productView-stickyCart #product-sticky-add-to-cart{
+  width:100%;
+  background:var(--atc-bg) !important;
+  color:var(--atc-text) !important;
+  border:1px solid var(--atc-bg) !important;
+}
+.productView-stickyCart #product-sticky-add-to-cart:hover{
+  background:var(--atc-bg-hover) !important;
+  color:var(--atc-text) !important;
+  border-color:var(--atc-bg-hover) !important;
+}
+
+/* Cleanup */
+.productView-stickyCart .productView-action{ margin:0; padding:0; border:0; min-height:0; }
+.productView-stickyCart .product-form__buttons{ margin:0; }
+
+/* Mobile only — hide ≥ 1024px */
+@media (min-width:1024px){
+  .productView-stickyCart{ display:none !important; }
+}
+
+/* add this to your existing container block */
+.productView-stickyCart .container,
+.productView-stickyCart .container-1170,
+.productView-stickyCart .container-1770,
+.productView-stickyCart .container-full{
+  padding: var(--s-container-pad);
+  border-bottom: var(--s-divider-w) solid var(--s-divider-color);  /* NEW */
+}
+
+.productView-stickyCart{
+  border-bottom: var(--s-divider-w) solid var(--s-divider-color);
+}
+
+/* Add to cart (filled, locked — no hover/active color changes) */
+.productView-stickyCart #product-sticky-add-to-cart{
+  width: 100%;
+  background: var(--atc-bg) !important;
+  color: var(--atc-text) !important;
+  border: 1px solid var(--atc-bg) !important;
+}
+
+/* Lock hover/active to the exact same styles */
+.productView-stickyCart #product-sticky-add-to-cart:hover,
+.productView-stickyCart #product-sticky-add-to-cart:active {
+  background: var(--atc-bg) !important;
+  color: var(--atc-text) !important;
+  border-color: var(--atc-bg) !important;
+}
+
+/* Wishlist text: smaller, lighter, Capitalize (not UPPERCASE) */
+.productView-stickyCart .sticky-wishlist-inline .wishlist-toggle {
+  /* typography overrides */
+  font-size: var(--wl-font-size, 13px) !important;   /* smaller than ATC */
+  font-weight: var(--wl-font-weight, 600) !important;/* less bold than 700 */
+  text-transform: capitalize !important;             /* Capitalised */
+  letter-spacing: .2px !important;                   /* a bit tighter */
+}
+
+/* Keep same style when toggled to "wishlisted" */
+.productView-stickyCart .sticky-wishlist-inline .wishlist-toggle.wishlisted {
+  font-size: var(--wl-font-size, 13px) !important;
+  font-weight: var(--wl-font-weight, 600) !important;
+  text-transform: capitalize !important;
+}
+
+/* Make sticky buttons taller */
+.productView-stickyCart{
+  --s-height: 44px;           /* was ~36px; try 44–48px for better tap target */
+}
+
+/* Ensure controls respect the new height */
+.productView-stickyCart .btn,
+.productView-stickyCart .wishlist-toggle{
+  height: var(--s-height);
+  min-height: var(--s-height);
+  line-height: calc(var(--s-height) - 2px); /* avoids cramped text */
+  padding-top: 0;
+  padding-bottom: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Optional: different heights for mobile vs desktop */
+@media (max-width: 1023px){
+  .productView-stickyCart{ --s-height: 48px; }  /* bigger tap target on phones */
+}
+@media (min-width: 1024px){
+  .productView-stickyCart{ --s-height: 42px; }
+}

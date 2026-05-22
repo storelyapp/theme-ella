@@ -1,0 +1,39 @@
+.check-shipping-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #e87529;
+  text-decoration: none;
+  line-height: 1.2;
+}
+
+.check-shipping-link svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* Animated underline only for the text */
+.check-shipping-text {
+  position: relative;
+  color: #e87529;
+}
+
+.check-shipping-text::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0%;
+  height: 2px;
+  background-color: #e87529;
+  transition: width 0.3s ease;
+}
+
+.check-shipping-link:hover .check-shipping-text::after {
+  width: 100%;
+}

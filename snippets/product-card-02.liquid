@@ -1,0 +1,892 @@
+{% comment %}
+    Renders a product card
+
+    Accepts:
+    - product_card_product: {Object} Product Liquid object (optional)
+    - media_size: {String} Size of the product image card. Values are "square" and "portrait". Default is "square" (optional)
+    - show_secondary_image: {Boolean} Show the secondary image on hover. Default: false (optional)
+    - add_image_padding: {Boolean} Enables padding on the image to space out the grid
+    - show_vendor: {Boolean} Show the product vendor. Default: false
+
+    Usage:
+    {% render 'product-card', show_vendor: section.settings.show_vendor %}
+{% endcomment %}
+
+{%- liquid
+    assign product_swatch_option = settings.swatch | downcase
+    assign isColor = false
+    assign variant_img = ''
+    for option in product_card_product.options_with_values
+        assign option_name = option.name | downcase
+        if product_swatch_option contains option_name
+            assign isColor = true
+            assign index = forloop.index0
+            assign position = forloop.index | minus: 1
+            assign variant_selected = option.selected_value
+            if settings.show_quick_shop
+                for variant in product_card_product.variants limit: 1
+                    if variant.image != null  
+                        assign variant_img = variant.image
+                    endif
+                endfor
+            endif
+          break
+        else 
+            assign position = 0
+            assign variant_selected = nil
+        endif
+    endfor
+
+    assign media_size = settings.product_block_image_ratio
+    if media_size == 'portrait'
+        assign portrait_aspect_ratio = settings.portrait_height
+    endif 
+
+    assign featured_media_aspect_ratio = product_card_product.featured_media.aspect_ratio
+    if product_card_product.featured_media.aspect_ratio == nil
+        assign featured_media_aspect_ratio = 1
+    endif
+
+    assign product_action_group = false
+    
+    assign show_quick_view = false
+    if settings.show_quick_view
+        if settings.product_quick_view_type == 'icon' or settings.show_quick_view_mb
+            assign show_quick_view = true
+        endif
+    endif
+
+    assign pc02_age_btn_enable = settings.pc02_age_btn_enable | default: true
+    assign pc02_age_modal_enable = settings.pc02_age_modal_enable | default: true
+    assign pc02_age_bag_icon_type = settings.pc02_age_bag_icon_type | default: 'svg'
+
+    if pc02_age_modal_enable
+        assign show_quick_view = false
+    endif
+
+    assign show_wishlist = false
+    if settings.show_wishlist_card and settings.show_wishlist
+        assign show_wishlist = true
+    elsif template.suffix == 'ajax_wishlist_card'
+        assign show_wishlist = true
+    endif
+
+    assign show_compare = false
+    if settings.show_compare and settings.product_compare_type == 'icon'
+        assign show_compare = true
+    endif
+
+    if show_quick_view or show_wishlist or show_compare
+        assign product_action_group = true
+    endif
+
+    assign has_video = product_card_product.media | where: 'media_type','video'
+
+    assign show_price = settings.show_price
+    
+    assign custom_fields = product_card_product.metafields.custom.product_variant_custom
+
+    assign pc02_enable_image_carousel = settings.pc02_enable_image_carousel | default: true
+    assign pc02_carousel_transition_duration = settings.pc02_carousel_transition_duration | default: 650
+    assign pc02_carousel_drag_threshold = settings.pc02_carousel_drag_threshold | default: 45
+    assign pc02_carousel_loop = settings.pc02_carousel_loop | default: true
+
+    assign pc02_dots_enable = settings.pc02_dots_enable | default: true
+    assign pc02_dots_alignment = settings.pc02_dots_alignment | default: 'center'
+
+    assign pc02_images = product_card_product.media | where: 'media_type', 'image'
+    assign pc02_images = pc02_images | slice: 0, 6
+
+    assign pc02_has_carousel = false
+    if pc02_enable_image_carousel and pc02_images.size > 1
+      assign pc02_has_carousel = true
+    endif
+
+
+    assign pc02_offer_enable = settings.pc02_offer_enable
+    if pc02_offer_enable == nil
+      assign pc02_offer_enable = true
+    endif
+    assign pc02_offer_only_sale = settings.pc02_offer_only_sale
+    if pc02_offer_only_sale == nil
+      assign pc02_offer_only_sale = true
+    endif
+    assign pc02_offer_style = 'rotate'
+    assign pc02_offer_position = settings.pc02_offer_position | default: 'bottom_right'
+    assign pc02_offer_message = settings.pc02_offer_message | default: 'LIMITED TIME OFFER'
+    assign pc02_offer_countdown_start = settings.pc02_offer_countdown_start | default: ''
+    assign pc02_offer_countdown_end = settings.pc02_offer_countdown_end | default: ''
+    assign pc02_offer_countdown_prefix = settings.pc02_offer_countdown_prefix | default: 'Ends in'
+    assign pc02_offer_start_prefix = settings.pc02_offer_start_prefix | default: 'Starts in'
+    assign pc02_offer_rotate_seconds = settings.pc02_offer_rotate_seconds | default: 2
+
+    assign pc02_compare_price = product_card_product.compare_at_price_max | default: 0
+    assign pc02_current_price = product_card_product.price | default: 0
+    assign pc02_offer_discount_percent = 0
+    if pc02_compare_price > pc02_current_price and pc02_compare_price > 0
+      assign pc02_offer_discount_percent = pc02_compare_price | minus: pc02_current_price | times: 100 | divided_by: pc02_compare_price | round
+    endif
+
+    assign pc02_offer_discount_label = settings.pc02_offer_discount_text | default: '' | strip
+    if pc02_offer_discount_label == blank and pc02_offer_discount_percent > 0
+      assign pc02_offer_discount_label = pc02_offer_discount_percent | append: '% OFF'
+    endif
+
+    assign pc02_show_offer_badge = false
+    if pc02_offer_enable
+      if pc02_offer_only_sale == false or pc02_offer_discount_percent > 0
+        if pc02_offer_message != blank or pc02_offer_discount_label != blank
+          assign pc02_show_offer_badge = true
+        endif
+      endif
+    endif
+
+    assign pc02_age_btn_font = settings.pc02_age_btn_font
+    assign pc02_age_btn_font_weight = settings.pc02_age_btn_font_weight | default: '600'
+    assign pc02_age_btn_text_transform = settings.pc02_age_btn_text_transform | default: 'capitalize'
+    assign pc02_age_btn_line_height = settings.pc02_age_btn_line_height | default: 22
+    assign pc02_age_btn_letter_spacing = settings.pc02_age_btn_letter_spacing | default: '.02em'
+
+
+    assign pc02_age_btn_position = settings.pc02_age_btn_position | default: 'below_price'
+    assign pc02_age_btn_align = settings.pc02_age_btn_align | default: 'left'
+    assign pc02_age_metafield_key = settings.pc02_age_metafield_key | default: 'custom.age'
+
+    assign pc02_age_meta = blank
+    if pc02_age_metafield_key != blank and pc02_age_metafield_key contains '.'
+      assign pc02_age_ns = pc02_age_metafield_key | split: '.' | first
+      assign pc02_age_key = pc02_age_metafield_key | split: '.' | last
+      assign pc02_age_meta = product_card_product.metafields[pc02_age_ns][pc02_age_key]
+    endif
+    if pc02_age_meta == blank
+      assign pc02_age_meta = product_card_product.metafields.custom.age | default: product_card_product.metafields.custom.Age | default: product_card_product.metafields.custom.ages | default: product_card_product.metafields.custom.Ages
+    endif
+
+    assign pc02_age_range_text = blank
+    assign pc02_show_age_btn = false
+
+    if pc02_age_btn_enable and pc02_age_meta != blank
+      assign pc02_age_raw = pc02_age_meta.value | default: pc02_age_meta
+      assign pc02_age_str = pc02_age_raw | strip
+
+      if pc02_age_str contains '[' or pc02_age_str contains '{'
+        assign pc02_age_str = pc02_age_raw | json
+      endif
+
+      assign pc02_age_clean = pc02_age_str
+      assign pc02_age_clean = pc02_age_clean | replace: '","', '|'
+      assign pc02_age_clean = pc02_age_clean | replace: '", "', '|'
+      assign pc02_age_clean = pc02_age_clean | replace: '" , "', '|'
+      assign pc02_age_clean = pc02_age_clean | replace: '[', ''
+      assign pc02_age_clean = pc02_age_clean | replace: ']', ''
+      assign pc02_age_clean = pc02_age_clean | replace: '"', ''
+      assign pc02_age_clean = pc02_age_clean | replace: '•', '|'
+      assign pc02_age_clean = pc02_age_clean | replace: '·', '|'
+      assign pc02_age_clean = pc02_age_clean | replace: ',', '|'
+      assign pc02_age_clean = pc02_age_clean | replace: '–', '-'
+      assign pc02_age_clean = pc02_age_clean | replace: '—', '-'
+      assign pc02_age_clean = pc02_age_clean | replace: ' to ', '-'
+      assign pc02_age_clean = pc02_age_clean | replace: 'to', '-'
+      assign pc02_age_clean = pc02_age_clean | replace: ' ', ''
+
+      assign pc02_age_list = pc02_age_clean | split: '|'
+
+      assign pc02_has_months = false
+      assign pc02_has_years = false
+      assign pc02_min_start_months = 999999
+      assign pc02_min_start_num = 0
+      assign pc02_min_unit = ''
+      assign pc02_max_year_upper = 0
+      assign pc02_max_month_upper = 0
+
+      for pc02_token in pc02_age_list
+        assign pc02_t = pc02_token | strip
+        if pc02_t != blank
+          assign pc02_parts = pc02_t | split: '-'
+          assign pc02_start_raw = pc02_parts[0]
+          assign pc02_end_raw = pc02_start_raw
+          if pc02_parts.size > 1
+            assign pc02_end_raw = pc02_parts[1]
+          endif
+
+          assign pc02_unit = ''
+          if pc02_end_raw contains 'M' or pc02_end_raw contains 'm' or pc02_start_raw contains 'M' or pc02_start_raw contains 'm'
+            assign pc02_unit = 'M'
+            assign pc02_has_months = true
+          elsif pc02_end_raw contains 'Y' or pc02_end_raw contains 'y' or pc02_start_raw contains 'Y' or pc02_start_raw contains 'y'
+            assign pc02_unit = 'Y'
+            assign pc02_has_years = true
+          endif
+
+          if pc02_unit != ''
+            assign pc02_start_num = pc02_start_raw | remove: 'M' | remove: 'm' | remove: 'Y' | remove: 'y' | plus: 0
+            assign pc02_end_num = pc02_end_raw | remove: 'M' | remove: 'm' | remove: 'Y' | remove: 'y' | plus: 0
+
+            assign pc02_start_months = pc02_start_num
+            if pc02_unit == 'Y'
+              assign pc02_start_months = pc02_start_num | times: 12
+            endif
+
+            if pc02_start_months < pc02_min_start_months
+              assign pc02_min_start_months = pc02_start_months
+              assign pc02_min_start_num = pc02_start_num
+              assign pc02_min_unit = pc02_unit
+            endif
+
+            if pc02_unit == 'Y'
+              if pc02_end_num > pc02_max_year_upper
+                assign pc02_max_year_upper = pc02_end_num
+              endif
+            else
+              if pc02_end_num > pc02_max_month_upper
+                assign pc02_max_month_upper = pc02_end_num
+              endif
+            endif
+          endif
+        endif
+      endfor
+
+      assign pc02_max_unit = ''
+      assign pc02_max_num = 0
+      if pc02_has_years
+        assign pc02_max_unit = 'Y'
+        assign pc02_max_num = pc02_max_year_upper
+      elsif pc02_has_months
+        assign pc02_max_unit = 'M'
+        assign pc02_max_num = pc02_max_month_upper
+      endif
+
+      if pc02_min_unit != '' and pc02_max_unit != '' and pc02_max_num > 0
+        assign pc02_age_range_text = pc02_min_start_num | append: pc02_min_unit | append: ' to ' | append: pc02_max_num | append: pc02_max_unit
+        assign pc02_show_age_btn = true
+      endif
+    endif
+-%}
+
+{%- comment -%}
+  PC02 product-card styles — rendered once per page load.
+  All values come from Theme Customizer settings so merchants can tweak without
+  touching code. The once-flag ensures this block doesn't repeat for every card
+  on a collection grid.
+{%- endcomment -%}
+{%- unless pc02_styles_rendered -%}
+  {%- assign pc02_styles_rendered = true -%}
+  <style>
+    /* ── Card media container ─────────────────────────────────────────────── */
+    .card-media.pc02-has-carousel {
+      position: relative;
+      overflow: hidden;
+      contain: layout style paint; /* paint boundary for compositor */
+    }
+
+    /* ── Dot bar CSS variables (set on .product-item so each card can
+       override independently if needed) ──────────────────────────────────── */
+    .product-item {
+      --pc02-dot-bar-bg:       {{ settings.pc02_dots_bg_color       | default: '#E5E5E5' }};
+      --pc02-dot-active:       {{ settings.pc02_dots_active_color    | default: '#FF7A00' }};
+      --pc02-dot-inactive:     {{ settings.pc02_dots_inactive_color  | default: '#9B9B9B' }};
+      --pc02-dot-bar-height:   {{ settings.pc02_dots_bar_height      | default: 18 }}px;
+      --pc02-dot-bar-padding-x:{{ settings.pc02_dots_bar_padding_x   | default: 10 }}px;
+      --pc02-dot-bar-padding-y:{{ settings.pc02_dots_bar_padding_y   | default: 6  }}px;
+      --pc02-dot-bar-radius:   {{ settings.pc02_dots_bar_radius      | default: 999 }}px;
+      --pc02-dot-size:         {{ settings.pc02_dots_dot_size        | default: 6  }}px;
+      --pc02-dot-gap:          {{ settings.pc02_dots_dot_gap         | default: 6  }}px;
+      --pc02-dot-bar-bottom:   {{ settings.pc02_dots_margin_top      | default: 10 }}px;
+      --pc02-dot-bar-inset-x:  {{ settings.pc02_dots_inset_x        | default: 10 }}px;
+      --pc02-offer-bg:         {{ settings.pc02_offer_bg         | default: '#E87529' }};
+      --pc02-offer-text:       {{ settings.pc02_offer_text       | default: '#FFFFFF' }};
+      --pc02-offer-panel-bg:   {{ settings.pc02_offer_bg         | default: '#E87529' }};
+      --pc02-offer-panel-text: {{ settings.pc02_offer_text       | default: '#FFFFFF' }};
+      --pc02-offer-font-size:  {{ settings.pc02_offer_font_size  | default: 11 }}px;
+      --pc02-offer-radius:     {{ settings.pc02_offer_radius     | default: 6 }}px;
+      --pc02-offer-offset-x:   {{ settings.pc02_offer_offset_x   | default: 8 }}px;
+      --pc02-offer-offset-y:   {{ settings.pc02_offer_offset_y   | default: 42 }}px;
+      --pc02-offer-width:      {{ settings.pc02_offer_width      | default: 156 }}px;
+      --pc02-offer-height:     {{ settings.pc02_offer_height     | default: 26 }}px;
+
+    }
+
+
+    /* ── Limited time offer badge: one fixed pill, three vertical-flip frames ── */
+    .product-item .card-media {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-item .pc02-offer-badge {
+      position: absolute;
+      z-index: 6;
+      pointer-events: none;
+      width: var(--pc02-offer-width);
+      max-width: calc(100% - (var(--pc02-offer-offset-x) * 2));
+      height: var(--pc02-offer-height);
+      font-size: var(--pc02-offer-font-size);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: .015em;
+      filter: drop-shadow(0 5px 12px rgba(17, 24, 39, .18));
+      perspective: 720px;
+      transform: translateZ(0);
+    }
+
+    .product-item .pc02-offer-badge.is-hidden,
+    .product-item .pc02-offer-badge.is-ended {
+      display: none;
+    }
+
+    .product-item .pc02-offer-pos--top_left {
+      top: var(--pc02-offer-offset-y);
+      left: var(--pc02-offer-offset-x);
+    }
+
+    .product-item .pc02-offer-pos--bottom_right {
+      right: var(--pc02-offer-offset-x);
+      bottom: var(--pc02-offer-offset-y);
+    }
+
+    .product-item .pc02-offer--rotate {
+      display: block;
+      color: var(--pc02-offer-text);
+      background: var(--pc02-offer-bg);
+      border-radius: var(--pc02-offer-radius);
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(17, 24, 39, .14);
+    }
+
+    .product-item .pc02-offer-stage {
+      position: relative;
+      display: block;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+    }
+
+    .product-item .pc02-offer-frame {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      padding: 0 9px;
+      color: var(--pc02-offer-text);
+      background: var(--pc02-offer-bg);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      opacity: 0;
+      backface-visibility: hidden;
+      transform: rotateX(90deg) translateY(5px);
+      transform-origin: 50% 50%;
+      transition:
+        transform .42s cubic-bezier(.2,.72,.2,1),
+        opacity .24s ease;
+      will-change: transform, opacity;
+    }
+
+    .product-item .pc02-offer-frame.is-active {
+      opacity: 1;
+      transform: rotateX(0deg) translateY(0);
+    }
+
+    .product-item .pc02-offer-frame.is-leaving {
+      opacity: 0;
+      transform: rotateX(-90deg) translateY(-5px);
+    }
+
+    .product-item .pc02-offer-frame-message {
+      text-transform: uppercase;
+      letter-spacing: .035em;
+    }
+
+    .product-item .pc02-offer-frame-discount {
+      text-transform: uppercase;
+      font-weight: 900;
+      letter-spacing: .02em;
+    }
+
+    .product-item .pc02-offer-frame-countdown {
+      text-transform: none;
+      font-weight: 800;
+      letter-spacing: .01em;
+      font-size: max(9px, calc(var(--pc02-offer-font-size) - 1px));
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .product-item .pc02-offer-frame {
+        transition: opacity .18s ease;
+        transform: none;
+      }
+      .product-item .pc02-offer-frame.is-leaving {
+        transform: none;
+      }
+    }
+
+    @media (max-width: 749px) {
+      .product-item {
+        --pc02-offer-width: min({{ settings.pc02_offer_width | default: 156 }}px, calc(100vw - 36px));
+      }
+
+      .product-item .pc02-offer-badge {
+        font-size: max(9px, calc(var(--pc02-offer-font-size) - 1px));
+      }
+    }
+
+
+    /* ── Age range button ──────────────────────────────────────────────────── */
+    .product-item .pc02-age-range-wrap {
+      margin-top: var(--pc02-age-btn-margin-top, {{ settings.pc02_age_btn_margin_top | default: 8 }}px);
+    }
+    .product-item .pc02-age-range-wrap.align-left   { text-align: left; }
+    .product-item .pc02-age-range-wrap.align-center { text-align: center; }
+    .product-item .pc02-age-range-wrap.align-right  { text-align: right; }
+
+    .product-item .pc02-age-range-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      height:         {{ settings.pc02_age_btn_height        | default: 32  }}px;
+      width:          {{ settings.pc02_age_btn_width         | default: 'auto' }};
+      padding:        {{ settings.pc02_age_btn_padding_y     | default: 6   }}px
+                      {{ settings.pc02_age_btn_padding_x     | default: 10  }}px;
+
+      background:     {{ settings.pc02_age_btn_bg_color      | default: '#F3F4F6' }};
+      color:          {{ settings.pc02_age_btn_text_color     | default: '#111827' }};
+      border:         1px solid {{ settings.pc02_age_btn_border_color | default: '#D1D5DB' }};
+      border-radius:  {{ settings.pc02_age_btn_border_radius  | default: 10  }}px;
+
+      {%- assign _age_font = settings.pc02_age_btn_font -%}
+      font-family:    {{ _age_font.family | append: ', ' | append: _age_font.fallback_families | default: 'var(--font-body-family)' }};
+      font-size:      {{ settings.pc02_age_btn_font_size      | default: 12  }}px;
+      font-weight:    {{ settings.pc02_age_btn_font_weight     | default: '600' }};
+      text-transform: {{ settings.pc02_age_btn_text_transform  | default: 'capitalize' }};
+      line-height:    {{ settings.pc02_age_btn_line_height     | default: 22  }}px;
+      letter-spacing: {{ settings.pc02_age_btn_letter_spacing  | default: '.02em' }};
+
+      text-decoration: none;
+      white-space: nowrap;
+    }
+  </style>
+{%- endunless -%}
+
+
+
+
+<div
+  class="product-item{% if settings.disable_product_card_border %} disable_product_card_border{% endif %}{% if settings.enable_custom_layout_card %} enable_custom_layout_card{% endif %}{% if settings.disable_product_card_border and settings.enable_custom_layout_card %} enable_custom_content{% endif %}"
+  data-product-id="{{ product_card_product.id }}"
+    data-handle="{{ product_card_product.handle }}"
+    data-url="{{ product_card_product.url }}"
+
+>
+    <div class="card{% if product_card_product.media[0].media_type == 'video' %} has-first-video{% endif %}">
+        <div class="card-product{% if product_card_product.featured_media == nil %} card--text-only card--soft{% endif %}">
+            <div class="card-product__wrapper">
+                {%- if settings.show_badge -%}
+                    {% render 'product-badge',
+                        product: product_card_product,
+                        class: 'card__badge',
+                        badge_detail: true,
+                        serial: serial
+                    %}
+                {%- endif -%}
+                <div class="card-media card-media--{{ media_size }}{% if pc02_has_carousel %} pc02-has-carousel{% endif %}{% if product_card_product.media[1] != nil and settings.show_image_swap and pc02_has_carousel == false %} media--hover-effect{% endif%}{% if settings.show_compare and settings.product_compare_type == 'default' %} has-compare{% endif %}{% if loading %} media--loading-effect{% endif %}" data-pc02-carousel-enabled="{{ pc02_has_carousel }}"
+                    {% if product_card_product.featured_media %}
+                        {% if media_size == 'adapt' %}
+                            style="padding-bottom: {{ 1 | divided_by: featured_media_aspect_ratio | times: 100 }}%;"
+                        {% elsif media_size == 'square' %}
+                            style="padding-bottom: 100%;"
+                        {% elsif media_size == 'portrait' %}
+                            {% if portrait_aspect_ratio != blank %}
+                                style="padding-bottom: {{ portrait_aspect_ratio | append: '%' }};"
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                >
+                    {% if pc02_has_carousel %}
+
+                      <div class="pc02-carousel"
+
+                        data-pc02-carousel
+
+                        data-pc02-duration="{{ pc02_carousel_transition_duration }}"
+
+                        data-pc02-drag-threshold="{{ pc02_carousel_drag_threshold }}"
+
+                        data-pc02-loop="{{ pc02_carousel_loop | json }}"
+
+                      >
+
+                        {%- for m in pc02_images -%}
+                          {%- assign img = m.preview_image -%}
+                          {%- assign pc02_is_first = forloop.first -%}
+
+                          <div class="pc02-slide" data-pc02-slide>
+
+                            <a class="pc02-slide-link" href="{{ product_card_product.url }}" title="{{ product_card_product.title | escape }}">
+
+                              {%- if pc02_is_first -%}
+                                {{- img
+                                  | image_url: width: 400, format: 'webp'
+                                  | image_tag:
+                                      class: 'pc02-img',
+                                      alt: img.alt | default: product_card_product.title,
+                                      loading: 'eager',
+                                      fetchpriority: 'high',
+                                      decoding: 'async',
+                                      widths: '220,320,400,520,640',
+                                      sizes: '(max-width: 749px) 50vw, (max-width: 989px) 33vw, 25vw'
+                                -}}
+                              {%- else -%}
+                                {{- img
+                                  | image_url: width: 400, format: 'webp'
+                                  | image_tag:
+                                      class: 'pc02-img',
+                                      alt: img.alt | default: product_card_product.title,
+                                      loading: 'lazy',
+                                      decoding: 'async',
+                                      widths: '220,320,400,520,640',
+                                      sizes: '(max-width: 749px) 50vw, (max-width: 989px) 33vw, 25vw'
+                                -}}
+                              {%- endif -%}
+
+                            </a>
+
+                          </div>
+
+                        {%- endfor -%}
+
+                      </div>
+
+                      {%- if pc02_dots_enable -%}
+                        <div class="pc02-dot-bar-wrap align-{{ pc02_dots_alignment }}" data-pc02-dotwrap>
+                          <div class="pc02-dot-bar" data-pc02-dots>
+                            {%- for m in pc02_images -%}
+                              <button
+                                type="button"
+                                class="pc02-dot{% if forloop.first %} is-active{% endif %}"
+                                data-pc02-dot="{{ forloop.index0 }}"
+                                aria-label="Slide {{ forloop.index }}"
+                              ></button>
+                            {%- endfor -%}
+                          </div>
+                        </div>
+                      {%- endif -%}
+
+                    {% else %}
+
+                      {% render 'image-product-card',
+
+                        product_card_product: product_card_product,
+
+                        variant_img: variant_img,
+
+                        has_video: has_video,
+
+                        loading: loading
+
+                      %}
+
+                      <a class="card-link" href="{{ product_card_product.url }}" title="{{ product_card_product.title | escape }}"></a>
+
+                    {% endif %}
+
+                    {%- if pc02_show_offer_badge -%}
+                      <div
+                        class="pc02-offer-badge pc02-offer--rotate pc02-offer-pos--{{ pc02_offer_position }}"
+                        data-pc02-offer-badge
+                        data-start="{{ pc02_offer_countdown_start | escape }}"
+                        data-end="{{ pc02_offer_countdown_end | escape }}"
+                        data-rotate-ms="{{ pc02_offer_rotate_seconds | times: 1000 }}"
+                        aria-label="{{ pc02_offer_message | escape }}{% if pc02_offer_discount_label != blank %} - {{ pc02_offer_discount_label | escape }}{% endif %}"
+                      >
+                        <span class="pc02-offer-stage">
+                          {%- if pc02_offer_message != blank -%}
+                            <span class="pc02-offer-frame pc02-offer-frame-message is-active" data-pc02-offer-frame>
+                              {{ pc02_offer_message }}
+                            </span>
+                          {%- endif -%}
+
+                          {%- if pc02_offer_discount_label != blank -%}
+                            <span class="pc02-offer-frame pc02-offer-frame-discount{% if pc02_offer_message == blank %} is-active{% endif %}" data-pc02-offer-frame>
+                              {{ pc02_offer_discount_label }}
+                            </span>
+                          {%- endif -%}
+
+                          {%- if pc02_offer_countdown_end != blank -%}
+                            <span
+                              class="pc02-offer-frame pc02-offer-frame-countdown{% if pc02_offer_message == blank and pc02_offer_discount_label == blank %} is-active{% endif %}"
+                              data-pc02-offer-frame
+                              data-pc02-offer-countdown
+                              data-prefix="{{ pc02_offer_countdown_prefix | escape }}"
+                            >
+                              {{ pc02_offer_countdown_prefix }} --:--:--
+                            </span>
+                          {%- endif -%}
+                        </span>
+                      </div>
+                    {%- endif -%}
+                </div>
+
+                {%- if product_action_group -%}
+                    <div class="card-product__group group-{{ settings.group_quickview_wishlist }}">
+                        {%- unless settings.enable_custom_layout_card -%}
+                            {%- if show_wishlist -%}
+                                <div class="card-product__group-item card-wishlist">
+                                    <button type="button" title="{{ 'wishlist.general.add' | t }}" class="wishlist-icon{% if settings.show_wishlist_card_mb %} show-mb{% endif %}" data-wishlist data-wishlist-handle="{{ product_card_product.handle }}" data-product-id="{{ product_card_product.id }}">
+                                        <span class="visually-hidden">{{ 'wishlist.general.add' | t }}</span>
+                                        <span class="text">
+                                            {{ 'wishlist.general.add' | t }}
+                                        </span>
+                                        {% render 'icon-heart-2' %}
+                                        {% if settings.show_wishlist_full_icon %}{% render 'icon-heart-add' %}{% endif %}
+                                    </button>
+                                </div>
+                            {%- endif -%}
+                        {%- endunless -%}
+                        {%- if show_quick_view -%}
+                            <div class="card-product__group-item card-quickview card-quickviewIcon{% if settings.show_quick_view_mb %} show-mb{% endif %}{% if settings.product_quick_view_type == 'default' %} default{% endif %}">
+                                <button type="button" title="{{ 'products.product.quick_view' | t }}" class="quickview-icon" data-product-id="{{ product_card_product.id }}" data-open-quick-view-popup data-product-handle="{{ product_card_product.handle }}">
+                                    <span class="visually-hidden">{{ 'products.product.quick_view' | t }}</span>
+                                    <span class="text">
+                                        {{ 'products.product.quick_view' | t }}
+                                    </span>
+                                    {% render 'icon-eyes' %}
+                                </button>
+                            </div>
+                        {%- endif -%}
+                        {%- if show_compare -%}
+                            {% render 'product-compare'.
+                                product: product_card_product,
+                                sectionId: sectionId,
+                                class: 'card-product__group-item card-compare card-compareIcon'
+                            %}
+                        {%- endif -%}
+                    </div>
+                {%- endif -%}
+
+                 {% if settings.display_item_size %}
+                    {% render 'product-item-size', product: product_card_product %}
+                {% endif %}
+
+                {%- if settings.show_quick_view and settings.product_quick_view_type == 'default' -%}
+                    <div class="card-quickview">
+                        <button type="button" title="{{ 'products.product.quick_view' | t }}" class="quickview-button button" data-product-id="{{ product_card_product.id }}" data-open-quick-view-popup data-product-handle="{{ product_card_product.handle }}">
+                            <span class="visually-hidden">{{ 'products.product.quick_view' | t }}</span>
+                            {{ 'products.product.quick_view' | t }}
+                        </button>
+                    </div>
+                {%- endif -%}
+
+                {%- if settings.show_product_marquee -%}
+                    {% render 'product-card-marquee',
+                        product: product_card_product,
+                    %}  
+                {%- endif -%}
+            </div>
+        </div>
+        <div class="card-information">
+            <div class="card-information__wrapper text-{{ settings.product_content_text_align }}">
+                {% if settings.disable_product_card_border and settings.enable_custom_layout_card %}
+                    <div class="wrapper-title-vendor {% if settings.product_title_line_text != 'full' %} card-title-ellipsis{% endif %}">
+                {% endif %}
+
+                {%- if settings.show_vendor -%}
+                    {% unless settings.disable_product_card_border and settings.enable_custom_layout_card %}
+                    <div class="card-information__group card-information__group-2">
+                    {% endunless %}
+                        <div class="card-vendor link-underline">
+                            <span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span>
+                            {{ product_card_product.vendor | link_to_vendor: class: 'vendor-text' }}
+                        </div>
+                    {% unless settings.disable_product_card_border and settings.enable_custom_layout_card %}    
+                    </div>
+                    {% endunless %}
+                {%- endif -%}
+               
+                <div class="pc02-title-row">
+                  <a class="card-title link-underline{% if settings.product_title_line_text != 'full' %} card-title-ellipsis{% endif %}{% if variant_selected != blank %} card-title-change{% endif %}"
+                    href="{{ product_card_product.url }}"
+                    data-product-title="{{ product_card_product.title | escape }}"
+                    data-product-url="{{ product_card_product.url }}">
+                    <span class="text">
+                      {{ product_card_product.title | escape }}
+                      {% if variant_selected != blank %}
+                        <span data-change-title> {% if settings.style_text_color_varriant == '01' %}-{% endif %} {{ variant_selected }} </span>
+                      {% endif %}
+                    </span>
+                  </a>
+
+                  {%- if settings.pc02_quick_add_placement == 'inline_title_right' -%}
+                    {% render 'pc02-quick-add-icon', product: product_card_product, aria_label: 'Quick add' %}
+                  {%- endif -%}
+                </div>
+
+                {% if settings.disable_product_card_border and settings.enable_custom_layout_card %}
+                    </div>
+                {% endif %}
+
+                {% render 'product-card-summary',
+                    product: product_card_product,
+                    class: 'card-list__hidden'
+                %}
+              
+                
+                {%- if pc02_show_age_btn and pc02_age_btn_position == 'above_price' -%}
+                    <div class="pc02-age-range-wrap align-{{ pc02_age_btn_align }}">
+                        <a
+                        class="pc02-age-range-btn"
+                        href="{{ product_card_product.url }}"
+                        title="{{ product_card_product.title | escape }}"
+                        {% if pc02_age_modal_enable %}
+                            data-open-quick-bag-popup
+                            data-product-handle="{{ product_card_product.handle }}"
+                            data-product-id="{{ product_card_product.id }}"
+                        {% endif %}
+                        >
+                        {{ pc02_age_range_text }}
+                        </a>
+                    </div>
+                {%- endif -%}
+
+                {%- if show_price -%}
+                    <div class="card-price">
+                        {% render 'price',
+                            product: product_card_product,
+                            price_class: '',
+                            hasCountdown: hasCountdown
+                        %}
+                    </div>
+                {%- endif -%}
+
+
+                {%- if pc02_show_age_btn and pc02_age_btn_position == 'below_price' -%}
+                    <div class="pc02-age-range-wrap align-{{ pc02_age_btn_align }}">
+                        <a
+                        class="pc02-age-range-btn"
+                        href="{{ product_card_product.url }}"
+                        title="{{ product_card_product.title | escape }}"
+                        {% if pc02_age_modal_enable %}
+                            data-open-quick-bag-popup
+                            data-product-handle="{{ product_card_product.handle }}"
+                            data-product-id="{{ product_card_product.id }}"
+                        {% endif %}
+                        >
+                        {{ pc02_age_range_text }}
+                        </a>
+                    </div>
+                {%- endif -%}
+
+                {%- if product_card_product.metafields.custom.positive_vibes_almost_sold_out or product_card_product.metafields.custom.positive_vibes_recently_people_gave_review or product_card_product.metafields.custom.positive_vibes_top_best_seller -%}
+                    <positive-vibes class="card-positive_vibes positive_vibes">
+                        <div class="text-vibes">
+                            {%- if product_card_product.metafields.custom.positive_vibes_almost_sold_out -%}
+                                <div class="text-vibes--child"><p>{% render 'icon-fire-3' %} {{product_card_product.metafields.custom.positive_vibes_almost_sold_out}}</p></div>
+                            {%- endif -%}
+                            {%- if product_card_product.metafields.custom.positive_vibes_recently_people_gave_review -%}
+                                <div class="text-vibes--child"><p>{% render 'icon-check-2' %} {{product_card_product.metafields.custom.positive_vibes_recently_people_gave_review}}</p></div>
+                            {%- endif -%}
+                            {%- if product_card_product.metafields.custom.positive_vibes_top_best_seller -%}
+                                <div class="text-vibes--child"><p><span class="hot-stock">{{ 'products.product.hot_stock_text' | t }}</span> {{product_card_product.metafields.custom.positive_vibes_top_best_seller}}</p></div>
+                            {%- endif -%}
+                        </div>
+                    </positive-vibes>
+                {%- endif -%}
+            </div>
+
+            {%- if settings.enable_combined_products_listing and custom_fields != blank -%}
+                {% render 'combined-products-listing', product: product %}
+            {%- else -%}
+                {%- if isColor -%}
+                    {%- unless settings.show_swatch -%}
+                    <div class="hidden">
+                    {%- endunless -%}
+                        {% render 'product-swatch',
+                            product: product_card_product,
+                            index: index,
+                            variant_selected: variant_selected
+                        %}
+                    {%- unless settings.show_swatch -%}
+                    </div>
+                    {%- endunless -%}
+                {%- endif -%}
+            {%- endif -%}
+
+            {% if settings.display_text_size %}
+                {% assign variant_size = product_card_product.options_by_name['Size'].values | size %}
+                {% if variant_size > 0 %}
+                    <span class="text-size text-{{ settings.product_content_text_align }}">{{ 'products.product.more_sizes' | t }}</span>
+                {% endif %}
+            {% endif %}
+
+            {%- if settings.enable_custom_layout_card -%}
+                <div class="wrapper__card{% if show_wishlist %} show-wishlist{% endif %}{% if settings.show_wishlist_card_mb %} show-mb{% endif %}">
+                    {%- if settings.show_action -%}
+                        <div class="card-action{% if settings.show_compare and settings.product_compare_type == 'default' %} has-compare{% endif %}">
+                            {% render 'add-to-cart-form',
+                                product: product_card_product,
+                                id: 'form',
+                                position: position,
+                                sectionId: sectionId
+                            %}
+                        </div>
+                    {%- endif -%}
+                    {%- if settings.show_action -%}
+                        {% render 'add-to-cart-form-category-list',
+                            product: product_card_product,
+                            id: 'form',
+                            list: 'list',
+                            position: position,
+                            sectionId: sectionId
+                        %}
+                    {%- endif -%}
+                    {%- if show_wishlist -%}
+                        <div class="card-product__group-item card-wishlist">
+                            <button type="button" title="{{ 'wishlist.general.add' | t }}" class="wishlist-icon{% if settings.show_wishlist_card_mb %} show-mb{% endif %}" href="#" data-wishlist data-wishlist-handle="{{ product_card_product.handle }}" data-product-id="{{ product_card_product.id }}"
+                            >
+                                <span class="visually-hidden">{{ 'wishlist.general.add' | t }}</span>
+                                <span class="text">
+                                    {{ 'wishlist.general.add' | t }}
+                                </span>
+                                {% render 'icon-heart-2' %}
+                                {% if settings.show_wishlist_full_icon %}{% render 'icon-heart-add' %}{% endif %}
+                            </button>
+                        </div>
+                    {%- endif -%}
+                </div>
+            {%- else -%}
+                {%- if settings.show_action -%}
+                    <div class="card-action{% if settings.show_compare and settings.product_compare_type == 'default' %} has-compare{% endif %}">
+                        {% render 'add-to-cart-form',
+                            product: product_card_product,
+                            id: 'form',
+                            position: position,
+                            sectionId: sectionId
+                        %}
+                    </div>
+                {%- endif -%}
+                {%- if settings.show_action -%}
+                    {% render 'add-to-cart-form-category-list',
+                        product: product_card_product,
+                        id: 'form',
+                        list: 'list',
+                        position: position,
+                        sectionId: sectionId
+                    %}
+                {%- endif -%}
+                {%- if settings.show_compare and settings.product_compare_type == 'default' -%}
+                    <div class="card-compare-wrapper">
+                        {% render 'product-compare',
+                            product: product_card_product,
+                            sectionId: sectionId,
+                            class: 'card-compare'
+                        %}
+                    </div>
+                {%- endif -%}
+            {%- endif -%}
+
+        </div>
+    </div>
+</div>

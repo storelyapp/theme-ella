@@ -1,0 +1,793 @@
+{% comment %}
+  Lagorii – Ultra-Custom Tabs (Section)
+{% endcomment %}
+
+<section id="lagorii-tabs-{{ section.id }}" class="lagorii-tabs" data-mode="{{ section.settings.layout_mode }}" data-mobile-mode="{{ section.settings.mobile_mode }}" data-allow-multiple="{{ section.settings.allow_multiple }}">
+  <div class="ltabs-wrapper" style="--brand: {{ section.settings.brand_color }}; --ink: {{ section.settings.text_color }}; --muted: {{ section.settings.muted_color }}; --bg: {{ section.settings.bg_color }}; --radius: {{ section.settings.radius }}px; --w: min({{ section.settings.max_width }}px, 94vw);">
+
+    {% if section.settings.heading != blank %}
+      <header class="ltabs-header">
+        <h2 class="ltabs-title">{{ section.settings.heading }}</h2>
+        {% if section.settings.subtext != blank %}
+          <p class="ltabs-sub">{{ section.settings.subtext }}</p>
+        {% endif %}
+      </header>
+    {% endif %}
+
+    <div class="ltabs-container">
+      {%- assign layout_mode = section.settings.layout_mode -%}
+
+      {% if layout_mode == 'tabs' %}
+        <div class="ltabs-list" role="tablist" aria-label="{{ section.settings.heading | default: 'Tabbed content' }}">
+          {% for block in section.blocks %}
+            {%- assign i = forloop.index0 -%}
+            {%- assign start_open = block.settings.start_open -%}
+            <button
+              type="button"
+              id="ltab-{{ section.id }}-btn-{{ i }}"
+              class="ltab-btn {% if start_open %}is-active{% endif %} {{ block.settings.custom_classes }}"
+              role="tab"
+              aria-selected="{% if start_open %}true{% else %}false{% endif %}"
+              aria-controls="ltab-{{ section.id }}-panel-{{ i }}"
+              tabindex="{% if start_open %}0{% else %}-1{% endif %}"
+              data-index="{{ i }}"
+            >
+              {% assign _title = block.settings.tab_title | strip %}
+              <span class="ltab-btn__text">
+              {% if _title == blank %}
+                Tab {{ forloop.index }}
+              {% else %}
+                {{ _title | escape }}
+              {% endif %}
+              </span>
+            </button>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <div class="ltabs-panels {% unless layout_mode == 'tabs' %}as-accordion{% endunless %}">
+        {% for block in section.blocks %}
+          {%- assign i = forloop.index0 -%}
+          {%- assign anim = block.settings.anim_style -%}
+          {%- assign start_open = block.settings.start_open -%}
+          {%- assign panel_id = 'ltab-' | append: section.id | append: '-panel-' | append: i -%}
+          <div
+            id="{{ panel_id }}"
+            class="ltab-panel {{ anim }} {% if start_open %}is-open{% endif %} {{ block.settings.custom_classes }}"
+            role="tabpanel"
+            aria-labelledby="ltab-{{ section.id }}-btn-{{ i }}"
+            aria-hidden="{% unless start_open %}true{% else %}false{% endunless %}"
+            data-index="{{ i }}"
+            data-animate="{{ block.settings.anim_style }}"
+            data-anim-duration="{{ block.settings.anim_duration }}"
+            data-anim-delay="{{ block.settings.anim_delay }}"
+          >
+            <button class="ltab-acc-toggle" data-index="{{ i }}" aria-controls="{{ panel_id }}" aria-expanded="{% if start_open %}true{% else %}false{% endif %}">
+              {% assign _title = block.settings.tab_title | strip %}
+              <span class="ltab-acc-title">
+                {% if _title == blank %}
+                  Tab {{ forloop.index }}
+                {% else %}
+                  {{ _title | escape }}
+                {% endif %}
+              </span>
+              <span class="ltab-acc-icon" aria-hidden="true">
+                <!-- Minimal chevron -->
+                <svg class="icon-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </span>
+            </button>
+
+            <div class="ltab-panel__inner">
+              {% if block.settings.enable_image and block.settings.image != blank %}
+                {%- assign img = block.settings.image -%}
+                {%- assign alt = block.settings.image_alt | default: img.alt | default: block.settings.tab_title -%}
+                {% if block.settings.image_link != blank %}
+                  <a href="{{ block.settings.image_link }}" class="ltab-banner">
+                    {{ img | image_url: width: 1440 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 900px, 92vw', widths: '400,600,900,1200,1440', alt: alt }}
+                  </a>
+                {% else %}
+                  <div class="ltab-banner">
+                    {{ img | image_url: width: 1440 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 900px, 92vw', widths: '400,600,900,1200,1440', alt: alt }}
+                  </div>
+                {% endif %}
+              {% endif %}
+
+              {% if block.settings.enable_richtext and block.settings.richtext != blank %}
+                <div class="ltab-richtext rte">{{ block.settings.richtext }}</div>
+              {% endif %}
+
+              {% if block.settings.enable_liquid and block.settings.custom_liquid != blank %}
+                <div class="ltab-liquid">{{ block.settings.custom_liquid }}</div>
+              {% endif %}
+            </div>
+
+            {% if block.settings.custom_css != blank %}
+              <style id="tab-css-{{ section.id }}-{{ i }}">
+                /* Scoped to this panel */
+                #{{ panel_id }} { {{ block.settings.custom_css }} }
+              </style>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <style>
+/* ===== Base (scoped) ===== */
+#lagorii-tabs-{{ section.id }}{ color:var(--ink); background:var(--bg); }
+#lagorii-tabs-{{ section.id }} .ltabs-wrapper{ width:var(--w); margin:0 auto; padding: {{ section.settings.py }}px {{ section.settings.px }}px; }
+
+#lagorii-tabs-{{ section.id }} .ltabs-header{ margin-bottom: 1.2rem; text-align: {{ section.settings.header_align }}; }
+#lagorii-tabs-{{ section.id }} .ltabs-title{ font-size: clamp(20px, 1.6rem + 0.3vw, 28px); margin:0 0 .25rem; color: var(--ink); }
+#lagorii-tabs-{{ section.id }} .ltabs-sub{ color: var(--muted); margin:0; }
+
+/* Tabs list */
+#lagorii-tabs-{{ section.id }} .ltabs-list{ display:flex; gap:.5rem; flex-wrap:wrap; border-bottom:1px solid color-mix(in srgb, var(--ink) 12%, transparent); margin-bottom: 1rem; }
+#lagorii-tabs-{{ section.id }} .ltab-btn{ appearance:none; background:transparent; border:0; padding:.6rem .9rem; border-radius: calc(var(--radius) - 2px) calc(var(--radius) - 2px) 0 0; color:var(--muted); cursor:pointer; position:relative; font-weight:600; }
+#lagorii-tabs-{{ section.id }} .ltab-btn:is(:focus-visible,.is-active){ color: var(--ink); outline:none; }
+#lagorii-tabs-{{ section.id }} .ltab-btn.is-active::after{ content:""; position:absolute; left:0; right:0; bottom:-1px; height:3px; background: var(--brand); border-radius:3px 3px 0 0; }
+
+/* Panels (generic) */
+#lagorii-tabs-{{ section.id }} .ltab-panel{ border:1px solid color-mix(in srgb, var(--ink) 12%, transparent); border-radius: var(--radius); margin-bottom: .75rem; overflow:hidden; background: color-mix(in srgb, var(--bg) 92%, white 8%); }
+#lagorii-tabs-{{ section.id }} .ltab-panel__inner{ padding: 1rem; display:grid; gap:.75rem; }
+
+/* Animations (optional) */
+#lagorii-tabs-{{ section.id }} .fade{ opacity:0; transform: translateY(8px); }
+#lagorii-tabs-{{ section.id }} .fade.is-open, #lagorii-tabs-{{ section.id }} .fade.is-visible{ opacity:1; transform:none; transition: all var(--dur,300ms) ease var(--del,0ms); }
+#lagorii-tabs-{{ section.id }} .slide{ max-height:0; opacity:0; }
+#lagorii-tabs-{{ section.id }} .slide.is-open{ opacity:1; max-height: 2000px; transition: all var(--dur,350ms) ease var(--del,0ms); }
+#lagorii-tabs-{{ section.id }} .zoom{ opacity:0; transform: scale(.98); }
+#lagorii-tabs-{{ section.id }} .zoom.is-open, #lagorii-tabs-{{ section.id }} .zoom.is-visible{ opacity:1; transform: none; transition: all var(--dur,280ms) ease var(--del,0ms); }
+
+@media (max-width: 767px){
+  #lagorii-tabs-{{ section.id }} .ltabs-wrapper{ padding: {{ section.settings.py_m }}px {{ section.settings.px_m }}px; }
+  #lagorii-tabs-{{ section.id }} .ltabs-list{ gap:.25rem; }
+  #lagorii-tabs-{{ section.id }} .ltab-btn{ padding:.5rem .7rem; font-size:.95rem; }
+}
+
+/* ----- Mode toggles (JS stamps .is-accordion / .is-tabs on the root) ----- */
+#lagorii-tabs-{{ section.id }} .ltab-acc-toggle { display: none; }
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-acc-toggle { display: flex; }
+#lagorii-tabs-{{ section.id }}.is-accordion .ltabs-list { display: none; }
+#lagorii-tabs-{{ section.id }}.is-tabs .ltabs-list { display: flex; }
+
+/* Tabs mode visibility */
+#lagorii-tabs-{{ section.id }}.is-tabs .ltab-panel[aria-hidden="true"] { display: none; }
+#lagorii-tabs-{{ section.id }}.is-tabs .ltab-panel.is-open { display: block; }
+
+/* ===== Minimal accordion look ===== */
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-panel{
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  margin: 0;
+  overflow: visible;
+}
+
+/* Header row */
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-acc-toggle{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 14px 0;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+  border-radius: 0;
+  cursor: pointer;
+}
+
+/* Title text */
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-acc-title{
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  color: var(--ink);
+}
+
+/* Chevron icon */
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-acc-icon{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition: transform .25s ease;
+  margin-left:auto;
+}
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-acc-icon .icon-arrow{
+  width:18px; height:18px; stroke:currentColor;
+}
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-panel.is-open .ltab-acc-icon{
+  transform: rotate(180deg);
+}
+
+/* Content area (only this collapses) */
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-panel__inner{
+  display: none;
+  padding: 12px 0 16px;
+  color: var(--ink);
+}
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-panel.is-open .ltab-panel__inner{
+  display: block;
+}
+
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-acc-toggle:focus-visible{
+  outline: 2px solid color-mix(in srgb, var(--brand) 60%, transparent);
+  outline-offset: 2px;
+}
+
+/* Mobile accordion tweaks for product tabs */
+@media (max-width: 767px) {
+  /* Remove border-bottom for active accordion header */
+  .ltab-acc-toggle[aria-expanded="true"] {
+    border-bottom: none !important;
+    background: transparent!important;
+  }
+}
+
+/* Center align the support buttons */
+#lagorii-tabs-{{ section.id }} .customer-support-buttons {
+  display: flex;
+  justify-content: center;   /* center them horizontally */
+  align-items: center;
+  gap: 16px;                 /* spacing between buttons */
+  flex-wrap: wrap;
+}
+
+/* Make buttons equal size */
+#lagorii-tabs-{{ section.id }} .support-btn {
+  flex: 0 1 auto;
+  min-width: 140px;          /* keeps them consistent */
+  text-align: center;
+}
+
+/* ===== Refined underline placement (anchor to text only) ===== */
+@media (min-width: 768px){
+  #lagorii-tabs-{{ section.id }} .ltabs-list{
+    justify-content: center;
+    border-bottom: 0;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  #lagorii-tabs-{{ section.id }} .ltab-btn{
+    font-size: clamp(16px, 0.9rem + 0.4vw, 20px);
+    padding: .7rem 1rem;
+    color: var(--muted);
+    position: relative;
+  }
+
+  #lagorii-tabs-{{ section.id }} .ltab-btn__text{
+    position: relative; /* anchor point for underline */
+    display: inline-block;
+    padding-bottom: 2px; /* spacing above underline */
+  }
+
+  #lagorii-tabs-{{ section.id }} .ltab-btn__text::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:0;
+    height:3px;
+    width:100%;
+    max-width: 50px; /* optional: cap underline length */
+    background: var(--brand);
+    border-radius:3px;
+    transform: translateX(-50%) scaleX(0);
+    transition: transform .25s ease;
+  }
+
+  #lagorii-tabs-{{ section.id }} .ltab-btn.is-active .ltab-btn__text::after{
+    transform: translateX(-50%) scaleX(1);
+  }
+
+  #lagorii-tabs-{{ section.id }} .ltab-btn.is-active{
+    color: var(--ink);
+  }
+}
+
+/* Remove the old underline & any accidental text-underline */
+#lagorii-tabs-{{ section.id }} .ltab-btn.is-active::after { 
+  content: none !important;
+}
+#lagorii-tabs-{{ section.id }} .ltab-btn,
+#lagorii-tabs-{{ section.id }} .ltab-btn__text {
+  text-decoration: none !important;
+}
+
+/* Keep the single, centered underline on the text */
+@media (min-width: 768px){
+  #lagorii-tabs-{{ section.id }} .ltab-btn__text{
+    position: relative;
+    display: inline-block;
+    padding-bottom: 4px;            /* space above the underline */
+  }
+  #lagorii-tabs-{{ section.id }} .ltab-btn__text::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:-2px;                    /* sits right under the text */
+    height:3px;
+    width:100%;                     /* matches text width */
+    background: var(--brand);
+    border-radius:3px;
+    transform: translateX(-50%) scaleX(0);
+    transform-origin:center;
+    transition: transform .25s ease;
+  }
+  #lagorii-tabs-{{ section.id }} .ltab-btn.is-active .ltab-btn__text::after{
+    transform: translateX(-50%) scaleX(1);
+  }
+}
+
+
+/* Reduce width of tab content box */
+#lagorii-tabs-{{ section.id }} .ltab-panel {
+  max-width: 1000px;       /* adjust to your liking */
+  margin: 0 auto 1rem;    /* center horizontally */
+  border: 0px solid #ddd; /* keep subtle border */
+  border-radius: 10px;
+  background: #fff;
+}
+
+/* Compact font for tab panel content */
+#lagorii-tabs-{{ section.id }} .ltab-panel__inner {
+  font-size: 14px;
+  line-height: 24px;
+}
+
+/* Accordion header title styling */
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-acc-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 16px;
+  letter-spacing: 0.32px;
+  text-transform: none;   /* Sentence case */
+  height: 40px !important;           /* fixed header height */
+  display: flex;
+  align-items: center;    /* vertically center text */
+}
+
+/* Chevron icon size */
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-acc-icon .icon-arrow {
+  width: 24px;
+  height: 24px;
+  stroke-width: 2.2;
+}
+
+/* Ensure active accordion headers don't lose separation */
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-panel.is-open {
+  border-bottom: 1px solid rgba(0,0,0,0.1); /* divider under content */
+  margin-bottom: 8px; /* small spacing before next header */
+}
+
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-acc-toggle[aria-expanded="true"] {
+  border-bottom: none; /* still remove the divider on the header */
+}
+
+  /* 1) Point this at your uploaded file */
+    #lagorii-tabs-{{ section.id }}{
+    /* file must be uploaded in Settings → Files */
+    --acc-icon-url: url({{ 'dropdown-arrow-svgrepo-com_1.svg' | file_url }});
+    }
+
+
+  /* 2) Replace inline <svg> with a CSS icon that inherits color */
+  #lagorii-tabs-{{ section.id }} .ltab-acc-icon svg{ display:none; }
+  #lagorii-tabs-{{ section.id }} .ltab-acc-icon{
+    width: 22px; height: 22px; flex: 0 0 22px;
+    position: relative;
+  }
+  #lagorii-tabs-{{ section.id }} .ltab-acc-icon::before{
+    content:"";
+    display:block; width:100%; height:100%;
+    /* Use mask so the icon picks up currentColor */
+    -webkit-mask-image: var(--acc-icon-url);
+            mask-image: var(--acc-icon-url);
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-position: center;  mask-position: center;
+    -webkit-mask-size: contain;     mask-size: contain;
+    background-color: currentColor; /* icon color follows text color */
+    transition: transform .25s ease;
+  }
+  /* Rotate when open (like your current chevron) */
+  #lagorii-tabs-{{ section.id }}.is-accordion .ltab-panel.is-open .ltab-acc-icon::before{
+    transform: rotate(180deg);
+  }
+
+  /* PNG fallback (in case mask isn’t supported) */
+  @supports not (mask-image: url("")) {
+    #lagorii-tabs-{{ section.id }} .ltab-acc-icon::before{
+      background-image: var(--acc-icon-url);
+      background-repeat:no-repeat; background-position:center; background-size:contain;
+      background-color: transparent; /* PNG keeps its own color */
+    }
+  }
+
+
+  /* Compact the accordion headers */
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-acc-toggle{
+  padding: 14px 0;              /* was 14px 0 */
+  min-height: 0;                /* avoid implicit height */
+}
+
+/* Title: keep your typography but remove fixed height */
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-acc-title{
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 18px;            /* your spec */
+  letter-spacing: .32px;
+  height: auto !important;      /* was 40px */
+}
+
+/* Icon stays the same size but aligns nicer with the tighter header */
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-acc-icon{
+  flex: 0 0 22px;
+  height: 22px;
+}
+
+/* Tighten spacing around open content and separators */
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-panel__inner{
+  padding: 10px 0 12px;         /* was 12px 0 16px */
+}
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-panel.is-open{
+  margin-bottom: 4px;           /* was 8px */
+}
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-panel.is-open + .ltab-panel .ltab-acc-toggle{
+  border-top: 1px solid rgba(0,0,0,.1);  /* crisp divider above the next header */
+}
+/* Show only a single divider between an open panel and the next header */
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-panel.is-open{
+  border-bottom: 0 !important;    /* remove the content’s bottom line */
+  margin-bottom: 4px;              /* keep a tiny breathing room if you like */
+}
+
+/* Keep the single divider attached to the next header */
+#lagorii-tabs-{{ section.id }}.is-accordion
+.ltab-panel.is-open + .ltab-panel .ltab-acc-toggle{
+  border-top: 1px solid rgba(0,0,0,.1);   /* the only line shown */
+}
+
+/* Reset any parent transforms */
+#lagorii-tabs-{{ section.id }} .ltab-acc-icon{
+  transform: none !important;
+}
+
+/* Rotate only the mask/inline icon */
+#lagorii-tabs-{{ section.id }} .ltab-acc-icon::before{
+  transform: rotate(0deg);                 /* closed state */
+  transform-origin: center;
+  transition: transform .25s ease;         /* smooth flip */
+  will-change: transform;
+}
+
+/* Open state: flip 180° – no more, no less */
+#lagorii-tabs-{{ section.id }}.is-accordion
+.ltab-panel.is-open .ltab-acc-icon::before{
+  transform: rotate(180deg);
+}
+
+
+@media (max-width: 767px){
+/* Remove bottom border across all products */
+.productView .productView-options.has-border-bottom {
+  border-bottom: 0 !important;
+}
+
+/* Remove margin-bottom from product size fieldset */
+.productView .product-form__input fieldset,
+.productView .product-form__input.js {
+  margin-bottom: 0 !important;
+}
+
+/* Remove bottom padding from ALL product pages */
+.productView {
+  padding-bottom: 0 !important;
+}
+
+.ltabs-wrapper {
+  padding: 0px 0px 16px 0px !important;
+}
+/* Remove bottom spacing for all .productView-moreItem */
+.productView-moreItem {
+  --spacing-bottom: 0px !important;
+  margin-bottom: 0 !important; /* fallback in case */
+  padding-bottom: 0 !important; /* if padding is also applied */
+}
+}
+
+/* Base toggle layout */
+.ltab-acc-toggle {
+  position: relative;             /* lets us absolutely-center the title when open */
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+/* Keep the chevron on the far right in all states */
+.ltab-acc-toggle .ltab-acc-icon {
+  margin-left: auto;
+}
+
+/* Header = 2 columns: [title area] [chevron] */
+#lagorii-tabs-{{ section.id }} .ltab-acc-toggle{
+  display:grid;
+  grid-template-columns: 1fr 22px;   /* text | icon */
+  align-items:center;
+  column-gap:8px;
+  padding:14px 0;
+  min-height:44px;                   /* keeps row height consistent */
+}
+
+/* Default (collapsed): title left */
+#lagorii-tabs-{{ section.id }} .ltab-acc-title{
+  grid-column:1;
+  justify-self:start;
+  text-align:left;
+  white-space:nowrap;
+}
+
+/* Layout the accordion header as a two-column grid: [title | chevron] */
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-acc-toggle{
+  display: grid !important;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: .5rem;
+}
+
+/* Default (collapsed): title left */
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-acc-title{
+  grid-column: 1;
+  justify-self: start;
+  text-align: left;
+  position: static !important;
+  transform: none !important;
+  width: auto !important;
+}
+
+/* Chevron stays pinned right */
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-acc-icon{
+  grid-column: 2;
+  justify-self: end;
+  margin-left: 0 !important; /* cancel earlier flex helper */
+}
+
+/* Expanded (active): title spans both columns and centers */
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-panel.is-open .ltab-acc-title,
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-acc-toggle[aria-expanded="true"] .ltab-acc-title{
+  grid-column: 1 / 3;
+  justify-self: center;
+  text-align: center;
+  padding-right: 2rem;
+}
+
+#lagorii-tabs-{{ section.id }} .ltab-acc-icon::before {
+  background-color: #E87529 !important; /* Force orange */
+}
+
+/* Hide accordion toggle only when we're in tabs mode on desktop */
+@media (min-width: 768px) {
+  #lagorii-tabs-{{ section.id }}.is-tabs .ltab-acc-toggle {
+    display: none !important;
+  }
+}
+
+/* In accordion mode, keep headers always visible – disable panel-level fade/slide/zoom */
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-panel.fade,
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-panel.zoom,
+#lagorii-tabs-{{ section.id }}.is-accordion .ltab-panel.slide{
+  opacity: 1;
+  transform: none;
+  max-height: none;
+}
+
+</style>
+
+
+<script>
+(() => {
+  const root = document.getElementById('lagorii-tabs-{{ section.id }}');
+  if (!root) return;
+
+  const list      = root.querySelector('.ltabs-list');
+  const panesWrap = root.querySelector('.ltabs-panels');
+  const panels    = Array.from(root.querySelectorAll('.ltab-panel'));
+  const btns      = list ? Array.from(list.querySelectorAll('.ltab-btn')) : [];
+
+  const desktopMode   = root.dataset.mode;
+  const mobileMode    = root.dataset.mobileMode;
+  const allowMultiple = root.dataset.allowMultiple === 'true';
+
+  const mq = window.matchMedia('(max-width: 767px)');
+  const isSmall = () => mq.matches;
+  const shouldAccordion = () => {
+    if (mobileMode === 'accordion' && isSmall()) return true;
+    if (mobileMode === 'tabs'      && isSmall()) return false;
+    if (mobileMode === 'auto'      && isSmall()) return (desktopMode === 'tabs');
+    return desktopMode === 'accordion';
+  };
+
+  // Delivery widget hook
+  const mountDeliveryShortcode = (panel) => {
+    const slot = panel && panel.querySelector('.delivery_date_shortcode');
+    if (!slot) return;
+
+    document.dispatchEvent(new CustomEvent('lagorii:panel-open', {
+      detail: { panel, sectionId: '{{ section.id }}' }
+    }));
+
+    // Try common globals; harmless if not present
+    if (window.DeliveryDateApp && typeof window.DeliveryDateApp.mount === 'function') {
+      try { window.DeliveryDateApp.mount(); } catch(e) {}
+    }
+    if (window.DeliveryDate && typeof window.DeliveryDate.init === 'function') {
+      try { window.DeliveryDate.init(); } catch(e) {}
+    }
+  };
+
+  const openTab = (index) => {
+    panels.forEach((p, i) => {
+      const show = i === index;
+      p.classList.toggle('is-open', show);
+      p.setAttribute('aria-hidden', show ? 'false' : 'true');
+    });
+    if (btns.length) {
+      btns.forEach((b, i) => {
+        const active = i === index;
+        b.classList.toggle('is-active', active);
+        b.setAttribute('aria-selected', active ? 'true' : 'false');
+        b.setAttribute('tabindex',     active ? '0'    : '-1');
+      });
+    }
+    mountDeliveryShortcode(panels[index]);
+  };
+
+  // Apply per-panel animation vars
+  panels.forEach((panel) => {
+    const dur = parseInt(panel.dataset.animDuration || '300', 10);
+    const del = parseInt(panel.dataset.animDelay    || '0',   10);
+    panel.style.setProperty('--dur', dur + 'ms');
+    panel.style.setProperty('--del', del + 'ms');
+  });
+
+  const mountUI = () => {
+    const acc = shouldAccordion();
+    root.classList.toggle('is-accordion', acc);
+    root.classList.toggle('is-tabs', !acc);
+    if (panesWrap) panesWrap.classList.toggle('as-accordion', acc);
+
+    if (acc) {
+      panels.forEach((p) => {
+        const isOpen = p.classList.contains('is-open');
+        p.setAttribute('aria-hidden', 'false');
+        const t = p.querySelector('.ltab-acc-toggle');
+        if (t) t.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        if (isOpen) mountDeliveryShortcode(p);
+      });
+    } else {
+      let idx = panels.findIndex(p => p.classList.contains('is-open'));
+      if (idx < 0) idx = 0;
+      openTab(idx);
+    }
+  };
+
+  if (list && btns.length) {
+    list.addEventListener('click', (e) => {
+      const btn = e.target.closest('.ltab-btn');
+      if (!btn) return;
+      const index = parseInt(btn.dataset.index, 10);
+      if (!shouldAccordion()) openTab(index);
+    });
+
+    list.addEventListener('keydown', (e) => {
+      const keys = ['ArrowLeft','ArrowRight','Home','End'];
+      if (!keys.includes(e.key) || shouldAccordion()) return;
+      e.preventDefault();
+      const current = btns.findIndex(b => b.classList.contains('is-active'));
+      let next = current;
+      if (e.key === 'ArrowRight') next = (current + 1) % btns.length;
+      if (e.key === 'ArrowLeft')  next = (current - 1 + btns.length) % btns.length;
+      if (e.key === 'Home')       next = 0;
+      if (e.key === 'End')        next = btns.length - 1;
+      btns[next].focus();
+      openTab(next);
+    });
+  }
+
+  root.addEventListener('click', (e) => {
+    const toggle = e.target.closest('.ltab-acc-toggle');
+    if (!toggle || !shouldAccordion()) return;
+
+    const idx   = parseInt(toggle.dataset.index, 10);
+    const panel = panels[idx];
+    const willOpen = !panel.classList.contains('is-open');
+
+    if (!allowMultiple) {
+      panels.forEach((p) => {
+        if (p !== panel) {
+          p.classList.remove('is-open');
+          p.setAttribute('aria-hidden', 'false');
+          const t = p.querySelector('.ltab-acc-toggle');
+          if (t) t.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+    panel.classList.toggle('is-open', willOpen);
+    panel.setAttribute('aria-hidden', 'false');
+    toggle.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+
+    if (willOpen) mountDeliveryShortcode(panel);
+  });
+
+  mq.addEventListener('change', mountUI);
+  mountUI();
+})();
+</script>
+</section>
+
+{% schema %}
+{
+  "name": "Lagorii – Custom Tabs",
+  "settings": [
+    {"type":"text","id":"heading","label":"Section heading","default":"Need-to-know details"},
+    {"type":"richtext","id":"subtext","label":"Section subtext","default":"<p>Add key information into beautifully organized tabs or accordions.</p>"},
+    {"type":"select","id":"layout_mode","label":"Layout mode (desktop)","default":"tabs","options":[{"value":"tabs","label":"Tabs"},{"value":"accordion","label":"Accordion"}]},
+    {"type":"select","id":"mobile_mode","label":"Mobile mode","default":"accordion","options":[{"value":"auto","label":"Auto (inherit tabs → accordion)"},{"value":"accordion","label":"Accordion"},{"value":"tabs","label":"Tabs"}]},
+    {"type":"checkbox","id":"allow_multiple","label":"Accordion: allow multiple panels open","default":false},
+    {"type":"range","id":"max_width","min":600,"max":1600,"step":20,"unit":"px","label":"Max content width","default":1100},
+    {"type":"range","id":"radius","min":0,"max":24,"step":1,"unit":"px","label":"Corner radius","default":12},
+    {"type":"select","id":"header_align","label":"Header alignment","default":"left","options":[{"value":"left","label":"Left"},{"value":"center","label":"Center"}]},
+    {"type":"color","id":"brand_color","label":"Brand color","default":"#E87529"},
+    {"type":"color","id":"text_color","label":"Text color","default":"#111111"},
+    {"type":"color","id":"muted_color","label":"Muted text","default":"#5b5b5b"},
+    {"type":"color","id":"bg_color","label":"Background","default":"#ffffff"},
+    {"type":"range","id":"py","min":0,"max":80,"step":2,"unit":"px","label":"Padding Y (desktop)","default":24},
+    {"type":"range","id":"px","min":0,"max":64,"step":2,"unit":"px","label":"Padding X (desktop)","default":12},
+    {"type":"range","id":"py_m","min":0,"max":80,"step":2,"unit":"px","label":"Padding Y (mobile)","default":16},
+    {"type":"range","id":"px_m","min":0,"max":64,"step":2,"unit":"px","label":"Padding X (mobile)","default":10}
+  ],
+  "blocks": [
+    {
+      "type":"tab",
+      "name":"Tab",
+      "limit": 8,
+      "settings":[
+        {"type":"text","id":"tab_title","label":"Tab heading","default":"Tab title"},
+        {"type":"checkbox","id":"start_open","label":"Start open (first render)","default":false},
+        {"type":"text","id":"custom_classes","label":"Custom classes (optional)","default":"tab-custom"},
+        {"type":"header","content":"Content"},
+        {"type":"checkbox","id":"enable_image","label":"Show image/banner","default":false},
+        {"type":"image_picker","id":"image","label":"Image"},
+        {"type":"text","id":"image_alt","label":"Image alt text"},
+        {"type":"url","id":"image_link","label":"Optional link for image"},
+        {"type":"checkbox","id":"enable_richtext","label":"Show rich text","default":true},
+        {"type":"richtext","id":"richtext","label":"Rich text","default":"<p>Add your content here. You can include links, lists, and formatting.</p>"},
+        {"type":"checkbox","id":"enable_liquid","label":"Show custom Liquid","default":false},
+        {"type":"liquid","id":"custom_liquid","label":"Custom Liquid"},
+        {"type":"header","content":"Animation"},
+        {"type":"select","id":"anim_style","label":"Animation style","default":"fade","options":[{"value":"none","label":"None"},{"value":"fade","label":"Fade"},{"value":"slide","label":"Slide"},{"value":"zoom","label":"Zoom"}]},
+        {"type":"range","id":"anim_duration","min":120,"max":1200,"step":20,"unit":"ms","label":"Animation duration","default":300},
+        {"type":"range","id":"anim_delay","min":0,"max":1200,"step":20,"unit":"ms","label":"Animation delay","default":0},
+        {"type":"header","content":"Per-tab custom CSS (scoped)"},
+        {"type":"textarea","id":"custom_css","label":"CSS declarations (no selector needed)","default":"/* Example: */\npadding: 0;"}
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name":"Lagorii – Custom Tabs",
+      "category":"Text",
+      "blocks":[
+        {"type":"tab","settings":{"tab_title":"Details","start_open":true}},
+        {"type":"tab","settings":{"tab_title":"Size & Fit"}},
+        {"type":"tab","settings":{"tab_title":"Shipping & Returns"}}
+      ]
+    }
+  ]
+}
+{% endschema %}
