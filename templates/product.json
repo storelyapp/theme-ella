@@ -160,7 +160,7 @@
           "settings": {
             "enable": true,
             "heading_override": "",
-            "body_override": "",
+            "body_override": "SITEWIDE",
             "discount_override": "",
             "show_countdown": true,
             "spacing_top": 27,
