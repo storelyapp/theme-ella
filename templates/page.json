@@ -1,1 +1,79 @@
-{"sections":{"main":{"type":"main-page","disabled":true,"settings":{}}},"order":["main"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner_slider_grid_hjThjq": {
+      "type": "Banner-slider-Grid",
+      "name": "Special Store",
+      "settings": {
+        "banner_desktop_image": "shopify://shop_images/website_heading_4938c160-0e40-43a8-b939-d0ec6b64f57e.webp",
+        "banner_mobile_image": "shopify://shop_images/SmallBanners1.webp",
+        "banner_alt": "",
+        "banner_link": "shopify://pages/the-orange-sale",
+        "bg_color": "rgba(0,0,0,0)",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "section_side_padding": 0,
+        "show_cards": true,
+        "cards_source": "manual",
+        "cards_layout": "slider",
+        "enable_arrows": true,
+        "show_arrows_desktop": false,
+        "show_arrows_mobile": false,
+        "arrow_bg": "#ffffff",
+        "arrow_color": "#111111",
+        "arrow_side_offset": 8,
+        "desktop_cards_full_width": true,
+        "desktop_cards_side_padding": 0,
+        "cards_margin_top": 0,
+        "cards_bg_color": "#edf7ff",
+        "cards_bg_image_size": "cover",
+        "cards_bg_padding": 0,
+        "cards_bg_radius": 0,
+        "cards_gap": 0,
+        "card_radius": 6,
+        "card_inner_padding": 2,
+        "card_bg_color": "rgba(0,0,0,0)",
+        "card_image_fit": "contain",
+        "grid_cols_desktop": 4,
+        "grid_cols_tablet": 3,
+        "grid_cols_mobile": 2,
+        "slider_card_width": 65,
+        "slider_cards_visible_mobile": "2.5",
+        "card_aspect_ratio": 135,
+        "overlay_font_family": "inherit",
+        "overlay_font_weight": "600",
+        "overlay_font_size_desktop": 22,
+        "overlay_font_size_mobile": 15,
+        "overlay_text_color": "#ffffff",
+        "overlay_bg_color": "#111111",
+        "overlay_bg_opacity": 100,
+        "overlay_padding": 0,
+        "overlay_radius": 8,
+        "overlay_text_align": "center",
+        "cards_collection": "",
+        "products_limit": 4,
+        "show_view_all": true,
+        "view_all_label": "View all",
+        "view_all_bg": "#e87529",
+        "view_all_text": "#ffffff"
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {}
+    }
+  },
+  "order": [
+    "banner_slider_grid_hjThjq",
+    "main"
+  ]
+}
