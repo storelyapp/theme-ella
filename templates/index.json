@@ -1,1 +1,2815 @@
-{"sections":{"lagorii_brand_slider_7Am7LD":{"type":"lagorii-brand-slider","blocks":{"category_XwCfXn":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/21_6d38b1e4-ec4f-405b-9d3a-f7d4711d3221.webp","collection":"","link":"shopify:\/\/collections\/casual-infants","title":"","subtext":""}},"category_8JPajt":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/22_0e8d17cf-d246-42b7-8e95-e86e3c6a4205.webp","collection":"girls","link":"","title":"","subtext":""}},"category_MbQMiy":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/23_48932b65-60ca-496c-834e-c16e6fc44045.webp","collection":"boys","link":"","title":"","subtext":""}},"category_be4iHU":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/Kids_Closet_1_7a851064-73ea-48eb-ac5d-5dc2bfdaf756.webp","collection":"casual-wear-1","link":"","title":"","subtext":""}},"category_UHahxb":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/25_ddb6e38e-4ebb-4c63-9d3b-be752c077b44.webp","collection":"ethnic-wear-lagorii","link":"","title":"","subtext":""}},"category_XpYekc":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/26_0d463833-eda9-458f-8841-5d38fd45e781.webp","collection":"party-wear","link":"","title":"","subtext":""}},"category_UQyEhF":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/Kids_Closet_2_c57af871-28ef-48d5-8204-fcb143ac32e0.webp","collection":"luxe","link":"","title":"Luxe","subtext":""}},"category_Xx3JMb":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/28_75ef48d1-1091-4251-8a03-7b8f4a63548d.webp","collection":"all-products","link":"","title":"","subtext":""}}},"block_order":["category_XwCfXn","category_8JPajt","category_MbQMiy","category_be4iHU","category_UHahxb","category_XpYekc","category_UQyEhF","category_Xx3JMb"],"name":"Category slider","settings":{"layout_mode":"slider","grid_cols_desktop":4,"grid_cols_mobile":2,"section_width":"1770","show_heading":false,"heading":"Shop by category","visible_desktop":"6.5","visible_tablet":"4.5","visible_mobile":"3.5","arrow_visibility":"none","show_dots":false,"dot_color":"#cccccc","dot_active_color":"#e87529","autoplay":false,"autoplay_interval":5,"gap":0,"radius":0,"bg":"#ffffff","section_margin_top":8,"section_margin_right":0,"section_margin_bottom":4,"section_margin_left":0,"inner_padding_top":0,"inner_padding_right":0,"inner_padding_bottom":6,"inner_padding_left":8}},"lagorii_hero_eta_9RACkg":{"type":"lagorii-hero-eta","blocks":{"banner_dpFKH3":{"type":"banner","name":"Summer Collection","settings":{"image_mobile":"shopify:\/\/shop_images\/10-_1.gif","image_desktop":"shopify:\/\/shop_images\/Summer.webp","banner_collection":"summer-vibes","banner_link":""}},"banner_3fxBtn":{"type":"banner","name":"Wedding Edit","settings":{"image_mobile":"shopify:\/\/shop_images\/Wedding_Wardrobe.webp","image_desktop":"shopify:\/\/shop_images\/Wedding_Edit_-_Web.webp","banner_collection":"wedding-wear","banner_link":""}},"banner_XVHjez":{"type":"banner","name":"Party ready","settings":{"image_mobile":"shopify:\/\/shop_images\/Party_Ready.webp","image_desktop":"shopify:\/\/shop_images\/Party_ready_-Weeb.webp","banner_collection":"party-wear","banner_link":""}},"banner_qi7G69":{"type":"banner","name":"Night Sets","settings":{"image_mobile":"shopify:\/\/shop_images\/Night_Sets.webp","image_desktop":"shopify:\/\/shop_images\/Night_Sets_-_Web.webp","banner_collection":"night-wear","banner_link":""}},"banner_MczfzT":{"type":"banner","name":"Ethnic Sets","settings":{"image_mobile":"shopify:\/\/shop_images\/Ethnic_Sets.webp","image_desktop":"shopify:\/\/shop_images\/Ethnic_Sets_-_Wed.webp","banner_collection":"ethnic-sets","banner_link":""}},"banner_kBnwWm":{"type":"banner","name":"Tailback frocks","settings":{"image_mobile":"shopify:\/\/shop_images\/Tailback_Frock.webp","image_desktop":"shopify:\/\/shop_images\/Tailback_Frocks_-_Web.webp","banner_collection":"tail-back-frocks","banner_link":""}},"banner_pWch7K":{"type":"banner","name":"Lagorii Play","disabled":true,"settings":{"image_mobile":"shopify:\/\/shop_images\/The_Festive_Edit_3_735390a5-de7a-46c1-9ac2-2c3696925469.webp","image_desktop":"shopify:\/\/shop_images\/Play_web_banner.webp","banner_collection":"","banner_link":"shopify:\/\/pages\/lagorii-play"}}},"block_order":["banner_dpFKH3","banner_3fxBtn","banner_XVHjez","banner_qi7G69","banner_MczfzT","banner_kBnwWm","banner_pWch7K"],"name":"Lagorii • Hero + ETA","settings":{"hero_radius":0,"section_margin_top":0,"section_margin_bottom":32,"inset":14,"inset_desktop":8,"overlay_font":"montserrat_n4","overlay_font_size":14,"overlay_weight":"900","overlay_pad_y":6,"overlay_pad_x":10,"overlay_radius":10,"overlay_bg":"#111111","overlay_border":"rgba(0,0,0,0)","overlay_text":"#ffffff","overlay_opacity":41,"truck_color":"#ffffff","truck_size":26,"rules_url":"","cta_collection":"kids-wear-120-min-delivery-bangalore","cta_fallback_url":"","cta_font":"montserrat_n4","cta_weight":"800","cta_font_size":14,"cta_pad_y":7,"cta_pad_x":10,"cta_radius":10,"cta_bg":"#111111","cta_text":"#ffffff","cta_border":"rgba(0,0,0,0)","cta_opacity":41,"cta_icon":"shopify:\/\/shop_images\/Categaries_image_9fc9a4ad-98b1-4a65-a9e1-8697802ddd2f.png","cta_icon_size":34,"cta_label":"Lagorii Now","cta_main_text":"2-Hours","dots_color":"#818181","dots_active_color":"#e87529","autoplay_speed":3000,"dots_margin_top":14,"dots_gap":11}},"lagorii_brand_slider_hCPYVr":{"type":"lagorii-brand-slider","blocks":{"category_riprcm":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/13_3828877c-a93b-4768-9680-abbcea5cfce1.webp","collection":"casual-infants-wear","link":"","title":"","subtext":""}},"category_mdgVYh":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/14_069acaf5-f411-4adf-97d7-750523365a4c.webp","collection":"girls","link":"","title":"","subtext":""}},"category_bfyVFG":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/15_8b658423-0334-43a3-bae2-fdfc9860f716.webp","collection":"boys","link":"","title":"","subtext":""}},"category_ayiA7L":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/16_3b585d29-7ea8-4268-90dd-7bba1780c2aa.webp","collection":"casual-wear-1","link":"","title":"","subtext":""}},"category_qVWWte":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/17_60a3aa07-cacc-4dc3-ab6a-080ad4d990d3.webp","collection":"ethnic-wear-lagorii","link":"","title":"","subtext":""}},"category_WXiRUH":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/18_4024483f-7cdf-4981-9230-fc09f0f880b8.webp","collection":"party-wear","link":"","title":"","subtext":""}},"category_PMHDEw":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/19_07bd0eb7-10ba-4e84-9d2a-4bcaf7747c8f.webp","collection":"luxe","link":"","title":"Luxe","subtext":""}},"category_CbDfLK":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/20_1c3b237f-5670-491f-adab-4a347274e632.webp","collection":"all-products","link":"","title":"","subtext":""}}},"block_order":["category_riprcm","category_mdgVYh","category_bfyVFG","category_ayiA7L","category_qVWWte","category_WXiRUH","category_PMHDEw","category_CbDfLK"],"disabled":true,"name":"Category slider","settings":{"layout_mode":"slider","grid_cols_desktop":4,"grid_cols_mobile":2,"section_width":"1770","show_heading":false,"heading":"Shop by category","visible_desktop":"6.5","visible_tablet":"4.5","visible_mobile":"3.5","arrow_visibility":"none","show_dots":false,"dot_color":"#cccccc","dot_active_color":"#e87529","autoplay":false,"autoplay_interval":5,"gap":0,"radius":0,"bg":"#ffffff","section_margin_top":4,"section_margin_right":0,"section_margin_bottom":0,"section_margin_left":0,"inner_padding_top":0,"inner_padding_right":0,"inner_padding_bottom":6,"inner_padding_left":8}},"lagorii_coupon_code_rrxkR3":{"type":"Lagorii-coupon-code","blocks":{"coupon_card_jkL8XY":{"type":"coupon_card","settings":{"coupon_display_mode":"image","mobile_banner_image":"shopify:\/\/shop_images\/SUMMER10.webp","mobile_banner_alt":"Coupon banner","coupon_code":"GET10","title":"Flat 10% off","subtitle":"Use code GET10 on your order.","show_badge":true,"badge_text":"GET10"}},"coupon_card_GHNgiw":{"type":"coupon_card","settings":{"coupon_display_mode":"image","mobile_banner_image":"shopify:\/\/shop_images\/GET10.webp","mobile_banner_alt":"Coupon banner","coupon_code":"GET10","title":"Flat 10% off","subtitle":"Use code GET10 on your order.","show_badge":true,"badge_text":"GET10"}}},"block_order":["coupon_card_jkL8XY","coupon_card_GHNgiw"],"name":"Lagorii Coupon Copy","settings":{"enable_autoplay":true,"autoplay_speed":2000,"show_dots":false,"show_copy_button":true,"section_padding_top":12,"section_padding_bottom":10,"outer_pad_top":0,"outer_pad_right":10,"outer_pad_bottom":0,"outer_pad_left":10,"image_radius":7,"image_bg_color":"#ffffff","card_bg_color":"rgba(0,0,0,0)","card_min_height":96,"card_radius":18,"card_border_width":0,"card_border_color":"rgba(0,0,0,0)","card_shadow":"0 6px 18px rgba(0,0,0,0.06)","card_gap":16,"card_pad_top":18,"card_pad_right":18,"card_pad_bottom":18,"card_pad_left":18,"font_family":"inherit","title_color":"#111111","title_size_mobile":18,"title_weight":700,"subtitle_color":"#3a3a3a","subtitle_size_mobile":14,"subtitle_weight":500,"subtitle_margin_top":6,"left_gap":14,"badge_pad_x":16,"badge_pad_y":10,"badge_radius":14,"badge_border_width":2,"badge_border_color":"#1e6b4f","badge_bg_color":"#ffffffa6","badge_text_color":"#1e6b4f","badge_font_size":16,"badge_font_weight":700,"right_gap":0,"copy_bg":"#ffffff","copy_color":"#111111","copy_border_width":1,"copy_border_color":"rgba(0,0,0,0)","copy_radius":14,"copy_pad_x_mobile":14,"copy_pad_y_mobile":11,"copy_font_size_mobile":13,"copy_font_weight":700,"copy_icon_size":18,"dots_margin_top":8,"dot_size":7,"dot_color":"#999999","dot_active_color":"#e87529","toast_text":"Coupon copied","toast_bg":"#111111","toast_color":"#ffffff","toast_radius":12,"toast_pad_x":12,"toast_pad_y":8,"toast_font_size":12,"toast_font_weight":600,"toast_duration_ms":1400}},"lagorii_hero_eta_haYYBJ":{"type":"lagorii-hero-eta","blocks":{"banner_VKJATJ":{"type":"banner","name":"Summer Collection","settings":{"image_mobile":"shopify:\/\/shop_images\/Summer_-_2026.png","image_desktop":"shopify:\/\/shop_images\/Summer_-_2026_Web.webp","banner_collection":"summer-vibes","banner_link":""}},"banner_ANmB3F":{"type":"banner","name":"Wedding Edit","settings":{"image_mobile":"shopify:\/\/shop_images\/TheFestiveEdit_5917016c-8b12-425f-bb78-c0d9a2d28342.webp","image_desktop":"shopify:\/\/shop_images\/Website_home_banner.webp","banner_collection":"wedding-wear","banner_link":""}},"banner_gGbewR":{"type":"banner","name":"Kurta Sets","settings":{"image_mobile":"shopify:\/\/shop_images\/212_04accddb-b9f1-4a67-a8df-0b2c7869fb6d.webp","image_desktop":"shopify:\/\/shop_images\/Kurta_Sets_-_Website.webp","banner_collection":"kurta-sets","banner_link":""}},"banner_7TbRWQ":{"type":"banner","name":"Co-ord Sets","settings":{"image_mobile":"shopify:\/\/shop_images\/213_5c3542d5-26be-4e60-b89b-e1778de95c68.webp","image_desktop":"shopify:\/\/shop_images\/Co-ord_Sets_-_Website.webp","banner_collection":"co-ord-set","banner_link":""}},"banner_gPJTTi":{"type":"banner","name":"Fusion wear","settings":{"image_mobile":"shopify:\/\/shop_images\/214_f3443393-cb12-4858-ae68-d699490531c7.webp","image_desktop":"shopify:\/\/shop_images\/Fusion_wear_-_Website.webp","banner_collection":"girls-indo-western","banner_link":""}},"banner_xjMbzd":{"type":"banner","name":"Palazzo Sets","settings":{"image_mobile":"shopify:\/\/shop_images\/211.webp","image_desktop":"shopify:\/\/shop_images\/Palazzo_Sets_-_Website.webp","banner_collection":"palazzo-sets","banner_link":""}},"banner_Yqim3c":{"type":"banner","name":"Lagorii Play","disabled":true,"settings":{"image_mobile":"shopify:\/\/shop_images\/The_Festive_Edit_3_735390a5-de7a-46c1-9ac2-2c3696925469.webp","image_desktop":"shopify:\/\/shop_images\/Play_web_banner.webp","banner_collection":"","banner_link":"shopify:\/\/pages\/lagorii-play"}}},"block_order":["banner_VKJATJ","banner_ANmB3F","banner_gGbewR","banner_7TbRWQ","banner_gPJTTi","banner_xjMbzd","banner_Yqim3c"],"disabled":true,"name":"Lagorii • Hero + ETA","settings":{"hero_radius":0,"section_margin_top":0,"section_margin_bottom":32,"inset":14,"inset_desktop":8,"overlay_font":"montserrat_n4","overlay_font_size":14,"overlay_weight":"900","overlay_pad_y":6,"overlay_pad_x":10,"overlay_radius":10,"overlay_bg":"#111111","overlay_border":"rgba(0,0,0,0)","overlay_text":"#ffffff","overlay_opacity":41,"truck_color":"#ffffff","truck_size":26,"rules_url":"","cta_collection":"kids-wear-120-min-delivery-bangalore","cta_fallback_url":"","cta_font":"montserrat_n4","cta_weight":"800","cta_font_size":14,"cta_pad_y":7,"cta_pad_x":10,"cta_radius":10,"cta_bg":"#111111","cta_text":"#ffffff","cta_border":"rgba(0,0,0,0)","cta_opacity":41,"cta_icon":"shopify:\/\/shop_images\/Categaries_image_9fc9a4ad-98b1-4a65-a9e1-8697802ddd2f.png","cta_icon_size":34,"cta_label":"Lagorii Now","cta_main_text":"60 Mins","dots_color":"#818181","dots_active_color":"#e87529","autoplay_speed":3000,"dots_margin_top":14,"dots_gap":11}},"b25c8bcb-007b-45d9-b198-57f4a84a1b9d":{"type":"product-block","custom_css":[],"name":"New Arrivals","settings":{"container":"fullwidth","padding_full_width":30,"disable_padding_content":false,"enable_border_top":false,"enable_border_bottom":false,"border_height":0,"color_border_bottom":"#e8e8e8","enable_minus_mg_top":false,"minus_spacing_top":-100,"product_block_layout":"scroll","product_bg":"#ffffff","product_bg_gradient":"","style_block_header":"style2","pd_top_title":30,"product_block_title":"New Arrivals","enable_border_title":false,"enable_border_title_style2":true,"fontsize_title":16,"fontsize_title_mb":16,"mg_bottom_title":6,"mg_bottom_title_mb":16,"border_color_title":"#232323","color_title":"#232323","view_all":"View All","view_all_align":"center","font_weight_view_all":"500","fontsize_view_all":15,"fontsize_view_all_mb":15,"mg_bottom_view":20,"mg_bottom_view_mb":9,"enable_border_view_all":true,"link_view_all":"shopify:\/\/collections\/new-arrivals","color_view_all":"#e87529","icon_view_all":"","color_view_all_icon":"#e87529","title_align":"center","button_text":"Show More","button_text_font_size":14,"button_text_font_weight":"500","button_text_text_transform":"uppercase","product_button_width":270,"pd_top_product_button":12,"pd_bottom_product_button":12,"button_icon":"","mg_bottom_button":95,"enable_button_shadow":false,"color_button":"#ffffff","border_color_button":"#232323","bg_color_button":"#e46e21","bg_color_gradient_button":"","color_button_hover":"","border_color_button_hover":"","bg_color_button_hover":"","bg_color_gradient_button_hover":"","product_block_collection":"new-arrivals","product_block_limit":15,"grid_gap":15,"pb_style":"style1","style_countdown":"style_1","countdown":"","font_size_countdown_text":14,"color_countdown":"#f42b23","countdown_margin_left":15,"product_block_per_row":"5","product_block_infinite_scroll":true,"product_block_swipe_on_mobile":true,"enable_product_card_pd_bottom":false,"product_card_pd_bottom":40,"product_block_dots":false,"product_block_dots_mb":true,"spacing_top_dots":0,"product_block_arrows":true,"product_block_arrows_mb":false,"product_block_progress_bar":false,"product_block_counter_number":false,"enable_hover_arrow":false,"enable_infinite":true,"product_block_show":"5.5","position_vertical_arrow":"70px","product_block_per_view":"5","show_half":true,"scroll_height":1,"scroll_track_bg":"#f1f1f1","scroll_thumb_color":"#000000","scroll_thumb_hover_color":"#444444","enable_hover_drag_icon":false,"position":"left","width_banner":40,"display_list_collection":false,"collection_color":"#202020","collection_color_hover":"#3e8cc4","collection_bg_color":"#ffffff","collection_bg_color_gradient":"","text_list":"View all categories","url_list":"","enable_layout_special":false,"bg_card":"#ffffff","padding_card":15,"border_radius_card":5,"border_layout_card":"full","border_width_card":0,"border_color_card":"#f0f1f4","mg_top_desktop":20,"mg_top_tablet":15,"mg_top_mobile":15,"mg_bottom_desktop":20,"mg_bottom_tablet":15,"mg_bottom_mobile":15}},"mobile_video_iNVdMb":{"type":"Mobile-video","disabled":true,"name":"Mobile Video Shop Now","settings":{"video":"shopify:\/\/files\/videos\/Video - horizontal.mp4","video_url":"","video_ratio":"16-9","autoplay":true,"loop_video":true,"show_mute_button":false,"show_shop_button":false,"button_text":"","collection_link":"ethnic-wear-lagorii","button_link":"","section_bg":"#ffffff","padding_top":12,"padding_right":12,"padding_bottom":12,"padding_left":12,"corner_radius":8,"font_family":"Montserrat, sans-serif","button_bg":"#e87529","button_text_color":"#ffffff","button_opacity":95,"button_bottom":20,"button_width":140,"button_padding_y":12,"button_padding_x":24,"button_radius":24,"button_font_size":14,"button_font_weight":"600","mute_bg":"#ffffff","mute_color":"#333333","mute_opacity":85,"mute_size":38,"mute_icon_size":16,"mute_top":14,"mute_right":14}},"image_banner_GU67WV":{"type":"image-banner","blocks":{"large_img_keceAV":{"type":"largeImg","settings":{"image":"shopify:\/\/shop_images\/Trust_budget_Web_294ed0a7-9d8f-41b9-a9ec-cf0cd0266c9e.png","mobile_image":"shopify:\/\/shop_images\/Trust_budget_mobile_7996b557-f401-4fb9-b1d9-2008cfb499b1.png","enable_max_width_image":false,"custom_width_image":1170,"enable_scroll_down":false,"enable_custom_image":false,"image_behavior":"none","sub_title":"","border_sub_title":false,"font_size_sub_title":14,"font_size_sub_title_mb":14,"margin_bottom_sub_title":14,"sub_heading_font":"font_1","font_weight_sub_title":"700","sub_title_position":"sub_title_above","color_sub_title":"#232323","color_sub_title_mb":"#ffffff","heading":"","letter_spacing_heading":"","enable_style_italic":false,"font_size_heading":40,"font_size_heading_mb":24,"margin_bottom_heading":20,"font_weight_heading":"600","color_heading":"#232323","color_heading_mb":"#ffffff","border_title":"border_s1","border_color_title":"#232323","border_color_title_mobile":"#ffffff","text":"","font_size_des":12,"font_size_des_mb":12,"line_height_des":26,"margin_bottom_des":35,"color_des":"#232323","color_des_mb":"#ffffff","countdown":"","hide_countdown_fc":"countdown","countdown_style":"round","countdown_position":"countdown_below_desc","font_size_countdown_number":30,"font_size_countdown_text":14,"color_countdown":"#232323","color_countdown_mb":"#ffffff","countdown_margin_bottom":35,"content_width":475,"bg_color_content":"","align":"center","align_items":"center","position":"left","custom_horizontal":"","custom_vertical":"","btn_text":"","link":"","btn_icon":"","button_1_width":235,"enable_button_custom_border":false,"button_color":"#ffffff","button_border":"#232323","button_background":"#232323","button_background_gradient":"","button_color_hover":"#ffffff","button_border_hover":"#232323","button_background_hover":"#232323","button_background_gradient_hover":"","btn_text_2":"","link_2":"","btn_icon_2":"","button_color_2":"#ffffff","button_border_2":"#232323","button_background_2":"#232323","button_background_2_gradient":"","button_color_hover_2":"#ffffff","button_border_hover_2":"#232323","button_background_hover_2":"#232323","button_background_gradient_hover_2":"","video_link":"","adaptive_height_video":"56","icon_style":"style_1","color_icon":"#ffffff","bg_color_icon":"#000000","enable_custom_video_icon_position":false,"video_icon_horizontal_position":"","video_icon_vertical_position":"","video_icon_horizontal_position_mb":"","video_icon_vertical_position_mb":""}}},"block_order":["large_img_keceAV"],"name":"Truste budget","settings":{"id_section":"","container":"fullwidth","padding_full_width":0,"image_banner_title":"","enable_border_title":false,"color_title":"#202020","fontsize_title":24,"fontsize_title_mb":20,"margin_bottom_title":25,"image_banner_des":"","color_des":"#202020","fontsize_des":16,"title_align":"center","style_bg":"none","bg_color":"","bg_color_gradient":"","display_type":"slide","list_gap":0,"enable_arrows":false,"arrows_position":"","enable_dots":false,"enable_autoplay":false,"mg_top_desktop":30,"mg_top_tablet":30,"mg_top_mobile":0,"mg_bottom_desktop":30,"mg_bottom_tablet":30,"mg_bottom_mobile":0}},"collection_showcase_bmeyjC":{"type":"collection-showcase","blocks":{"card_QrVaR6":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/89_0be2e04d-12f7-4604-a2b5-0f7a656a029b.webp","card_overlay_text":"Wedding Styles","card_collection":"wedding-wear","card_url":""}},"card_Xenkhy":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/Festive_Charm_2d481590-2431-4eac-b7f5-12b02cbe523a.webp","card_overlay_text":"Festive Charm","card_collection":"festive","card_url":""}},"card_dYmwCn":{"type":"card","disabled":true,"settings":{"card_image":"shopify:\/\/shop_images\/91_677ea7e4-fcc4-49ff-9568-d5f6b795ceac.webp","card_overlay_text":"Festive Charm","card_collection":"festive","card_url":""}},"card_cGKacp":{"type":"card","disabled":true,"settings":{"card_image":"shopify:\/\/shop_images\/Girls_Boys_Collection_Categories_1080_x_980_px_1.webp","card_overlay_text":"Summer Ready","card_collection":"summer-vibes","card_url":""}},"card_bMnzBG":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/90_34f27263-2e2b-4ad8-84b8-53f08c2281d0.webp","card_overlay_text":"Birthday Bash","card_collection":"birthday","card_url":""}},"card_hUMKw7":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/92_7a712dbd-3429-44fa-8397-c4329d078679.webp","card_overlay_text":"Easy Casuals","card_collection":"casual-wear-1","card_url":""}}},"block_order":["card_QrVaR6","card_Xenkhy","card_dYmwCn","card_cGKacp","card_bMnzBG","card_hUMKw7"],"disabled":true,"name":"Shop By Occassion","settings":{"layout":"grid","grid_gap":12,"heading":"Shop By Occasion","heading_font_family":"Montserrat","heading_font_size_desktop":32,"heading_font_size_mobile":24,"heading_font_weight":"600","heading_color":"#e87529","heading_margin_bottom":6,"heading_padding_top":0,"heading_padding_bottom":0,"heading_padding_left":0,"heading_padding_right":0,"description":"Outfits made to match every happy occasion","description_font_family":"Montserrat","description_font_size_desktop":16,"description_font_size_mobile":14,"description_font_weight":"500","description_color":"#000000","description_padding_top":0,"description_padding_bottom":0,"description_padding_left":0,"description_padding_right":0,"header_margin_bottom":12,"section_bg_color":"#ffffff","section_padding_top":16,"section_padding_bottom":16,"section_padding_left":12,"section_padding_right":12,"section_border_radius":0,"card_border_radius":8,"overlay_font_family":"Montserrat","overlay_font_size":16,"overlay_text_color":"#ffffff","overlay_padding":14,"overlay_vertical_position":"bottom","overlay_offset_vertical":0,"overlay_horizontal_position":"center","overlay_offset_horizontal":0,"slider_show_arrows":false,"slider_show_dots":false,"slider_autoplay":false,"slider_autoplay_speed":3000}},"banner_slider_grid_Pih9wW":{"type":"Banner-slider-Grid","blocks":{"card_8L4xmp":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/Party_Glam_396c9d8d-d7a8-4e7d-8dfb-735510f92a20.webp","card_text":"","card_link":"shopify:\/\/collections\/party-wear"}},"card_AEqJJD":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/183_25820f9e-67c7-4102-a257-bac5641b109b.webp","card_text":"","card_link":"shopify:\/\/collections\/wedding-wear"}},"card_hNwB8i":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/Ethnic_Picks.webp","card_text":"","card_link":"shopify:\/\/collections\/ethnic-wear-lagorii"}},"card_m64hrn":{"type":"card","name":"Pertty Gowns","settings":{"card_image":"shopify:\/\/shop_images\/Collections_photo_eb7722b0-fcbd-4d9d-80a2-c8cad17f1f9e.webp","card_text":"","card_link":"shopify:\/\/collections\/ball-gowns"}},"card_cbKnLx":{"type":"card","name":"Birthday Girl","settings":{"card_image":"shopify:\/\/shop_images\/186_4db7146a-9e86-4dae-911a-7709759a8685.webp","card_text":"","card_link":"shopify:\/\/collections\/girls-birthday-dresses-party-outfits"}},"card_xK3wjQ":{"type":"card","name":"Birthday Boy","settings":{"card_image":"shopify:\/\/shop_images\/187_944cd090-2f7a-42a2-85eb-a27bea58bcbc.webp","card_text":"","card_link":"shopify:\/\/collections\/birthday-boy"}}},"block_order":["card_8L4xmp","card_AEqJJD","card_hNwB8i","card_m64hrn","card_cbKnLx","card_xK3wjQ"],"name":"Special Store","settings":{"banner_desktop_image":"shopify:\/\/shop_images\/Special_store.webp","banner_mobile_image":"shopify:\/\/shop_images\/mobile_heading_1.webp","banner_alt":"","banner_link":"","bg_color":"rgba(0,0,0,0)","padding_top":12,"padding_bottom":16,"section_side_padding":0,"show_cards":true,"cards_source":"manual","cards_layout":"slider","enable_arrows":true,"show_arrows_desktop":false,"show_arrows_mobile":false,"arrow_bg":"#ffffff","arrow_color":"#111111","arrow_side_offset":8,"desktop_cards_full_width":true,"desktop_cards_side_padding":0,"cards_margin_top":0,"cards_bg_color":"#edf7ff","cards_bg_image_size":"cover","cards_bg_padding":0,"cards_bg_radius":0,"cards_gap":0,"card_radius":6,"card_inner_padding":2,"card_bg_color":"rgba(0,0,0,0)","card_image_fit":"contain","grid_cols_desktop":4,"grid_cols_tablet":3,"grid_cols_mobile":2,"slider_card_width":65,"slider_cards_visible_mobile":"2.5","card_aspect_ratio":135,"overlay_font_family":"inherit","overlay_font_weight":"600","overlay_font_size_desktop":22,"overlay_font_size_mobile":15,"overlay_text_color":"#ffffff","overlay_bg_color":"#111111","overlay_bg_opacity":100,"overlay_padding":0,"overlay_radius":8,"overlay_text_align":"center","cards_collection":"","products_limit":4,"show_view_all":true,"view_all_label":"View all","view_all_bg":"#e87529","view_all_text":"#ffffff"}},"banner_slider_grid_BAbQne":{"type":"Banner-slider-Grid","blocks":{"card_xThgam":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/Summer_Edit.webp","card_text":"","card_link":"shopify:\/\/collections\/summer-vibes"}},"card_UVbyKt":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/Shorts_Sets_7b3d1977-734f-43e9-89ab-0e6b40bb017d.webp","card_text":"","card_link":"shopify:\/\/collections\/shorts-sets"}},"card_dGM3Mb":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/Linen_Breeze.webp","card_text":"","card_link":"shopify:\/\/collections\/linen-causal-wear"}},"card_tC7rHX":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/Shimmer_Shine.webp","card_text":"","card_link":"shopify:\/\/collections\/shimmer-edit"}},"card_bEdRRr":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/Mermaid_Magic.webp","card_text":"","card_link":"shopify:\/\/collections\/fish-cut"}},"card_LGMp4n":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/Co-ord_Sets_f0b63f7d-7492-4ed8-8f59-f95554c512c2.webp","card_text":"","card_link":"shopify:\/\/collections\/co-ord-set"}},"card_nmQiWH":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/Night_Suits.webp","card_text":"","card_link":"shopify:\/\/collections\/night-wear"}}},"block_order":["card_xThgam","card_UVbyKt","card_dGM3Mb","card_tC7rHX","card_bEdRRr","card_LGMp4n","card_nmQiWH"],"name":"Trending now","settings":{"banner_desktop_image":"shopify:\/\/shop_images\/Now_trending_56843e61-8b57-4481-8594-0723a958cb7a.webp","banner_mobile_image":"shopify:\/\/shop_images\/mobile_heading.webp","banner_alt":"Lagorii banner","banner_link":"","bg_color":"rgba(0,0,0,0)","padding_top":16,"padding_bottom":12,"section_side_padding":0,"show_cards":true,"cards_source":"manual","cards_layout":"slider","enable_arrows":true,"show_arrows_desktop":false,"show_arrows_mobile":false,"arrow_bg":"#ffffff","arrow_color":"#111111","arrow_side_offset":8,"desktop_cards_full_width":true,"desktop_cards_side_padding":0,"cards_margin_top":0,"cards_bg_color":"#f8e9ff","cards_bg_image_size":"cover","cards_bg_padding":0,"cards_bg_radius":0,"cards_gap":0,"card_radius":6,"card_inner_padding":6,"card_bg_color":"rgba(0,0,0,0)","card_image_fit":"contain","grid_cols_desktop":4,"grid_cols_tablet":3,"grid_cols_mobile":2,"slider_card_width":65,"slider_cards_visible_mobile":"2.5","card_aspect_ratio":135,"overlay_font_family":"inherit","overlay_font_weight":"600","overlay_font_size_desktop":22,"overlay_font_size_mobile":15,"overlay_text_color":"#ffffff","overlay_bg_color":"#111111","overlay_bg_opacity":100,"overlay_padding":0,"overlay_radius":8,"overlay_text_align":"center","cards_collection":"","products_limit":4,"show_view_all":true,"view_all_label":"View all","view_all_bg":"#e87529","view_all_text":"#ffffff"}},"lagorii_category_grid_Tfrcri":{"type":"Lagorii-Category-Grid","blocks":{"category_jP7c3U":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/29_e0669f4f-689c-4ea8-831f-80b44f5afe5b.webp","label":"","subtext":"","link":"shopify:\/\/collections\/sharara-sets"}},"category_dkCCEQ":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/30_d28a8c70-0af2-4145-aff6-6946ea191d17.webp","label":"","subtext":"","link":"shopify:\/\/collections\/lehenga-choli"}},"category_Bx8GCb":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/33_1b3c5d44-5e24-44e0-b07a-f58aa3a38163.webp","label":"","subtext":"","link":"shopify:\/\/collections\/palazzo-sets"}},"category_kPiaYK":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/32_f502e891-cec1-48ff-8e53-16f61b5dfdbb.webp","label":"","subtext":"","link":"shopify:\/\/collections\/girls-party-wear-frocks"}},"category_mXDTQF":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/Dresses.webp","label":"","subtext":"","link":"shopify:\/\/collections\/girls-dress"}},"category_TcDqg4":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/34_c0aa7c2d-1f2c-409b-a674-1fa9ed4f6ed1.webp","label":"","subtext":"","link":"shopify:\/\/collections\/girls-party-wear-gowns"}},"category_GgatKK":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/35_f086dcfe-01e0-4259-a661-2c241181fd81.webp","label":"","subtext":"","link":"shopify:\/\/collections\/nehru-jackets"}},"category_K7DxQj":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/38_1c1f511e-b29e-4cfb-af16-878f62fc04f8.webp","label":"","subtext":"","link":"shopify:\/\/collections\/co-ord-set"}},"category_Yg96fC":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/36_f7816fa5-f93d-47c2-b462-053c6f110ac3.webp","label":"","subtext":"","link":"shopify:\/\/collections\/boys-indo-western"}},"category_JbUGRq":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/37_007bb889-77c3-408a-8b54-fc2ba0b2ddb1.webp","label":"","subtext":"","link":"shopify:\/\/collections\/boys-suits"}},"category_ty9Lzw":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/31_426fe159-7540-47e2-8a55-d41e3764fda9.webp","label":"","subtext":"","link":"shopify:\/\/collections\/girls-indo-western"}},"category_pXYbNf":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/39_b8cdd7e8-7329-403f-a455-c9e9545cea56.webp","label":"","subtext":"","link":"shopify:\/\/collections\/shirts"}}},"block_order":["category_jP7c3U","category_dkCCEQ","category_Bx8GCb","category_kPiaYK","category_mXDTQF","category_TcDqg4","category_GgatKK","category_K7DxQj","category_Yg96fC","category_JbUGRq","category_ty9Lzw","category_pXYbNf"],"name":"Kids Closet","settings":{"section_bg":"#ffeded","heading":"","heading_color":"#111111","heading_weight":600,"heading_size_m":22,"heading_size_d":30,"heading_image_desktop":"shopify:\/\/shop_images\/Kids_closet_1_2acb98a2-7013-473f-a290-9f797e5089c8.webp","heading_image_mobile":"shopify:\/\/shop_images\/Kids_Closet_4fb8f0d0-c3f9-45cd-a7e2-a45aec2ca216.webp","heading_padding_tb":0,"heading_padding_lr":0,"heading_image_gap":12,"show_category_text":false,"cat_font":"montserrat_n4","subtext_color":"#777777","cat_weight":600,"cat_size_m":12,"cat_size_d":18,"subtext_size_m":10,"subtext_size_d":12,"cat_min_height":38,"image_radius":0,"image_text_gap":0,"grid_gap_mobile":2,"grid_gap":18,"mobile_columns":3,"desktop_columns":6,"padding_m":12,"padding_d":30,"outer_top_padding_mobile":10,"outer_bottom_padding_mobile":12,"outer_top_padding_desktop":12,"outer_bottom_padding_desktop":12}},"lagorii_category_grid_FBQ9fk":{"type":"Lagorii-Category-Grid","blocks":{"category_JRG7U4":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/Categories_image_2_c5309a31-9144-48fd-a0d6-ebf46ca6d3a5.webp","label":"","subtext":"","link":"shopify:\/\/collections\/just-born"}},"category_8DYnBC":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/Categories_image_1.webp","label":"","subtext":"","link":"shopify:\/\/collections\/girls-toddler"}},"category_YpmLeT":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/Categories_image_2.webp","label":"","subtext":"","link":"shopify:\/\/collections\/girls-tweens"}},"category_tEzEic":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/Girls_Teens.webp","label":"","subtext":"","link":"shopify:\/\/collections\/girls-teens"}},"category_x9kfeA":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/Categories_image_f821a5cf-5e22-4c32-ac33-0e71cdf03fe6.webp","label":"","subtext":"","link":"shopify:\/\/collections\/boys-0-2-years"}},"category_BWtaYU":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/Categories_image_4.webp","label":"","subtext":"","link":"shopify:\/\/collections\/boys-toddler"}},"category_Uf8Kif":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/Categories_image_6.webp","label":"","subtext":"","link":"shopify:\/\/collections\/boys-tweens"}},"category_edQKtx":{"type":"category","settings":{"image":"shopify:\/\/shop_images\/Boys_Teens.webp","label":"","subtext":"","link":"shopify:\/\/collections\/boys-teens"}}},"block_order":["category_JRG7U4","category_8DYnBC","category_YpmLeT","category_tEzEic","category_x9kfeA","category_BWtaYU","category_Uf8Kif","category_edQKtx"],"name":"Shop by Age","settings":{"section_bg":"#fffcf4","heading":"Shop By Age","heading_color":"#e87529","heading_weight":600,"heading_size_m":22,"heading_size_d":30,"heading_padding_tb":8,"heading_padding_lr":0,"heading_image_gap":12,"show_category_text":false,"cat_font":"montserrat_n4","subtext_color":"#777777","cat_weight":600,"cat_size_m":12,"cat_size_d":18,"subtext_size_m":10,"subtext_size_d":12,"cat_min_height":38,"image_radius":0,"image_text_gap":0,"grid_gap_mobile":0,"grid_gap":16,"mobile_columns":4,"desktop_columns":4,"padding_m":4,"padding_d":30,"outer_top_padding_mobile":10,"outer_bottom_padding_mobile":14,"outer_top_padding_desktop":12,"outer_bottom_padding_desktop":10}},"custom_image_cards_jydF3q":{"type":"custom-image-cards","blocks":{"card_gjnpHx":{"type":"card","settings":{"image":"shopify:\/\/shop_images\/Birthday_Collections.webp","card_title":"","card_text":"","button_label":"","card_link":"shopify:\/\/pages\/the-birthday-edit"}},"card_GzBxBK":{"type":"card","settings":{"image":"shopify:\/\/shop_images\/Wedding_Collection.webp","card_title":"","card_text":"","button_label":"","card_link":"shopify:\/\/collections\/wedding-wear"}},"card_pHV8UK":{"type":"card","settings":{"image":"shopify:\/\/shop_images\/Casual_Collection.webp","card_title":"","card_text":"","button_label":"","card_link":"shopify:\/\/collections\/casual-wear-1"}},"card_Exfa6C":{"type":"card","settings":{"image":"shopify:\/\/shop_images\/Party_Collection.webp","card_title":"","card_text":"","button_label":"","card_link":"shopify:\/\/collections\/party-wear"}},"card_chRh9g":{"type":"card","settings":{"image":"shopify:\/\/shop_images\/Luxe_Collections_1.webp","card_title":"","card_text":"","button_label":"","card_link":"shopify:\/\/collections\/luxe"}}},"block_order":["card_gjnpHx","card_GzBxBK","card_pHV8UK","card_Exfa6C","card_chRh9g"],"name":"Shop by collection","settings":{"full_width":false,"layout_mode":"slider","heading":"Shop by Collection","description":"","text_alignment":"center","heading_font_family":"inherit","heading_font_weight":"600","heading_size":32,"heading_size_mobile":22,"description_font_family":"inherit","description_font_weight":"400","description_size":16,"description_size_mobile":14,"cards_per_row_desktop":3,"cards_per_row_tablet":2,"cards_per_row_mobile":1,"slider_visible_desktop":"4.5","slider_visible_tablet":2,"slider_visible_mobile":"1.5","card_gap":8,"card_radius":6,"image_radius":6,"card_title_font_family":"inherit","card_title_font_weight":"700","card_title_size":20,"card_title_size_mobile":18,"card_text_font_family":"inherit","card_text_font_weight":"400","card_text_size":15,"card_text_size_mobile":14,"padding_top":40,"padding_bottom":40,"padding_left":20,"padding_right":12,"padding_top_mobile":14,"padding_bottom_mobile":24,"padding_left_mobile":16,"padding_right_mobile":6,"card_padding_top":8,"card_padding_right":11,"card_padding_bottom":12,"card_padding_left":16,"section_bg":"#ffffff","heading_color":"#e87529","description_color":"#666666","card_bg":"#ffffff","text_color":"#111111","button_bg":"#111111","button_color":"#ffffff","card_border_width":0,"card_border_color":"#ffffff","card_shadow_opacity":0}},"lagorii_media_banner_a6ViNC":{"type":"Lagorii-media-banner","name":"Lagorii now","settings":{"desktop_image":"shopify:\/\/shop_images\/Lagorii_Now_-_Website.webp","mobile_image":"shopify:\/\/shop_images\/Lagorii_Now_-_Mobile.webp","banner_collection":"kids-wear-120-min-delivery-bangalore","bg_color":"#ffffff","padding_top":8,"padding_bottom":8}},"banner_slider_grid_KbPtx6":{"type":"Banner-slider-Grid","blocks":{"card_pYGAYc":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/1_871d4d7c-d89d-4c45-a463-d5c80b07acab.webp","card_text":"","card_link":"shopify:\/\/collections\/lehenga-choli"}},"card_RLHVYK":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/5_7d148465-2dc6-43b6-a54b-3a894950532c.webp","card_text":"","card_link":"shopify:\/\/collections\/kurta-sets"}},"card_9cLU89":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/8_fc028bf6-21ef-4eb6-bad2-fcba6dcade01.webp","card_text":"","card_link":"shopify:\/\/collections\/palazzo-sets"}},"card_frVQtW":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/3_571a8739-e4ce-47b1-930a-9885cedcd25b.webp","card_text":"","card_link":"shopify:\/\/collections\/boys-indo-western"}},"card_y6GNXe":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/4_26b188f4-2070-4ecd-85b3-23ef2d72c77e.webp","card_text":"","card_link":"shopify:\/\/collections\/sharara-sets"}},"card_zpYKVF":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/2_f43da774-ef50-422e-a4b7-ff8e6102b79c.webp","card_text":"","card_link":"shopify:\/\/collections\/nehru-jackets"}},"card_Jz4GMR":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/6_11f317c3-ca2c-42e8-b2c6-f941bf107bb8.webp","card_text":"","card_link":"shopify:\/\/collections\/pattu-pavadai"}},"card_JwchzX":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/7_30fc584b-2b9b-42f5-a368-6a54e040279e.webp","card_text":"","card_link":"shopify:\/\/collections\/ethnic-wear-2"}}},"block_order":["card_pYGAYc","card_RLHVYK","card_9cLU89","card_frVQtW","card_y6GNXe","card_zpYKVF","card_Jz4GMR","card_JwchzX"],"disabled":true,"name":"Ethnic Store","settings":{"banner_desktop_image":"shopify:\/\/shop_images\/Website_banner_high-resolution_f9b6aece-3ac2-44e0-aa47-c5e11dcbc1a4.webp","banner_mobile_image":"shopify:\/\/shop_images\/LUXE_de4d444c-00cc-494d-9b40-16746b9e75b7.webp","banner_alt":"Lagorii banner","banner_link":"shopify:\/\/collections\/wedding-wear","bg_color":"rgba(0,0,0,0)","padding_top":4,"padding_bottom":0,"section_side_padding":0,"show_cards":true,"cards_source":"manual","cards_layout":"slider","enable_arrows":true,"show_arrows_desktop":false,"show_arrows_mobile":false,"arrow_bg":"#ffffff","arrow_color":"#111111","arrow_side_offset":8,"desktop_cards_full_width":true,"desktop_cards_side_padding":0,"cards_margin_top":0,"cards_bg_color":"#ffffff","cards_bg_image_size":"cover","cards_bg_padding":0,"cards_bg_radius":0,"cards_gap":0,"card_radius":0,"card_inner_padding":8,"card_bg_color":"rgba(0,0,0,0)","card_image_fit":"cover","grid_cols_desktop":4,"grid_cols_tablet":3,"grid_cols_mobile":2,"slider_card_width":65,"slider_cards_visible_mobile":"2.5","card_aspect_ratio":130,"overlay_font_family":"inherit","overlay_font_weight":"600","overlay_font_size_desktop":22,"overlay_font_size_mobile":15,"overlay_text_color":"#ffffff","overlay_bg_color":"#111111","overlay_bg_opacity":100,"overlay_padding":0,"overlay_radius":8,"overlay_text_align":"center","cards_collection":"","products_limit":4,"show_view_all":true,"view_all_label":"View all","view_all_bg":"#e87529","view_all_text":"#ffffff"}},"banner_slider_grid_TmnhkN":{"type":"Banner-slider-Grid","blocks":{"card_MkqJqp":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/Lehenga_Choli_0926b27a-e31f-4082-87b0-b41e4f9fc902.webp","card_text":"","card_link":"shopify:\/\/collections\/lehenga-choli"}},"card_WN6KRx":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/Nehru_Jacket.webp","card_text":"","card_link":"shopify:\/\/collections\/nehru-jackets"}},"card_d6RGYH":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/Sherwanis_e20df594-894b-4e36-9615-9828e528018c.webp","card_text":"","card_link":"shopify:\/\/collections\/boys-indo-western"}},"card_4Qfbre":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/Palazzo_Sets.webp","card_text":"","card_link":"shopify:\/\/collections\/palazzo-sets"}},"card_CCVXfY":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/Collections_photo_5978dd8c-28fa-4b58-a978-591139ab8df6.webp","card_text":"","card_link":"shopify:\/\/collections\/jodhpuri-suit"}},"card_JRUD76":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/Sharara_Sets_9725fd77-49d8-480e-9a83-b94b1da0d0c2.webp","card_text":"","card_link":"shopify:\/\/collections\/sharara-sets"}},"card_rQzJU8":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/Kurta_Sets_1a10d70c-c57d-4217-99f8-aacb954e99a3.webp","card_text":"","card_link":"shopify:\/\/collections\/kurta-sets"}},"card_8nUDHn":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/Fusion_wear.webp","card_text":"","card_link":"shopify:\/\/collections\/girls-indo-western"}},"card_tw9VTJ":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/Dhoti_Sets_0c634f27-34c4-46bc-b2a4-2c117158eee1.webp","card_text":"","card_link":"shopify:\/\/collections\/boys-dhoti-set"}},"card_TUAxFL":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/Pattu_Pavadai_cc132133-0277-4e10-9a99-5279bee5129e.webp","card_text":"","card_link":"shopify:\/\/collections\/pattu-pavadai"}},"card_aWMBWt":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/All.webp","card_text":"","card_link":"shopify:\/\/collections\/ethnic-wear-2"}}},"block_order":["card_MkqJqp","card_WN6KRx","card_d6RGYH","card_4Qfbre","card_CCVXfY","card_JRUD76","card_rQzJU8","card_8nUDHn","card_tw9VTJ","card_TUAxFL","card_aWMBWt"],"name":"Ethnic Store","settings":{"banner_desktop_image":"shopify:\/\/shop_images\/Website_banner_high-resolution_f9b6aece-3ac2-44e0-aa47-c5e11dcbc1a4.webp","banner_mobile_image":"shopify:\/\/shop_images\/Ethnic_Store.webp","banner_alt":"Lagorii banner","banner_link":"shopify:\/\/collections\/ethnic-wear-2","bg_color":"rgba(0,0,0,0)","padding_top":16,"padding_bottom":0,"section_side_padding":0,"show_cards":true,"cards_source":"manual","cards_layout":"slider","enable_arrows":true,"show_arrows_desktop":false,"show_arrows_mobile":false,"arrow_bg":"#ffffff","arrow_color":"#111111","arrow_side_offset":8,"desktop_cards_full_width":true,"desktop_cards_side_padding":0,"cards_margin_top":0,"cards_bg_color":"#ffffff","cards_bg_image_size":"cover","cards_bg_padding":0,"cards_bg_radius":0,"cards_gap":0,"card_radius":6,"card_inner_padding":4,"card_bg_color":"rgba(0,0,0,0)","card_image_fit":"cover","grid_cols_desktop":4,"grid_cols_tablet":3,"grid_cols_mobile":2,"slider_card_width":65,"slider_cards_visible_mobile":"2.5","card_aspect_ratio":130,"overlay_font_family":"inherit","overlay_font_weight":"600","overlay_font_size_desktop":22,"overlay_font_size_mobile":15,"overlay_text_color":"#ffffff","overlay_bg_color":"#111111","overlay_bg_opacity":100,"overlay_padding":0,"overlay_radius":8,"overlay_text_align":"center","cards_collection":"","products_limit":4,"show_view_all":true,"view_all_label":"View all","view_all_bg":"#e87529","view_all_text":"#ffffff"}},"banner_slider_grid_4679Uy":{"type":"Banner-slider-Grid","blocks":{"card_UrUmeU":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/Collections_photo_a7a3fce4-f708-4d46-b456-9195316e4e98.webp","card_text":"","card_link":"shopify:\/\/collections\/girls-party-wear-frocks"}},"card_Ej6McF":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/173_5bffaa08-675c-494e-8f2e-5c8a2ee8f1df.webp","card_text":"","card_link":"shopify:\/\/collections\/girls-party-wear-dress"}},"card_KKYqnz":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/172_3d84bece-5d53-45e2-8f94-32abd456bb88.webp","card_text":"","card_link":"shopify:\/\/collections\/boys-suits"}},"card_QakAJk":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/175_935cbe93-46ce-40e3-9f7b-6a013643fb00.webp","card_text":"","card_link":"shopify:\/\/collections\/tail-back-frocks"}},"card_JjmtUp":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/176_9a547216-d5df-4d12-be6d-b146d6faa09b.webp","card_text":"","card_link":"shopify:\/\/collections\/girls-party-wear-gowns"}},"card_jU7xan":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/177_9ab8f39a-60f6-4a30-ae7e-b45fc4809fb9.webp","card_text":"","card_link":"shopify:\/\/collections\/party-wear"}}},"block_order":["card_UrUmeU","card_Ej6McF","card_KKYqnz","card_QakAJk","card_JjmtUp","card_jU7xan"],"name":"Partywear Store","settings":{"banner_desktop_image":"shopify:\/\/shop_images\/Website_banner_high-resolution_5e46d788-7563-4b55-9745-cac10131374a.webp","banner_mobile_image":"shopify:\/\/shop_images\/LUXE_2b2296c4-43d7-44df-a6f6-b268c8b59c21.webp","banner_alt":"Lagorii banner","banner_link":"shopify:\/\/collections\/party-wear","bg_color":"rgba(0,0,0,0)","padding_top":0,"padding_bottom":0,"section_side_padding":0,"show_cards":true,"cards_source":"manual","cards_layout":"slider","enable_arrows":true,"show_arrows_desktop":false,"show_arrows_mobile":false,"arrow_bg":"#ffffff","arrow_color":"#111111","arrow_side_offset":8,"desktop_cards_full_width":true,"desktop_cards_side_padding":0,"cards_margin_top":0,"cards_bg_color":"rgba(0,0,0,0)","cards_bg_image":"shopify:\/\/shop_images\/LUXE_3.png","cards_bg_image_size":"cover","cards_bg_padding":0,"cards_bg_radius":0,"cards_gap":0,"card_radius":6,"card_inner_padding":4,"card_bg_color":"rgba(0,0,0,0)","card_image_fit":"cover","grid_cols_desktop":4,"grid_cols_tablet":3,"grid_cols_mobile":2,"slider_card_width":65,"slider_cards_visible_mobile":"2.5","card_aspect_ratio":130,"overlay_font_family":"inherit","overlay_font_weight":"600","overlay_font_size_desktop":22,"overlay_font_size_mobile":15,"overlay_text_color":"#ffffff","overlay_bg_color":"#111111","overlay_bg_opacity":100,"overlay_padding":0,"overlay_radius":8,"overlay_text_align":"center","cards_collection":"","products_limit":4,"show_view_all":true,"view_all_label":"View all","view_all_bg":"#e87529","view_all_text":"#ffffff"}},"banner_slider_grid_twM8K6":{"type":"Banner-slider-Grid","blocks":{"card_JdQNr7":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/179_90baa740-0ef4-4107-8741-95f7ba861ed5.webp","card_text":"","card_link":"shopify:\/\/collections\/frock-dress"}},"card_WWKtJi":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/181_ebdc9257-b2a6-4fb4-a23a-187ee2cb9934.webp","card_text":"","card_link":"shopify:\/\/collections\/shirts"}},"card_W33m8z":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/183_39bf7113-234a-4dae-a148-9c5f622e3de4.webp","card_text":"","card_link":"shopify:\/\/collections\/co-ord-set-for-girls"}},"card_rNq4RD":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/Collections_photo_1_83f39eb7-3c7f-4a84-bd36-17ee1d963ac9.webp","card_text":"","card_link":"shopify:\/\/collections\/casual-infants-wear"}},"card_TUwgdP":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/182_03e718d8-eeea-40fd-959a-e736c322fbf3.webp","card_text":"","card_link":"shopify:\/\/collections\/boys-sets"}},"card_3XmQwF":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/Collections_photo_61a08c7f-db5b-4a57-a01f-604e1cf58fc0.webp","card_text":"","card_link":"shopify:\/\/collections\/boys-jackets"}},"card_xfmnF6":{"type":"card","settings":{"card_image":"shopify:\/\/shop_images\/184_fe03d8b2-4e66-4da1-a0a7-6a8b7e546116.webp","card_text":"","card_link":"shopify:\/\/collections\/casual-wear-1"}}},"block_order":["card_JdQNr7","card_WWKtJi","card_W33m8z","card_rNq4RD","card_TUwgdP","card_3XmQwF","card_xfmnF6"],"name":"Casual Wear","settings":{"banner_desktop_image":"shopify:\/\/shop_images\/Website_banner_high-resolution_273bfaeb-3e62-4360-8f2a-49afac0b4df9.webp","banner_mobile_image":"shopify:\/\/shop_images\/LUXE_1_5b84cf91-b630-4adc-9e20-f1201b8216d4.webp","banner_alt":"Lagorii banner","banner_link":"shopify:\/\/collections\/casual-wear-1","bg_color":"rgba(0,0,0,0)","padding_top":16,"padding_bottom":0,"section_side_padding":0,"show_cards":true,"cards_source":"manual","cards_layout":"slider","enable_arrows":true,"show_arrows_desktop":false,"show_arrows_mobile":false,"arrow_bg":"#ffffff","arrow_color":"#111111","arrow_side_offset":8,"desktop_cards_full_width":true,"desktop_cards_side_padding":0,"cards_margin_top":0,"cards_bg_color":"rgba(0,0,0,0)","cards_bg_image":"shopify:\/\/shop_images\/LUXE_30f6f78c-17c3-488d-a50c-cf88932d6f86.webp","cards_bg_image_size":"cover","cards_bg_padding":0,"cards_bg_radius":0,"cards_gap":0,"card_radius":4,"card_inner_padding":4,"card_bg_color":"rgba(0,0,0,0)","card_image_fit":"cover","grid_cols_desktop":4,"grid_cols_tablet":3,"grid_cols_mobile":2,"slider_card_width":65,"slider_cards_visible_mobile":"2.5","card_aspect_ratio":130,"overlay_font_family":"inherit","overlay_font_weight":"600","overlay_font_size_desktop":22,"overlay_font_size_mobile":15,"overlay_text_color":"#ffffff","overlay_bg_color":"#111111","overlay_bg_opacity":100,"overlay_padding":0,"overlay_radius":8,"overlay_text_align":"center","cards_collection":"","products_limit":4,"show_view_all":true,"view_all_label":"View all","view_all_bg":"#e87529","view_all_text":"#ffffff"}},"banner_slider_grid_xE7Tcc":{"type":"Banner-slider-Grid","name":"Luxe banner","settings":{"banner_desktop_image":"shopify:\/\/shop_images\/LUXE_-_Website.webp","banner_mobile_image":"shopify:\/\/shop_images\/LUXE_-_mobile.webp","banner_alt":"Lagorii banner","banner_link":"shopify:\/\/collections\/luxe","bg_color":"#ffffff","padding_top":12,"padding_bottom":4,"section_side_padding":0,"show_cards":true,"cards_source":"manual","cards_layout":"slider","enable_arrows":true,"show_arrows_desktop":false,"show_arrows_mobile":false,"arrow_bg":"#ffffff","arrow_color":"#111111","arrow_side_offset":8,"desktop_cards_full_width":true,"desktop_cards_side_padding":20,"cards_margin_top":0,"cards_bg_color":"rgba(0,0,0,0)","cards_bg_image_size":"cover","cards_bg_padding":8,"cards_bg_radius":0,"cards_gap":8,"card_radius":14,"card_inner_padding":6,"card_bg_color":"rgba(0,0,0,0)","card_image_fit":"cover","grid_cols_desktop":4,"grid_cols_tablet":3,"grid_cols_mobile":2,"slider_card_width":45,"slider_cards_visible_mobile":"2.5","card_aspect_ratio":130,"overlay_font_family":"inherit","overlay_font_weight":"600","overlay_font_size_desktop":18,"overlay_font_size_mobile":15,"overlay_text_color":"#ffffff","overlay_bg_color":"#111111","overlay_bg_opacity":80,"overlay_padding":4,"overlay_radius":8,"overlay_text_align":"center","cards_collection":"luxe","products_limit":8,"show_view_all":false,"view_all_label":"View all","view_all_bg":"#e87529","view_all_text":"#ffffff"}},"product_block_nHBxmY":{"type":"product-block","name":"Luxe product tabs","settings":{"container":"fullwidth","padding_full_width":30,"disable_padding_content":false,"enable_border_top":false,"enable_border_bottom":false,"border_height":0,"color_border_bottom":"#e8e8e8","enable_minus_mg_top":false,"minus_spacing_top":-100,"product_block_layout":"scroll","product_bg":"#ffffff","product_bg_gradient":"","style_block_header":"style2","pd_top_title":30,"product_block_title":"","enable_border_title":false,"enable_border_title_style2":true,"fontsize_title":16,"fontsize_title_mb":16,"mg_bottom_title":6,"mg_bottom_title_mb":16,"border_color_title":"#232323","color_title":"#232323","view_all":"View All","view_all_align":"center","font_weight_view_all":"500","fontsize_view_all":14,"fontsize_view_all_mb":13,"mg_bottom_view":30,"mg_bottom_view_mb":8,"enable_border_view_all":true,"link_view_all":"shopify:\/\/collections\/luxe","color_view_all":"#e87529","icon_view_all":"","color_view_all_icon":"#eb492f","title_align":"center","button_text":"Show More","button_text_font_size":14,"button_text_font_weight":"500","button_text_text_transform":"uppercase","product_button_width":270,"pd_top_product_button":12,"pd_bottom_product_button":12,"button_icon":"","mg_bottom_button":95,"enable_button_shadow":false,"color_button":"#ffffff","border_color_button":"#232323","bg_color_button":"#e46e21","bg_color_gradient_button":"","color_button_hover":"","border_color_button_hover":"","bg_color_button_hover":"","bg_color_gradient_button_hover":"","product_block_collection":"luxe","product_block_limit":15,"grid_gap":15,"pb_style":"style1","style_countdown":"style_1","countdown":"","font_size_countdown_text":14,"color_countdown":"#f42b23","countdown_margin_left":15,"product_block_per_row":"4","product_block_infinite_scroll":true,"product_block_swipe_on_mobile":true,"enable_product_card_pd_bottom":false,"product_card_pd_bottom":40,"product_block_dots":false,"product_block_dots_mb":true,"spacing_top_dots":0,"product_block_arrows":true,"product_block_arrows_mb":false,"product_block_progress_bar":false,"product_block_counter_number":false,"enable_hover_arrow":false,"enable_infinite":true,"product_block_show":"5.5","position_vertical_arrow":"70px","product_block_per_view":"5","show_half":true,"scroll_height":1,"scroll_track_bg":"#f1f1f1","scroll_thumb_color":"#000000","scroll_thumb_hover_color":"#444444","enable_hover_drag_icon":false,"position":"left","width_banner":40,"display_list_collection":false,"collection_color":"#202020","collection_color_hover":"#3e8cc4","collection_bg_color":"#ffffff","collection_bg_color_gradient":"","text_list":"all categories","url_list":"","enable_layout_special":false,"bg_card":"#ffffff","padding_card":15,"border_radius_card":5,"border_layout_card":"full","border_width_card":0,"border_color_card":"#f0f1f4","mg_top_desktop":15,"mg_top_tablet":15,"mg_top_mobile":5,"mg_bottom_desktop":15,"mg_bottom_tablet":15,"mg_bottom_mobile":15}},"image_banner_hNVnHU":{"type":"image-banner","blocks":{"large_img_UAMgMM":{"type":"largeImg","settings":{"image":"shopify:\/\/shop_images\/web_banners_3_d98c617f-4089-4a89-bd38-3e7a9da03719.png","mobile_image":"shopify:\/\/shop_images\/GIF_BANNERS_2.png","enable_max_width_image":false,"custom_width_image":1170,"enable_scroll_down":false,"enable_custom_image":false,"image_behavior":"none","sub_title":"","border_sub_title":false,"font_size_sub_title":14,"font_size_sub_title_mb":14,"margin_bottom_sub_title":14,"sub_heading_font":"font_1","font_weight_sub_title":"700","sub_title_position":"sub_title_above","color_sub_title":"#232323","color_sub_title_mb":"#ffffff","heading":"","letter_spacing_heading":"","enable_style_italic":false,"font_size_heading":40,"font_size_heading_mb":24,"margin_bottom_heading":20,"font_weight_heading":"600","color_heading":"#232323","color_heading_mb":"#ffffff","border_title":"border_s1","border_color_title":"#232323","border_color_title_mobile":"#ffffff","text":"","font_size_des":12,"font_size_des_mb":12,"line_height_des":26,"margin_bottom_des":35,"color_des":"#232323","color_des_mb":"#ffffff","countdown":"","hide_countdown_fc":"countdown","countdown_style":"round","countdown_position":"countdown_below_desc","font_size_countdown_number":30,"font_size_countdown_text":14,"color_countdown":"#232323","color_countdown_mb":"#ffffff","countdown_margin_bottom":35,"content_width":475,"bg_color_content":"","align":"center","align_items":"center","position":"left","custom_horizontal":"","custom_vertical":"","btn_text":"","link":"shopify:\/\/pages\/reviews","btn_icon":"","button_1_width":235,"enable_button_custom_border":false,"button_color":"#ffffff","button_border":"#232323","button_background":"#232323","button_background_gradient":"","button_color_hover":"#ffffff","button_border_hover":"#232323","button_background_hover":"#232323","button_background_gradient_hover":"","btn_text_2":"","link_2":"","btn_icon_2":"","button_color_2":"#ffffff","button_border_2":"#232323","button_background_2":"#232323","button_background_2_gradient":"","button_color_hover_2":"#ffffff","button_border_hover_2":"#232323","button_background_hover_2":"#232323","button_background_gradient_hover_2":"","video_link":"","adaptive_height_video":"56","icon_style":"style_1","color_icon":"#ffffff","bg_color_icon":"#000000","enable_custom_video_icon_position":false,"video_icon_horizontal_position":"","video_icon_vertical_position":"","video_icon_horizontal_position_mb":"","video_icon_vertical_position_mb":""}}},"block_order":["large_img_UAMgMM"],"disabled":true,"settings":{"id_section":"","container":"fullwidth","padding_full_width":0,"image_banner_title":"","enable_border_title":false,"color_title":"#202020","fontsize_title":24,"fontsize_title_mb":20,"margin_bottom_title":25,"image_banner_des":"","color_des":"#202020","fontsize_des":16,"title_align":"center","style_bg":"none","bg_color":"","bg_color_gradient":"","display_type":"slide","list_gap":0,"enable_arrows":false,"arrows_position":"","enable_dots":false,"enable_autoplay":false,"mg_top_desktop":30,"mg_top_tablet":40,"mg_top_mobile":30,"mg_bottom_desktop":0,"mg_bottom_tablet":0,"mg_bottom_mobile":0}},"1778677756d4f8c62a":{"type":"apps","blocks":{"judge_me_reviews_cards_carousel_dfTmzU":{"type":"shopify:\/\/apps\/judge-me-reviews\/blocks\/cards_carousel\/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8","settings":{"show_sample_reviews":true,"reviews_selection":"all","products":[],"star_rating":"5_star","show_review_media":true,"display_order":"media_first","no_image_fallback":"review_text_only","max_reviews":20,"review_length":"medium","text_size":"small","image_ratio":"1","reviews_shown":4,"show_reviewer_name":true,"show_product_name":true,"hide_arrows_mobile":false,"arrows_position":"sides","max_width":1100,"corner_styling":"soft","header_text_color":"#e87529","text_color":"#000000","card_color":"#f9f9f9","stars_color":"#e87529","arrows_color":"#000000","transition_speed":5,"header_text":"Trusted by 100k+ Parents worldwide","show_average_rating":true}}},"block_order":["judge_me_reviews_cards_carousel_dfTmzU"],"settings":{"include_margins":false}},"banner_slider_grid_gVVkdP":{"type":"Banner-slider-Grid","name":"More Reviews ","settings":{"banner_desktop_image":"shopify:\/\/shop_images\/website_heading_1.png","banner_mobile_image":"shopify:\/\/shop_images\/Read_More_Reviews.webp","banner_alt":"Lagorii banner","banner_link":"shopify:\/\/pages\/reviews","bg_color":"rgba(0,0,0,0)","padding_top":0,"padding_bottom":16,"section_side_padding":36,"show_cards":true,"cards_source":"manual","cards_layout":"slider","enable_arrows":true,"show_arrows_desktop":false,"show_arrows_mobile":false,"arrow_bg":"#ffffff","arrow_color":"#111111","arrow_side_offset":8,"desktop_cards_full_width":true,"desktop_cards_side_padding":0,"cards_margin_top":0,"cards_bg_color":"#f8e9ff","cards_bg_image_size":"cover","cards_bg_padding":0,"cards_bg_radius":0,"cards_gap":0,"card_radius":6,"card_inner_padding":6,"card_bg_color":"rgba(0,0,0,0)","card_image_fit":"contain","grid_cols_desktop":4,"grid_cols_tablet":3,"grid_cols_mobile":2,"slider_card_width":65,"slider_cards_visible_mobile":"2.5","card_aspect_ratio":135,"overlay_font_family":"inherit","overlay_font_weight":"600","overlay_font_size_desktop":22,"overlay_font_size_mobile":15,"overlay_text_color":"#ffffff","overlay_bg_color":"#111111","overlay_bg_opacity":100,"overlay_padding":0,"overlay_radius":8,"overlay_text_align":"center","cards_collection":"","products_limit":4,"show_view_all":true,"view_all_label":"View all","view_all_bg":"#e87529","view_all_text":"#ffffff"}}},"order":["lagorii_brand_slider_7Am7LD","lagorii_hero_eta_9RACkg","lagorii_brand_slider_hCPYVr","lagorii_coupon_code_rrxkR3","lagorii_hero_eta_haYYBJ","b25c8bcb-007b-45d9-b198-57f4a84a1b9d","mobile_video_iNVdMb","image_banner_GU67WV","collection_showcase_bmeyjC","banner_slider_grid_Pih9wW","banner_slider_grid_BAbQne","lagorii_category_grid_Tfrcri","lagorii_category_grid_FBQ9fk","custom_image_cards_jydF3q","lagorii_media_banner_a6ViNC","banner_slider_grid_KbPtx6","banner_slider_grid_TmnhkN","banner_slider_grid_4679Uy","banner_slider_grid_twM8K6","banner_slider_grid_xE7Tcc","product_block_nHBxmY","image_banner_hNVnHU","1778677756d4f8c62a","banner_slider_grid_gVVkdP"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "lagorii_brand_slider_7Am7LD": {
+      "type": "lagorii-brand-slider",
+      "blocks": {
+        "category_XwCfXn": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/21_6d38b1e4-ec4f-405b-9d3a-f7d4711d3221.webp",
+            "collection": "",
+            "link": "shopify://collections/casual-infants",
+            "title": "",
+            "subtext": ""
+          }
+        },
+        "category_8JPajt": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/22_0e8d17cf-d246-42b7-8e95-e86e3c6a4205.webp",
+            "collection": "girls",
+            "link": "",
+            "title": "",
+            "subtext": ""
+          }
+        },
+        "category_MbQMiy": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/23_48932b65-60ca-496c-834e-c16e6fc44045.webp",
+            "collection": "boys",
+            "link": "",
+            "title": "",
+            "subtext": ""
+          }
+        },
+        "category_be4iHU": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/Kids_Closet_1_7a851064-73ea-48eb-ac5d-5dc2bfdaf756.webp",
+            "collection": "casual-wear-1",
+            "link": "",
+            "title": "",
+            "subtext": ""
+          }
+        },
+        "category_UHahxb": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/25_ddb6e38e-4ebb-4c63-9d3b-be752c077b44.webp",
+            "collection": "ethnic-wear-lagorii",
+            "link": "",
+            "title": "",
+            "subtext": ""
+          }
+        },
+        "category_XpYekc": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/26_0d463833-eda9-458f-8841-5d38fd45e781.webp",
+            "collection": "party-wear",
+            "link": "",
+            "title": "",
+            "subtext": ""
+          }
+        },
+        "category_UQyEhF": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/Kids_Closet_2_c57af871-28ef-48d5-8204-fcb143ac32e0.webp",
+            "collection": "luxe",
+            "link": "",
+            "title": "Luxe",
+            "subtext": ""
+          }
+        },
+        "category_Xx3JMb": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/28_75ef48d1-1091-4251-8a03-7b8f4a63548d.webp",
+            "collection": "all-products",
+            "link": "",
+            "title": "",
+            "subtext": ""
+          }
+        }
+      },
+      "block_order": [
+        "category_XwCfXn",
+        "category_8JPajt",
+        "category_MbQMiy",
+        "category_be4iHU",
+        "category_UHahxb",
+        "category_XpYekc",
+        "category_UQyEhF",
+        "category_Xx3JMb"
+      ],
+      "disabled": true,
+      "name": "Category slider",
+      "settings": {
+        "layout_mode": "slider",
+        "grid_cols_desktop": 4,
+        "grid_cols_mobile": 2,
+        "section_width": "1770",
+        "show_heading": false,
+        "heading": "Shop by category",
+        "visible_desktop": "6.5",
+        "visible_tablet": "4.5",
+        "visible_mobile": "3.5",
+        "arrow_visibility": "none",
+        "show_dots": false,
+        "dot_color": "#cccccc",
+        "dot_active_color": "#e87529",
+        "autoplay": false,
+        "autoplay_interval": 5,
+        "gap": 0,
+        "radius": 0,
+        "bg": "#ffffff",
+        "section_margin_top": 8,
+        "section_margin_right": 0,
+        "section_margin_bottom": 4,
+        "section_margin_left": 0,
+        "inner_padding_top": 0,
+        "inner_padding_right": 0,
+        "inner_padding_bottom": 6,
+        "inner_padding_left": 8
+      }
+    },
+    "lagorii_hero_eta_FnhwBy": {
+      "type": "lagorii-hero-eta",
+      "blocks": {
+        "banner_3ndrE8": {
+          "type": "banner",
+          "name": "THE ORANGE SALE",
+          "settings": {
+            "image_mobile": "shopify://shop_images/10_7.webp",
+            "image_desktop": "shopify://shop_images/20.webp",
+            "banner_collection": "",
+            "banner_link": "shopify://pages/the-orange-sale"
+          }
+        },
+        "banner_bdD37J": {
+          "type": "banner",
+          "name": "Party wear",
+          "settings": {
+            "image_mobile": "shopify://shop_images/10_6.webp",
+            "image_desktop": "shopify://shop_images/23_eede708b-178c-46cc-8a47-e8380bdfcd9a.webp",
+            "banner_collection": "party-wear",
+            "banner_link": ""
+          }
+        },
+        "banner_4PDKtn": {
+          "type": "banner",
+          "name": "Ethnic wear",
+          "settings": {
+            "image_mobile": "shopify://shop_images/10_4_22eaeed8-4a81-4371-823d-d7916ee9bf8c.webp",
+            "image_desktop": "shopify://shop_images/Website_home_banner_cf554028-69d6-4eda-b3f1-d253d38fdc57.webp",
+            "banner_collection": "ethnic-wear-lagorii",
+            "banner_link": ""
+          }
+        },
+        "banner_KtbdpV": {
+          "type": "banner",
+          "name": "Casual wear",
+          "settings": {
+            "image_mobile": "shopify://shop_images/10_5.webp",
+            "image_desktop": "shopify://shop_images/22_e862c380-cf79-46e6-94db-ee43d755c3b8.webp",
+            "banner_collection": "casual-wear-1",
+            "banner_link": ""
+          }
+        },
+        "banner_wqQFWR": {
+          "type": "banner",
+          "name": "Summer Collection",
+          "disabled": true,
+          "settings": {
+            "image_mobile": "shopify://shop_images/10-_1.gif",
+            "image_desktop": "shopify://shop_images/Summer.webp",
+            "banner_collection": "summer-vibes",
+            "banner_link": ""
+          }
+        },
+        "banner_NRNmL3": {
+          "type": "banner",
+          "name": "Wedding Edit",
+          "disabled": true,
+          "settings": {
+            "image_mobile": "shopify://shop_images/10_2.webp",
+            "image_desktop": "shopify://shop_images/20.webp",
+            "banner_collection": "wedding-wear",
+            "banner_link": ""
+          }
+        },
+        "banner_7CHCMc": {
+          "type": "banner",
+          "name": "Party ready",
+          "disabled": true,
+          "settings": {
+            "image_mobile": "shopify://shop_images/Party_Ready.webp",
+            "image_desktop": "shopify://shop_images/Party_ready_-Weeb.webp",
+            "banner_collection": "party-wear",
+            "banner_link": ""
+          }
+        },
+        "banner_RjGKTX": {
+          "type": "banner",
+          "name": "Night Sets",
+          "disabled": true,
+          "settings": {
+            "image_mobile": "shopify://shop_images/Night_Sets.webp",
+            "image_desktop": "shopify://shop_images/Night_Sets_-_Web.webp",
+            "banner_collection": "night-wear",
+            "banner_link": ""
+          }
+        },
+        "banner_Nrra3e": {
+          "type": "banner",
+          "name": "Ethnic Sets",
+          "disabled": true,
+          "settings": {
+            "image_mobile": "shopify://shop_images/Ethnic_Sets.webp",
+            "image_desktop": "shopify://shop_images/Ethnic_Sets_-_Wed.webp",
+            "banner_collection": "ethnic-sets",
+            "banner_link": ""
+          }
+        },
+        "banner_p3KpUt": {
+          "type": "banner",
+          "name": "Tailback frocks",
+          "disabled": true,
+          "settings": {
+            "image_mobile": "shopify://shop_images/Tailback_Frock.webp",
+            "image_desktop": "shopify://shop_images/Tailback_Frocks_-_Web.webp",
+            "banner_collection": "tail-back-frocks",
+            "banner_link": ""
+          }
+        },
+        "banner_DWJzJF": {
+          "type": "banner",
+          "name": "Lagorii Play",
+          "disabled": true,
+          "settings": {
+            "image_mobile": "shopify://shop_images/The_Festive_Edit_3_735390a5-de7a-46c1-9ac2-2c3696925469.webp",
+            "image_desktop": "shopify://shop_images/Play_web_banner.webp",
+            "banner_collection": "",
+            "banner_link": "shopify://pages/lagorii-play"
+          }
+        }
+      },
+      "block_order": [
+        "banner_3ndrE8",
+        "banner_bdD37J",
+        "banner_4PDKtn",
+        "banner_KtbdpV",
+        "banner_wqQFWR",
+        "banner_NRNmL3",
+        "banner_7CHCMc",
+        "banner_RjGKTX",
+        "banner_Nrra3e",
+        "banner_p3KpUt",
+        "banner_DWJzJF"
+      ],
+      "name": "Lagorii • Hero + ETA",
+      "settings": {
+        "hero_radius": 0,
+        "section_margin_top": 0,
+        "section_margin_bottom": 32,
+        "inset": 14,
+        "inset_desktop": 8,
+        "overlay_font": "montserrat_n4",
+        "overlay_font_size": 14,
+        "overlay_weight": "900",
+        "overlay_pad_y": 6,
+        "overlay_pad_x": 10,
+        "overlay_radius": 10,
+        "overlay_bg": "#111111",
+        "overlay_border": "rgba(0,0,0,0)",
+        "overlay_text": "#ffffff",
+        "overlay_opacity": 41,
+        "truck_color": "#ffffff",
+        "truck_size": 26,
+        "rules_url": "",
+        "cta_collection": "kids-wear-120-min-delivery-bangalore",
+        "cta_fallback_url": "",
+        "cta_font": "montserrat_n4",
+        "cta_weight": "800",
+        "cta_font_size": 14,
+        "cta_pad_y": 7,
+        "cta_pad_x": 10,
+        "cta_radius": 10,
+        "cta_bg": "#111111",
+        "cta_text": "#ffffff",
+        "cta_border": "rgba(0,0,0,0)",
+        "cta_opacity": 41,
+        "cta_icon": "shopify://shop_images/Categaries_image_9fc9a4ad-98b1-4a65-a9e1-8697802ddd2f.png",
+        "cta_icon_size": 34,
+        "cta_label": "Lagorii Now",
+        "cta_main_text": "2-Hours",
+        "dots_color": "#818181",
+        "dots_active_color": "#e87529",
+        "autoplay_speed": 3000,
+        "dots_margin_top": 14,
+        "dots_gap": 11
+      }
+    },
+    "lagorii_hero_eta_9RACkg": {
+      "type": "lagorii-hero-eta",
+      "blocks": {
+        "banner_dpFKH3": {
+          "type": "banner",
+          "name": "Summer Collection",
+          "settings": {
+            "image_mobile": "shopify://shop_images/10-_1.gif",
+            "image_desktop": "shopify://shop_images/Summer.webp",
+            "banner_collection": "summer-vibes",
+            "banner_link": ""
+          }
+        },
+        "banner_3fxBtn": {
+          "type": "banner",
+          "name": "Wedding Edit",
+          "settings": {
+            "image_mobile": "shopify://shop_images/Wedding_Wardrobe.webp",
+            "image_desktop": "shopify://shop_images/Wedding_Edit_-_Web.webp",
+            "banner_collection": "wedding-wear",
+            "banner_link": ""
+          }
+        },
+        "banner_XVHjez": {
+          "type": "banner",
+          "name": "Party ready",
+          "settings": {
+            "image_mobile": "shopify://shop_images/Party_Ready.webp",
+            "image_desktop": "shopify://shop_images/Party_ready_-Weeb.webp",
+            "banner_collection": "party-wear",
+            "banner_link": ""
+          }
+        },
+        "banner_qi7G69": {
+          "type": "banner",
+          "name": "Night Sets",
+          "settings": {
+            "image_mobile": "shopify://shop_images/Night_Sets.webp",
+            "image_desktop": "shopify://shop_images/Night_Sets_-_Web.webp",
+            "banner_collection": "night-wear",
+            "banner_link": ""
+          }
+        },
+        "banner_MczfzT": {
+          "type": "banner",
+          "name": "Ethnic Sets",
+          "settings": {
+            "image_mobile": "shopify://shop_images/Ethnic_Sets.webp",
+            "image_desktop": "shopify://shop_images/Ethnic_Sets_-_Wed.webp",
+            "banner_collection": "ethnic-sets",
+            "banner_link": ""
+          }
+        },
+        "banner_kBnwWm": {
+          "type": "banner",
+          "name": "Tailback frocks",
+          "settings": {
+            "image_mobile": "shopify://shop_images/Tailback_Frock.webp",
+            "image_desktop": "shopify://shop_images/Tailback_Frocks_-_Web.webp",
+            "banner_collection": "tail-back-frocks",
+            "banner_link": ""
+          }
+        },
+        "banner_pWch7K": {
+          "type": "banner",
+          "name": "Lagorii Play",
+          "disabled": true,
+          "settings": {
+            "image_mobile": "shopify://shop_images/The_Festive_Edit_3_735390a5-de7a-46c1-9ac2-2c3696925469.webp",
+            "image_desktop": "shopify://shop_images/Play_web_banner.webp",
+            "banner_collection": "",
+            "banner_link": "shopify://pages/lagorii-play"
+          }
+        }
+      },
+      "block_order": [
+        "banner_dpFKH3",
+        "banner_3fxBtn",
+        "banner_XVHjez",
+        "banner_qi7G69",
+        "banner_MczfzT",
+        "banner_kBnwWm",
+        "banner_pWch7K"
+      ],
+      "name": "Lagorii • Hero + ETA",
+      "settings": {
+        "hero_radius": 0,
+        "section_margin_top": 0,
+        "section_margin_bottom": 32,
+        "inset": 14,
+        "inset_desktop": 8,
+        "overlay_font": "montserrat_n4",
+        "overlay_font_size": 14,
+        "overlay_weight": "900",
+        "overlay_pad_y": 6,
+        "overlay_pad_x": 10,
+        "overlay_radius": 10,
+        "overlay_bg": "#111111",
+        "overlay_border": "rgba(0,0,0,0)",
+        "overlay_text": "#ffffff",
+        "overlay_opacity": 41,
+        "truck_color": "#ffffff",
+        "truck_size": 26,
+        "rules_url": "",
+        "cta_collection": "kids-wear-120-min-delivery-bangalore",
+        "cta_fallback_url": "",
+        "cta_font": "montserrat_n4",
+        "cta_weight": "800",
+        "cta_font_size": 14,
+        "cta_pad_y": 7,
+        "cta_pad_x": 10,
+        "cta_radius": 10,
+        "cta_bg": "#111111",
+        "cta_text": "#ffffff",
+        "cta_border": "rgba(0,0,0,0)",
+        "cta_opacity": 41,
+        "cta_icon": "shopify://shop_images/Categaries_image_9fc9a4ad-98b1-4a65-a9e1-8697802ddd2f.png",
+        "cta_icon_size": 34,
+        "cta_label": "Lagorii Now",
+        "cta_main_text": "2-Hours",
+        "dots_color": "#818181",
+        "dots_active_color": "#e87529",
+        "autoplay_speed": 3000,
+        "dots_margin_top": 14,
+        "dots_gap": 11
+      }
+    },
+    "lagorii_brand_slider_hCPYVr": {
+      "type": "lagorii-brand-slider",
+      "blocks": {
+        "category_riprcm": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/13_3828877c-a93b-4768-9680-abbcea5cfce1.webp",
+            "collection": "casual-infants-wear",
+            "link": "",
+            "title": "",
+            "subtext": ""
+          }
+        },
+        "category_mdgVYh": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/14_069acaf5-f411-4adf-97d7-750523365a4c.webp",
+            "collection": "girls",
+            "link": "",
+            "title": "",
+            "subtext": ""
+          }
+        },
+        "category_bfyVFG": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/15_8b658423-0334-43a3-bae2-fdfc9860f716.webp",
+            "collection": "boys",
+            "link": "",
+            "title": "",
+            "subtext": ""
+          }
+        },
+        "category_ayiA7L": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/16_3b585d29-7ea8-4268-90dd-7bba1780c2aa.webp",
+            "collection": "casual-wear-1",
+            "link": "",
+            "title": "",
+            "subtext": ""
+          }
+        },
+        "category_qVWWte": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/17_60a3aa07-cacc-4dc3-ab6a-080ad4d990d3.webp",
+            "collection": "ethnic-wear-lagorii",
+            "link": "",
+            "title": "",
+            "subtext": ""
+          }
+        },
+        "category_WXiRUH": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/18_4024483f-7cdf-4981-9230-fc09f0f880b8.webp",
+            "collection": "party-wear",
+            "link": "",
+            "title": "",
+            "subtext": ""
+          }
+        },
+        "category_PMHDEw": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/19_07bd0eb7-10ba-4e84-9d2a-4bcaf7747c8f.webp",
+            "collection": "luxe",
+            "link": "",
+            "title": "Luxe",
+            "subtext": ""
+          }
+        },
+        "category_CbDfLK": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/20_1c3b237f-5670-491f-adab-4a347274e632.webp",
+            "collection": "all-products",
+            "link": "",
+            "title": "",
+            "subtext": ""
+          }
+        }
+      },
+      "block_order": [
+        "category_riprcm",
+        "category_mdgVYh",
+        "category_bfyVFG",
+        "category_ayiA7L",
+        "category_qVWWte",
+        "category_WXiRUH",
+        "category_PMHDEw",
+        "category_CbDfLK"
+      ],
+      "disabled": true,
+      "name": "Category slider",
+      "settings": {
+        "layout_mode": "slider",
+        "grid_cols_desktop": 4,
+        "grid_cols_mobile": 2,
+        "section_width": "1770",
+        "show_heading": false,
+        "heading": "Shop by category",
+        "visible_desktop": "6.5",
+        "visible_tablet": "4.5",
+        "visible_mobile": "3.5",
+        "arrow_visibility": "none",
+        "show_dots": false,
+        "dot_color": "#cccccc",
+        "dot_active_color": "#e87529",
+        "autoplay": false,
+        "autoplay_interval": 5,
+        "gap": 0,
+        "radius": 0,
+        "bg": "#ffffff",
+        "section_margin_top": 4,
+        "section_margin_right": 0,
+        "section_margin_bottom": 0,
+        "section_margin_left": 0,
+        "inner_padding_top": 0,
+        "inner_padding_right": 0,
+        "inner_padding_bottom": 6,
+        "inner_padding_left": 8
+      }
+    },
+    "lagorii_coupon_code_rrxkR3": {
+      "type": "Lagorii-coupon-code",
+      "blocks": {
+        "coupon_card_jkL8XY": {
+          "type": "coupon_card",
+          "settings": {
+            "coupon_display_mode": "image",
+            "mobile_banner_image": "shopify://shop_images/SUMMER10.webp",
+            "mobile_banner_alt": "Coupon banner",
+            "coupon_code": "GET10",
+            "title": "Flat 10% off",
+            "subtitle": "Use code GET10 on your order.",
+            "show_badge": true,
+            "badge_text": "GET10"
+          }
+        },
+        "coupon_card_GHNgiw": {
+          "type": "coupon_card",
+          "settings": {
+            "coupon_display_mode": "image",
+            "mobile_banner_image": "shopify://shop_images/GET10.webp",
+            "mobile_banner_alt": "Coupon banner",
+            "coupon_code": "GET10",
+            "title": "Flat 10% off",
+            "subtitle": "Use code GET10 on your order.",
+            "show_badge": true,
+            "badge_text": "GET10"
+          }
+        }
+      },
+      "block_order": [
+        "coupon_card_jkL8XY",
+        "coupon_card_GHNgiw"
+      ],
+      "name": "Lagorii Coupon Copy",
+      "settings": {
+        "enable_autoplay": true,
+        "autoplay_speed": 2000,
+        "show_dots": false,
+        "show_copy_button": true,
+        "section_padding_top": 12,
+        "section_padding_bottom": 10,
+        "outer_pad_top": 0,
+        "outer_pad_right": 10,
+        "outer_pad_bottom": 0,
+        "outer_pad_left": 10,
+        "image_radius": 7,
+        "image_bg_color": "#ffffff",
+        "card_bg_color": "rgba(0,0,0,0)",
+        "card_min_height": 96,
+        "card_radius": 18,
+        "card_border_width": 0,
+        "card_border_color": "rgba(0,0,0,0)",
+        "card_shadow": "0 6px 18px rgba(0,0,0,0.06)",
+        "card_gap": 16,
+        "card_pad_top": 18,
+        "card_pad_right": 18,
+        "card_pad_bottom": 18,
+        "card_pad_left": 18,
+        "font_family": "inherit",
+        "title_color": "#111111",
+        "title_size_mobile": 18,
+        "title_weight": 700,
+        "subtitle_color": "#3a3a3a",
+        "subtitle_size_mobile": 14,
+        "subtitle_weight": 500,
+        "subtitle_margin_top": 6,
+        "left_gap": 14,
+        "badge_pad_x": 16,
+        "badge_pad_y": 10,
+        "badge_radius": 14,
+        "badge_border_width": 2,
+        "badge_border_color": "#1e6b4f",
+        "badge_bg_color": "#ffffffa6",
+        "badge_text_color": "#1e6b4f",
+        "badge_font_size": 16,
+        "badge_font_weight": 700,
+        "right_gap": 0,
+        "copy_bg": "#ffffff",
+        "copy_color": "#111111",
+        "copy_border_width": 1,
+        "copy_border_color": "rgba(0,0,0,0)",
+        "copy_radius": 14,
+        "copy_pad_x_mobile": 14,
+        "copy_pad_y_mobile": 11,
+        "copy_font_size_mobile": 13,
+        "copy_font_weight": 700,
+        "copy_icon_size": 18,
+        "dots_margin_top": 8,
+        "dot_size": 7,
+        "dot_color": "#999999",
+        "dot_active_color": "#e87529",
+        "toast_text": "Coupon copied",
+        "toast_bg": "#111111",
+        "toast_color": "#ffffff",
+        "toast_radius": 12,
+        "toast_pad_x": 12,
+        "toast_pad_y": 8,
+        "toast_font_size": 12,
+        "toast_font_weight": 600,
+        "toast_duration_ms": 1400
+      }
+    },
+    "lagorii_hero_eta_haYYBJ": {
+      "type": "lagorii-hero-eta",
+      "blocks": {
+        "banner_VKJATJ": {
+          "type": "banner",
+          "name": "Summer Collection",
+          "settings": {
+            "image_mobile": "shopify://shop_images/Summer_-_2026.png",
+            "image_desktop": "shopify://shop_images/Summer_-_2026_Web.webp",
+            "banner_collection": "summer-vibes",
+            "banner_link": ""
+          }
+        },
+        "banner_ANmB3F": {
+          "type": "banner",
+          "name": "Wedding Edit",
+          "settings": {
+            "image_mobile": "shopify://shop_images/TheFestiveEdit_5917016c-8b12-425f-bb78-c0d9a2d28342.webp",
+            "image_desktop": "shopify://shop_images/Website_home_banner.webp",
+            "banner_collection": "wedding-wear",
+            "banner_link": ""
+          }
+        },
+        "banner_gGbewR": {
+          "type": "banner",
+          "name": "Kurta Sets",
+          "settings": {
+            "image_mobile": "shopify://shop_images/212_04accddb-b9f1-4a67-a8df-0b2c7869fb6d.webp",
+            "image_desktop": "shopify://shop_images/Kurta_Sets_-_Website.webp",
+            "banner_collection": "kurta-sets",
+            "banner_link": ""
+          }
+        },
+        "banner_7TbRWQ": {
+          "type": "banner",
+          "name": "Co-ord Sets",
+          "settings": {
+            "image_mobile": "shopify://shop_images/213_5c3542d5-26be-4e60-b89b-e1778de95c68.webp",
+            "image_desktop": "shopify://shop_images/Co-ord_Sets_-_Website.webp",
+            "banner_collection": "co-ord-set",
+            "banner_link": ""
+          }
+        },
+        "banner_gPJTTi": {
+          "type": "banner",
+          "name": "Fusion wear",
+          "settings": {
+            "image_mobile": "shopify://shop_images/214_f3443393-cb12-4858-ae68-d699490531c7.webp",
+            "image_desktop": "shopify://shop_images/Fusion_wear_-_Website.webp",
+            "banner_collection": "girls-indo-western",
+            "banner_link": ""
+          }
+        },
+        "banner_xjMbzd": {
+          "type": "banner",
+          "name": "Palazzo Sets",
+          "settings": {
+            "image_mobile": "shopify://shop_images/211.webp",
+            "image_desktop": "shopify://shop_images/Palazzo_Sets_-_Website.webp",
+            "banner_collection": "palazzo-sets",
+            "banner_link": ""
+          }
+        },
+        "banner_Yqim3c": {
+          "type": "banner",
+          "name": "Lagorii Play",
+          "disabled": true,
+          "settings": {
+            "image_mobile": "shopify://shop_images/The_Festive_Edit_3_735390a5-de7a-46c1-9ac2-2c3696925469.webp",
+            "image_desktop": "shopify://shop_images/Play_web_banner.webp",
+            "banner_collection": "",
+            "banner_link": "shopify://pages/lagorii-play"
+          }
+        }
+      },
+      "block_order": [
+        "banner_VKJATJ",
+        "banner_ANmB3F",
+        "banner_gGbewR",
+        "banner_7TbRWQ",
+        "banner_gPJTTi",
+        "banner_xjMbzd",
+        "banner_Yqim3c"
+      ],
+      "disabled": true,
+      "name": "Lagorii • Hero + ETA",
+      "settings": {
+        "hero_radius": 0,
+        "section_margin_top": 0,
+        "section_margin_bottom": 32,
+        "inset": 14,
+        "inset_desktop": 8,
+        "overlay_font": "montserrat_n4",
+        "overlay_font_size": 14,
+        "overlay_weight": "900",
+        "overlay_pad_y": 6,
+        "overlay_pad_x": 10,
+        "overlay_radius": 10,
+        "overlay_bg": "#111111",
+        "overlay_border": "rgba(0,0,0,0)",
+        "overlay_text": "#ffffff",
+        "overlay_opacity": 41,
+        "truck_color": "#ffffff",
+        "truck_size": 26,
+        "rules_url": "",
+        "cta_collection": "kids-wear-120-min-delivery-bangalore",
+        "cta_fallback_url": "",
+        "cta_font": "montserrat_n4",
+        "cta_weight": "800",
+        "cta_font_size": 14,
+        "cta_pad_y": 7,
+        "cta_pad_x": 10,
+        "cta_radius": 10,
+        "cta_bg": "#111111",
+        "cta_text": "#ffffff",
+        "cta_border": "rgba(0,0,0,0)",
+        "cta_opacity": 41,
+        "cta_icon": "shopify://shop_images/Categaries_image_9fc9a4ad-98b1-4a65-a9e1-8697802ddd2f.png",
+        "cta_icon_size": 34,
+        "cta_label": "Lagorii Now",
+        "cta_main_text": "60 Mins",
+        "dots_color": "#818181",
+        "dots_active_color": "#e87529",
+        "autoplay_speed": 3000,
+        "dots_margin_top": 14,
+        "dots_gap": 11
+      }
+    },
+    "b25c8bcb-007b-45d9-b198-57f4a84a1b9d": {
+      "type": "product-block",
+      "custom_css": [],
+      "name": "New Arrivals",
+      "settings": {
+        "container": "fullwidth",
+        "padding_full_width": 30,
+        "disable_padding_content": false,
+        "enable_border_top": false,
+        "enable_border_bottom": false,
+        "border_height": 0,
+        "color_border_bottom": "#e8e8e8",
+        "enable_minus_mg_top": false,
+        "minus_spacing_top": -100,
+        "product_block_layout": "scroll",
+        "product_bg": "#ffffff",
+        "product_bg_gradient": "",
+        "style_block_header": "style2",
+        "pd_top_title": 30,
+        "product_block_title": "New Arrivals",
+        "enable_border_title": false,
+        "enable_border_title_style2": true,
+        "fontsize_title": 16,
+        "fontsize_title_mb": 16,
+        "mg_bottom_title": 6,
+        "mg_bottom_title_mb": 16,
+        "border_color_title": "#232323",
+        "color_title": "#232323",
+        "view_all": "View All",
+        "view_all_align": "center",
+        "font_weight_view_all": "500",
+        "fontsize_view_all": 15,
+        "fontsize_view_all_mb": 15,
+        "mg_bottom_view": 20,
+        "mg_bottom_view_mb": 9,
+        "enable_border_view_all": true,
+        "link_view_all": "shopify://collections/new-arrivals",
+        "color_view_all": "#e87529",
+        "icon_view_all": "",
+        "color_view_all_icon": "#e87529",
+        "title_align": "center",
+        "button_text": "Show More",
+        "button_text_font_size": 14,
+        "button_text_font_weight": "500",
+        "button_text_text_transform": "uppercase",
+        "product_button_width": 270,
+        "pd_top_product_button": 12,
+        "pd_bottom_product_button": 12,
+        "button_icon": "",
+        "mg_bottom_button": 95,
+        "enable_button_shadow": false,
+        "color_button": "#ffffff",
+        "border_color_button": "#232323",
+        "bg_color_button": "#e46e21",
+        "bg_color_gradient_button": "",
+        "color_button_hover": "",
+        "border_color_button_hover": "",
+        "bg_color_button_hover": "",
+        "bg_color_gradient_button_hover": "",
+        "product_block_collection": "new-arrivals",
+        "product_block_limit": 15,
+        "grid_gap": 15,
+        "pb_style": "style1",
+        "style_countdown": "style_1",
+        "countdown": "",
+        "font_size_countdown_text": 14,
+        "color_countdown": "#f42b23",
+        "countdown_margin_left": 15,
+        "product_block_per_row": "5",
+        "product_block_infinite_scroll": true,
+        "product_block_swipe_on_mobile": true,
+        "enable_product_card_pd_bottom": false,
+        "product_card_pd_bottom": 40,
+        "product_block_dots": false,
+        "product_block_dots_mb": true,
+        "spacing_top_dots": 0,
+        "product_block_arrows": true,
+        "product_block_arrows_mb": false,
+        "product_block_progress_bar": false,
+        "product_block_counter_number": false,
+        "enable_hover_arrow": false,
+        "enable_infinite": true,
+        "product_block_show": "5.5",
+        "position_vertical_arrow": "70px",
+        "product_block_per_view": "5",
+        "show_half": true,
+        "scroll_height": 1,
+        "scroll_track_bg": "#f1f1f1",
+        "scroll_thumb_color": "#000000",
+        "scroll_thumb_hover_color": "#444444",
+        "enable_hover_drag_icon": false,
+        "position": "left",
+        "width_banner": 40,
+        "display_list_collection": false,
+        "collection_color": "#202020",
+        "collection_color_hover": "#3e8cc4",
+        "collection_bg_color": "#ffffff",
+        "collection_bg_color_gradient": "",
+        "text_list": "View all categories",
+        "url_list": "",
+        "enable_layout_special": false,
+        "bg_card": "#ffffff",
+        "padding_card": 15,
+        "border_radius_card": 5,
+        "border_layout_card": "full",
+        "border_width_card": 0,
+        "border_color_card": "#f0f1f4",
+        "mg_top_desktop": 20,
+        "mg_top_tablet": 15,
+        "mg_top_mobile": 15,
+        "mg_bottom_desktop": 20,
+        "mg_bottom_tablet": 15,
+        "mg_bottom_mobile": 15
+      }
+    },
+    "mobile_video_iNVdMb": {
+      "type": "Mobile-video",
+      "disabled": true,
+      "name": "Mobile Video Shop Now",
+      "settings": {
+        "video": "shopify://files/videos/Video - horizontal.mp4",
+        "video_url": "",
+        "video_ratio": "16-9",
+        "autoplay": true,
+        "loop_video": true,
+        "show_mute_button": false,
+        "show_shop_button": false,
+        "button_text": "",
+        "collection_link": "ethnic-wear-lagorii",
+        "button_link": "",
+        "section_bg": "#ffffff",
+        "padding_top": 12,
+        "padding_right": 12,
+        "padding_bottom": 12,
+        "padding_left": 12,
+        "corner_radius": 8,
+        "font_family": "Montserrat, sans-serif",
+        "button_bg": "#e87529",
+        "button_text_color": "#ffffff",
+        "button_opacity": 95,
+        "button_bottom": 20,
+        "button_width": 140,
+        "button_padding_y": 12,
+        "button_padding_x": 24,
+        "button_radius": 24,
+        "button_font_size": 14,
+        "button_font_weight": "600",
+        "mute_bg": "#ffffff",
+        "mute_color": "#333333",
+        "mute_opacity": 85,
+        "mute_size": 38,
+        "mute_icon_size": 16,
+        "mute_top": 14,
+        "mute_right": 14
+      }
+    },
+    "image_banner_GU67WV": {
+      "type": "image-banner",
+      "blocks": {
+        "large_img_keceAV": {
+          "type": "largeImg",
+          "settings": {
+            "image": "shopify://shop_images/Trust_budget_Web_294ed0a7-9d8f-41b9-a9ec-cf0cd0266c9e.png",
+            "mobile_image": "shopify://shop_images/Trust_budget_mobile_7996b557-f401-4fb9-b1d9-2008cfb499b1.png",
+            "enable_max_width_image": false,
+            "custom_width_image": 1170,
+            "enable_scroll_down": false,
+            "enable_custom_image": false,
+            "image_behavior": "none",
+            "sub_title": "",
+            "border_sub_title": false,
+            "font_size_sub_title": 14,
+            "font_size_sub_title_mb": 14,
+            "margin_bottom_sub_title": 14,
+            "sub_heading_font": "font_1",
+            "font_weight_sub_title": "700",
+            "sub_title_position": "sub_title_above",
+            "color_sub_title": "#232323",
+            "color_sub_title_mb": "#ffffff",
+            "heading": "",
+            "letter_spacing_heading": "",
+            "enable_style_italic": false,
+            "font_size_heading": 40,
+            "font_size_heading_mb": 24,
+            "margin_bottom_heading": 20,
+            "font_weight_heading": "600",
+            "color_heading": "#232323",
+            "color_heading_mb": "#ffffff",
+            "border_title": "border_s1",
+            "border_color_title": "#232323",
+            "border_color_title_mobile": "#ffffff",
+            "text": "",
+            "font_size_des": 12,
+            "font_size_des_mb": 12,
+            "line_height_des": 26,
+            "margin_bottom_des": 35,
+            "color_des": "#232323",
+            "color_des_mb": "#ffffff",
+            "countdown": "",
+            "hide_countdown_fc": "countdown",
+            "countdown_style": "round",
+            "countdown_position": "countdown_below_desc",
+            "font_size_countdown_number": 30,
+            "font_size_countdown_text": 14,
+            "color_countdown": "#232323",
+            "color_countdown_mb": "#ffffff",
+            "countdown_margin_bottom": 35,
+            "content_width": 475,
+            "bg_color_content": "",
+            "align": "center",
+            "align_items": "center",
+            "position": "left",
+            "custom_horizontal": "",
+            "custom_vertical": "",
+            "btn_text": "",
+            "link": "",
+            "btn_icon": "",
+            "button_1_width": 235,
+            "enable_button_custom_border": false,
+            "button_color": "#ffffff",
+            "button_border": "#232323",
+            "button_background": "#232323",
+            "button_background_gradient": "",
+            "button_color_hover": "#ffffff",
+            "button_border_hover": "#232323",
+            "button_background_hover": "#232323",
+            "button_background_gradient_hover": "",
+            "btn_text_2": "",
+            "link_2": "",
+            "btn_icon_2": "",
+            "button_color_2": "#ffffff",
+            "button_border_2": "#232323",
+            "button_background_2": "#232323",
+            "button_background_2_gradient": "",
+            "button_color_hover_2": "#ffffff",
+            "button_border_hover_2": "#232323",
+            "button_background_hover_2": "#232323",
+            "button_background_gradient_hover_2": "",
+            "video_link": "",
+            "adaptive_height_video": "56",
+            "icon_style": "style_1",
+            "color_icon": "#ffffff",
+            "bg_color_icon": "#000000",
+            "enable_custom_video_icon_position": false,
+            "video_icon_horizontal_position": "",
+            "video_icon_vertical_position": "",
+            "video_icon_horizontal_position_mb": "",
+            "video_icon_vertical_position_mb": ""
+          }
+        }
+      },
+      "block_order": [
+        "large_img_keceAV"
+      ],
+      "name": "Truste budget",
+      "settings": {
+        "id_section": "",
+        "container": "fullwidth",
+        "padding_full_width": 0,
+        "image_banner_title": "",
+        "enable_border_title": false,
+        "color_title": "#202020",
+        "fontsize_title": 24,
+        "fontsize_title_mb": 20,
+        "margin_bottom_title": 25,
+        "image_banner_des": "",
+        "color_des": "#202020",
+        "fontsize_des": 16,
+        "title_align": "center",
+        "style_bg": "none",
+        "bg_color": "",
+        "bg_color_gradient": "",
+        "display_type": "slide",
+        "list_gap": 0,
+        "enable_arrows": false,
+        "arrows_position": "",
+        "enable_dots": false,
+        "enable_autoplay": false,
+        "mg_top_desktop": 30,
+        "mg_top_tablet": 30,
+        "mg_top_mobile": 0,
+        "mg_bottom_desktop": 30,
+        "mg_bottom_tablet": 30,
+        "mg_bottom_mobile": 0
+      }
+    },
+    "collection_showcase_bmeyjC": {
+      "type": "collection-showcase",
+      "blocks": {
+        "card_QrVaR6": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/89_0be2e04d-12f7-4604-a2b5-0f7a656a029b.webp",
+            "card_overlay_text": "Wedding Styles",
+            "card_collection": "wedding-wear",
+            "card_url": ""
+          }
+        },
+        "card_Xenkhy": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/Festive_Charm_2d481590-2431-4eac-b7f5-12b02cbe523a.webp",
+            "card_overlay_text": "Festive Charm",
+            "card_collection": "festive",
+            "card_url": ""
+          }
+        },
+        "card_dYmwCn": {
+          "type": "card",
+          "disabled": true,
+          "settings": {
+            "card_image": "shopify://shop_images/91_677ea7e4-fcc4-49ff-9568-d5f6b795ceac.webp",
+            "card_overlay_text": "Festive Charm",
+            "card_collection": "festive",
+            "card_url": ""
+          }
+        },
+        "card_cGKacp": {
+          "type": "card",
+          "disabled": true,
+          "settings": {
+            "card_image": "shopify://shop_images/Girls_Boys_Collection_Categories_1080_x_980_px_1.webp",
+            "card_overlay_text": "Summer Ready",
+            "card_collection": "summer-vibes",
+            "card_url": ""
+          }
+        },
+        "card_bMnzBG": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/90_34f27263-2e2b-4ad8-84b8-53f08c2281d0.webp",
+            "card_overlay_text": "Birthday Bash",
+            "card_collection": "birthday",
+            "card_url": ""
+          }
+        },
+        "card_hUMKw7": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/92_7a712dbd-3429-44fa-8397-c4329d078679.webp",
+            "card_overlay_text": "Easy Casuals",
+            "card_collection": "casual-wear-1",
+            "card_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "card_QrVaR6",
+        "card_Xenkhy",
+        "card_dYmwCn",
+        "card_cGKacp",
+        "card_bMnzBG",
+        "card_hUMKw7"
+      ],
+      "disabled": true,
+      "name": "Shop By Occassion",
+      "settings": {
+        "layout": "grid",
+        "grid_gap": 12,
+        "heading": "Shop By Occasion",
+        "heading_font_family": "Montserrat",
+        "heading_font_size_desktop": 32,
+        "heading_font_size_mobile": 24,
+        "heading_font_weight": "600",
+        "heading_color": "#e87529",
+        "heading_margin_bottom": 6,
+        "heading_padding_top": 0,
+        "heading_padding_bottom": 0,
+        "heading_padding_left": 0,
+        "heading_padding_right": 0,
+        "description": "Outfits made to match every happy occasion",
+        "description_font_family": "Montserrat",
+        "description_font_size_desktop": 16,
+        "description_font_size_mobile": 14,
+        "description_font_weight": "500",
+        "description_color": "#000000",
+        "description_padding_top": 0,
+        "description_padding_bottom": 0,
+        "description_padding_left": 0,
+        "description_padding_right": 0,
+        "header_margin_bottom": 12,
+        "section_bg_color": "#ffffff",
+        "section_padding_top": 16,
+        "section_padding_bottom": 16,
+        "section_padding_left": 12,
+        "section_padding_right": 12,
+        "section_border_radius": 0,
+        "card_border_radius": 8,
+        "overlay_font_family": "Montserrat",
+        "overlay_font_size": 16,
+        "overlay_text_color": "#ffffff",
+        "overlay_padding": 14,
+        "overlay_vertical_position": "bottom",
+        "overlay_offset_vertical": 0,
+        "overlay_horizontal_position": "center",
+        "overlay_offset_horizontal": 0,
+        "slider_show_arrows": false,
+        "slider_show_dots": false,
+        "slider_autoplay": false,
+        "slider_autoplay_speed": 3000
+      }
+    },
+    "banner_slider_grid_Pih9wW": {
+      "type": "Banner-slider-Grid",
+      "blocks": {
+        "card_8L4xmp": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/Party_Glam_396c9d8d-d7a8-4e7d-8dfb-735510f92a20.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/party-wear"
+          }
+        },
+        "card_AEqJJD": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/183_25820f9e-67c7-4102-a257-bac5641b109b.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/wedding-wear"
+          }
+        },
+        "card_hNwB8i": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/Ethnic_Picks.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/ethnic-wear-lagorii"
+          }
+        },
+        "card_m64hrn": {
+          "type": "card",
+          "name": "Pertty Gowns",
+          "settings": {
+            "card_image": "shopify://shop_images/Collections_photo_eb7722b0-fcbd-4d9d-80a2-c8cad17f1f9e.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/ball-gowns"
+          }
+        },
+        "card_cbKnLx": {
+          "type": "card",
+          "name": "Birthday Girl",
+          "settings": {
+            "card_image": "shopify://shop_images/186_4db7146a-9e86-4dae-911a-7709759a8685.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/girls-birthday-dresses-party-outfits"
+          }
+        },
+        "card_xK3wjQ": {
+          "type": "card",
+          "name": "Birthday Boy",
+          "settings": {
+            "card_image": "shopify://shop_images/187_944cd090-2f7a-42a2-85eb-a27bea58bcbc.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/birthday-boy"
+          }
+        }
+      },
+      "block_order": [
+        "card_8L4xmp",
+        "card_AEqJJD",
+        "card_hNwB8i",
+        "card_m64hrn",
+        "card_cbKnLx",
+        "card_xK3wjQ"
+      ],
+      "name": "Special Store",
+      "settings": {
+        "banner_desktop_image": "shopify://shop_images/Special_store.webp",
+        "banner_mobile_image": "shopify://shop_images/mobile_heading_1.webp",
+        "banner_alt": "",
+        "banner_link": "",
+        "bg_color": "rgba(0,0,0,0)",
+        "padding_top": 12,
+        "padding_bottom": 16,
+        "section_side_padding": 0,
+        "show_cards": true,
+        "cards_source": "manual",
+        "cards_layout": "slider",
+        "enable_arrows": true,
+        "show_arrows_desktop": false,
+        "show_arrows_mobile": false,
+        "arrow_bg": "#ffffff",
+        "arrow_color": "#111111",
+        "arrow_side_offset": 8,
+        "desktop_cards_full_width": true,
+        "desktop_cards_side_padding": 0,
+        "cards_margin_top": 0,
+        "cards_bg_color": "#edf7ff",
+        "cards_bg_image_size": "cover",
+        "cards_bg_padding": 0,
+        "cards_bg_radius": 0,
+        "cards_gap": 0,
+        "card_radius": 6,
+        "card_inner_padding": 2,
+        "card_bg_color": "rgba(0,0,0,0)",
+        "card_image_fit": "contain",
+        "grid_cols_desktop": 4,
+        "grid_cols_tablet": 3,
+        "grid_cols_mobile": 2,
+        "slider_card_width": 65,
+        "slider_cards_visible_mobile": "2.5",
+        "card_aspect_ratio": 135,
+        "overlay_font_family": "inherit",
+        "overlay_font_weight": "600",
+        "overlay_font_size_desktop": 22,
+        "overlay_font_size_mobile": 15,
+        "overlay_text_color": "#ffffff",
+        "overlay_bg_color": "#111111",
+        "overlay_bg_opacity": 100,
+        "overlay_padding": 0,
+        "overlay_radius": 8,
+        "overlay_text_align": "center",
+        "cards_collection": "",
+        "products_limit": 4,
+        "show_view_all": true,
+        "view_all_label": "View all",
+        "view_all_bg": "#e87529",
+        "view_all_text": "#ffffff"
+      }
+    },
+    "banner_slider_grid_BAbQne": {
+      "type": "Banner-slider-Grid",
+      "blocks": {
+        "card_xThgam": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/Summer_Edit.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/summer-vibes"
+          }
+        },
+        "card_UVbyKt": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/Shorts_Sets_7b3d1977-734f-43e9-89ab-0e6b40bb017d.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/shorts-sets"
+          }
+        },
+        "card_dGM3Mb": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/Linen_Breeze.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/linen-causal-wear"
+          }
+        },
+        "card_tC7rHX": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/Shimmer_Shine.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/shimmer-edit"
+          }
+        },
+        "card_bEdRRr": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/Mermaid_Magic.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/fish-cut"
+          }
+        },
+        "card_LGMp4n": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/Co-ord_Sets_f0b63f7d-7492-4ed8-8f59-f95554c512c2.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/co-ord-set"
+          }
+        },
+        "card_nmQiWH": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/Night_Suits.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/night-wear"
+          }
+        }
+      },
+      "block_order": [
+        "card_xThgam",
+        "card_UVbyKt",
+        "card_dGM3Mb",
+        "card_tC7rHX",
+        "card_bEdRRr",
+        "card_LGMp4n",
+        "card_nmQiWH"
+      ],
+      "name": "Trending now",
+      "settings": {
+        "banner_desktop_image": "shopify://shop_images/Now_trending_56843e61-8b57-4481-8594-0723a958cb7a.webp",
+        "banner_mobile_image": "shopify://shop_images/mobile_heading.webp",
+        "banner_alt": "Lagorii banner",
+        "banner_link": "",
+        "bg_color": "rgba(0,0,0,0)",
+        "padding_top": 16,
+        "padding_bottom": 12,
+        "section_side_padding": 0,
+        "show_cards": true,
+        "cards_source": "manual",
+        "cards_layout": "slider",
+        "enable_arrows": true,
+        "show_arrows_desktop": false,
+        "show_arrows_mobile": false,
+        "arrow_bg": "#ffffff",
+        "arrow_color": "#111111",
+        "arrow_side_offset": 8,
+        "desktop_cards_full_width": true,
+        "desktop_cards_side_padding": 0,
+        "cards_margin_top": 0,
+        "cards_bg_color": "#f8e9ff",
+        "cards_bg_image_size": "cover",
+        "cards_bg_padding": 0,
+        "cards_bg_radius": 0,
+        "cards_gap": 0,
+        "card_radius": 6,
+        "card_inner_padding": 6,
+        "card_bg_color": "rgba(0,0,0,0)",
+        "card_image_fit": "contain",
+        "grid_cols_desktop": 4,
+        "grid_cols_tablet": 3,
+        "grid_cols_mobile": 2,
+        "slider_card_width": 65,
+        "slider_cards_visible_mobile": "2.5",
+        "card_aspect_ratio": 135,
+        "overlay_font_family": "inherit",
+        "overlay_font_weight": "600",
+        "overlay_font_size_desktop": 22,
+        "overlay_font_size_mobile": 15,
+        "overlay_text_color": "#ffffff",
+        "overlay_bg_color": "#111111",
+        "overlay_bg_opacity": 100,
+        "overlay_padding": 0,
+        "overlay_radius": 8,
+        "overlay_text_align": "center",
+        "cards_collection": "",
+        "products_limit": 4,
+        "show_view_all": true,
+        "view_all_label": "View all",
+        "view_all_bg": "#e87529",
+        "view_all_text": "#ffffff"
+      }
+    },
+    "lagorii_category_grid_Tfrcri": {
+      "type": "Lagorii-Category-Grid",
+      "blocks": {
+        "category_jP7c3U": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/29_e0669f4f-689c-4ea8-831f-80b44f5afe5b.webp",
+            "label": "",
+            "subtext": "",
+            "link": "shopify://collections/sharara-sets"
+          }
+        },
+        "category_dkCCEQ": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/30_d28a8c70-0af2-4145-aff6-6946ea191d17.webp",
+            "label": "",
+            "subtext": "",
+            "link": "shopify://collections/lehenga-choli"
+          }
+        },
+        "category_Bx8GCb": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/33_1b3c5d44-5e24-44e0-b07a-f58aa3a38163.webp",
+            "label": "",
+            "subtext": "",
+            "link": "shopify://collections/palazzo-sets"
+          }
+        },
+        "category_kPiaYK": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/32_f502e891-cec1-48ff-8e53-16f61b5dfdbb.webp",
+            "label": "",
+            "subtext": "",
+            "link": "shopify://collections/girls-party-wear-frocks"
+          }
+        },
+        "category_mXDTQF": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/Dresses.webp",
+            "label": "",
+            "subtext": "",
+            "link": "shopify://collections/girls-dress"
+          }
+        },
+        "category_TcDqg4": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/34_c0aa7c2d-1f2c-409b-a674-1fa9ed4f6ed1.webp",
+            "label": "",
+            "subtext": "",
+            "link": "shopify://collections/girls-party-wear-gowns"
+          }
+        },
+        "category_GgatKK": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/35_f086dcfe-01e0-4259-a661-2c241181fd81.webp",
+            "label": "",
+            "subtext": "",
+            "link": "shopify://collections/nehru-jackets"
+          }
+        },
+        "category_K7DxQj": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/38_1c1f511e-b29e-4cfb-af16-878f62fc04f8.webp",
+            "label": "",
+            "subtext": "",
+            "link": "shopify://collections/co-ord-set"
+          }
+        },
+        "category_Yg96fC": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/36_f7816fa5-f93d-47c2-b462-053c6f110ac3.webp",
+            "label": "",
+            "subtext": "",
+            "link": "shopify://collections/boys-indo-western"
+          }
+        },
+        "category_JbUGRq": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/37_007bb889-77c3-408a-8b54-fc2ba0b2ddb1.webp",
+            "label": "",
+            "subtext": "",
+            "link": "shopify://collections/boys-suits"
+          }
+        },
+        "category_ty9Lzw": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/31_426fe159-7540-47e2-8a55-d41e3764fda9.webp",
+            "label": "",
+            "subtext": "",
+            "link": "shopify://collections/girls-indo-western"
+          }
+        },
+        "category_pXYbNf": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/39_b8cdd7e8-7329-403f-a455-c9e9545cea56.webp",
+            "label": "",
+            "subtext": "",
+            "link": "shopify://collections/shirts"
+          }
+        }
+      },
+      "block_order": [
+        "category_jP7c3U",
+        "category_dkCCEQ",
+        "category_Bx8GCb",
+        "category_kPiaYK",
+        "category_mXDTQF",
+        "category_TcDqg4",
+        "category_GgatKK",
+        "category_K7DxQj",
+        "category_Yg96fC",
+        "category_JbUGRq",
+        "category_ty9Lzw",
+        "category_pXYbNf"
+      ],
+      "name": "Kids Closet",
+      "settings": {
+        "section_bg": "#ffeded",
+        "heading": "",
+        "heading_color": "#111111",
+        "heading_weight": 600,
+        "heading_size_m": 22,
+        "heading_size_d": 30,
+        "heading_image_desktop": "shopify://shop_images/Kids_closet_1_2acb98a2-7013-473f-a290-9f797e5089c8.webp",
+        "heading_image_mobile": "shopify://shop_images/Kids_Closet_4fb8f0d0-c3f9-45cd-a7e2-a45aec2ca216.webp",
+        "heading_padding_tb": 0,
+        "heading_padding_lr": 0,
+        "heading_image_gap": 12,
+        "show_category_text": false,
+        "cat_font": "montserrat_n4",
+        "subtext_color": "#777777",
+        "cat_weight": 600,
+        "cat_size_m": 12,
+        "cat_size_d": 18,
+        "subtext_size_m": 10,
+        "subtext_size_d": 12,
+        "cat_min_height": 38,
+        "image_radius": 0,
+        "image_text_gap": 0,
+        "grid_gap_mobile": 2,
+        "grid_gap": 18,
+        "mobile_columns": 3,
+        "desktop_columns": 6,
+        "padding_m": 12,
+        "padding_d": 30,
+        "outer_top_padding_mobile": 10,
+        "outer_bottom_padding_mobile": 12,
+        "outer_top_padding_desktop": 12,
+        "outer_bottom_padding_desktop": 12
+      }
+    },
+    "lagorii_category_grid_FBQ9fk": {
+      "type": "Lagorii-Category-Grid",
+      "blocks": {
+        "category_JRG7U4": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/Categories_image_2_c5309a31-9144-48fd-a0d6-ebf46ca6d3a5.webp",
+            "label": "",
+            "subtext": "",
+            "link": "shopify://collections/just-born"
+          }
+        },
+        "category_8DYnBC": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/Categories_image_1.webp",
+            "label": "",
+            "subtext": "",
+            "link": "shopify://collections/girls-toddler"
+          }
+        },
+        "category_YpmLeT": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/Categories_image_2.webp",
+            "label": "",
+            "subtext": "",
+            "link": "shopify://collections/girls-tweens"
+          }
+        },
+        "category_tEzEic": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/Girls_Teens.webp",
+            "label": "",
+            "subtext": "",
+            "link": "shopify://collections/girls-teens"
+          }
+        },
+        "category_x9kfeA": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/Categories_image_f821a5cf-5e22-4c32-ac33-0e71cdf03fe6.webp",
+            "label": "",
+            "subtext": "",
+            "link": "shopify://collections/boys-0-2-years"
+          }
+        },
+        "category_BWtaYU": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/Categories_image_4.webp",
+            "label": "",
+            "subtext": "",
+            "link": "shopify://collections/boys-toddler"
+          }
+        },
+        "category_Uf8Kif": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/Categories_image_6.webp",
+            "label": "",
+            "subtext": "",
+            "link": "shopify://collections/boys-tweens"
+          }
+        },
+        "category_edQKtx": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/Boys_Teens.webp",
+            "label": "",
+            "subtext": "",
+            "link": "shopify://collections/boys-teens"
+          }
+        }
+      },
+      "block_order": [
+        "category_JRG7U4",
+        "category_8DYnBC",
+        "category_YpmLeT",
+        "category_tEzEic",
+        "category_x9kfeA",
+        "category_BWtaYU",
+        "category_Uf8Kif",
+        "category_edQKtx"
+      ],
+      "name": "Shop by Age",
+      "settings": {
+        "section_bg": "#fffcf4",
+        "heading": "Shop By Age",
+        "heading_color": "#e87529",
+        "heading_weight": 600,
+        "heading_size_m": 22,
+        "heading_size_d": 30,
+        "heading_padding_tb": 8,
+        "heading_padding_lr": 0,
+        "heading_image_gap": 12,
+        "show_category_text": false,
+        "cat_font": "montserrat_n4",
+        "subtext_color": "#777777",
+        "cat_weight": 600,
+        "cat_size_m": 12,
+        "cat_size_d": 18,
+        "subtext_size_m": 10,
+        "subtext_size_d": 12,
+        "cat_min_height": 38,
+        "image_radius": 0,
+        "image_text_gap": 0,
+        "grid_gap_mobile": 0,
+        "grid_gap": 16,
+        "mobile_columns": 4,
+        "desktop_columns": 4,
+        "padding_m": 4,
+        "padding_d": 30,
+        "outer_top_padding_mobile": 10,
+        "outer_bottom_padding_mobile": 14,
+        "outer_top_padding_desktop": 12,
+        "outer_bottom_padding_desktop": 10
+      }
+    },
+    "custom_image_cards_jydF3q": {
+      "type": "custom-image-cards",
+      "blocks": {
+        "card_gjnpHx": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/Birthday_Collections.webp",
+            "card_title": "",
+            "card_text": "",
+            "button_label": "",
+            "card_link": "shopify://pages/the-birthday-edit"
+          }
+        },
+        "card_GzBxBK": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/Wedding_Collection.webp",
+            "card_title": "",
+            "card_text": "",
+            "button_label": "",
+            "card_link": "shopify://collections/wedding-wear"
+          }
+        },
+        "card_pHV8UK": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/Casual_Collection.webp",
+            "card_title": "",
+            "card_text": "",
+            "button_label": "",
+            "card_link": "shopify://collections/casual-wear-1"
+          }
+        },
+        "card_Exfa6C": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/Party_Collection.webp",
+            "card_title": "",
+            "card_text": "",
+            "button_label": "",
+            "card_link": "shopify://collections/party-wear"
+          }
+        },
+        "card_chRh9g": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/Luxe_Collections_1.webp",
+            "card_title": "",
+            "card_text": "",
+            "button_label": "",
+            "card_link": "shopify://collections/luxe"
+          }
+        }
+      },
+      "block_order": [
+        "card_gjnpHx",
+        "card_GzBxBK",
+        "card_pHV8UK",
+        "card_Exfa6C",
+        "card_chRh9g"
+      ],
+      "name": "Shop by collection",
+      "settings": {
+        "full_width": false,
+        "layout_mode": "slider",
+        "heading": "Shop by Collection",
+        "description": "",
+        "text_alignment": "center",
+        "heading_font_family": "inherit",
+        "heading_font_weight": "600",
+        "heading_size": 32,
+        "heading_size_mobile": 22,
+        "description_font_family": "inherit",
+        "description_font_weight": "400",
+        "description_size": 16,
+        "description_size_mobile": 14,
+        "cards_per_row_desktop": 3,
+        "cards_per_row_tablet": 2,
+        "cards_per_row_mobile": 1,
+        "slider_visible_desktop": "4.5",
+        "slider_visible_tablet": 2,
+        "slider_visible_mobile": "1.5",
+        "card_gap": 8,
+        "card_radius": 6,
+        "image_radius": 6,
+        "card_title_font_family": "inherit",
+        "card_title_font_weight": "700",
+        "card_title_size": 20,
+        "card_title_size_mobile": 18,
+        "card_text_font_family": "inherit",
+        "card_text_font_weight": "400",
+        "card_text_size": 15,
+        "card_text_size_mobile": 14,
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "padding_left": 20,
+        "padding_right": 12,
+        "padding_top_mobile": 14,
+        "padding_bottom_mobile": 24,
+        "padding_left_mobile": 16,
+        "padding_right_mobile": 6,
+        "card_padding_top": 8,
+        "card_padding_right": 11,
+        "card_padding_bottom": 12,
+        "card_padding_left": 16,
+        "section_bg": "#ffffff",
+        "heading_color": "#e87529",
+        "description_color": "#666666",
+        "card_bg": "#ffffff",
+        "text_color": "#111111",
+        "button_bg": "#111111",
+        "button_color": "#ffffff",
+        "card_border_width": 0,
+        "card_border_color": "#ffffff",
+        "card_shadow_opacity": 0
+      }
+    },
+    "lagorii_media_banner_a6ViNC": {
+      "type": "Lagorii-media-banner",
+      "name": "Lagorii now",
+      "settings": {
+        "desktop_image": "shopify://shop_images/Lagorii_Now_-_Website.webp",
+        "mobile_image": "shopify://shop_images/Lagorii_Now_-_Mobile.webp",
+        "banner_collection": "kids-wear-120-min-delivery-bangalore",
+        "bg_color": "#ffffff",
+        "padding_top": 8,
+        "padding_bottom": 8
+      }
+    },
+    "banner_slider_grid_KbPtx6": {
+      "type": "Banner-slider-Grid",
+      "blocks": {
+        "card_pYGAYc": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/1_871d4d7c-d89d-4c45-a463-d5c80b07acab.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/lehenga-choli"
+          }
+        },
+        "card_RLHVYK": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/5_7d148465-2dc6-43b6-a54b-3a894950532c.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/kurta-sets"
+          }
+        },
+        "card_9cLU89": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/8_fc028bf6-21ef-4eb6-bad2-fcba6dcade01.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/palazzo-sets"
+          }
+        },
+        "card_frVQtW": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/3_571a8739-e4ce-47b1-930a-9885cedcd25b.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/boys-indo-western"
+          }
+        },
+        "card_y6GNXe": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/4_26b188f4-2070-4ecd-85b3-23ef2d72c77e.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/sharara-sets"
+          }
+        },
+        "card_zpYKVF": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/2_f43da774-ef50-422e-a4b7-ff8e6102b79c.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/nehru-jackets"
+          }
+        },
+        "card_Jz4GMR": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/6_11f317c3-ca2c-42e8-b2c6-f941bf107bb8.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/pattu-pavadai"
+          }
+        },
+        "card_JwchzX": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/7_30fc584b-2b9b-42f5-a368-6a54e040279e.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/ethnic-wear-2"
+          }
+        }
+      },
+      "block_order": [
+        "card_pYGAYc",
+        "card_RLHVYK",
+        "card_9cLU89",
+        "card_frVQtW",
+        "card_y6GNXe",
+        "card_zpYKVF",
+        "card_Jz4GMR",
+        "card_JwchzX"
+      ],
+      "disabled": true,
+      "name": "Ethnic Store",
+      "settings": {
+        "banner_desktop_image": "shopify://shop_images/Website_banner_high-resolution_f9b6aece-3ac2-44e0-aa47-c5e11dcbc1a4.webp",
+        "banner_mobile_image": "shopify://shop_images/LUXE_de4d444c-00cc-494d-9b40-16746b9e75b7.webp",
+        "banner_alt": "Lagorii banner",
+        "banner_link": "shopify://collections/wedding-wear",
+        "bg_color": "rgba(0,0,0,0)",
+        "padding_top": 4,
+        "padding_bottom": 0,
+        "section_side_padding": 0,
+        "show_cards": true,
+        "cards_source": "manual",
+        "cards_layout": "slider",
+        "enable_arrows": true,
+        "show_arrows_desktop": false,
+        "show_arrows_mobile": false,
+        "arrow_bg": "#ffffff",
+        "arrow_color": "#111111",
+        "arrow_side_offset": 8,
+        "desktop_cards_full_width": true,
+        "desktop_cards_side_padding": 0,
+        "cards_margin_top": 0,
+        "cards_bg_color": "#ffffff",
+        "cards_bg_image_size": "cover",
+        "cards_bg_padding": 0,
+        "cards_bg_radius": 0,
+        "cards_gap": 0,
+        "card_radius": 0,
+        "card_inner_padding": 8,
+        "card_bg_color": "rgba(0,0,0,0)",
+        "card_image_fit": "cover",
+        "grid_cols_desktop": 4,
+        "grid_cols_tablet": 3,
+        "grid_cols_mobile": 2,
+        "slider_card_width": 65,
+        "slider_cards_visible_mobile": "2.5",
+        "card_aspect_ratio": 130,
+        "overlay_font_family": "inherit",
+        "overlay_font_weight": "600",
+        "overlay_font_size_desktop": 22,
+        "overlay_font_size_mobile": 15,
+        "overlay_text_color": "#ffffff",
+        "overlay_bg_color": "#111111",
+        "overlay_bg_opacity": 100,
+        "overlay_padding": 0,
+        "overlay_radius": 8,
+        "overlay_text_align": "center",
+        "cards_collection": "",
+        "products_limit": 4,
+        "show_view_all": true,
+        "view_all_label": "View all",
+        "view_all_bg": "#e87529",
+        "view_all_text": "#ffffff"
+      }
+    },
+    "banner_slider_grid_TmnhkN": {
+      "type": "Banner-slider-Grid",
+      "blocks": {
+        "card_MkqJqp": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/Lehenga_Choli_0926b27a-e31f-4082-87b0-b41e4f9fc902.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/lehenga-choli"
+          }
+        },
+        "card_WN6KRx": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/Nehru_Jacket.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/nehru-jackets"
+          }
+        },
+        "card_d6RGYH": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/Sherwanis_e20df594-894b-4e36-9615-9828e528018c.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/boys-indo-western"
+          }
+        },
+        "card_4Qfbre": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/Palazzo_Sets.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/palazzo-sets"
+          }
+        },
+        "card_CCVXfY": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/Collections_photo_5978dd8c-28fa-4b58-a978-591139ab8df6.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/jodhpuri-suit"
+          }
+        },
+        "card_JRUD76": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/Sharara_Sets_9725fd77-49d8-480e-9a83-b94b1da0d0c2.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/sharara-sets"
+          }
+        },
+        "card_rQzJU8": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/Kurta_Sets_1a10d70c-c57d-4217-99f8-aacb954e99a3.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/kurta-sets"
+          }
+        },
+        "card_8nUDHn": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/Fusion_wear.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/girls-indo-western"
+          }
+        },
+        "card_tw9VTJ": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/Dhoti_Sets_0c634f27-34c4-46bc-b2a4-2c117158eee1.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/boys-dhoti-set"
+          }
+        },
+        "card_TUAxFL": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/Pattu_Pavadai_cc132133-0277-4e10-9a99-5279bee5129e.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/pattu-pavadai"
+          }
+        },
+        "card_aWMBWt": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/All.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/ethnic-wear-2"
+          }
+        }
+      },
+      "block_order": [
+        "card_MkqJqp",
+        "card_WN6KRx",
+        "card_d6RGYH",
+        "card_4Qfbre",
+        "card_CCVXfY",
+        "card_JRUD76",
+        "card_rQzJU8",
+        "card_8nUDHn",
+        "card_tw9VTJ",
+        "card_TUAxFL",
+        "card_aWMBWt"
+      ],
+      "name": "Ethnic Store",
+      "settings": {
+        "banner_desktop_image": "shopify://shop_images/Website_banner_high-resolution_f9b6aece-3ac2-44e0-aa47-c5e11dcbc1a4.webp",
+        "banner_mobile_image": "shopify://shop_images/Ethnic_Store.webp",
+        "banner_alt": "Lagorii banner",
+        "banner_link": "shopify://collections/ethnic-wear-2",
+        "bg_color": "rgba(0,0,0,0)",
+        "padding_top": 16,
+        "padding_bottom": 0,
+        "section_side_padding": 0,
+        "show_cards": true,
+        "cards_source": "manual",
+        "cards_layout": "slider",
+        "enable_arrows": true,
+        "show_arrows_desktop": false,
+        "show_arrows_mobile": false,
+        "arrow_bg": "#ffffff",
+        "arrow_color": "#111111",
+        "arrow_side_offset": 8,
+        "desktop_cards_full_width": true,
+        "desktop_cards_side_padding": 0,
+        "cards_margin_top": 0,
+        "cards_bg_color": "#ffffff",
+        "cards_bg_image_size": "cover",
+        "cards_bg_padding": 0,
+        "cards_bg_radius": 0,
+        "cards_gap": 0,
+        "card_radius": 6,
+        "card_inner_padding": 4,
+        "card_bg_color": "rgba(0,0,0,0)",
+        "card_image_fit": "cover",
+        "grid_cols_desktop": 4,
+        "grid_cols_tablet": 3,
+        "grid_cols_mobile": 2,
+        "slider_card_width": 65,
+        "slider_cards_visible_mobile": "2.5",
+        "card_aspect_ratio": 130,
+        "overlay_font_family": "inherit",
+        "overlay_font_weight": "600",
+        "overlay_font_size_desktop": 22,
+        "overlay_font_size_mobile": 15,
+        "overlay_text_color": "#ffffff",
+        "overlay_bg_color": "#111111",
+        "overlay_bg_opacity": 100,
+        "overlay_padding": 0,
+        "overlay_radius": 8,
+        "overlay_text_align": "center",
+        "cards_collection": "",
+        "products_limit": 4,
+        "show_view_all": true,
+        "view_all_label": "View all",
+        "view_all_bg": "#e87529",
+        "view_all_text": "#ffffff"
+      }
+    },
+    "banner_slider_grid_4679Uy": {
+      "type": "Banner-slider-Grid",
+      "blocks": {
+        "card_UrUmeU": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/Collections_photo_a7a3fce4-f708-4d46-b456-9195316e4e98.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/girls-party-wear-frocks"
+          }
+        },
+        "card_Ej6McF": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/173_5bffaa08-675c-494e-8f2e-5c8a2ee8f1df.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/girls-party-wear-dress"
+          }
+        },
+        "card_KKYqnz": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/172_3d84bece-5d53-45e2-8f94-32abd456bb88.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/boys-suits"
+          }
+        },
+        "card_QakAJk": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/175_935cbe93-46ce-40e3-9f7b-6a013643fb00.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/tail-back-frocks"
+          }
+        },
+        "card_JjmtUp": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/176_9a547216-d5df-4d12-be6d-b146d6faa09b.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/girls-party-wear-gowns"
+          }
+        },
+        "card_jU7xan": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/177_9ab8f39a-60f6-4a30-ae7e-b45fc4809fb9.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/party-wear"
+          }
+        }
+      },
+      "block_order": [
+        "card_UrUmeU",
+        "card_Ej6McF",
+        "card_KKYqnz",
+        "card_QakAJk",
+        "card_JjmtUp",
+        "card_jU7xan"
+      ],
+      "name": "Partywear Store",
+      "settings": {
+        "banner_desktop_image": "shopify://shop_images/Website_banner_high-resolution_5e46d788-7563-4b55-9745-cac10131374a.webp",
+        "banner_mobile_image": "shopify://shop_images/LUXE_2b2296c4-43d7-44df-a6f6-b268c8b59c21.webp",
+        "banner_alt": "Lagorii banner",
+        "banner_link": "shopify://collections/party-wear",
+        "bg_color": "rgba(0,0,0,0)",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "section_side_padding": 0,
+        "show_cards": true,
+        "cards_source": "manual",
+        "cards_layout": "slider",
+        "enable_arrows": true,
+        "show_arrows_desktop": false,
+        "show_arrows_mobile": false,
+        "arrow_bg": "#ffffff",
+        "arrow_color": "#111111",
+        "arrow_side_offset": 8,
+        "desktop_cards_full_width": true,
+        "desktop_cards_side_padding": 0,
+        "cards_margin_top": 0,
+        "cards_bg_color": "rgba(0,0,0,0)",
+        "cards_bg_image": "shopify://shop_images/LUXE_3.png",
+        "cards_bg_image_size": "cover",
+        "cards_bg_padding": 0,
+        "cards_bg_radius": 0,
+        "cards_gap": 0,
+        "card_radius": 6,
+        "card_inner_padding": 4,
+        "card_bg_color": "rgba(0,0,0,0)",
+        "card_image_fit": "cover",
+        "grid_cols_desktop": 4,
+        "grid_cols_tablet": 3,
+        "grid_cols_mobile": 2,
+        "slider_card_width": 65,
+        "slider_cards_visible_mobile": "2.5",
+        "card_aspect_ratio": 130,
+        "overlay_font_family": "inherit",
+        "overlay_font_weight": "600",
+        "overlay_font_size_desktop": 22,
+        "overlay_font_size_mobile": 15,
+        "overlay_text_color": "#ffffff",
+        "overlay_bg_color": "#111111",
+        "overlay_bg_opacity": 100,
+        "overlay_padding": 0,
+        "overlay_radius": 8,
+        "overlay_text_align": "center",
+        "cards_collection": "",
+        "products_limit": 4,
+        "show_view_all": true,
+        "view_all_label": "View all",
+        "view_all_bg": "#e87529",
+        "view_all_text": "#ffffff"
+      }
+    },
+    "banner_slider_grid_twM8K6": {
+      "type": "Banner-slider-Grid",
+      "blocks": {
+        "card_JdQNr7": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/179_90baa740-0ef4-4107-8741-95f7ba861ed5.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/frock-dress"
+          }
+        },
+        "card_WWKtJi": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/181_ebdc9257-b2a6-4fb4-a23a-187ee2cb9934.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/shirts"
+          }
+        },
+        "card_W33m8z": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/183_39bf7113-234a-4dae-a148-9c5f622e3de4.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/co-ord-set-for-girls"
+          }
+        },
+        "card_rNq4RD": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/Collections_photo_1_83f39eb7-3c7f-4a84-bd36-17ee1d963ac9.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/casual-infants-wear"
+          }
+        },
+        "card_TUwgdP": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/182_03e718d8-eeea-40fd-959a-e736c322fbf3.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/boys-sets"
+          }
+        },
+        "card_3XmQwF": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/Collections_photo_61a08c7f-db5b-4a57-a01f-604e1cf58fc0.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/boys-jackets"
+          }
+        },
+        "card_xfmnF6": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/184_fe03d8b2-4e66-4da1-a0a7-6a8b7e546116.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/casual-wear-1"
+          }
+        }
+      },
+      "block_order": [
+        "card_JdQNr7",
+        "card_WWKtJi",
+        "card_W33m8z",
+        "card_rNq4RD",
+        "card_TUwgdP",
+        "card_3XmQwF",
+        "card_xfmnF6"
+      ],
+      "name": "Casual Wear",
+      "settings": {
+        "banner_desktop_image": "shopify://shop_images/Website_banner_high-resolution_273bfaeb-3e62-4360-8f2a-49afac0b4df9.webp",
+        "banner_mobile_image": "shopify://shop_images/LUXE_1_5b84cf91-b630-4adc-9e20-f1201b8216d4.webp",
+        "banner_alt": "Lagorii banner",
+        "banner_link": "shopify://collections/casual-wear-1",
+        "bg_color": "rgba(0,0,0,0)",
+        "padding_top": 16,
+        "padding_bottom": 0,
+        "section_side_padding": 0,
+        "show_cards": true,
+        "cards_source": "manual",
+        "cards_layout": "slider",
+        "enable_arrows": true,
+        "show_arrows_desktop": false,
+        "show_arrows_mobile": false,
+        "arrow_bg": "#ffffff",
+        "arrow_color": "#111111",
+        "arrow_side_offset": 8,
+        "desktop_cards_full_width": true,
+        "desktop_cards_side_padding": 0,
+        "cards_margin_top": 0,
+        "cards_bg_color": "rgba(0,0,0,0)",
+        "cards_bg_image": "shopify://shop_images/LUXE_30f6f78c-17c3-488d-a50c-cf88932d6f86.webp",
+        "cards_bg_image_size": "cover",
+        "cards_bg_padding": 0,
+        "cards_bg_radius": 0,
+        "cards_gap": 0,
+        "card_radius": 4,
+        "card_inner_padding": 4,
+        "card_bg_color": "rgba(0,0,0,0)",
+        "card_image_fit": "cover",
+        "grid_cols_desktop": 4,
+        "grid_cols_tablet": 3,
+        "grid_cols_mobile": 2,
+        "slider_card_width": 65,
+        "slider_cards_visible_mobile": "2.5",
+        "card_aspect_ratio": 130,
+        "overlay_font_family": "inherit",
+        "overlay_font_weight": "600",
+        "overlay_font_size_desktop": 22,
+        "overlay_font_size_mobile": 15,
+        "overlay_text_color": "#ffffff",
+        "overlay_bg_color": "#111111",
+        "overlay_bg_opacity": 100,
+        "overlay_padding": 0,
+        "overlay_radius": 8,
+        "overlay_text_align": "center",
+        "cards_collection": "",
+        "products_limit": 4,
+        "show_view_all": true,
+        "view_all_label": "View all",
+        "view_all_bg": "#e87529",
+        "view_all_text": "#ffffff"
+      }
+    },
+    "banner_slider_grid_xE7Tcc": {
+      "type": "Banner-slider-Grid",
+      "name": "Luxe banner",
+      "settings": {
+        "banner_desktop_image": "shopify://shop_images/LUXE_-_Website.webp",
+        "banner_mobile_image": "shopify://shop_images/LUXE_-_mobile.webp",
+        "banner_alt": "Lagorii banner",
+        "banner_link": "shopify://collections/luxe",
+        "bg_color": "#ffffff",
+        "padding_top": 12,
+        "padding_bottom": 4,
+        "section_side_padding": 0,
+        "show_cards": true,
+        "cards_source": "manual",
+        "cards_layout": "slider",
+        "enable_arrows": true,
+        "show_arrows_desktop": false,
+        "show_arrows_mobile": false,
+        "arrow_bg": "#ffffff",
+        "arrow_color": "#111111",
+        "arrow_side_offset": 8,
+        "desktop_cards_full_width": true,
+        "desktop_cards_side_padding": 20,
+        "cards_margin_top": 0,
+        "cards_bg_color": "rgba(0,0,0,0)",
+        "cards_bg_image_size": "cover",
+        "cards_bg_padding": 8,
+        "cards_bg_radius": 0,
+        "cards_gap": 8,
+        "card_radius": 14,
+        "card_inner_padding": 6,
+        "card_bg_color": "rgba(0,0,0,0)",
+        "card_image_fit": "cover",
+        "grid_cols_desktop": 4,
+        "grid_cols_tablet": 3,
+        "grid_cols_mobile": 2,
+        "slider_card_width": 45,
+        "slider_cards_visible_mobile": "2.5",
+        "card_aspect_ratio": 130,
+        "overlay_font_family": "inherit",
+        "overlay_font_weight": "600",
+        "overlay_font_size_desktop": 18,
+        "overlay_font_size_mobile": 15,
+        "overlay_text_color": "#ffffff",
+        "overlay_bg_color": "#111111",
+        "overlay_bg_opacity": 80,
+        "overlay_padding": 4,
+        "overlay_radius": 8,
+        "overlay_text_align": "center",
+        "cards_collection": "luxe",
+        "products_limit": 8,
+        "show_view_all": false,
+        "view_all_label": "View all",
+        "view_all_bg": "#e87529",
+        "view_all_text": "#ffffff"
+      }
+    },
+    "product_block_nHBxmY": {
+      "type": "product-block",
+      "name": "Luxe product tabs",
+      "settings": {
+        "container": "fullwidth",
+        "padding_full_width": 30,
+        "disable_padding_content": false,
+        "enable_border_top": false,
+        "enable_border_bottom": false,
+        "border_height": 0,
+        "color_border_bottom": "#e8e8e8",
+        "enable_minus_mg_top": false,
+        "minus_spacing_top": -100,
+        "product_block_layout": "scroll",
+        "product_bg": "#ffffff",
+        "product_bg_gradient": "",
+        "style_block_header": "style2",
+        "pd_top_title": 30,
+        "product_block_title": "",
+        "enable_border_title": false,
+        "enable_border_title_style2": true,
+        "fontsize_title": 16,
+        "fontsize_title_mb": 16,
+        "mg_bottom_title": 6,
+        "mg_bottom_title_mb": 16,
+        "border_color_title": "#232323",
+        "color_title": "#232323",
+        "view_all": "View All",
+        "view_all_align": "center",
+        "font_weight_view_all": "500",
+        "fontsize_view_all": 14,
+        "fontsize_view_all_mb": 13,
+        "mg_bottom_view": 30,
+        "mg_bottom_view_mb": 8,
+        "enable_border_view_all": true,
+        "link_view_all": "shopify://collections/luxe",
+        "color_view_all": "#e87529",
+        "icon_view_all": "",
+        "color_view_all_icon": "#eb492f",
+        "title_align": "center",
+        "button_text": "Show More",
+        "button_text_font_size": 14,
+        "button_text_font_weight": "500",
+        "button_text_text_transform": "uppercase",
+        "product_button_width": 270,
+        "pd_top_product_button": 12,
+        "pd_bottom_product_button": 12,
+        "button_icon": "",
+        "mg_bottom_button": 95,
+        "enable_button_shadow": false,
+        "color_button": "#ffffff",
+        "border_color_button": "#232323",
+        "bg_color_button": "#e46e21",
+        "bg_color_gradient_button": "",
+        "color_button_hover": "",
+        "border_color_button_hover": "",
+        "bg_color_button_hover": "",
+        "bg_color_gradient_button_hover": "",
+        "product_block_collection": "luxe",
+        "product_block_limit": 15,
+        "grid_gap": 15,
+        "pb_style": "style1",
+        "style_countdown": "style_1",
+        "countdown": "",
+        "font_size_countdown_text": 14,
+        "color_countdown": "#f42b23",
+        "countdown_margin_left": 15,
+        "product_block_per_row": "4",
+        "product_block_infinite_scroll": true,
+        "product_block_swipe_on_mobile": true,
+        "enable_product_card_pd_bottom": false,
+        "product_card_pd_bottom": 40,
+        "product_block_dots": false,
+        "product_block_dots_mb": true,
+        "spacing_top_dots": 0,
+        "product_block_arrows": true,
+        "product_block_arrows_mb": false,
+        "product_block_progress_bar": false,
+        "product_block_counter_number": false,
+        "enable_hover_arrow": false,
+        "enable_infinite": true,
+        "product_block_show": "5.5",
+        "position_vertical_arrow": "70px",
+        "product_block_per_view": "5",
+        "show_half": true,
+        "scroll_height": 1,
+        "scroll_track_bg": "#f1f1f1",
+        "scroll_thumb_color": "#000000",
+        "scroll_thumb_hover_color": "#444444",
+        "enable_hover_drag_icon": false,
+        "position": "left",
+        "width_banner": 40,
+        "display_list_collection": false,
+        "collection_color": "#202020",
+        "collection_color_hover": "#3e8cc4",
+        "collection_bg_color": "#ffffff",
+        "collection_bg_color_gradient": "",
+        "text_list": "all categories",
+        "url_list": "",
+        "enable_layout_special": false,
+        "bg_card": "#ffffff",
+        "padding_card": 15,
+        "border_radius_card": 5,
+        "border_layout_card": "full",
+        "border_width_card": 0,
+        "border_color_card": "#f0f1f4",
+        "mg_top_desktop": 15,
+        "mg_top_tablet": 15,
+        "mg_top_mobile": 5,
+        "mg_bottom_desktop": 15,
+        "mg_bottom_tablet": 15,
+        "mg_bottom_mobile": 15
+      }
+    },
+    "image_banner_hNVnHU": {
+      "type": "image-banner",
+      "blocks": {
+        "large_img_UAMgMM": {
+          "type": "largeImg",
+          "settings": {
+            "image": "shopify://shop_images/web_banners_3_d98c617f-4089-4a89-bd38-3e7a9da03719.png",
+            "mobile_image": "shopify://shop_images/GIF_BANNERS_2.png",
+            "enable_max_width_image": false,
+            "custom_width_image": 1170,
+            "enable_scroll_down": false,
+            "enable_custom_image": false,
+            "image_behavior": "none",
+            "sub_title": "",
+            "border_sub_title": false,
+            "font_size_sub_title": 14,
+            "font_size_sub_title_mb": 14,
+            "margin_bottom_sub_title": 14,
+            "sub_heading_font": "font_1",
+            "font_weight_sub_title": "700",
+            "sub_title_position": "sub_title_above",
+            "color_sub_title": "#232323",
+            "color_sub_title_mb": "#ffffff",
+            "heading": "",
+            "letter_spacing_heading": "",
+            "enable_style_italic": false,
+            "font_size_heading": 40,
+            "font_size_heading_mb": 24,
+            "margin_bottom_heading": 20,
+            "font_weight_heading": "600",
+            "color_heading": "#232323",
+            "color_heading_mb": "#ffffff",
+            "border_title": "border_s1",
+            "border_color_title": "#232323",
+            "border_color_title_mobile": "#ffffff",
+            "text": "",
+            "font_size_des": 12,
+            "font_size_des_mb": 12,
+            "line_height_des": 26,
+            "margin_bottom_des": 35,
+            "color_des": "#232323",
+            "color_des_mb": "#ffffff",
+            "countdown": "",
+            "hide_countdown_fc": "countdown",
+            "countdown_style": "round",
+            "countdown_position": "countdown_below_desc",
+            "font_size_countdown_number": 30,
+            "font_size_countdown_text": 14,
+            "color_countdown": "#232323",
+            "color_countdown_mb": "#ffffff",
+            "countdown_margin_bottom": 35,
+            "content_width": 475,
+            "bg_color_content": "",
+            "align": "center",
+            "align_items": "center",
+            "position": "left",
+            "custom_horizontal": "",
+            "custom_vertical": "",
+            "btn_text": "",
+            "link": "shopify://pages/reviews",
+            "btn_icon": "",
+            "button_1_width": 235,
+            "enable_button_custom_border": false,
+            "button_color": "#ffffff",
+            "button_border": "#232323",
+            "button_background": "#232323",
+            "button_background_gradient": "",
+            "button_color_hover": "#ffffff",
+            "button_border_hover": "#232323",
+            "button_background_hover": "#232323",
+            "button_background_gradient_hover": "",
+            "btn_text_2": "",
+            "link_2": "",
+            "btn_icon_2": "",
+            "button_color_2": "#ffffff",
+            "button_border_2": "#232323",
+            "button_background_2": "#232323",
+            "button_background_2_gradient": "",
+            "button_color_hover_2": "#ffffff",
+            "button_border_hover_2": "#232323",
+            "button_background_hover_2": "#232323",
+            "button_background_gradient_hover_2": "",
+            "video_link": "",
+            "adaptive_height_video": "56",
+            "icon_style": "style_1",
+            "color_icon": "#ffffff",
+            "bg_color_icon": "#000000",
+            "enable_custom_video_icon_position": false,
+            "video_icon_horizontal_position": "",
+            "video_icon_vertical_position": "",
+            "video_icon_horizontal_position_mb": "",
+            "video_icon_vertical_position_mb": ""
+          }
+        }
+      },
+      "block_order": [
+        "large_img_UAMgMM"
+      ],
+      "disabled": true,
+      "settings": {
+        "id_section": "",
+        "container": "fullwidth",
+        "padding_full_width": 0,
+        "image_banner_title": "",
+        "enable_border_title": false,
+        "color_title": "#202020",
+        "fontsize_title": 24,
+        "fontsize_title_mb": 20,
+        "margin_bottom_title": 25,
+        "image_banner_des": "",
+        "color_des": "#202020",
+        "fontsize_des": 16,
+        "title_align": "center",
+        "style_bg": "none",
+        "bg_color": "",
+        "bg_color_gradient": "",
+        "display_type": "slide",
+        "list_gap": 0,
+        "enable_arrows": false,
+        "arrows_position": "",
+        "enable_dots": false,
+        "enable_autoplay": false,
+        "mg_top_desktop": 30,
+        "mg_top_tablet": 40,
+        "mg_top_mobile": 30,
+        "mg_bottom_desktop": 0,
+        "mg_bottom_tablet": 0,
+        "mg_bottom_mobile": 0
+      }
+    },
+    "1778677756d4f8c62a": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_cards_carousel_dfTmzU": {
+          "type": "shopify://apps/judge-me-reviews/blocks/cards_carousel/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "show_sample_reviews": true,
+            "reviews_selection": "all",
+            "products": [],
+            "star_rating": "5_star",
+            "show_review_media": true,
+            "display_order": "media_first",
+            "no_image_fallback": "review_text_only",
+            "max_reviews": 20,
+            "review_length": "medium",
+            "text_size": "small",
+            "image_ratio": "1",
+            "reviews_shown": 4,
+            "show_reviewer_name": true,
+            "show_product_name": true,
+            "hide_arrows_mobile": false,
+            "arrows_position": "sides",
+            "max_width": 1100,
+            "corner_styling": "soft",
+            "header_text_color": "#e87529",
+            "text_color": "#000000",
+            "card_color": "#f9f9f9",
+            "stars_color": "#e87529",
+            "arrows_color": "#000000",
+            "transition_speed": 5,
+            "header_text": "Trusted by 100k+ Parents worldwide",
+            "show_average_rating": true
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_cards_carousel_dfTmzU"
+      ],
+      "settings": {
+        "include_margins": false
+      }
+    },
+    "banner_slider_grid_gVVkdP": {
+      "type": "Banner-slider-Grid",
+      "name": "More Reviews ",
+      "settings": {
+        "banner_desktop_image": "shopify://shop_images/website_heading_1.png",
+        "banner_mobile_image": "shopify://shop_images/Read_More_Reviews.webp",
+        "banner_alt": "Lagorii banner",
+        "banner_link": "shopify://pages/reviews",
+        "bg_color": "rgba(0,0,0,0)",
+        "padding_top": 0,
+        "padding_bottom": 16,
+        "section_side_padding": 36,
+        "show_cards": true,
+        "cards_source": "manual",
+        "cards_layout": "slider",
+        "enable_arrows": true,
+        "show_arrows_desktop": false,
+        "show_arrows_mobile": false,
+        "arrow_bg": "#ffffff",
+        "arrow_color": "#111111",
+        "arrow_side_offset": 8,
+        "desktop_cards_full_width": true,
+        "desktop_cards_side_padding": 0,
+        "cards_margin_top": 0,
+        "cards_bg_color": "#f8e9ff",
+        "cards_bg_image_size": "cover",
+        "cards_bg_padding": 0,
+        "cards_bg_radius": 0,
+        "cards_gap": 0,
+        "card_radius": 6,
+        "card_inner_padding": 6,
+        "card_bg_color": "rgba(0,0,0,0)",
+        "card_image_fit": "contain",
+        "grid_cols_desktop": 4,
+        "grid_cols_tablet": 3,
+        "grid_cols_mobile": 2,
+        "slider_card_width": 65,
+        "slider_cards_visible_mobile": "2.5",
+        "card_aspect_ratio": 135,
+        "overlay_font_family": "inherit",
+        "overlay_font_weight": "600",
+        "overlay_font_size_desktop": 22,
+        "overlay_font_size_mobile": 15,
+        "overlay_text_color": "#ffffff",
+        "overlay_bg_color": "#111111",
+        "overlay_bg_opacity": 100,
+        "overlay_padding": 0,
+        "overlay_radius": 8,
+        "overlay_text_align": "center",
+        "cards_collection": "",
+        "products_limit": 4,
+        "show_view_all": true,
+        "view_all_label": "View all",
+        "view_all_bg": "#e87529",
+        "view_all_text": "#ffffff"
+      }
+    }
+  },
+  "order": [
+    "lagorii_brand_slider_7Am7LD",
+    "lagorii_hero_eta_FnhwBy",
+    "lagorii_hero_eta_9RACkg",
+    "lagorii_brand_slider_hCPYVr",
+    "lagorii_coupon_code_rrxkR3",
+    "lagorii_hero_eta_haYYBJ",
+    "b25c8bcb-007b-45d9-b198-57f4a84a1b9d",
+    "mobile_video_iNVdMb",
+    "image_banner_GU67WV",
+    "collection_showcase_bmeyjC",
+    "banner_slider_grid_Pih9wW",
+    "banner_slider_grid_BAbQne",
+    "lagorii_category_grid_Tfrcri",
+    "lagorii_category_grid_FBQ9fk",
+    "custom_image_cards_jydF3q",
+    "lagorii_media_banner_a6ViNC",
+    "banner_slider_grid_KbPtx6",
+    "banner_slider_grid_TmnhkN",
+    "banner_slider_grid_4679Uy",
+    "banner_slider_grid_twM8K6",
+    "banner_slider_grid_xE7Tcc",
+    "product_block_nHBxmY",
+    "image_banner_hNVnHU",
+    "1778677756d4f8c62a",
+    "banner_slider_grid_gVVkdP"
+  ]
+}
