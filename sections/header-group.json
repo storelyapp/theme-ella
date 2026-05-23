@@ -110,6 +110,7 @@
         },
         "announcement_AWRfiH": {
           "type": "announcement",
+          "disabled": true,
           "settings": {
             "text": "<p> Use Code GET10 For Flat 10% OFF</p>",
             "btn_color": "#f84248",
