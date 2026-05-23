@@ -98,6 +98,17 @@ var _usfVariantPrice = `
                 <span class="price-item price-item--sale">
                     <span class="money" v-html="usf.utils.getDisplayPrice(v.price)"></span>
                 </span>
+
+                <span
+                    v-if="v.compareAtPrice > v.price"
+                    class="price__label_sale price__label_percent lagorii-usf-sale-chip"
+                    aria-hidden="true"
+                >
+                    <span
+                        class="label_sale label_sale_percent"
+                        v-html="'-' + Math.round(((v.compareAtPrice - v.price) * 100) / v.compareAtPrice) + '%'"
+                    ></span>
+                </span>
             </dd>
         </div>
     </dl>
