@@ -1279,9 +1279,72 @@ body:not(.usf-horz-layout) .usf-facets:not(.usf-facets--mobile) .usf-facet-value
     overflow: hidden
 }
 
+/* Lagorii sale discount chip for Sobooster product cards */
+.usf-zone .card-price .price__last,
+.usf-zone .price.card-price .price__last,
+.usf-zone .price .price__last {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+}
 
+.usf-zone .lagorii-usf-sale-chip.price__label_sale.price__label_percent {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: auto !important;
+  max-width: max-content !important;
+  min-width: 0 !important;
+  margin: 0 0 0 3px !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+  vertical-align: middle;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
 
+.usf-zone .lagorii-usf-sale-chip .label_sale_percent,
+.usf-zone .lagorii-usf-sale-chip .label_sale {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: auto !important;
+  max-width: max-content !important;
+  min-width: 0 !important;
+  padding: 2px 6px !important;
+  border: 1px solid rgba(232, 117, 41, 0.35) !important;
+  border-radius: 7px !important;
+  background: #fff6ed !important;
+  color: #e87529 !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  line-height: 1.15 !important;
+  letter-spacing: 0.01em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  box-shadow: none !important;
+}
+
+/* Prevent theme/app sale badge inheritance from making the chip red or wide */
+.usf-zone .lagorii-usf-sale-chip *,
+.usf-zone .lagorii-usf-sale-chip .label_sale_percent {
+  background-color: #fff6ed !important;
+  color: #e87529 !important;
+}
+
+/* Mobile tightening */
+@media (max-width: 767px) {
+  .usf-zone .lagorii-usf-sale-chip .label_sale_percent,
+  .usf-zone .lagorii-usf-sale-chip .label_sale {
+    padding: 2px 5px !important;
+    font-size: 9.5px !important;
+    border-radius: 6px !important;
+  }
+}
 /* End custom theme code */
+
 
 
 
