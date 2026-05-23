@@ -133,10 +133,10 @@
         "inner_padding_left": 8
       }
     },
-    "lagorii_hero_eta_FnhwBy": {
+    "lagorii_hero_eta_paerHT": {
       "type": "lagorii-hero-eta",
       "blocks": {
-        "banner_3ndrE8": {
+        "banner_ePpRFw": {
           "type": "banner",
           "name": "THE ORANGE SALE",
           "settings": {
@@ -146,7 +146,7 @@
             "banner_link": "shopify://pages/the-orange-sale"
           }
         },
-        "banner_bdD37J": {
+        "banner_j7jyVk": {
           "type": "banner",
           "name": "Party wear",
           "settings": {
@@ -156,7 +156,7 @@
             "banner_link": ""
           }
         },
-        "banner_4PDKtn": {
+        "banner_qcBmmE": {
           "type": "banner",
           "name": "Ethnic wear",
           "settings": {
@@ -166,7 +166,7 @@
             "banner_link": ""
           }
         },
-        "banner_KtbdpV": {
+        "banner_rMyMTg": {
           "type": "banner",
           "name": "Casual wear",
           "settings": {
@@ -176,7 +176,7 @@
             "banner_link": ""
           }
         },
-        "banner_wqQFWR": {
+        "banner_VyFTkK": {
           "type": "banner",
           "name": "Summer Collection",
           "disabled": true,
@@ -187,7 +187,7 @@
             "banner_link": ""
           }
         },
-        "banner_NRNmL3": {
+        "banner_9Gbrq9": {
           "type": "banner",
           "name": "Wedding Edit",
           "disabled": true,
@@ -198,7 +198,7 @@
             "banner_link": ""
           }
         },
-        "banner_7CHCMc": {
+        "banner_bpeA9L": {
           "type": "banner",
           "name": "Party ready",
           "disabled": true,
@@ -209,7 +209,7 @@
             "banner_link": ""
           }
         },
-        "banner_RjGKTX": {
+        "banner_N9PHxX": {
           "type": "banner",
           "name": "Night Sets",
           "disabled": true,
@@ -220,7 +220,7 @@
             "banner_link": ""
           }
         },
-        "banner_Nrra3e": {
+        "banner_DHcLdK": {
           "type": "banner",
           "name": "Ethnic Sets",
           "disabled": true,
@@ -231,7 +231,7 @@
             "banner_link": ""
           }
         },
-        "banner_p3KpUt": {
+        "banner_JUKn9G": {
           "type": "banner",
           "name": "Tailback frocks",
           "disabled": true,
@@ -242,7 +242,7 @@
             "banner_link": ""
           }
         },
-        "banner_DWJzJF": {
+        "banner_9eJDW4": {
           "type": "banner",
           "name": "Lagorii Play",
           "disabled": true,
@@ -255,18 +255,19 @@
         }
       },
       "block_order": [
-        "banner_3ndrE8",
-        "banner_bdD37J",
-        "banner_4PDKtn",
-        "banner_KtbdpV",
-        "banner_wqQFWR",
-        "banner_NRNmL3",
-        "banner_7CHCMc",
-        "banner_RjGKTX",
-        "banner_Nrra3e",
-        "banner_p3KpUt",
-        "banner_DWJzJF"
+        "banner_ePpRFw",
+        "banner_j7jyVk",
+        "banner_qcBmmE",
+        "banner_rMyMTg",
+        "banner_VyFTkK",
+        "banner_9Gbrq9",
+        "banner_bpeA9L",
+        "banner_N9PHxX",
+        "banner_DHcLdK",
+        "banner_JUKn9G",
+        "banner_9eJDW4"
       ],
+      "disabled": true,
       "name": "Lagorii • Hero + ETA",
       "settings": {
         "hero_radius": 0,
@@ -310,6 +311,258 @@
         "dots_gap": 11
       }
     },
+    "lagorii_hero_eta_9RACkg": {
+      "type": "lagorii-hero-eta",
+      "blocks": {
+        "banner_dpFKH3": {
+          "type": "banner",
+          "name": "Summer Collection",
+          "settings": {
+            "image_mobile": "shopify://shop_images/10-_1.gif",
+            "image_desktop": "shopify://shop_images/Summer.webp",
+            "banner_collection": "summer-vibes",
+            "banner_link": ""
+          }
+        },
+        "banner_3fxBtn": {
+          "type": "banner",
+          "name": "Wedding Edit",
+          "settings": {
+            "image_mobile": "shopify://shop_images/Wedding_Wardrobe.webp",
+            "image_desktop": "shopify://shop_images/Wedding_Edit_-_Web.webp",
+            "banner_collection": "wedding-wear",
+            "banner_link": ""
+          }
+        },
+        "banner_XVHjez": {
+          "type": "banner",
+          "name": "Party ready",
+          "settings": {
+            "image_mobile": "shopify://shop_images/Party_Ready.webp",
+            "image_desktop": "shopify://shop_images/Party_ready_-Weeb.webp",
+            "banner_collection": "party-wear",
+            "banner_link": ""
+          }
+        },
+        "banner_qi7G69": {
+          "type": "banner",
+          "name": "Night Sets",
+          "settings": {
+            "image_mobile": "shopify://shop_images/Night_Sets.webp",
+            "image_desktop": "shopify://shop_images/Night_Sets_-_Web.webp",
+            "banner_collection": "night-wear",
+            "banner_link": ""
+          }
+        },
+        "banner_MczfzT": {
+          "type": "banner",
+          "name": "Ethnic Sets",
+          "settings": {
+            "image_mobile": "shopify://shop_images/Ethnic_Sets.webp",
+            "image_desktop": "shopify://shop_images/Ethnic_Sets_-_Wed.webp",
+            "banner_collection": "ethnic-sets",
+            "banner_link": ""
+          }
+        },
+        "banner_kBnwWm": {
+          "type": "banner",
+          "name": "Tailback frocks",
+          "settings": {
+            "image_mobile": "shopify://shop_images/Tailback_Frock.webp",
+            "image_desktop": "shopify://shop_images/Tailback_Frocks_-_Web.webp",
+            "banner_collection": "tail-back-frocks",
+            "banner_link": ""
+          }
+        },
+        "banner_pWch7K": {
+          "type": "banner",
+          "name": "Lagorii Play",
+          "disabled": true,
+          "settings": {
+            "image_mobile": "shopify://shop_images/The_Festive_Edit_3_735390a5-de7a-46c1-9ac2-2c3696925469.webp",
+            "image_desktop": "shopify://shop_images/Play_web_banner.webp",
+            "banner_collection": "",
+            "banner_link": "shopify://pages/lagorii-play"
+          }
+        }
+      },
+      "block_order": [
+        "banner_dpFKH3",
+        "banner_3fxBtn",
+        "banner_XVHjez",
+        "banner_qi7G69",
+        "banner_MczfzT",
+        "banner_kBnwWm",
+        "banner_pWch7K"
+      ],
+      "disabled": true,
+      "name": "Lagorii • Hero + ETA",
+      "settings": {
+        "hero_radius": 0,
+        "section_margin_top": 0,
+        "section_margin_bottom": 32,
+        "inset": 14,
+        "inset_desktop": 8,
+        "overlay_font": "montserrat_n4",
+        "overlay_font_size": 14,
+        "overlay_weight": "900",
+        "overlay_pad_y": 6,
+        "overlay_pad_x": 10,
+        "overlay_radius": 10,
+        "overlay_bg": "#111111",
+        "overlay_border": "rgba(0,0,0,0)",
+        "overlay_text": "#ffffff",
+        "overlay_opacity": 41,
+        "truck_color": "#ffffff",
+        "truck_size": 26,
+        "rules_url": "",
+        "cta_collection": "kids-wear-120-min-delivery-bangalore",
+        "cta_fallback_url": "",
+        "cta_font": "montserrat_n4",
+        "cta_weight": "800",
+        "cta_font_size": 14,
+        "cta_pad_y": 7,
+        "cta_pad_x": 10,
+        "cta_radius": 10,
+        "cta_bg": "#111111",
+        "cta_text": "#ffffff",
+        "cta_border": "rgba(0,0,0,0)",
+        "cta_opacity": 41,
+        "cta_icon": "shopify://shop_images/Categaries_image_9fc9a4ad-98b1-4a65-a9e1-8697802ddd2f.png",
+        "cta_icon_size": 34,
+        "cta_label": "Lagorii Now",
+        "cta_main_text": "2-Hours",
+        "dots_color": "#818181",
+        "dots_active_color": "#e87529",
+        "autoplay_speed": 3000,
+        "dots_margin_top": 14,
+        "dots_gap": 11
+      }
+    },
+    "lagorii_brand_slider_hCPYVr": {
+      "type": "lagorii-brand-slider",
+      "blocks": {
+        "category_riprcm": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/13_3828877c-a93b-4768-9680-abbcea5cfce1.webp",
+            "collection": "casual-infants-wear",
+            "link": "",
+            "title": "",
+            "subtext": ""
+          }
+        },
+        "category_mdgVYh": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/14_069acaf5-f411-4adf-97d7-750523365a4c.webp",
+            "collection": "girls",
+            "link": "",
+            "title": "",
+            "subtext": ""
+          }
+        },
+        "category_bfyVFG": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/15_8b658423-0334-43a3-bae2-fdfc9860f716.webp",
+            "collection": "boys",
+            "link": "",
+            "title": "",
+            "subtext": ""
+          }
+        },
+        "category_ayiA7L": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/16_3b585d29-7ea8-4268-90dd-7bba1780c2aa.webp",
+            "collection": "casual-wear-1",
+            "link": "",
+            "title": "",
+            "subtext": ""
+          }
+        },
+        "category_qVWWte": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/17_60a3aa07-cacc-4dc3-ab6a-080ad4d990d3.webp",
+            "collection": "ethnic-wear-lagorii",
+            "link": "",
+            "title": "",
+            "subtext": ""
+          }
+        },
+        "category_WXiRUH": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/18_4024483f-7cdf-4981-9230-fc09f0f880b8.webp",
+            "collection": "party-wear",
+            "link": "",
+            "title": "",
+            "subtext": ""
+          }
+        },
+        "category_PMHDEw": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/19_07bd0eb7-10ba-4e84-9d2a-4bcaf7747c8f.webp",
+            "collection": "luxe",
+            "link": "",
+            "title": "Luxe",
+            "subtext": ""
+          }
+        },
+        "category_CbDfLK": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/20_1c3b237f-5670-491f-adab-4a347274e632.webp",
+            "collection": "all-products",
+            "link": "",
+            "title": "",
+            "subtext": ""
+          }
+        }
+      },
+      "block_order": [
+        "category_riprcm",
+        "category_mdgVYh",
+        "category_bfyVFG",
+        "category_ayiA7L",
+        "category_qVWWte",
+        "category_WXiRUH",
+        "category_PMHDEw",
+        "category_CbDfLK"
+      ],
+      "name": "Category slider",
+      "settings": {
+        "layout_mode": "slider",
+        "grid_cols_desktop": 4,
+        "grid_cols_mobile": 2,
+        "section_width": "1770",
+        "show_heading": false,
+        "heading": "Shop by category",
+        "visible_desktop": "6.5",
+        "visible_tablet": "4.5",
+        "visible_mobile": "3.5",
+        "arrow_visibility": "none",
+        "show_dots": false,
+        "dot_color": "#cccccc",
+        "dot_active_color": "#e87529",
+        "autoplay": false,
+        "autoplay_interval": 5,
+        "gap": 0,
+        "radius": 0,
+        "bg": "#ffffff",
+        "section_margin_top": 4,
+        "section_margin_right": 0,
+        "section_margin_bottom": 0,
+        "section_margin_left": 0,
+        "inner_padding_top": 0,
+        "inner_padding_right": 0,
+        "inner_padding_bottom": 6,
+        "inner_padding_left": 8
+      }
+    },
     "lagorii_coupon_code_rrxkR3": {
       "type": "Lagorii-coupon-code",
       "blocks": {
@@ -344,6 +597,7 @@
         "coupon_card_jkL8XY",
         "coupon_card_GHNgiw"
       ],
+      "disabled": true,
       "name": "Lagorii Coupon Copy",
       "settings": {
         "enable_autoplay": true,
@@ -658,167 +912,116 @@
         "mg_bottom_mobile": 0
       }
     },
-    "banner_slider_grid_wFrmHz": {
+    "banner_slider_grid_Pih9wW": {
       "type": "Banner-slider-Grid",
       "blocks": {
-        "card_eTQjNM": {
+        "card_8L4xmp": {
           "type": "card",
           "settings": {
-            "card_image": "shopify://shop_images/GIRLS_1b8f0929-3347-4c98-a273-bc5848d46112.webp",
-            "card_text": "",
-            "card_link": "shopify://collections/girls"
-          }
-        },
-        "card_EKEm4P": {
-          "type": "card",
-          "settings": {
-            "card_image": "shopify://shop_images/BOYS_d1d2ac43-c9d4-4235-a735-54e03274174e.webp",
-            "card_text": "",
-            "card_link": "shopify://collections/boys"
-          }
-        },
-        "card_wazQpi": {
-          "type": "card",
-          "settings": {
-            "card_image": "shopify://shop_images/INFANTS_f1cdd012-9456-464c-b87c-5c0049c66d22.webp",
-            "card_text": "",
-            "card_link": "shopify://collections/infants"
-          }
-        },
-        "card_GxUEgP": {
-          "type": "card",
-          "settings": {
-            "card_image": "shopify://shop_images/CASAULWEAR.webp",
-            "card_text": "",
-            "card_link": "shopify://collections/casual-wear-1"
-          }
-        },
-        "card_TkBXJp": {
-          "type": "card",
-          "settings": {
-            "card_image": "shopify://shop_images/PARTYWEAR_64809cd0-ef9e-40f2-9815-ab47b29dd625.webp",
+            "card_image": "shopify://shop_images/Party_Glam_396c9d8d-d7a8-4e7d-8dfb-735510f92a20.webp",
             "card_text": "",
             "card_link": "shopify://collections/party-wear"
           }
         },
-        "card_JcaMFe": {
+        "card_AEqJJD": {
           "type": "card",
           "settings": {
-            "card_image": "shopify://shop_images/ETHNICWEAR.webp",
+            "card_image": "shopify://shop_images/183_25820f9e-67c7-4102-a257-bac5641b109b.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/wedding-wear"
+          }
+        },
+        "card_hNwB8i": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/Ethnic_Picks.webp",
             "card_text": "",
             "card_link": "shopify://collections/ethnic-wear-lagorii"
           }
         },
-        "card_TWzq4y": {
+        "card_m64hrn": {
           "type": "card",
+          "name": "Pertty Gowns",
           "settings": {
-            "card_image": "shopify://shop_images/SLEEPWEAR.webp",
+            "card_image": "shopify://shop_images/Collections_photo_eb7722b0-fcbd-4d9d-80a2-c8cad17f1f9e.webp",
             "card_text": "",
-            "card_link": "shopify://collections/night-wear"
+            "card_link": "shopify://collections/ball-gowns"
           }
         },
-        "card_FrUeQz": {
+        "card_cbKnLx": {
           "type": "card",
+          "name": "Birthday Girl",
           "settings": {
-            "card_image": "shopify://shop_images/CO-ORDSET.webp",
+            "card_image": "shopify://shop_images/186_4db7146a-9e86-4dae-911a-7709759a8685.webp",
             "card_text": "",
-            "card_link": "shopify://collections/co-ord-set"
+            "card_link": "shopify://collections/girls-birthday-dresses-party-outfits"
           }
         },
-        "card_ctb9wh": {
+        "card_xK3wjQ": {
           "type": "card",
+          "name": "Birthday Boy",
           "settings": {
-            "card_image": "shopify://shop_images/GOWNS.webp",
+            "card_image": "shopify://shop_images/187_944cd090-2f7a-42a2-85eb-a27bea58bcbc.webp",
             "card_text": "",
-            "card_link": "shopify://collections/gowns"
-          }
-        },
-        "card_X3zftg": {
-          "type": "card",
-          "settings": {
-            "card_image": "shopify://shop_images/FUSIONWEAR_288ef5f6-563d-4b80-a1d1-5f7f3154313f.webp",
-            "card_text": "",
-            "card_link": "shopify://collections/girls-indo-western"
-          }
-        },
-        "card_BkycWE": {
-          "type": "card",
-          "settings": {
-            "card_image": "shopify://shop_images/PARTYFROCK.webp",
-            "card_text": "",
-            "card_link": "shopify://collections/girls-party-wear-frocks"
-          }
-        },
-        "card_fddPxV": {
-          "type": "card",
-          "settings": {
-            "card_image": "shopify://shop_images/DRESSES_a8e696cd-88ae-4df5-9502-d5e678710589.webp",
-            "card_text": "",
-            "card_link": "shopify://collections/dresses"
+            "card_link": "shopify://collections/birthday-boy"
           }
         }
       },
       "block_order": [
-        "card_eTQjNM",
-        "card_EKEm4P",
-        "card_wazQpi",
-        "card_GxUEgP",
-        "card_TkBXJp",
-        "card_JcaMFe",
-        "card_TWzq4y",
-        "card_FrUeQz",
-        "card_ctb9wh",
-        "card_X3zftg",
-        "card_BkycWE",
-        "card_fddPxV"
+        "card_8L4xmp",
+        "card_AEqJJD",
+        "card_hNwB8i",
+        "card_m64hrn",
+        "card_cbKnLx",
+        "card_xK3wjQ"
       ],
-      "name": "Banner + Slider/Grid",
+      "name": "Special Store",
       "settings": {
-        "banner_desktop_image": "shopify://shop_images/website_heading_2.webp",
-        "banner_mobile_image": "shopify://shop_images/mobileheading11.webp",
-        "banner_alt": "Lagorii banner",
+        "banner_desktop_image": "shopify://shop_images/Special_store.webp",
+        "banner_mobile_image": "shopify://shop_images/mobile_heading_1.webp",
+        "banner_alt": "",
         "banner_link": "",
-        "bg_color": "#ffffff",
-        "padding_top": 0,
-        "padding_bottom": 0,
+        "bg_color": "rgba(0,0,0,0)",
+        "padding_top": 12,
+        "padding_bottom": 16,
         "section_side_padding": 0,
         "show_cards": true,
         "cards_source": "manual",
-        "cards_layout": "grid",
+        "cards_layout": "slider",
         "enable_arrows": true,
-        "show_arrows_desktop": true,
+        "show_arrows_desktop": false,
         "show_arrows_mobile": false,
         "arrow_bg": "#ffffff",
         "arrow_color": "#111111",
         "arrow_side_offset": 8,
         "desktop_cards_full_width": true,
-        "desktop_cards_side_padding": 20,
-        "cards_margin_top": 12,
-        "cards_bg_color": "#ffffff",
+        "desktop_cards_side_padding": 0,
+        "cards_margin_top": 0,
+        "cards_bg_color": "#edf7ff",
         "cards_bg_image_size": "cover",
         "cards_bg_padding": 0,
         "cards_bg_radius": 0,
-        "cards_gap": 2,
-        "card_radius": 0,
-        "card_inner_padding": 4,
-        "card_bg_color": "#ffffff",
-        "card_image_fit": "cover",
-        "grid_cols_desktop": 6,
+        "cards_gap": 0,
+        "card_radius": 6,
+        "card_inner_padding": 2,
+        "card_bg_color": "rgba(0,0,0,0)",
+        "card_image_fit": "contain",
+        "grid_cols_desktop": 4,
         "grid_cols_tablet": 3,
-        "grid_cols_mobile": 3,
-        "slider_card_width": 45,
-        "slider_cards_visible_mobile": "1.5",
-        "card_aspect_ratio": 130,
+        "grid_cols_mobile": 2,
+        "slider_card_width": 65,
+        "slider_cards_visible_mobile": "2.5",
+        "card_aspect_ratio": 135,
         "overlay_font_family": "inherit",
         "overlay_font_weight": "600",
-        "overlay_font_size_desktop": 18,
-        "overlay_font_size_mobile": 14,
-        "overlay_text_color": "#111111",
-        "overlay_bg_color": "#ffffff",
-        "overlay_bg_opacity": 80,
-        "overlay_padding": 10,
+        "overlay_font_size_desktop": 22,
+        "overlay_font_size_mobile": 15,
+        "overlay_text_color": "#ffffff",
+        "overlay_bg_color": "#111111",
+        "overlay_bg_opacity": 100,
+        "overlay_padding": 0,
         "overlay_radius": 8,
-        "overlay_text_align": "left",
+        "overlay_text_align": "center",
         "cards_collection": "",
         "products_limit": 4,
         "show_view_all": true,
@@ -1348,178 +1551,6 @@
         "card_border_width": 0,
         "card_border_color": "#ffffff",
         "card_shadow_opacity": 0
-      }
-    },
-    "lagorii_media_banner_a6ViNC": {
-      "type": "Lagorii-media-banner",
-      "name": "Lagorii now",
-      "settings": {
-        "desktop_image": "shopify://shop_images/Lagorii_Now_-_Website.webp",
-        "mobile_image": "shopify://shop_images/Lagorii_Now_-_Mobile.webp",
-        "banner_collection": "kids-wear-120-min-delivery-bangalore",
-        "bg_color": "#ffffff",
-        "padding_top": 8,
-        "padding_bottom": 8
-      }
-    },
-    "banner_slider_grid_TmnhkN": {
-      "type": "Banner-slider-Grid",
-      "blocks": {
-        "card_MkqJqp": {
-          "type": "card",
-          "settings": {
-            "card_image": "shopify://shop_images/Lehenga_Choli_0926b27a-e31f-4082-87b0-b41e4f9fc902.webp",
-            "card_text": "",
-            "card_link": "shopify://collections/lehenga-choli"
-          }
-        },
-        "card_WN6KRx": {
-          "type": "card",
-          "settings": {
-            "card_image": "shopify://shop_images/Nehru_Jacket.webp",
-            "card_text": "",
-            "card_link": "shopify://collections/nehru-jackets"
-          }
-        },
-        "card_d6RGYH": {
-          "type": "card",
-          "settings": {
-            "card_image": "shopify://shop_images/Sherwanis_e20df594-894b-4e36-9615-9828e528018c.webp",
-            "card_text": "",
-            "card_link": "shopify://collections/boys-indo-western"
-          }
-        },
-        "card_4Qfbre": {
-          "type": "card",
-          "settings": {
-            "card_image": "shopify://shop_images/Palazzo_Sets.webp",
-            "card_text": "",
-            "card_link": "shopify://collections/palazzo-sets"
-          }
-        },
-        "card_CCVXfY": {
-          "type": "card",
-          "settings": {
-            "card_image": "shopify://shop_images/Collections_photo_5978dd8c-28fa-4b58-a978-591139ab8df6.webp",
-            "card_text": "",
-            "card_link": "shopify://collections/jodhpuri-suit"
-          }
-        },
-        "card_JRUD76": {
-          "type": "card",
-          "settings": {
-            "card_image": "shopify://shop_images/Sharara_Sets_9725fd77-49d8-480e-9a83-b94b1da0d0c2.webp",
-            "card_text": "",
-            "card_link": "shopify://collections/sharara-sets"
-          }
-        },
-        "card_rQzJU8": {
-          "type": "card",
-          "settings": {
-            "card_image": "shopify://shop_images/Kurta_Sets_1a10d70c-c57d-4217-99f8-aacb954e99a3.webp",
-            "card_text": "",
-            "card_link": "shopify://collections/kurta-sets"
-          }
-        },
-        "card_8nUDHn": {
-          "type": "card",
-          "settings": {
-            "card_image": "shopify://shop_images/Fusion_wear.webp",
-            "card_text": "",
-            "card_link": "shopify://collections/girls-indo-western"
-          }
-        },
-        "card_tw9VTJ": {
-          "type": "card",
-          "settings": {
-            "card_image": "shopify://shop_images/Dhoti_Sets_0c634f27-34c4-46bc-b2a4-2c117158eee1.webp",
-            "card_text": "",
-            "card_link": "shopify://collections/boys-dhoti-set"
-          }
-        },
-        "card_TUAxFL": {
-          "type": "card",
-          "settings": {
-            "card_image": "shopify://shop_images/Pattu_Pavadai_cc132133-0277-4e10-9a99-5279bee5129e.webp",
-            "card_text": "",
-            "card_link": "shopify://collections/pattu-pavadai"
-          }
-        },
-        "card_aWMBWt": {
-          "type": "card",
-          "settings": {
-            "card_image": "shopify://shop_images/All.webp",
-            "card_text": "",
-            "card_link": "shopify://collections/ethnic-wear-2"
-          }
-        }
-      },
-      "block_order": [
-        "card_MkqJqp",
-        "card_WN6KRx",
-        "card_d6RGYH",
-        "card_4Qfbre",
-        "card_CCVXfY",
-        "card_JRUD76",
-        "card_rQzJU8",
-        "card_8nUDHn",
-        "card_tw9VTJ",
-        "card_TUAxFL",
-        "card_aWMBWt"
-      ],
-      "name": "Ethnic Store",
-      "settings": {
-        "banner_desktop_image": "shopify://shop_images/Website_banner_high-resolution_f9b6aece-3ac2-44e0-aa47-c5e11dcbc1a4.webp",
-        "banner_mobile_image": "shopify://shop_images/Ethnic_Store.webp",
-        "banner_alt": "Lagorii banner",
-        "banner_link": "shopify://collections/ethnic-wear-2",
-        "bg_color": "rgba(0,0,0,0)",
-        "padding_top": 16,
-        "padding_bottom": 0,
-        "section_side_padding": 0,
-        "show_cards": true,
-        "cards_source": "manual",
-        "cards_layout": "slider",
-        "enable_arrows": true,
-        "show_arrows_desktop": false,
-        "show_arrows_mobile": false,
-        "arrow_bg": "#ffffff",
-        "arrow_color": "#111111",
-        "arrow_side_offset": 8,
-        "desktop_cards_full_width": true,
-        "desktop_cards_side_padding": 0,
-        "cards_margin_top": 0,
-        "cards_bg_color": "#ffffff",
-        "cards_bg_image_size": "cover",
-        "cards_bg_padding": 0,
-        "cards_bg_radius": 0,
-        "cards_gap": 0,
-        "card_radius": 6,
-        "card_inner_padding": 4,
-        "card_bg_color": "rgba(0,0,0,0)",
-        "card_image_fit": "cover",
-        "grid_cols_desktop": 4,
-        "grid_cols_tablet": 3,
-        "grid_cols_mobile": 2,
-        "slider_card_width": 65,
-        "slider_cards_visible_mobile": "2.5",
-        "card_aspect_ratio": 130,
-        "overlay_font_family": "inherit",
-        "overlay_font_weight": "600",
-        "overlay_font_size_desktop": 22,
-        "overlay_font_size_mobile": 15,
-        "overlay_text_color": "#ffffff",
-        "overlay_bg_color": "#111111",
-        "overlay_bg_opacity": 100,
-        "overlay_padding": 0,
-        "overlay_radius": 8,
-        "overlay_text_align": "center",
-        "cards_collection": "",
-        "products_limit": 4,
-        "show_view_all": true,
-        "view_all_label": "View all",
-        "view_all_bg": "#e87529",
-        "view_all_text": "#ffffff"
       }
     },
     "banner_slider_grid_4679Uy": {
@@ -2166,17 +2197,17 @@
   },
   "order": [
     "lagorii_brand_slider_7Am7LD",
-    "lagorii_hero_eta_FnhwBy",
+    "lagorii_hero_eta_paerHT",
+    "lagorii_hero_eta_9RACkg",
+    "lagorii_brand_slider_hCPYVr",
     "lagorii_coupon_code_rrxkR3",
     "b25c8bcb-007b-45d9-b198-57f4a84a1b9d",
     "image_banner_GU67WV",
-    "banner_slider_grid_wFrmHz",
+    "banner_slider_grid_Pih9wW",
     "banner_slider_grid_BAbQne",
     "lagorii_category_grid_Tfrcri",
     "lagorii_category_grid_FBQ9fk",
     "custom_image_cards_jydF3q",
-    "lagorii_media_banner_a6ViNC",
-    "banner_slider_grid_TmnhkN",
     "banner_slider_grid_4679Uy",
     "banner_slider_grid_twM8K6",
     "banner_slider_grid_xE7Tcc",
