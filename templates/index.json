@@ -134,6 +134,130 @@
         "inner_padding_left": 8
       }
     },
+    "lagorii_brand_slider_hCPYVr": {
+      "type": "lagorii-brand-slider",
+      "blocks": {
+        "category_riprcm": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/13_3828877c-a93b-4768-9680-abbcea5cfce1.webp",
+            "collection": "casual-infants-wear",
+            "link": "",
+            "title": "",
+            "subtext": ""
+          }
+        },
+        "category_mdgVYh": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/14_069acaf5-f411-4adf-97d7-750523365a4c.webp",
+            "collection": "girls",
+            "link": "",
+            "title": "",
+            "subtext": ""
+          }
+        },
+        "category_bfyVFG": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/15_8b658423-0334-43a3-bae2-fdfc9860f716.webp",
+            "collection": "boys",
+            "link": "",
+            "title": "",
+            "subtext": ""
+          }
+        },
+        "category_ayiA7L": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/16_3b585d29-7ea8-4268-90dd-7bba1780c2aa.webp",
+            "collection": "casual-wear-1",
+            "link": "",
+            "title": "",
+            "subtext": ""
+          }
+        },
+        "category_qVWWte": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/17_60a3aa07-cacc-4dc3-ab6a-080ad4d990d3.webp",
+            "collection": "ethnic-wear-lagorii",
+            "link": "",
+            "title": "",
+            "subtext": ""
+          }
+        },
+        "category_WXiRUH": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/18_4024483f-7cdf-4981-9230-fc09f0f880b8.webp",
+            "collection": "party-wear",
+            "link": "",
+            "title": "",
+            "subtext": ""
+          }
+        },
+        "category_PMHDEw": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/19_07bd0eb7-10ba-4e84-9d2a-4bcaf7747c8f.webp",
+            "collection": "luxe",
+            "link": "",
+            "title": "Luxe",
+            "subtext": ""
+          }
+        },
+        "category_CbDfLK": {
+          "type": "category",
+          "settings": {
+            "image": "shopify://shop_images/20_1c3b237f-5670-491f-adab-4a347274e632.webp",
+            "collection": "all-products",
+            "link": "",
+            "title": "",
+            "subtext": ""
+          }
+        }
+      },
+      "block_order": [
+        "category_riprcm",
+        "category_mdgVYh",
+        "category_bfyVFG",
+        "category_ayiA7L",
+        "category_qVWWte",
+        "category_WXiRUH",
+        "category_PMHDEw",
+        "category_CbDfLK"
+      ],
+      "name": "Category slider",
+      "settings": {
+        "layout_mode": "slider",
+        "grid_cols_desktop": 4,
+        "grid_cols_mobile": 2,
+        "section_width": "1770",
+        "show_heading": false,
+        "heading": "Shop by category",
+        "visible_desktop": "6.5",
+        "visible_tablet": "4.5",
+        "visible_mobile": "3.5",
+        "arrow_visibility": "none",
+        "show_dots": false,
+        "dot_color": "#cccccc",
+        "dot_active_color": "#e87529",
+        "autoplay": false,
+        "autoplay_interval": 5,
+        "gap": 0,
+        "radius": 0,
+        "bg": "#ffffff",
+        "section_margin_top": 4,
+        "section_margin_right": 0,
+        "section_margin_bottom": 0,
+        "section_margin_left": 0,
+        "inner_padding_top": 0,
+        "inner_padding_right": 0,
+        "inner_padding_bottom": 6,
+        "inner_padding_left": 8
+      }
+    },
     "lagorii_hero_eta_paerHT": {
       "type": "lagorii-hero-eta",
       "blocks": {
@@ -437,130 +561,6 @@
         "autoplay_speed": 3000,
         "dots_margin_top": 14,
         "dots_gap": 11
-      }
-    },
-    "lagorii_brand_slider_hCPYVr": {
-      "type": "lagorii-brand-slider",
-      "blocks": {
-        "category_riprcm": {
-          "type": "category",
-          "settings": {
-            "image": "shopify://shop_images/13_3828877c-a93b-4768-9680-abbcea5cfce1.webp",
-            "collection": "casual-infants-wear",
-            "link": "",
-            "title": "",
-            "subtext": ""
-          }
-        },
-        "category_mdgVYh": {
-          "type": "category",
-          "settings": {
-            "image": "shopify://shop_images/14_069acaf5-f411-4adf-97d7-750523365a4c.webp",
-            "collection": "girls",
-            "link": "",
-            "title": "",
-            "subtext": ""
-          }
-        },
-        "category_bfyVFG": {
-          "type": "category",
-          "settings": {
-            "image": "shopify://shop_images/15_8b658423-0334-43a3-bae2-fdfc9860f716.webp",
-            "collection": "boys",
-            "link": "",
-            "title": "",
-            "subtext": ""
-          }
-        },
-        "category_ayiA7L": {
-          "type": "category",
-          "settings": {
-            "image": "shopify://shop_images/16_3b585d29-7ea8-4268-90dd-7bba1780c2aa.webp",
-            "collection": "casual-wear-1",
-            "link": "",
-            "title": "",
-            "subtext": ""
-          }
-        },
-        "category_qVWWte": {
-          "type": "category",
-          "settings": {
-            "image": "shopify://shop_images/17_60a3aa07-cacc-4dc3-ab6a-080ad4d990d3.webp",
-            "collection": "ethnic-wear-lagorii",
-            "link": "",
-            "title": "",
-            "subtext": ""
-          }
-        },
-        "category_WXiRUH": {
-          "type": "category",
-          "settings": {
-            "image": "shopify://shop_images/18_4024483f-7cdf-4981-9230-fc09f0f880b8.webp",
-            "collection": "party-wear",
-            "link": "",
-            "title": "",
-            "subtext": ""
-          }
-        },
-        "category_PMHDEw": {
-          "type": "category",
-          "settings": {
-            "image": "shopify://shop_images/19_07bd0eb7-10ba-4e84-9d2a-4bcaf7747c8f.webp",
-            "collection": "luxe",
-            "link": "",
-            "title": "Luxe",
-            "subtext": ""
-          }
-        },
-        "category_CbDfLK": {
-          "type": "category",
-          "settings": {
-            "image": "shopify://shop_images/20_1c3b237f-5670-491f-adab-4a347274e632.webp",
-            "collection": "all-products",
-            "link": "",
-            "title": "",
-            "subtext": ""
-          }
-        }
-      },
-      "block_order": [
-        "category_riprcm",
-        "category_mdgVYh",
-        "category_bfyVFG",
-        "category_ayiA7L",
-        "category_qVWWte",
-        "category_WXiRUH",
-        "category_PMHDEw",
-        "category_CbDfLK"
-      ],
-      "name": "Category slider",
-      "settings": {
-        "layout_mode": "slider",
-        "grid_cols_desktop": 4,
-        "grid_cols_mobile": 2,
-        "section_width": "1770",
-        "show_heading": false,
-        "heading": "Shop by category",
-        "visible_desktop": "6.5",
-        "visible_tablet": "4.5",
-        "visible_mobile": "3.5",
-        "arrow_visibility": "none",
-        "show_dots": false,
-        "dot_color": "#cccccc",
-        "dot_active_color": "#e87529",
-        "autoplay": false,
-        "autoplay_interval": 5,
-        "gap": 0,
-        "radius": 0,
-        "bg": "#ffffff",
-        "section_margin_top": 4,
-        "section_margin_right": 0,
-        "section_margin_bottom": 0,
-        "section_margin_left": 0,
-        "inner_padding_top": 0,
-        "inner_padding_right": 0,
-        "inner_padding_bottom": 6,
-        "inner_padding_left": 8
       }
     },
     "lagorii_coupon_code_rrxkR3": {
@@ -2367,9 +2367,9 @@
   },
   "order": [
     "lagorii_brand_slider_7Am7LD",
+    "lagorii_brand_slider_hCPYVr",
     "lagorii_hero_eta_paerHT",
     "lagorii_hero_eta_9RACkg",
-    "lagorii_brand_slider_hCPYVr",
     "lagorii_coupon_code_rrxkR3",
     "b25c8bcb-007b-45d9-b198-57f4a84a1b9d",
     "image_banner_GU67WV",

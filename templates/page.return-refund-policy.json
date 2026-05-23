@@ -1,1 +1,121 @@
-{"sections":{"main":{"type":"lagorii-policy-builder","blocks":{"t1":{"type":"takeaway","settings":{"label":"Key takeaways","icon1":"🗓️","item1":"Return window: 3 days from delivery (approval after quality check).","icon2":"🛍️","item2":"Condition: Items must be unused, in original condition, with tags & packaging","icon3":"💳","item3":"Refunds: Store Credit (₹99\/item deduction, instant) or Bank\/UPI Refund (₹149–₹199\/item deduction, 5–7 days). COD refunds go only to Lagorii Wallet.","icon4":"🌍","item4":"International Orders: No reverse pickup; customers must self-ship items to Lagorii’s warehouse.","icon5":"","item5":"","icon6":"","item6":""}},"r1":{"type":"richtext","name":"Main policy","settings":{"content":"<h2>Main Policy<\/h2><p>To initiate returns: <a href=\"https:\/\/lagorii.com\/apps\/return_prime\" target=\"_blank\" title=\"https:\/\/lagorii.com\/apps\/return_prime\"><strong>Click Here<\/strong><\/a><\/p><h3>1. Eligibility for Return<\/h3><ul><li>Return requests allowed within <strong>3 days of delivery<\/strong>.<br\/><\/li><li>Products must be unused, original condition, with all tags\/labels intact.<br\/><\/li><li>Subject to <strong>quality control approval<\/strong>.<br\/><\/li><\/ul><h3>2. Non-Returnable Items<\/h3><ul><li>Innerwear<br\/><\/li><li>Socks & Hair Accessories<br\/><\/li><li>Personalized\/Customized Products<br\/><\/li><li>Clearance\/Final Sale items<br\/><\/li><\/ul><h3>3. Refund Methods & Charges<\/h3><p><strong>a) Lagorii Wallet (Store Credits)<\/strong><\/p><ul><li>₹99 deduction per item<br\/><\/li><li>Non-expiring credits added within <strong>48 hours<\/strong> post quality check<br\/><\/li><\/ul><p><strong>b) Bank Account \/ UPI Refunds<\/strong><\/p><ul><li>Returns for products under ₹5,000 will have a ₹199 deduction per item. <\/li><li>For products ₹5,000 or more, a ₹249 deduction per item will apply.<\/li><li>Processed within <strong>5–7 business days<\/strong> after QC<br\/><\/li><\/ul><p><strong>c) Cash on Delivery (COD) Orders<\/strong><\/p><ul><li>Refunds only as <strong>Lagorii Wallet store credits<\/strong><br\/><\/li><\/ul><h3>4. International Orders<\/h3><ul><li>No reverse pickup outside India<br\/><\/li><li>Customers must <strong>self-ship<\/strong> to Lagorii warehouse<\/li><li>Email us at care@lagorii.com within 7 days of receiving your order with your order number and the item(s) you wish to return.<\/li><li>Ensure the product is unused and returned within 20 days of delivery.<\/li><li>Once we receive the item and it passes our quality inspection, the refund will be processed to your original payment method or store credit, as chosen by the customer<\/li><li>Order cancellations are subject to a 5% cancellation fee<br\/><\/li><\/ul><h3>5. General Conditions<\/h3><ul><li>Return charges apply <strong>per item<\/strong> (not per order)<br\/><\/li><li><strong>Shipping charges & payment gateway fees are non-refundable<\/strong><br\/><\/li><li>Refunds are processed only after <strong>quality check approval<\/strong><\/li><li>Orders paid using a gift card are not eligible for refunds to the original payment method. <\/li><li>Please take an unpacking video to ensure safe returns in case a wrong or damaged product is received.<br\/><\/li><li><strong>No direct exchanges<\/strong> → customer must place a new order<\/li><li>For order cancellations made before dispatch, a<strong> 2% bank<\/strong> processing fee will apply. <\/li><li>After dispatch, a cancellation fee of <strong>₹199<\/strong> will be applicable. For COD orders, the<strong> ₹100 <\/strong>COD charge is non-refundable.<\/li><\/ul><p><\/p>"}},"richtext_ReTi7a":{"type":"richtext","name":"Main Policy <p>","disabled":true,"settings":{"content":"<h3>Main Policy<\/h3><p>To initiate a return, please [<a href=\"https:\/\/lagorii.com\/apps\/return_prime\" target=\"_blank\" title=\"https:\/\/lagorii.com\/apps\/return_prime\"><strong>click here<\/strong><\/a>].<\/p><p> Return requests can be made within <strong>7 days of delivery<\/strong>, provided that the products are unused, in their original condition, and have all tags and labels intact. All returns are subject to inspection and approval by Lagorii’s quality control team.<\/p><p>Certain items are <strong>non-returnable<\/strong>, including innerwear, socks and hair accessories, personalized or customized products, and clearance or final sale items.<\/p><p>Refunds are processed in three ways. For the <strong>Lagorii Wallet (Store Credits)<\/strong>, a deduction of ₹99 per item applies. These credits never expire and are added within 48 hours after the quality check. For <strong>Bank Account or UPI refunds<\/strong>, orders valued below ₹5,000 incur a deduction of ₹149 per item, while orders of ₹5,000 and above have a deduction of ₹199 per item. These refunds are processed within 5–7 business days after quality check. For <strong>Cash on Delivery (COD) orders<\/strong>, refunds are issued only as Lagorii Wallet store credits.<\/p><p>For <strong>international orders<\/strong>, Lagorii does not provide reverse pickup services. Customers must self-ship the products to our designated warehouse. Refunds for international orders can be issued either as store credits or as a refund to the original payment method, depending on the customer’s choice.<\/p><p>For <strong>domestic orders<\/strong>, Lagorii arranges one pickup attempt from the customer’s address. Customers must ensure products are securely packed in their original packaging. If the pickup attempt fails, the customer will be required to self-ship the product to Lagorii’s warehouse.<\/p><p>Please note that <strong>return charges are applied per item, not per order<\/strong>. Shipping charges and payment gateway fees are non-refundable. Refunds are processed only after successful quality check approval. Lagorii does not offer direct exchanges—customers wishing to replace a product must place a new order.<\/p>"}},"richtext_E3wxBe":{"type":"richtext","name":"Things to note:","settings":{"content":"<h4>Things to note:<\/h4>"}},"steps_DXUxX8":{"type":"steps","settings":{"step1":"Refunds differ by payment mode (Store Credit vs Bank\/UPI vs COD).","step2":"Store Credits are fastest (within 48 hrs). It cannot be encashed or transferable.","step3":"International customers bear self-shipping responsibility.","step4":"All refunds are strictly post-QC — rejected returns will not be refunded.","step5":"","step6":""}},"tw1":{"type":"two_col","disabled":true,"settings":{"h1":"Domestic rules (India)","c1":"<p><\/p><ul><li>Items must be <strong>securely packed in original packaging<\/strong>.<br\/><\/li><li>Refunds: <strong>Wallet<\/strong> (₹99\/item; 48 hrs post QC) or <strong>Bank\/UPI<\/strong> (₹149 or ₹199\/item per order value; 5–7 business days post QC).<br\/><\/li><li><strong>COD refunds<\/strong>: Wallet credits only.<br\/><\/li><li><strong>Per-item deductions<\/strong> apply; shipping & gateway fees are non-refundable.<\/li><\/ul>","h2":"International rules","c2":"<ul><li><strong>No reverse pickup<\/strong> outside India; <strong>self-ship<\/strong> to our warehouse.<\/li><li>After receipt & QC approval, refunds can be <strong>Wallet credits<\/strong> or <strong>original payment source<\/strong> (your choice).<\/li><li>All <strong>general conditions<\/strong> apply, including <strong>per-item deductions<\/strong> and <strong>no exchanges<\/strong>.<br\/><\/li><\/ul>"}},"ir1":{"type":"image_row","disabled":true,"settings":{"row_label":"Policy images","alt1":"","alt2":"","alt3":"","alt4":"","alt5":"","alt6":"","alt7":"","alt8":""}},"cta1":{"type":"cta","settings":{"label":"Chat with support","link":"https:\/\/wa.me\/919620237728?text=I%20have%20%20a%20query%20regarding%20refunds%2Freturns"}}},"block_order":["t1","r1","richtext_ReTi7a","richtext_E3wxBe","steps_DXUxX8","tw1","ir1","cta1"],"settings":{"show_title":true,"policy_title":"Lagorii — Return & Refund Policy","subtitle":"","banner_alt":"","brand_color":"#e87529"}}},"order":["main"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "lagorii-policy-builder",
+      "blocks": {
+        "t1": {
+          "type": "takeaway",
+          "settings": {
+            "label": "Key takeaways",
+            "icon1": "🗓️",
+            "item1": "Return window: 3 days from delivery (approval after quality check).",
+            "icon2": "🛍️",
+            "item2": "Condition: Items must be unused, in original condition, with tags & packaging",
+            "icon3": "💳",
+            "item3": "Refunds: Store Credit (₹99/item deduction, instant) or Bank/UPI Refund (₹199–₹249/item deduction, 5–7 days). COD refunds go only to Lagorii Wallet.",
+            "icon4": "🌍",
+            "item4": "International Orders: No reverse pickup; customers must self-ship items to Lagorii’s warehouse.",
+            "icon5": "",
+            "item5": "",
+            "icon6": "",
+            "item6": ""
+          }
+        },
+        "r1": {
+          "type": "richtext",
+          "name": "Main policy",
+          "settings": {
+            "content": "<h2>Main Policy</h2><p>To initiate returns: <a href=\"https://lagorii.com/apps/return_prime\" target=\"_blank\" title=\"https://lagorii.com/apps/return_prime\"><strong>Click Here</strong></a></p><h3>1. Eligibility for Return</h3><ul><li>Return requests allowed within <strong>3 days of delivery</strong>.<br/></li><li>Products must be unused, original condition, with all tags/labels intact.<br/></li><li>Subject to <strong>quality control approval</strong>.<br/></li></ul><h3>2. Non-Returnable Items</h3><ul><li>Innerwear<br/></li><li>Socks & Hair Accessories<br/></li><li>Personalized/Customized Products<br/></li><li>Clearance/Final Sale items<br/></li></ul><h3>3. Refund Methods & Charges</h3><p><strong>a) Lagorii Wallet (Store Credits)</strong></p><ul><li>₹99 deduction per item<br/></li><li>Non-expiring credits added within <strong>48 hours</strong> post quality check<br/></li></ul><p><strong>b) Bank Account / UPI Refunds</strong></p><ul><li>Returns for products under ₹5,000 will have a ₹199 deduction per item. </li><li>For products ₹5,000 or more, a ₹249 deduction per item will apply.</li><li>Processed within <strong>5–7 business days</strong> after QC<br/></li></ul><p><strong>c) Cash on Delivery (COD) Orders</strong></p><ul><li>Refunds only as <strong>Lagorii Wallet store credits</strong><br/></li></ul><h3>4. International Orders</h3><ul><li>No reverse pickup outside India<br/></li><li>Customers must <strong>self-ship</strong> to Lagorii warehouse</li><li>Email us at care@lagorii.com within 7 days of receiving your order with your order number and the item(s) you wish to return.</li><li>Ensure the product is unused and returned within 20 days of delivery.</li><li>Once we receive the item and it passes our quality inspection, the refund will be processed to your original payment method or store credit, as chosen by the customer</li><li>Order cancellations are subject to a 5% cancellation fee<br/></li></ul><h3>5. General Conditions</h3><ul><li>Return charges apply <strong>per item</strong> (not per order)<br/></li><li><strong>Shipping charges & payment gateway fees are non-refundable</strong><br/></li><li>Refunds are processed only after <strong>quality check approval</strong></li><li>Orders paid using a gift card are not eligible for refunds to the original payment method. </li><li>Please take an unpacking video to ensure safe returns in case a wrong or damaged product is received.<br/></li><li><strong>No direct exchanges</strong> → customer must place a new order</li><li>For order cancellations made before dispatch, a<strong> 2% bank</strong> processing fee will apply. </li><li>After dispatch, a cancellation fee of <strong>₹199</strong> will be applicable. For COD orders, the<strong> ₹100 </strong>COD charge is non-refundable.</li></ul><p></p>"
+          }
+        },
+        "richtext_ReTi7a": {
+          "type": "richtext",
+          "name": "Main Policy <p>",
+          "disabled": true,
+          "settings": {
+            "content": "<h3>Main Policy</h3><p>To initiate a return, please [<a href=\"https://lagorii.com/apps/return_prime\" target=\"_blank\" title=\"https://lagorii.com/apps/return_prime\"><strong>click here</strong></a>].</p><p> Return requests can be made within <strong>7 days of delivery</strong>, provided that the products are unused, in their original condition, and have all tags and labels intact. All returns are subject to inspection and approval by Lagorii’s quality control team.</p><p>Certain items are <strong>non-returnable</strong>, including innerwear, socks and hair accessories, personalized or customized products, and clearance or final sale items.</p><p>Refunds are processed in three ways. For the <strong>Lagorii Wallet (Store Credits)</strong>, a deduction of ₹99 per item applies. These credits never expire and are added within 48 hours after the quality check. For <strong>Bank Account or UPI refunds</strong>, orders valued below ₹5,000 incur a deduction of ₹149 per item, while orders of ₹5,000 and above have a deduction of ₹199 per item. These refunds are processed within 5–7 business days after quality check. For <strong>Cash on Delivery (COD) orders</strong>, refunds are issued only as Lagorii Wallet store credits.</p><p>For <strong>international orders</strong>, Lagorii does not provide reverse pickup services. Customers must self-ship the products to our designated warehouse. Refunds for international orders can be issued either as store credits or as a refund to the original payment method, depending on the customer’s choice.</p><p>For <strong>domestic orders</strong>, Lagorii arranges one pickup attempt from the customer’s address. Customers must ensure products are securely packed in their original packaging. If the pickup attempt fails, the customer will be required to self-ship the product to Lagorii’s warehouse.</p><p>Please note that <strong>return charges are applied per item, not per order</strong>. Shipping charges and payment gateway fees are non-refundable. Refunds are processed only after successful quality check approval. Lagorii does not offer direct exchanges—customers wishing to replace a product must place a new order.</p>"
+          }
+        },
+        "richtext_E3wxBe": {
+          "type": "richtext",
+          "name": "Things to note:",
+          "settings": {
+            "content": "<h4>Things to note:</h4>"
+          }
+        },
+        "steps_DXUxX8": {
+          "type": "steps",
+          "settings": {
+            "step1": "Refunds differ by payment mode (Store Credit vs Bank/UPI vs COD).",
+            "step2": "Store Credits are fastest (within 48 hrs). It cannot be encashed or transferable.",
+            "step3": "International customers bear self-shipping responsibility.",
+            "step4": "All refunds are strictly post-QC — rejected returns will not be refunded.",
+            "step5": "",
+            "step6": ""
+          }
+        },
+        "tw1": {
+          "type": "two_col",
+          "disabled": true,
+          "settings": {
+            "h1": "Domestic rules (India)",
+            "c1": "<p></p><ul><li>Items must be <strong>securely packed in original packaging</strong>.<br/></li><li>Refunds: <strong>Wallet</strong> (₹99/item; 48 hrs post QC) or <strong>Bank/UPI</strong> (₹149 or ₹199/item per order value; 5–7 business days post QC).<br/></li><li><strong>COD refunds</strong>: Wallet credits only.<br/></li><li><strong>Per-item deductions</strong> apply; shipping & gateway fees are non-refundable.</li></ul>",
+            "h2": "International rules",
+            "c2": "<ul><li><strong>No reverse pickup</strong> outside India; <strong>self-ship</strong> to our warehouse.</li><li>After receipt & QC approval, refunds can be <strong>Wallet credits</strong> or <strong>original payment source</strong> (your choice).</li><li>All <strong>general conditions</strong> apply, including <strong>per-item deductions</strong> and <strong>no exchanges</strong>.<br/></li></ul>"
+          }
+        },
+        "ir1": {
+          "type": "image_row",
+          "disabled": true,
+          "settings": {
+            "row_label": "Policy images",
+            "alt1": "",
+            "alt2": "",
+            "alt3": "",
+            "alt4": "",
+            "alt5": "",
+            "alt6": "",
+            "alt7": "",
+            "alt8": ""
+          }
+        },
+        "cta1": {
+          "type": "cta",
+          "settings": {
+            "label": "Chat with support",
+            "link": "https://wa.me/919620237728?text=I%20have%20%20a%20query%20regarding%20refunds%2Freturns"
+          }
+        }
+      },
+      "block_order": [
+        "t1",
+        "r1",
+        "richtext_ReTi7a",
+        "richtext_E3wxBe",
+        "steps_DXUxX8",
+        "tw1",
+        "ir1",
+        "cta1"
+      ],
+      "settings": {
+        "show_title": true,
+        "policy_title": "Lagorii — Return & Refund Policy",
+        "subtitle": "",
+        "banner_alt": "",
+        "brand_color": "#e87529"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
