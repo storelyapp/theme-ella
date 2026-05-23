@@ -103,6 +103,7 @@
         "category_UQyEhF",
         "category_Xx3JMb"
       ],
+      "disabled": true,
       "name": "Category slider",
       "settings": {
         "layout_mode": "slider",
