@@ -69,7 +69,22 @@
     endif
     assign first_3d_model = product.media | where: "media_type", "model" | first
     assign has_product_combo = false
-    
+  assign lagorii_sale_fomo_enabled = settings.lagorii_sale_fomo_enable
+  if lagorii_sale_fomo_enabled == nil
+    assign lagorii_sale_fomo_enabled = true
+  endif
+  assign lagorii_sale_campaign_enabled = settings.pc02_offer_enable
+  if lagorii_sale_campaign_enabled == nil
+    assign lagorii_sale_campaign_enabled = true
+  endif
+  assign lagorii_sale_fomo_placement = settings.lagorii_sale_fomo_placement | default: 'below_price'
+  assign lagorii_sale_fomo_rendered = false
+  assign lagorii_sale_fomo_block_present = false
+  for block in section.blocks
+    if block.type == 'lagorii_sale_fomo'
+      assign lagorii_sale_fomo_block_present = true
+    endif
+  endfor
     assign has_sidebar = false
     assign show_sidebar = section.settings.show_sidebar
     assign sidebar_type = 'vertical'
@@ -198,7 +213,7 @@
                     assign has_product_combo = true
                 else
                     assign has_product_combo = false
-                endif
+                  endif
             when 'complementary_products'
                 assign complementary_product_title = block.settings.complementary_product_title
                 assign complementary_product_arrows = block.settings.complementary_product_arrows
@@ -886,7 +901,11 @@
                                                 color_text: color_text
                                             %}
                                         </div>
-                                    {%- when 'variant_description' -%}
+                                                    {%- if lagorii_sale_fomo_enabled and lagorii_sale_campaign_enabled and lagorii_sale_fomo_block_present != true and lagorii_sale_fomo_rendered != true and lagorii_sale_fomo_placement == 'above_description' -%}
+                  {% render 'lagorii-sale-fomo', product: product %}
+                  {%- assign lagorii_sale_fomo_rendered = true -%}
+                {%- endif -%}
+                {%- when 'variant_description' -%}
                                         <div class="productView-moreItem{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"
                                             style="--spacing-top: {{ spacing_top | append: 'px' }};
                                             --spacing-bottom: {{ spacing_bottom | append: 'px' }}"
@@ -961,7 +980,11 @@
                                                 </div>
                                             {% endif %}
                                         </div>
-                                    {%- when 'countdown' -%}
+                                                    {%- if lagorii_sale_fomo_enabled and lagorii_sale_campaign_enabled and lagorii_sale_fomo_block_present != true and lagorii_sale_fomo_rendered != true and lagorii_sale_fomo_placement == 'below_price' -%}
+                  {% render 'lagorii-sale-fomo', product: product %}
+                  {%- assign lagorii_sale_fomo_rendered = true -%}
+                {%- endif -%}
+                {%- when 'countdown' -%}
                                         {%- liquid
                                             assign show_countdown = settings.show_countdown
                                             if show_countdown
@@ -1097,7 +1120,11 @@
                                                 </div>
                                             {%- endif -%}
                                         {% endunless %}
-                                    {%- when 'buy_buttons' -%}
+                                                    {%- if lagorii_sale_fomo_enabled and lagorii_sale_campaign_enabled and lagorii_sale_fomo_block_present != true and lagorii_sale_fomo_rendered != true and lagorii_sale_fomo_placement == 'above_add_to_cart' -%}
+                  {% render 'lagorii-sale-fomo', product: product %}
+                  {%- assign lagorii_sale_fomo_rendered = true -%}
+                {%- endif -%}
+                {%- when 'buy_buttons' -%}
                                         {% unless has_product_combo %}
                                             <div class="productView-moreItem"
                                                 style="--spacing-top: {{ spacing_top | append: 'px' }};
@@ -1118,7 +1145,11 @@
                                                 %}
                                             </div>
                                         {% endunless %}
-                                    {%- when 'customer_viewing' -%}
+                                                    {%- if lagorii_sale_fomo_enabled and lagorii_sale_campaign_enabled and lagorii_sale_fomo_block_present != true and lagorii_sale_fomo_rendered != true and lagorii_sale_fomo_placement == 'below_add_to_cart' -%}
+                  {% render 'lagorii-sale-fomo', product: product %}
+                  {%- assign lagorii_sale_fomo_rendered = true -%}
+                {%- endif -%}
+                {%- when 'customer_viewing' -%}
                                         <div class="productView-moreItem{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"
                                             style="--spacing-top: {{ spacing_top | append: 'px' }};
                                             --spacing-bottom: {{ spacing_bottom | append: 'px' }}"
@@ -1226,7 +1257,10 @@
                                                 %}
                                             </div>
                                         {%- endif -%}
-                                    {%- when 'custom_liquid' -%}
+                                    {%- when 'lagorii_sale_fomo' -%}
+                  {% render 'lagorii-sale-fomo', product: product, block: block %}
+                  {%- assign lagorii_sale_fomo_rendered = true -%}
+                {%- when 'custom_liquid' -%}
                                         {{ block.settings.custom_liquid }}
                                     {%- when 'complementary_products' -%}
                                         <div class="productView-moreItem{% if settings.banner_animation == 'effect_fade_up' %} scroll-trigger animate--slide-in{% endif %}"

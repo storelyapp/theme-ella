@@ -263,9 +263,37 @@
   function formatMoney(cents) {
     try {
       if (window.Shopify && typeof window.Shopify.formatMoney === "function")
-        return window.Shopify.formatMoney(cents);
+        return window.Shopify.formatMoney(cents, window.money_format || window.Shopify.money_format);
     } catch (_) {}
     return "\u20B9 " + (Number(cents || 0) / 100).toFixed(0);
+  }
+
+  function salePercent(variant) {
+    var price = Number(variant && variant.price || 0);
+    var compare = Number(variant && variant.compare_at_price || 0);
+
+    if (!compare || compare <= price) return 0;
+
+    return Math.round(((compare - price) * 100) / compare);
+  }
+
+  function renderVariantPrice(variant) {
+    if (!variant) return "";
+
+    var price = Number(variant.price || 0);
+    var compare = Number(variant.compare_at_price || 0);
+    var discount = salePercent(variant);
+    var current = '<span class="pc02-qa-current">' + formatMoney(price) + '</span>';
+
+    if (!discount) {
+      return '<div class="pc02-qa-price pc02-qa-price--regular" data-pc02-qa-price>' + current + '</div>';
+    }
+
+    return '<div class="pc02-qa-price pc02-qa-price--sale" data-pc02-qa-price>' +
+      current +
+      '<s class="pc02-qa-compare">' + formatMoney(compare) + '</s>' +
+      '<span class="pc02-qa-discount">' + discount + '% OFF</span>' +
+    '</div>';
   }
 
   function pickDefaultVariant(p) {
@@ -460,9 +488,7 @@
         '</a>'
       : '<a class="pc02-qa-thumb-link" href="' + escapeHtml(productUrl) + '"><div class="pc02-qa-thumb"></div></a>';
 
-    var priceHtml = v0
-      ? '<div class="pc02-qa-price" data-pc02-qa-price><span class="money">' + escapeHtml(formatMoney(v0.price)) + '</span></div>'
-      : '';
+    var priceHtml = renderVariantPrice(v0);
 
     body.innerHTML =
       '<div class="pc02-qa-top">' +
@@ -530,7 +556,8 @@
         state.variant    = match;
 
         if (priceWrap && match) {
-          priceWrap.innerHTML = '<span class="money">' + escapeHtml(formatMoney(match.price)) + '</span>';
+          priceWrap.outerHTML = renderVariantPrice(match);
+          priceWrap = body.querySelector("[data-pc02-qa-price]");
           document.dispatchEvent(new CustomEvent("lag:money_updated", { detail: { source: "pc02-quick-add" } }));
         }
 

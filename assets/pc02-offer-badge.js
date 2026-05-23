@@ -9,16 +9,14 @@
 */
 
 (function () {
-  if (window.__pc02OfferBadgeGlobalReady) return;
-  window.__pc02OfferBadgeGlobalReady = true;
+  var READY_FLAG = 'pc02OfferBadgeReady';
+
+  if (document.documentElement.dataset[READY_FLAG] === 'true') return;
+  document.documentElement.dataset[READY_FLAG] = 'true';
 
   var BADGE_SELECTOR = '[data-pc02-offer-badge]';
   var FRAME_SELECTOR = '[data-pc02-offer-frame]';
-  var COUNTDOWN_SELECTOR = '[data-pc02-offer-countdown]';
-
-  function pad(value) {
-    return String(value).padStart(2, '0');
-  }
+  var REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 
   function parseTime(value) {
     if (!value) return null;
@@ -28,20 +26,13 @@
     return Number.isNaN(time) ? null : time;
   }
 
-  function formatRemaining(ms) {
-    var totalSeconds = Math.max(0, Math.floor(ms / 1000));
-
-    var hours = Math.floor(totalSeconds / 3600);
-    var minutes = Math.floor((totalSeconds % 3600) / 60);
-    var seconds = totalSeconds % 60;
-
-    return pad(hours) + ':' + pad(minutes) + ':' + pad(seconds);
+  function prefersReducedMotion() {
+    return window.matchMedia && window.matchMedia(REDUCED_MOTION_QUERY).matches;
   }
 
   function updateBadgeState(badge) {
     if (!badge) return;
 
-    var countdown = badge.querySelector(COUNTDOWN_SELECTOR);
     var start = parseTime(badge.getAttribute('data-start'));
     var end = parseTime(badge.getAttribute('data-end'));
     var now = Date.now();
@@ -64,11 +55,6 @@
     if (end && now >= end) {
       badge.classList.add('is-ended');
       return;
-    }
-
-    if (countdown && end) {
-      var prefix = countdown.getAttribute('data-prefix') || 'Ends in';
-      countdown.textContent = prefix + ' ' + formatRemaining(end - now);
     }
   }
 
@@ -97,7 +83,7 @@
 
     updateBadgeState(badge);
 
-    if (frames.length < 2) return;
+    if (frames.length < 2 || prefersReducedMotion()) return;
 
     var rotateMs = parseInt(badge.getAttribute('data-rotate-ms') || '2000', 10);
 
@@ -195,10 +181,8 @@
         childList: true,
         subtree: true
       });
-
-      window.__pc02OfferBadgeObserver = observer;
     } catch (error) {
-      console.warn('PC02 offer badge observer failed:', error);
+      return;
     }
   }
 

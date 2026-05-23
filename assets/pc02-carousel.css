@@ -359,7 +359,30 @@ html.pc02-qa-open .pc02-qa-panel.is-drawer {
   text-decoration: underline; text-underline-offset: 2px;
 }
 
-.pc02-qa-price { font-size: 14px; font-weight: 600; margin: 0; color: #1f2937; }
+.pc02-qa-price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 7px;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+  color: #1f2937;
+}
+.pc02-qa-current { color: #F97316; font-weight: 700; }
+.pc02-qa-price--regular .pc02-qa-current { color: #1f2937; }
+.pc02-qa-compare {
+  color: #7b7b7b;
+  font-size: 12.5px;
+  font-weight: 500;
+}
+.pc02-qa-discount {
+  color: #F97316;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: .02em;
+  white-space: nowrap;
+}
 
 .pc02-qa-row {
   display: flex; align-items: center; justify-content: space-between;

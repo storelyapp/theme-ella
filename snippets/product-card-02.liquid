@@ -112,30 +112,48 @@
       assign pc02_offer_only_sale = true
     endif
     assign pc02_offer_style = 'rotate'
+    assign pc02_offer_kicker = 'LIMITED TIME OFFER'
     assign pc02_offer_position = settings.pc02_offer_position | default: 'bottom_right'
-    assign pc02_offer_message = settings.pc02_offer_message | default: 'LIMITED TIME OFFER'
+    assign pc02_offer_message = settings.pc02_offer_message | default: pc02_offer_kicker | strip
     assign pc02_offer_countdown_start = settings.pc02_offer_countdown_start | default: ''
     assign pc02_offer_countdown_end = settings.pc02_offer_countdown_end | default: ''
     assign pc02_offer_countdown_prefix = settings.pc02_offer_countdown_prefix | default: 'Ends in'
     assign pc02_offer_start_prefix = settings.pc02_offer_start_prefix | default: 'Starts in'
     assign pc02_offer_rotate_seconds = settings.pc02_offer_rotate_seconds | default: 2
-
-    assign pc02_compare_price = product_card_product.compare_at_price_max | default: 0
-    assign pc02_current_price = product_card_product.price | default: 0
-    assign pc02_offer_discount_percent = 0
-    if pc02_compare_price > pc02_current_price and pc02_compare_price > 0
-      assign pc02_offer_discount_percent = pc02_compare_price | minus: pc02_current_price | times: 100 | divided_by: pc02_compare_price | round
+    assign pc02_offer_countdown_format = settings.lagorii_campaign_countdown_format | default: 'hh_mm_ss'
+    assign pc02_offer_countdown_placeholder = '--:--:--'
+    if pc02_offer_countdown_format == 'dd_hh_mm_ss'
+      assign pc02_offer_countdown_placeholder = '--:--:--:--'
     endif
+
+    assign pc02_offer_discount_percent = 0
+    for pc02_variant in product_card_product.variants
+      assign pc02_compare_price = pc02_variant.compare_at_price | default: 0
+      assign pc02_current_price = pc02_variant.price | default: 0
+      if pc02_compare_price > pc02_current_price and pc02_compare_price > 0
+        assign pc02_variant_discount_percent = pc02_compare_price | minus: pc02_current_price | times: 100.0 | divided_by: pc02_compare_price | round
+        if pc02_variant_discount_percent > pc02_offer_discount_percent
+          assign pc02_offer_discount_percent = pc02_variant_discount_percent
+        endif
+      endif
+    endfor
 
     assign pc02_offer_discount_label = settings.pc02_offer_discount_text | default: '' | strip
     if pc02_offer_discount_label == blank and pc02_offer_discount_percent > 0
       assign pc02_offer_discount_label = pc02_offer_discount_percent | append: '% OFF'
     endif
+    if pc02_offer_discount_label == blank
+      assign pc02_offer_discount_label = '25% OFF'
+    endif
+
+    assign pc02_offer_kicker_key = pc02_offer_kicker | downcase | strip
+    assign pc02_offer_message_key = pc02_offer_message | downcase | strip
+    assign pc02_offer_discount_key = pc02_offer_discount_label | downcase | strip
 
     assign pc02_show_offer_badge = false
     if pc02_offer_enable
       if pc02_offer_only_sale == false or pc02_offer_discount_percent > 0
-        if pc02_offer_message != blank or pc02_offer_discount_label != blank
+        if pc02_offer_message != blank or pc02_offer_discount_label != blank or pc02_offer_countdown_end != blank
           assign pc02_show_offer_badge = true
         endif
       endif
@@ -596,33 +614,50 @@
                     {%- if pc02_show_offer_badge -%}
                       <div
                         class="pc02-offer-badge pc02-offer--rotate pc02-offer-pos--{{ pc02_offer_position }}"
+                        data-lagorii-sale-root
                         data-pc02-offer-badge
                         data-start="{{ pc02_offer_countdown_start | escape }}"
                         data-end="{{ pc02_offer_countdown_end | escape }}"
                         data-rotate-ms="{{ pc02_offer_rotate_seconds | times: 1000 }}"
-                        aria-label="{{ pc02_offer_message | escape }}{% if pc02_offer_discount_label != blank %} - {{ pc02_offer_discount_label | escape }}{% endif %}"
+                        aria-label="{{ pc02_offer_kicker | escape }}{% if pc02_offer_message != blank and pc02_offer_message_key != pc02_offer_kicker_key %} - {{ pc02_offer_message | escape }}{% endif %}{% if pc02_offer_discount_label != blank %} - {{ pc02_offer_discount_label | escape }}{% endif %}"
                       >
                         <span class="pc02-offer-stage">
-                          {%- if pc02_offer_message != blank -%}
-                            <span class="pc02-offer-frame pc02-offer-frame-message is-active" data-pc02-offer-frame>
+                          <span class="pc02-offer-frame pc02-offer-frame-message is-active" data-pc02-offer-frame>
+                            {{ pc02_offer_kicker }}
+                          </span>
+
+                          {%- if pc02_offer_message != blank and pc02_offer_message_key != pc02_offer_kicker_key -%}
+                            <span class="pc02-offer-frame pc02-offer-frame-message" data-pc02-offer-frame>
                               {{ pc02_offer_message }}
                             </span>
                           {%- endif -%}
 
-                          {%- if pc02_offer_discount_label != blank -%}
-                            <span class="pc02-offer-frame pc02-offer-frame-discount{% if pc02_offer_message == blank %} is-active{% endif %}" data-pc02-offer-frame>
+                          {%- if pc02_offer_discount_label != blank and pc02_offer_discount_key != pc02_offer_kicker_key and pc02_offer_discount_key != pc02_offer_message_key -%}
+                            <span class="pc02-offer-frame pc02-offer-frame-discount" data-pc02-offer-frame>
                               {{ pc02_offer_discount_label }}
                             </span>
                           {%- endif -%}
 
                           {%- if pc02_offer_countdown_end != blank -%}
                             <span
-                              class="pc02-offer-frame pc02-offer-frame-countdown{% if pc02_offer_message == blank and pc02_offer_discount_label == blank %} is-active{% endif %}"
+                              class="pc02-offer-frame pc02-offer-frame-countdown"
+                              data-sale-countdown
+                              data-lagorii-sale-countdown
                               data-pc02-offer-frame
                               data-pc02-offer-countdown
+                              data-sale-countdown-end="{{ pc02_offer_countdown_end | escape }}"
+                              data-end="{{ pc02_offer_countdown_end | escape }}"
                               data-prefix="{{ pc02_offer_countdown_prefix | escape }}"
+                              data-fallback="{{ pc02_offer_countdown_prefix | escape }} {{ pc02_offer_countdown_placeholder }}"
+                              data-sale-countdown-style="compact_text"
+                              data-countdown-style="compact_text"
+                              data-sale-countdown-format="{{ pc02_offer_countdown_format | escape }}"
+                              data-countdown-format="{{ pc02_offer_countdown_format | escape }}"
+                              data-countdown-class="pc02-offer"
+                              data-sale-expired-behavior="hide_root"
+                              data-hide-expired="true"
                             >
-                              {{ pc02_offer_countdown_prefix }} --:--:--
+                              {{ pc02_offer_countdown_prefix }} {{ pc02_offer_countdown_placeholder }}
                             </span>
                           {%- endif -%}
                         </span>
@@ -756,7 +791,8 @@
                         {% render 'price',
                             product: product_card_product,
                             price_class: '',
-                            hasCountdown: hasCountdown
+                            hasCountdown: hasCountdown,
+                            show_discount_percent: true
                         %}
                     </div>
                 {%- endif -%}

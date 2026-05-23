@@ -1522,8 +1522,7 @@
         "type": "text",
         "id": "pc02_offer_discount_text",
         "label": "Frame 2 — discount text",
-        "info": "Leave blank to auto-calculate from compare-at price. Example: 25% OFF",
-        "default": "25% OFF"
+        "info": "Leave blank to auto-calculate from compare-at price. Example: 25% OFF"
       },
       {
         "type": "text",
@@ -1618,6 +1617,164 @@
         "max": 80,
         "step": 1,
         "default": 42
+      },
+      {
+        "type": "header",
+        "content": "Lagorii sale campaign (shared)"
+      },
+      {
+        "type": "text",
+        "id": "lagorii_campaign_sale_label",
+        "label": "Sale label",
+        "default": "ORANGE SALE"
+      },
+      {
+        "type": "url",
+        "id": "lagorii_campaign_link",
+        "label": "Campaign destination link"
+      },
+      {
+        "type": "text",
+        "id": "lagorii_campaign_cta_label",
+        "label": "Campaign CTA label",
+        "default": "SHOP NOW"
+      },
+      {
+        "type": "text",
+        "id": "lagorii_campaign_urgency_text",
+        "label": "Urgency text",
+        "default": "HURRY NOW"
+      },
+      {
+        "type": "text",
+        "id": "lagorii_campaign_fallback_text",
+        "label": "Fallback countdown text",
+        "default": "ENDS SOON"
+      },
+      {
+        "type": "select",
+        "id": "lagorii_campaign_countdown_format",
+        "label": "Campaign countdown format",
+        "info": "Applies to the header sale announcement, Product Card 02 countdown, and product sale FOMO card.",
+        "default": "hh_mm_ss",
+        "options": [
+          {
+            "value": "hh_mm_ss",
+            "label": "HH:MM:SS"
+          },
+          {
+            "value": "dd_hh_mm_ss",
+            "label": "DD:HH:MM:SS"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "id": "lagorii_campaign_coupon_code",
+        "label": "Default coupon code",
+        "default": "GET10"
+      },
+      {
+        "type": "header",
+        "content": "Sale campaign product page FOMO"
+      },
+      {
+        "type": "checkbox",
+        "id": "lagorii_sale_fomo_enable",
+        "label": "Enable product sale FOMO",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "lagorii_sale_fomo_show_coupon",
+        "label": "Show coupon code",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "lagorii_sale_fomo_heading",
+        "label": "FOMO heading",
+        "default": "HURRY NOW"
+      },
+      {
+        "type": "text",
+        "id": "lagorii_sale_fomo_message",
+        "label": "FOMO text",
+        "default": "Add to cart and get"
+      },
+      {
+        "type": "select",
+        "id": "lagorii_sale_fomo_placement",
+        "label": "Placement",
+        "default": "below_price",
+        "options": [
+          {
+            "value": "below_price",
+            "label": "Below price"
+          },
+          {
+            "value": "above_add_to_cart",
+            "label": "Above add to cart"
+          },
+          {
+            "value": "below_add_to_cart",
+            "label": "Below add to cart"
+          },
+          {
+            "value": "above_description",
+            "label": "Above description"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "id": "lagorii_sale_fomo_coupon_code",
+        "label": "Coupon code text",
+        "default": "GET10"
+      },
+      {
+        "type": "checkbox",
+        "id": "lagorii_sale_fomo_show_countdown",
+        "label": "Show countdown",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "lagorii_sale_fomo_show_cta",
+        "label": "Show CTA",
+        "default": true
+      },
+      {
+        "type": "url",
+        "id": "lagorii_sale_fomo_link",
+        "label": "Destination link"
+      },
+      {
+        "type": "text",
+        "id": "lagorii_sale_fomo_cta_label",
+        "label": "CTA label",
+        "default": "Add to cart"
+      },
+      {
+        "type": "range",
+        "id": "lagorii_sale_fomo_radius",
+        "label": "FOMO radius",
+        "min": 0,
+        "max": 32,
+        "step": 1,
+        "default": 12
+      },
+      {
+        "type": "checkbox",
+        "id": "lagorii_sale_fomo_show_border",
+        "label": "Show border",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "lagorii_sale_fomo_show_shadow",
+        "label": "Show shadow",
+        "default": true
       },
       {
         "type": "header",

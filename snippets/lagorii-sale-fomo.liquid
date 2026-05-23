@@ -1,0 +1,376 @@
+{%- liquid
+  assign campaign_enabled = settings.pc02_offer_enable
+  if campaign_enabled == nil
+    assign campaign_enabled = true
+  endif
+
+  assign fomo_enabled = settings.lagorii_sale_fomo_enable
+  if fomo_enabled == nil
+    assign fomo_enabled = true
+  endif
+
+  assign show_countdown = settings.lagorii_sale_fomo_show_countdown
+  if show_countdown == nil
+    assign show_countdown = true
+  endif
+
+  assign block_enabled = true
+  if block != blank
+    assign block_enabled = block.settings.enable
+    if block_enabled == nil
+      assign block_enabled = true
+    endif
+
+    assign show_countdown = block.settings.show_countdown
+    if show_countdown == nil
+      assign show_countdown = true
+    endif
+  endif
+
+  assign sale_label = settings.lagorii_campaign_sale_label | default: 'ORANGE SALE' | strip
+  assign heading = settings.lagorii_sale_fomo_heading | default: 'HURRY NOW!' | strip
+  assign body_text = settings.lagorii_sale_fomo_message | default: 'Add to cart and get' | strip
+  assign discount_text = settings.pc02_offer_discount_text | default: 'FLAT 25% OFF' | strip
+  if block != blank
+    if block.settings.heading_override != blank
+      assign heading = block.settings.heading_override | strip
+    endif
+    if block.settings.body_override != blank
+      assign body_text = block.settings.body_override | strip
+    endif
+    if block.settings.discount_override != blank
+      assign discount_text = block.settings.discount_override | strip
+    endif
+  endif
+  assign countdown_end = settings.pc02_offer_countdown_end | default: '' | strip
+  assign countdown_prefix = settings.pc02_offer_countdown_prefix | default: 'ENDS IN' | strip
+  assign countdown_format = settings.lagorii_campaign_countdown_format | default: 'hh_mm_ss'
+  assign sale_link = settings.lagorii_sale_fomo_link | default: settings.lagorii_campaign_link | default: ''
+  assign radius = settings.lagorii_sale_fomo_radius | default: 14
+  assign margin_top = 8
+  assign margin_bottom = 14
+  if block != blank
+    assign margin_top = block.settings.spacing_top | default: margin_top
+    assign margin_bottom = block.settings.spacing_bottom | default: margin_bottom
+  endif
+  assign shadow_enabled = settings.lagorii_sale_fomo_show_shadow
+  if shadow_enabled == nil
+    assign shadow_enabled = true
+  endif
+  assign border_enabled = settings.lagorii_sale_fomo_show_border
+  if border_enabled == nil
+    assign border_enabled = true
+  endif
+  assign offer_bg = settings.pc02_offer_bg | default: '#E87529'
+  assign offer_text = settings.pc02_offer_text | default: '#FFFFFF'
+  assign countdown_fallback = settings.lagorii_campaign_fallback_text | default: 'ENDS SOON'
+  assign urgency_text = settings.lagorii_campaign_urgency_text | default: 'HURRY NOW'
+  assign render_fomo = false
+  assign countdown_prefix_display = countdown_prefix | replace: ':', '' | strip | upcase
+  assign expired_behavior = 'hide_root'
+
+  if request.design_mode
+    assign expired_behavior = 'none'
+  endif
+
+  if sale_label == blank
+    assign sale_label = 'ORANGE SALE'
+  endif
+
+  if heading == blank
+    assign heading = 'HURRY NOW!'
+  endif
+
+  if body_text == blank
+    assign body_text = 'Add to cart and get'
+  endif
+
+  if discount_text == blank
+    assign discount_text = 'FLAT 25% OFF'
+  endif
+
+  if countdown_prefix_display == blank
+    assign countdown_prefix_display = 'ENDS IN'
+  endif
+
+  if countdown_fallback == blank
+    assign countdown_fallback = 'ENDS SOON'
+  endif
+
+  if urgency_text == blank
+    assign urgency_text = 'HURRY NOW'
+  endif
+
+  if campaign_enabled and fomo_enabled and block_enabled
+    assign render_fomo = true
+  endif
+-%}
+
+{%- if render_fomo -%}
+  <style>
+    .lagorii-sale-fomo {
+      --lsf-accent: {{ offer_bg }};
+      --lsf-accent-text: {{ offer_text }};
+      --lsf-ink: #5a2a11;
+      --lsf-radius: {{ radius }}px;
+      margin: var(--lsf-margin-top, 8px) auto var(--lsf-margin-bottom, 14px);
+      max-width: 430px;
+      width: 100%;
+      color: var(--lsf-ink);
+    }
+
+    .lagorii-sale-fomo[hidden] {
+      display: none;
+    }
+
+    .lagorii-sale-fomo__link,
+    .lagorii-sale-fomo__inner {
+      position: relative;
+      display: grid;
+      justify-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 14px 14px 16px;
+      color: inherit;
+      text-align: center;
+      text-decoration: none;
+      background: linear-gradient(180deg, #fffaf4 0%, #fff2e4 100%);
+      {% if border_enabled %}border: 1px solid rgba(232, 117, 41, .30);{% else %}border: 1px solid transparent;{% endif %}
+      border-radius: var(--lsf-radius);
+      {% if shadow_enabled %}box-shadow: 0 10px 22px rgba(112, 51, 14, .11), inset 0 1px 0 rgba(255, 255, 255, .85);{% endif %}
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .lagorii-sale-fomo__link:focus-visible {
+      outline: 2px solid var(--lsf-accent);
+      outline-offset: 2px;
+    }
+
+    .lagorii-sale-fomo__inner::before,
+    .lagorii-sale-fomo__link::before {
+      content: "";
+      position: absolute;
+      top: -30px;
+      right: -26px;
+      width: 112px;
+      height: 112px;
+      background: radial-gradient(circle, rgba(232, 117, 41, .18) 0%, rgba(232, 117, 41, 0) 74%);
+      pointer-events: none;
+    }
+
+    .lagorii-sale-fomo__inner::after,
+    .lagorii-sale-fomo__link::after {
+      content: "";
+      position: absolute;
+      left: -18px;
+      bottom: -34px;
+      width: 96px;
+      height: 96px;
+      background: radial-gradient(circle, rgba(255, 169, 92, .24) 0%, rgba(255, 169, 92, 0) 70%);
+      pointer-events: none;
+    }
+
+    .lagorii-sale-fomo__badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 26px;
+      width: fit-content;
+      padding: 0 10px;
+      color: #ffffff;
+      background: var(--lsf-accent);
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: .045em;
+      text-transform: uppercase;
+      box-shadow: 0 6px 12px rgba(111, 45, 11, .18);
+    }
+
+    .lagorii-sale-fomo__heading {
+      display: block;
+      color: var(--lsf-accent);
+      font-size: 20px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: .015em;
+      text-transform: uppercase;
+    }
+
+    .lagorii-sale-fomo__text {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.24;
+    }
+
+    .lagorii-sale-fomo__discount {
+      display: block;
+      color: var(--lsf-accent);
+      font-size: 28px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: .015em;
+      text-transform: uppercase;
+    }
+
+    .lagorii-sale-fomo__countdown-wrap {
+      display: grid;
+      justify-items: center;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .lagorii-sale-fomo__countdown-prefix {
+      color: var(--lsf-accent);
+      font-size: 10px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+
+    .lagorii-sale-fomo__countdown {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 54px;
+      min-width: 230px;
+      width: fit-content;
+      padding: 0 14px;
+      color: #ffffff;
+      background: linear-gradient(135deg, #f08b3e 0%, #df6f27 100%);
+      border-radius: 12px;
+      font-variant-numeric: tabular-nums;
+      font-size: 17px;
+      font-weight: 900;
+      line-height: 1;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .24);
+    }
+
+    .lagorii-sale-fomo__countdown-units {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .lagorii-sale-fomo__countdown-unit {
+      display: inline-grid;
+      gap: 2px;
+      min-width: 32px;
+      text-align: center;
+    }
+
+    .lagorii-sale-fomo__countdown-value {
+      font-size: 20px;
+    }
+
+    .lagorii-sale-fomo__countdown-label {
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: .055em;
+      opacity: .9;
+    }
+
+    .lagorii-sale-fomo__countdown-sep {
+      opacity: .72;
+    }
+
+    .lagorii-sale-fomo__urgency {
+      color: #cc0e14;
+      font-size: 11px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .lagorii-sale-fomo.is-urgent .lagorii-sale-fomo__countdown {
+      background: #cc0e14;
+    }
+
+    @media (max-width: 749px) {
+      .lagorii-sale-fomo {
+        margin-top: 6px;
+        margin-bottom: 12px;
+      }
+
+      .lagorii-sale-fomo__link,
+      .lagorii-sale-fomo__inner {
+        gap: 9px;
+        padding: 12px 12px 14px;
+      }
+
+      .lagorii-sale-fomo__heading {
+        font-size: 18px;
+      }
+
+      .lagorii-sale-fomo__discount {
+        font-size: 24px;
+      }
+
+      .lagorii-sale-fomo__countdown {
+        width: 100%;
+        min-width: 0;
+      }
+
+      .lagorii-sale-fomo__countdown-value {
+        font-size: 18px;
+      }
+    }
+  </style>
+
+  {%- capture fomo_content -%}
+    <span class="lagorii-sale-fomo__badge">{{ sale_label | escape }}</span>
+    <span class="lagorii-sale-fomo__heading">{{ heading | escape }}</span>
+    <span class="lagorii-sale-fomo__text">{{ body_text | escape }}</span>
+    <span class="lagorii-sale-fomo__discount">{{ discount_text | escape }}</span>
+
+    {%- if show_countdown -%}
+      <span class="lagorii-sale-fomo__countdown-wrap">
+        <span class="lagorii-sale-fomo__countdown-prefix">{{ countdown_prefix_display | escape }}</span>
+        <span
+          class="lagorii-sale-fomo__countdown"
+          data-sale-countdown
+          data-lagorii-sale-countdown
+          data-sale-countdown-end="{{ countdown_end | escape }}"
+          data-end="{{ countdown_end | escape }}"
+          data-prefix="{{ countdown_prefix_display | escape }}"
+          data-fallback="{{ countdown_fallback | escape }}"
+          data-sale-countdown-style="boxed_units"
+          data-countdown-style="boxed_units"
+          data-sale-countdown-format="{{ countdown_format | escape }}"
+          data-countdown-format="{{ countdown_format | escape }}"
+          data-countdown-class="lagorii-sale-fomo"
+          data-sale-expired-behavior="{{ expired_behavior }}"
+          data-hide-expired="{% if expired_behavior == 'hide_root' %}true{% else %}false{% endif %}"
+          aria-live="polite"
+        >
+          {{ countdown_fallback | escape }}
+        </span>
+      </span>
+    {%- endif -%}
+
+    <span
+      class="lagorii-sale-fomo__urgency"
+      data-lagorii-sale-urgency-label
+      data-normal-text=""
+      data-urgency-text="{{ urgency_text | escape }}"
+      hidden
+    ></span>
+  {%- endcapture -%}
+
+  <div class="lagorii-sale-fomo" style="--lsf-margin-top: {{ margin_top }}px; --lsf-margin-bottom: {{ margin_bottom }}px;" data-sale-root data-lagorii-sale-root data-lagorii-sale-fomo{% if block != blank %} {{ block.shopify_attributes }}{% endif %}>
+    {%- if sale_link != blank -%}
+      <a class="lagorii-sale-fomo__link" href="{{ sale_link }}" aria-label="{{ heading | strip_html | escape }} {{ body_text | strip_html | escape }}">
+        {{ fomo_content }}
+      </a>
+    {%- else -%}
+      <div class="lagorii-sale-fomo__inner">
+        {{ fomo_content }}
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}

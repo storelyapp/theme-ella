@@ -139,9 +139,38 @@
 }
 
 .price__label_sale.price__label_percent {
-    line-height: var(--product-price-line-height);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: auto;
+    max-width: max-content;
+    min-width: 0;
+    min-height: 16px;
+    margin: 0 0 0 5px !important;
+    padding: 2px 5px;
+    color: #e87529;
+    background: #fff6ed;
+    border: 1px solid rgba(232, 117, 41, .34);
+    border-radius: 7px;
+    box-shadow: none;
+    line-height: 1;
     clip-path: unset;
-    height: initial;
+    height: auto;
+    overflow: visible;
+}
+
+.price__label_sale.price__label_percent .label_sale_percent {
+    color: inherit;
+    background: transparent;
+    display: inline;
+    padding: 0;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    white-space: nowrap;
 }
 
 .price__label_sale.price__label_percent .label_sale:not(.label_sale_percent){

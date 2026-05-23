@@ -3138,6 +3138,63 @@
             ]
         },
         {
+            "type": "lagorii_sale_fomo",
+            "name": "Lagorii sale FOMO",
+            "limit": 1,
+            "settings": [
+                {
+                    "type": "checkbox",
+                    "id": "enable",
+                    "label": "Enable block",
+                    "default": true
+                },
+                {
+                    "type": "text",
+                    "id": "heading_override",
+                    "label": "Heading override",
+                    "info": "Leave blank to use the global FOMO heading."
+                },
+                {
+                    "type": "text",
+                    "id": "body_override",
+                    "label": "Body override",
+                    "info": "Leave blank to use the global FOMO text."
+                },
+                {
+                    "type": "text",
+                    "id": "discount_override",
+                    "label": "Discount override",
+                    "info": "Leave blank to use the shared campaign discount."
+                },
+                {
+                    "type": "checkbox",
+                    "id": "show_countdown",
+                    "label": "Show countdown",
+                    "default": true
+                },
+                {
+                    "type": "range",
+                    "id": "spacing_top",
+                    "label": "Spacing top",
+                    "min": 0,
+                    "max": 100,
+                    "step": 1,
+                    "unit": "px",
+                    "default": 8
+                },
+                {
+                    "type": "range",
+                    "id": "spacing_bottom",
+                    "label": "Spacing bottom",
+                    "min": 0,
+                    "max": 100,
+                    "step": 1,
+                    "unit": "px",
+                    "default": 14
+                }
+            ]
+        },
+        {
             "type": "custom_liquid",
             "name": "t:sections.custom-liquid.name",
             "settings": [

@@ -1,0 +1,633 @@
+{%- liquid
+  assign campaign_enabled = settings.pc02_offer_enable
+  if campaign_enabled == nil
+    assign campaign_enabled = true
+  endif
+
+  assign sale_label = settings.lagorii_campaign_sale_label | default: 'ORANGE SALE' | strip
+  assign campaign_message = settings.pc02_offer_message | default: 'LIMITED TIME OFFER' | strip
+  assign campaign_discount = settings.pc02_offer_discount_text | default: 'FLAT 25% OFF' | strip
+  assign countdown_end = settings.pc02_offer_countdown_end | default: '' | strip
+  assign countdown_prefix = settings.pc02_offer_countdown_prefix | default: 'ENDS IN' | strip
+  assign rotation_interval = settings.pc02_offer_rotate_seconds | default: 3
+  assign offer_bg = settings.pc02_offer_bg | default: '#E87529'
+  assign offer_text = settings.pc02_offer_text | default: '#FFFFFF'
+
+  assign cta_label = section.settings.cta_label | default: settings.lagorii_campaign_cta_label | default: 'SHOP NOW' | strip
+  assign countdown_fallback = section.settings.countdown_fallback_text | default: 'ENDS SOON' | strip
+  assign urgency_text = section.settings.last_6_hours_urgency_text | default: settings.lagorii_campaign_urgency_text | default: 'HURRY NOW' | strip
+  assign desktop_style = section.settings.desktop_style | default: 'rotating_single_capsule'
+  assign mobile_style = section.settings.mobile_style | default: 'compact_rotating_capsule'
+  assign sticky_mode = section.settings.sticky_mode | default: 'off'
+  assign countdown_display_style = section.settings.countdown_display_style | default: 'boxed_units'
+  assign countdown_format = settings.lagorii_campaign_countdown_format | default: 'hh_mm_ss'
+  assign top_radius = section.settings.container_top_radius | default: 14
+  assign bottom_radius = section.settings.container_bottom_radius | default: 14
+  assign capsule_radius = section.settings.capsule_radius | default: 50
+  assign badge_radius = section.settings.badge_radius | default: 999
+  assign countdown_radius = section.settings.countdown_radius | default: 14
+  assign destination_link = section.settings.sale_link | default: settings.lagorii_campaign_link
+  assign countdown_expired_behavior = 'hide_root'
+  if request.design_mode
+    assign countdown_expired_behavior = 'none'
+  endif
+  assign should_render_sale_bar = section.settings.enable_sale_bar
+  if should_render_sale_bar and campaign_enabled == false and request.design_mode != true
+    assign should_render_sale_bar = false
+  endif
+
+  if sale_label == blank
+    assign sale_label = 'ORANGE SALE'
+  endif
+
+  if campaign_message == blank
+    assign campaign_message = 'LIMITED TIME OFFER'
+  endif
+
+  if campaign_discount == blank
+    assign campaign_discount = 'FLAT 25% OFF'
+  endif
+
+  if cta_label == blank
+    assign cta_label = 'SHOP NOW'
+  endif
+
+  if countdown_prefix == blank
+    assign countdown_prefix = 'ENDS IN'
+  endif
+
+  if countdown_fallback == blank
+    assign countdown_fallback = 'ENDS SOON'
+  endif
+
+  if urgency_text == blank
+    assign urgency_text = 'HURRY NOW'
+  endif
+
+  assign campaign_message_key = campaign_message | downcase | strip
+  assign campaign_discount_key = campaign_discount | downcase | strip
+  assign cta_label_key = cta_label | downcase | strip
+  assign frame_count = 1
+
+  capture offer_frames_json
+    echo '['
+    echo campaign_message | json
+    if campaign_discount != blank and campaign_discount_key != campaign_message_key
+      echo ','
+      echo campaign_discount | json
+      assign frame_count = frame_count | plus: 1
+    endif
+    if cta_label != blank and cta_label_key != campaign_message_key and cta_label_key != campaign_discount_key
+      echo ','
+      echo cta_label | json
+      assign frame_count = frame_count | plus: 1
+    endif
+    echo ']'
+  endcapture
+
+  capture aria_label
+    echo sale_label
+    echo ' '
+    echo campaign_message
+    if campaign_discount != blank and campaign_discount_key != campaign_message_key
+      echo ' '
+      echo campaign_discount
+    endif
+    if cta_label != blank
+      echo ' '
+      echo cta_label
+    endif
+  endcapture
+-%}
+
+{%- if should_render_sale_bar -%}
+  <style>
+    #shopify-section-{{ section.id }} .lagorii-sale-announcement {
+      --lsa-accent: {{ offer_bg }};
+      --lsa-accent-text: {{ offer_text }};
+      --lsa-cream: #fff7ef;
+      --lsa-warm-ink: #5b2b12;
+      --lsa-top-radius: {{ top_radius }}px;
+      --lsa-bottom-radius: {{ bottom_radius }}px;
+      --lsa-capsule-radius: {{ capsule_radius }}px;
+      --lsa-badge-radius: {{ badge_radius }}px;
+      --lsa-countdown-radius: {{ countdown_radius }}px;
+      --lsa-sticky-offset: 0px;
+      position: relative;
+      z-index: 19;
+      background: transparent;
+    }
+
+    #shopify-section-{{ section.id }} .lagorii-sale-announcement[hidden] {
+      display: none;
+    }
+
+    #shopify-section-{{ section.id }} .lagorii-sale-announcement__link,
+    #shopify-section-{{ section.id }} .lagorii-sale-announcement__inner {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      padding: 8px 12px;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    #shopify-section-{{ section.id }} .lagorii-sale-announcement__link:focus-visible {
+      outline: 2px solid #ffffff;
+      outline-offset: -4px;
+    }
+
+    #shopify-section-{{ section.id }} .lagorii-sale-announcement__capsule {
+      position: relative;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto auto;
+      align-items: center;
+      gap: 11px;
+      width: min(1060px, calc(100vw - 22px));
+      min-height: 62px;
+      padding: 8px 12px;
+      color: #ffffff;
+      background: linear-gradient(135deg, #f79a4e 0%, var(--lsa-accent) 48%, #d9661f 100%);
+      border: 1px solid rgba(255, 255, 255, .24);
+      border-radius: var(--lsa-top-radius) var(--lsa-top-radius) var(--lsa-bottom-radius) var(--lsa-bottom-radius);
+      box-shadow:
+        0 12px 24px rgba(123, 55, 15, .22),
+        inset 0 1px 0 rgba(255, 255, 255, .26),
+        inset 0 -1px 0 rgba(121, 55, 17, .2);
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    #shopify-section-{{ section.id }} .lagorii-sale-announcement__capsule::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 22% 0%, rgba(255, 255, 255, .26), transparent 42%);
+      pointer-events: none;
+    }
+
+    #shopify-section-{{ section.id }} .lagorii-sale-announcement__badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      padding: 0 12px;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: .045em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      background: rgba(88, 34, 8, .32);
+      border: 1px solid rgba(255, 255, 255, .34);
+      border-radius: var(--lsa-badge-radius);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25);
+    }
+
+    #shopify-section-{{ section.id }} .lagorii-sale-announcement__frame {
+      display: block;
+      min-width: 0;
+      font-size: 16px;
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: .01em;
+      text-transform: uppercase;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transform: translateY(0);
+      transition: transform .3s cubic-bezier(.2, .72, .2, 1), opacity .2s ease;
+    }
+
+    #shopify-section-{{ section.id }} .lagorii-sale-announcement.is-rotating .lagorii-sale-announcement__frame {
+      opacity: 0;
+      transform: translateY(-7px);
+    }
+
+    #shopify-section-{{ section.id }} .lagorii-sale-announcement__countdown {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 194px;
+      min-height: 42px;
+      padding: 0 11px;
+      color: #ffffff;
+      background: rgba(77, 28, 5, .35);
+      border: 1px solid rgba(255, 255, 255, .26);
+      border-radius: var(--lsa-countdown-radius);
+      font-variant-numeric: tabular-nums;
+      font-size: 15px;
+      font-weight: 900;
+      line-height: 1;
+      white-space: nowrap;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .24);
+    }
+
+    #shopify-section-{{ section.id }} .lagorii-sale-announcement__countdown-units {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    #shopify-section-{{ section.id }} .lagorii-sale-announcement__countdown-unit {
+      display: inline-grid;
+      gap: 2px;
+      min-width: 28px;
+      text-align: center;
+    }
+
+    #shopify-section-{{ section.id }} .lagorii-sale-announcement__countdown-value {
+      font-size: 17px;
+    }
+
+    #shopify-section-{{ section.id }} .lagorii-sale-announcement__countdown-label {
+      font-size: 8px;
+      font-weight: 800;
+      letter-spacing: .045em;
+      opacity: .86;
+    }
+
+    #shopify-section-{{ section.id }} .lagorii-sale-announcement__countdown-sep {
+      font-size: 15px;
+      opacity: .68;
+    }
+
+    #shopify-section-{{ section.id }} .lagorii-sale-announcement__cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 0 14px;
+      color: var(--lsa-warm-ink);
+      background: var(--lsa-cream);
+      border: 1px solid rgba(255, 255, 255, .7);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    #shopify-section-{{ section.id }} .lagorii-sale-announcement.is-urgent .lagorii-sale-announcement__countdown {
+      background: #cc0e14;
+      border-color: rgba(255, 255, 255, .32);
+    }
+
+    #shopify-section-{{ section.id }} .lagorii-sale-announcement[data-desktop-style="two_pill_message_timer"] .lagorii-sale-announcement__capsule {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+    }
+
+    #shopify-section-{{ section.id }} .lagorii-sale-announcement[data-desktop-style="two_pill_message_timer"] .lagorii-sale-announcement__cta {
+      display: none;
+    }
+
+    #shopify-section-{{ section.id }} .lagorii-sale-announcement[data-desktop-style="full_width_campaign_strip"] .lagorii-sale-announcement__capsule {
+      width: calc(100vw - 4px);
+      border-radius: 0;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #shopify-section-{{ section.id }} .lagorii-sale-announcement__frame {
+        transform: none;
+        transition: opacity .16s ease;
+      }
+
+      #shopify-section-{{ section.id }} .lagorii-sale-announcement.is-rotating .lagorii-sale-announcement__frame {
+        transform: none;
+      }
+    }
+
+    @media (min-width: 750px) {
+      #shopify-section-{{ section.id }} .lagorii-sale-announcement[data-sticky-mode="desktop"],
+      #shopify-section-{{ section.id }} .lagorii-sale-announcement[data-sticky-mode="both"] {
+        position: sticky;
+        top: var(--lsa-sticky-offset, var(--header-height, 0px));
+      }
+    }
+
+    @media (max-width: 749px) {
+      #shopify-section-{{ section.id }} .lagorii-sale-announcement__link,
+      #shopify-section-{{ section.id }} .lagorii-sale-announcement__inner {
+        padding: 7px 8px;
+      }
+
+      #shopify-section-{{ section.id }} .lagorii-sale-announcement__capsule {
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 8px 9px;
+        width: min(430px, calc(100vw - 14px));
+        min-height: 0;
+        padding: 10px;
+      }
+
+      #shopify-section-{{ section.id }} .lagorii-sale-announcement__badge {
+        min-height: 30px;
+        padding: 0 10px;
+        font-size: 10px;
+      }
+
+      #shopify-section-{{ section.id }} .lagorii-sale-announcement__frame {
+        font-size: 13px;
+        text-align: left;
+        white-space: normal;
+      }
+
+      #shopify-section-{{ section.id }} .lagorii-sale-announcement__countdown {
+        grid-column: 1 / -1;
+        width: 100%;
+        min-width: 0;
+        min-height: 40px;
+      }
+
+      #shopify-section-{{ section.id }} .lagorii-sale-announcement__countdown-value {
+        font-size: 16px;
+      }
+
+      #shopify-section-{{ section.id }} .lagorii-sale-announcement__countdown-label {
+        font-size: 7px;
+      }
+
+      #shopify-section-{{ section.id }} .lagorii-sale-announcement__cta {
+        display: none;
+      }
+
+      #shopify-section-{{ section.id }} .lagorii-sale-announcement[data-mobile-style="two_line_compact"] .lagorii-sale-announcement__frame {
+        font-size: 12px;
+      }
+
+      #shopify-section-{{ section.id }} .lagorii-sale-announcement[data-mobile-style="single_line_scroll"] .lagorii-sale-announcement__inner,
+      #shopify-section-{{ section.id }} .lagorii-sale-announcement[data-mobile-style="single_line_scroll"] .lagorii-sale-announcement__link {
+        justify-content: flex-start;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+
+      #shopify-section-{{ section.id }} .lagorii-sale-announcement[data-mobile-style="single_line_scroll"] .lagorii-sale-announcement__inner::-webkit-scrollbar,
+      #shopify-section-{{ section.id }} .lagorii-sale-announcement[data-mobile-style="single_line_scroll"] .lagorii-sale-announcement__link::-webkit-scrollbar {
+        display: none;
+      }
+
+      #shopify-section-{{ section.id }} .lagorii-sale-announcement[data-mobile-style="single_line_scroll"] .lagorii-sale-announcement__capsule {
+        display: inline-flex;
+        align-items: center;
+        width: max-content;
+        min-width: min(100%, 360px);
+        gap: 8px;
+      }
+
+      #shopify-section-{{ section.id }} .lagorii-sale-announcement[data-mobile-style="single_line_scroll"] .lagorii-sale-announcement__countdown {
+        width: auto;
+      }
+
+      #shopify-section-{{ section.id }} .lagorii-sale-announcement[data-sticky-mode="mobile"],
+      #shopify-section-{{ section.id }} .lagorii-sale-announcement[data-sticky-mode="both"] {
+        position: sticky;
+        top: var(--lsa-sticky-offset, 0px);
+      }
+    }
+  </style>
+
+  {%- capture sale_content -%}
+    <span class="lagorii-sale-announcement__capsule">
+      <span class="lagorii-sale-announcement__badge">{{ sale_label | escape }}</span>
+
+      <span
+        class="lagorii-sale-announcement__frame"
+        data-sale-rotate-target
+        aria-live="polite"
+      >
+        {{ campaign_message | escape }}
+      </span>
+
+      <span
+        class="lagorii-sale-announcement__countdown"
+        data-sale-countdown
+        data-lagorii-sale-countdown
+        data-sale-countdown-end="{{ countdown_end | escape }}"
+        data-end="{{ countdown_end | escape }}"
+        data-prefix="{{ countdown_prefix | escape }}"
+        data-fallback="{{ countdown_fallback | escape }}"
+        data-sale-countdown-style="{{ countdown_display_style | escape }}"
+        data-countdown-style="{{ countdown_display_style | escape }}"
+        data-sale-countdown-format="{{ countdown_format | escape }}"
+        data-countdown-format="{{ countdown_format | escape }}"
+        data-countdown-class="lagorii-sale-announcement"
+        data-sale-expired-behavior="{{ countdown_expired_behavior }}"
+        data-hide-expired="{% if countdown_expired_behavior == 'hide_root' %}true{% else %}false{% endif %}"
+        aria-live="polite"
+      >
+        {{ countdown_fallback | escape }}
+      </span>
+
+      <span class="lagorii-sale-announcement__cta">
+        {{ cta_label | escape }}
+      </span>
+    </span>
+  {%- endcapture -%}
+
+  <section
+    class="lagorii-sale-announcement"
+    role="region"
+    aria-label="{{ aria_label | strip | escape }}"
+    data-sale-root
+    data-lagorii-sale-root
+    data-lagorii-sale-announcement
+    data-sale-frames='{{ offer_frames_json | strip | escape }}'
+    data-sale-urgent-frame="{{ urgency_text | escape }}"
+    data-desktop-style="{{ desktop_style }}"
+    data-mobile-style="{{ mobile_style }}"
+    data-sticky-mode="{{ sticky_mode }}"
+    data-countdown-render="{{ countdown_display_style }}"
+    data-rotation-enabled="{% if frame_count > 1 %}true{% else %}false{% endif %}"
+    data-rotation-interval="{{ rotation_interval }}"
+  >
+    {%- if destination_link != blank -%}
+      <a class="lagorii-sale-announcement__link" href="{{ destination_link }}" aria-label="{{ aria_label | strip | escape }}">
+        {{ sale_content }}
+      </a>
+    {%- else -%}
+      <div class="lagorii-sale-announcement__inner">
+        {{ sale_content }}
+      </div>
+    {%- endif -%}
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Lagorii sale announcement",
+  "class": "section-lagorii-sale-announcement",
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_sale_bar",
+      "label": "Enable sale bar",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "sale_link",
+      "label": "Destination link"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA label",
+      "default": "SHOP NOW"
+    },
+    {
+      "type": "select",
+      "id": "desktop_style",
+      "label": "Desktop style preset",
+      "default": "rotating_single_capsule",
+      "options": [
+        {
+          "value": "rotating_single_capsule",
+          "label": "Rotating single capsule"
+        },
+        {
+          "value": "two_pill_message_timer",
+          "label": "Two-pill message + timer"
+        },
+        {
+          "value": "full_width_campaign_strip",
+          "label": "Full-width campaign strip"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "mobile_style",
+      "label": "Mobile style preset",
+      "default": "compact_rotating_capsule",
+      "options": [
+        {
+          "value": "compact_rotating_capsule",
+          "label": "Compact rotating capsule"
+        },
+        {
+          "value": "two_line_compact",
+          "label": "Two-line compact"
+        },
+        {
+          "value": "single_line_scroll",
+          "label": "Single-line scroll"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "countdown_display_style",
+      "label": "Countdown display style",
+      "default": "boxed_units",
+      "options": [
+        {
+          "value": "boxed_units",
+          "label": "Large boxed units"
+        },
+        {
+          "value": "compact_text",
+          "label": "Compact text"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "container_top_radius",
+      "label": "Container top radius",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "container_bottom_radius",
+      "label": "Container bottom radius",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "capsule_radius",
+      "label": "Capsule radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "badge_radius",
+      "label": "Badge radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "countdown_radius",
+      "label": "Countdown radius",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "select",
+      "id": "sticky_mode",
+      "label": "Sticky mode",
+      "default": "off",
+      "options": [
+        {
+          "value": "off",
+          "label": "Off"
+        },
+        {
+          "value": "desktop",
+          "label": "Desktop only"
+        },
+        {
+          "value": "mobile",
+          "label": "Mobile only"
+        },
+        {
+          "value": "both",
+          "label": "Desktop and mobile"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "countdown_fallback_text",
+      "label": "Countdown fallback text",
+      "default": "ENDS SOON"
+    },
+    {
+      "type": "text",
+      "id": "last_6_hours_urgency_text",
+      "label": "Urgency text",
+      "default": "HURRY NOW"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Lagorii sale announcement"
+    }
+  ]
+}
+{% endschema %}
