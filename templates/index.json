@@ -912,6 +912,175 @@
         "mg_bottom_mobile": 0
       }
     },
+    "banner_slider_grid_GbcXDP": {
+      "type": "Banner-slider-Grid",
+      "blocks": {
+        "card_xxeTQi": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/GIRLS_1b8f0929-3347-4c98-a273-bc5848d46112.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/girls"
+          }
+        },
+        "card_CYXBNY": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/BOYS_d1d2ac43-c9d4-4235-a735-54e03274174e.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/boys"
+          }
+        },
+        "card_LpUbCJ": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/INFANTS_f1cdd012-9456-464c-b87c-5c0049c66d22.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/infants"
+          }
+        },
+        "card_VHWwnk": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/CASAULWEAR.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/casual-wear-1"
+          }
+        },
+        "card_GMgwVg": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/PARTYWEAR_64809cd0-ef9e-40f2-9815-ab47b29dd625.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/party-wear"
+          }
+        },
+        "card_dqCajF": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/ETHNICWEAR.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/ethnic-wear-lagorii"
+          }
+        },
+        "card_KmCcLx": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/SLEEPWEAR.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/night-wear"
+          }
+        },
+        "card_VeKRgm": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/CO-ORDSET.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/co-ord-set"
+          }
+        },
+        "card_B6Ui9c": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/GOWNS.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/gowns"
+          }
+        },
+        "card_YJVnKN": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/FUSIONWEAR_288ef5f6-563d-4b80-a1d1-5f7f3154313f.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/girls-indo-western"
+          }
+        },
+        "card_kVfPfd": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/PARTYFROCK.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/girls-party-wear-frocks"
+          }
+        },
+        "card_QATzCi": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/DRESSES_a8e696cd-88ae-4df5-9502-d5e678710589.webp",
+            "card_text": "",
+            "card_link": "shopify://collections/dresses"
+          }
+        }
+      },
+      "block_order": [
+        "card_xxeTQi",
+        "card_CYXBNY",
+        "card_LpUbCJ",
+        "card_VHWwnk",
+        "card_GMgwVg",
+        "card_dqCajF",
+        "card_KmCcLx",
+        "card_VeKRgm",
+        "card_B6Ui9c",
+        "card_YJVnKN",
+        "card_kVfPfd",
+        "card_QATzCi"
+      ],
+      "name": "Banner + Slider/Grid",
+      "settings": {
+        "banner_desktop_image": "shopify://shop_images/website_heading_2.webp",
+        "banner_mobile_image": "shopify://shop_images/mobileheading11.webp",
+        "banner_alt": "Lagorii banner",
+        "banner_link": "",
+        "bg_color": "#ffffff",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "section_side_padding": 0,
+        "show_cards": true,
+        "cards_source": "manual",
+        "cards_layout": "grid",
+        "enable_arrows": true,
+        "show_arrows_desktop": true,
+        "show_arrows_mobile": false,
+        "arrow_bg": "#ffffff",
+        "arrow_color": "#111111",
+        "arrow_side_offset": 8,
+        "desktop_cards_full_width": true,
+        "desktop_cards_side_padding": 20,
+        "cards_margin_top": 12,
+        "cards_bg_color": "#ffffff",
+        "cards_bg_image_size": "cover",
+        "cards_bg_padding": 0,
+        "cards_bg_radius": 0,
+        "cards_gap": 2,
+        "card_radius": 0,
+        "card_inner_padding": 4,
+        "card_bg_color": "#ffffff",
+        "card_image_fit": "cover",
+        "grid_cols_desktop": 6,
+        "grid_cols_tablet": 3,
+        "grid_cols_mobile": 3,
+        "slider_card_width": 45,
+        "slider_cards_visible_mobile": "1.5",
+        "card_aspect_ratio": 130,
+        "overlay_font_family": "inherit",
+        "overlay_font_weight": "600",
+        "overlay_font_size_desktop": 18,
+        "overlay_font_size_mobile": 14,
+        "overlay_text_color": "#111111",
+        "overlay_bg_color": "#ffffff",
+        "overlay_bg_opacity": 80,
+        "overlay_padding": 10,
+        "overlay_radius": 8,
+        "overlay_text_align": "left",
+        "cards_collection": "",
+        "products_limit": 4,
+        "show_view_all": true,
+        "view_all_label": "View all",
+        "view_all_bg": "#e87529",
+        "view_all_text": "#ffffff"
+      }
+    },
     "banner_slider_grid_Pih9wW": {
       "type": "Banner-slider-Grid",
       "blocks": {
@@ -975,6 +1144,7 @@
         "card_cbKnLx",
         "card_xK3wjQ"
       ],
+      "disabled": true,
       "name": "Special Store",
       "settings": {
         "banner_desktop_image": "shopify://shop_images/Special_store.webp",
@@ -2203,6 +2373,7 @@
     "lagorii_coupon_code_rrxkR3",
     "b25c8bcb-007b-45d9-b198-57f4a84a1b9d",
     "image_banner_GU67WV",
+    "banner_slider_grid_GbcXDP",
     "banner_slider_grid_Pih9wW",
     "banner_slider_grid_BAbQne",
     "lagorii_category_grid_Tfrcri",
