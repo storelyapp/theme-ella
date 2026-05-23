@@ -395,6 +395,7 @@
         "banner_kBnwWm",
         "banner_pWch7K"
       ],
+      "disabled": true,
       "name": "Lagorii • Hero + ETA",
       "settings": {
         "hero_radius": 0,
