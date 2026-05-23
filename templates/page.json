@@ -558,12 +558,201 @@
         "view_all_bg": "#e87529",
         "view_all_text": "#ffffff"
       }
+    },
+    "product_tab_block_nRWYT4": {
+      "type": "product-tab-block",
+      "blocks": {
+        "product_tabs_7cztWG": {
+          "type": "ProductTabs",
+          "settings": {
+            "title": "NEW ARRIVALS",
+            "collection": "new-arrivals"
+          }
+        },
+        "product_tabs_38CEeN": {
+          "type": "ProductTabs",
+          "settings": {
+            "title": "ETHNIC WEAR",
+            "collection": "ethnic-wear-lagorii"
+          }
+        },
+        "product_tabs_UrYJEw": {
+          "type": "ProductTabs",
+          "settings": {
+            "title": "PARTY WEAR",
+            "collection": "party-wear"
+          }
+        },
+        "product_tabs_zCMHKL": {
+          "type": "ProductTabs",
+          "settings": {
+            "title": "CASUAL WEAR",
+            "collection": "casual-wear-1"
+          }
+        },
+        "product_tabs_UNmFDC": {
+          "type": "ProductTabs",
+          "settings": {
+            "title": "LEHENGA CHOLI",
+            "collection": "lehenga-choli"
+          }
+        },
+        "product_tabs_rGQjYx": {
+          "type": "ProductTabs",
+          "settings": {
+            "title": "SHARARA SET",
+            "collection": "sharara-sets"
+          }
+        },
+        "product_tabs_Y7GgVH": {
+          "type": "ProductTabs",
+          "settings": {
+            "title": "PALAZZO SET",
+            "collection": "palazzo-sets"
+          }
+        },
+        "product_tabs_TqYpgL": {
+          "type": "ProductTabs",
+          "settings": {
+            "title": "KURTA SET",
+            "collection": "kurta-sets"
+          }
+        },
+        "product_tabs_FpYpPV": {
+          "type": "ProductTabs",
+          "settings": {
+            "title": "SHERWANIS",
+            "collection": "boys-indo-western"
+          }
+        },
+        "product_tabs_TEMTbM": {
+          "type": "ProductTabs",
+          "settings": {
+            "title": "FUSION WEAR",
+            "collection": "girls-indo-western"
+          }
+        },
+        "product_tabs_7MMH8J": {
+          "type": "ProductTabs",
+          "settings": {
+            "title": "GOWNS",
+            "collection": "gowns"
+          }
+        },
+        "product_tabs_9gFQcE": {
+          "type": "ProductTabs",
+          "settings": {
+            "title": "BOYS SUITS",
+            "collection": "boys-suits"
+          }
+        },
+        "product_tabs_Wdxw3K": {
+          "type": "ProductTabs",
+          "settings": {
+            "title": "CO-ORD SET",
+            "collection": "co-ord-set"
+          }
+        }
+      },
+      "block_order": [
+        "product_tabs_7cztWG",
+        "product_tabs_38CEeN",
+        "product_tabs_UrYJEw",
+        "product_tabs_zCMHKL",
+        "product_tabs_UNmFDC",
+        "product_tabs_rGQjYx",
+        "product_tabs_Y7GgVH",
+        "product_tabs_TqYpgL",
+        "product_tabs_FpYpPV",
+        "product_tabs_TEMTbM",
+        "product_tabs_7MMH8J",
+        "product_tabs_9gFQcE",
+        "product_tabs_Wdxw3K"
+      ],
+      "name": "t:sections.product_tab_block.name",
+      "settings": {
+        "container": "container",
+        "padding_full_width": 0,
+        "product_bg": "#fff",
+        "product_bg_gradient": "",
+        "product_block_layout": "grid",
+        "product_block_title": "Trending Now",
+        "fontsize_title": 16,
+        "fontsize_title_mb": 16,
+        "mg_bottom_title": 12,
+        "enable_border_title": true,
+        "border_color_title": "#232323",
+        "enable_border_title2": false,
+        "border_color_title2": "#232323",
+        "color_title": "#232323",
+        "title_align": "center",
+        "product_block_limit": 8,
+        "view_all_style": "style_1",
+        "view_all": "",
+        "font_weight_view_all": "400",
+        "mg_bottom_view": 30,
+        "link_view_all": "",
+        "color_view_all": "#3c3c3c",
+        "image_behavior": "none",
+        "product_block_per_row": "4",
+        "product_block_infinite_scroll": true,
+        "min_width_button": "",
+        "product_block_dots": false,
+        "product_block_dots_mb": true,
+        "product_block_arrows": true,
+        "product_block_arrows_mb": false,
+        "product_block_arrows_custom_position": false,
+        "product_block_progress_bar": false,
+        "enable_infinite": true,
+        "product_block_show": "5",
+        "product_block_per_view": "4",
+        "show_half": true,
+        "scroll_height": 4,
+        "scroll_track_bg": "#f1f1f1",
+        "scroll_thumb_color": "#000",
+        "scroll_thumb_hover_color": "#444",
+        "enable_hover_drag_icon": true,
+        "position": "left",
+        "width_banner": 20,
+        "tab_title_style": "style_1",
+        "mg_bottom_title_tab": 24,
+        "type_tab_font": "font_1",
+        "separation": true,
+        "style_separation": "style1",
+        "color_separation": "",
+        "enable_scroll_title": true,
+        "fontsize_tab": 14,
+        "fontsize_tab_mb": 14,
+        "font_weight_tab": "700",
+        "font_weight_active_tab": "700",
+        "spacing_between_title": 24,
+        "line_height_tab": 20,
+        "line_height_tab_mobile": 24,
+        "border_tab_radius": 3,
+        "min_width_tab": 5,
+        "border_width_tab": 3,
+        "tab_align": "center",
+        "color_tab": "#232323",
+        "border_color_tab": "",
+        "bg_color_tab": "#fff",
+        "bg_color_gradient_tab": "",
+        "color_tab_active": "#232323",
+        "bg_color_tab_active": "#f8f8f8",
+        "bg_color_gradient_tab_active": "",
+        "mg_top_desktop": 50,
+        "mg_top_tablet": 50,
+        "mg_top_mobile": 50,
+        "mg_bottom_desktop": 50,
+        "mg_bottom_tablet": 50,
+        "mg_bottom_mobile": 50
+      }
     }
   },
   "order": [
     "banner_slider_grid_hjThjq",
     "main",
     "image_banner_xULeKP",
-    "banner_slider_grid_d99qNU"
+    "banner_slider_grid_d99qNU",
+    "product_tab_block_nRWYT4"
   ]
 }
