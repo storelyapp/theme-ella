@@ -57,14 +57,6 @@ var _usfPrice = `
                 <span v-else class="price-item price-item--sale">
                     <span class="money" v-html="displayDiscountedPrice"></span>
                 </span>
-
-                <span
-                    v-if="hasDiscount && salePercent"
-                    class="price__label_sale price__label_percent lagorii-usf-sale-chip"
-                    aria-hidden="true"
-                >
-                    <span class="label_sale label_sale_percent" v-html="'-' + salePercent + '%'"></span>
-                </span>
             </dd>
         </div>
     </dl>
@@ -97,17 +89,6 @@ var _usfVariantPrice = `
             <dd class="price__last">
                 <span class="price-item price-item--sale">
                     <span class="money" v-html="usf.utils.getDisplayPrice(v.price)"></span>
-                </span>
-
-                <span
-                    v-if="v.compareAtPrice > v.price"
-                    class="price__label_sale price__label_percent lagorii-usf-sale-chip"
-                    aria-hidden="true"
-                >
-                    <span
-                        class="label_sale label_sale_percent"
-                        v-html="'-' + Math.round(((v.compareAtPrice - v.price) * 100) / v.compareAtPrice) + '%'"
-                    ></span>
                 </span>
             </dd>
         </div>
@@ -285,6 +266,32 @@ var _usfProductCard2 = `
                                     :aria-label="'Slide ' + (index + 1)"
                                 ></button>
                             </div>
+                        </div>
+                        <div
+                            :class="'pc02-offer-badge pc02-offer--rotate pc02-offer-pos--'+_usfGlobalSettings.pc02_offer_position"
+                            data-pc02-offer-badge
+                            :data-start="_usfGlobalSettings.pc02_offer_countdown_start"
+                            :data-end="_usfGlobalSettings.pc02_offer_countdown_end"
+                            :data-rotate-ms="_usfGlobalSettings.pc02_offer_rotate_seconds*1000"
+                            :aria-label="_usfGlobalSettings.pc02_offer_message+' '+_usfGlobalSettings.pc02_offer_discount_label ?  '-'+ _usfGlobalSettings.pc02_offer_discount_label:'' "
+                        >
+                            <span class="pc02-offer-stage">
+                                <span v-if="_usfGlobalSettings.pc02_offer_message" class="pc02-offer-frame pc02-offer-frame-message is-active" data-pc02-offer-frame v-html="_usfGlobalSettings.pc02_offer_message"></span>
+
+
+                                
+                                <span v-if="_usfGlobalSettings.pc02_offer_discount_label" :class="'pc02-offer-frame pc02-offer-frame-discount'+_usfGlobalSettings.pc02_offer_message=='' ?  ' is-active':''" data-pc02-offer-frame v-html="_usfGlobalSettings.pc02_offer_message"></span>
+                                
+ 
+                                <span v-if="_usfGlobalSettings.pc02_offer_countdown_end"  
+                                class="pc02-offer-frame pc02-offer-frame-countdown"
+                                data-pc02-offer-frame
+                                data-pc02-offer-countdown
+                                :data-prefix="_usfGlobalSettings.pc02_offer_countdown_prefix"
+                                v-html="_usfGlobalSettings.pc02_offer_countdown_prefix + ' --:--:--'"
+                                > 
+                                </span> 
+                            </span>
                         </div>
                     </template>
                     <template v-else>
