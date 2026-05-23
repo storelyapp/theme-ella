@@ -57,6 +57,14 @@ var _usfPrice = `
                 <span v-else class="price-item price-item--sale">
                     <span class="money" v-html="displayDiscountedPrice"></span>
                 </span>
+
+                <span
+                    v-if="hasDiscount && salePercent"
+                    class="price__label_sale price__label_percent lagorii-usf-sale-chip"
+                    aria-hidden="true"
+                >
+                    <span class="label_sale label_sale_percent" v-html="'-' + salePercent + '%'"></span>
+                </span>
             </dd>
         </div>
     </dl>
