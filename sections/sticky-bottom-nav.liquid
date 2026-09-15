@@ -98,7 +98,7 @@
             {% if mode != 'text' %}
               <span class="sbn__icon">
                 {%- comment -%} INACTIVE ICON {%- endcomment -%}
-                {%- case block.settings.icon_source_inactive | default: 'builtin' -%}
+                {%- case block.settings.icon_source_inactive -%}
                   {%- when 'builtin' -%}
                     <span class="icon--inactive">
                       {%- assign inactive_builtin = block.settings.icon_inactive | default: 'home' -%}
@@ -123,7 +123,7 @@
                 {%- endcase -%}
 
                 {%- comment -%} ACTIVE ICON {%- endcomment -%}
-                {%- case block.settings.icon_source_active | default: 'builtin' -%}
+                {%- case block.settings.icon_source_active -%}
                   {%- when 'builtin' -%}
                     <span class="icon--active">
                       {%- assign active_builtin = block.settings.icon_active | default: inactive_builtin -%}
@@ -700,4 +700,16 @@
     ]
   }
 }
-{% endschema %}
+{% endschema %}{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- case block.settings.icon_source_inactive | default: 'builtin' -%}"
+  to: "{%- case block.settings.icon_source_inactive -%}"
+  position: 5379..5427
+- from: "{%- case block.settings.icon_source_active | default: 'builtin' -%}"
+  to: "{%- case block.settings.icon_source_active -%}"
+  position: 7745..7791
+{%- endcomment -%}

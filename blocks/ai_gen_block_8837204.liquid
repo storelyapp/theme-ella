@@ -47,7 +47,7 @@
 
     <div class="ai-snippet-renderer-content-{{ ai_gen_id }}">
       {% if block.settings.snippet_name != blank %}
-        {% render block.settings.snippet_name %}
+        {% render block %}
       {% else %}
         <div style="padding: 40px; text-align: center; background-color: #f9fafb; border: 2px dashed #d1d5db; border-radius: 8px; color: #6b7280;">
           <p style="margin: 0; font-size: 14px;">Enter a snippet name to render it here</p>
@@ -190,3 +190,13 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% render block.settings.snippet_name %}"
+  to: "{% render block %}"
+  position: 1764..1782
+{% endcomment %}

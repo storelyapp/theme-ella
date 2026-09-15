@@ -11,7 +11,7 @@
                                 {
                                   "url": {{ link.url | json }},
                                   "title":{{ link.title | json }},
-                                  "handle":{%if link.handle!="" %}{{link.handle | json}}{%else%}{{link.title | handleize | json}}{%endif%},
+                                  "handle":{% if link.handle %}{{link.handle | json}}{%else%}{{link.title | handleize | json}}{%endif%},
                                   "object":{% if link.type == "collection_link" or link.type == "product_link" or link.type == "page_link" or link.type == "blog_link" %}{{link.object | json}}{% else %}{{null | json}}{%endif%},
                                   "id":{% if link.type == "collection_link" or link.type == "product_link" or link.type == "page_link" or link.type == "blog_link" %}{{link.object.id | json}}{% else %}{{null | json}}{%endif%},
                                   "obj-handle":{% if link.type == "collection_link" or link.type == "product_link" or link.type == "page_link" or link.type == "blog_link" %}{{link.object.handle | json}}{% else %}{{null | json}}{%endif%},
@@ -49,4 +49,13 @@
                     {% endcapture %}
                     {
                         "results": [{{ results }}]
-                    }
+                    }{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: '{%if link.handle!="" %}'
+  to: "{% if link.handle %}"
+  position: 672..692
+{%- endcomment -%}

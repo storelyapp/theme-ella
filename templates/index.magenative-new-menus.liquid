@@ -15,7 +15,7 @@
                             {
                                 "url": {{ link.url | json }},
                                 "title":{{ link.title | json }},
-                                "handle":{%if link.handle!="" %}{{link.handle | json}}{%else%}{{link.title | handleize | json}}{%endif%},
+                                "handle":{% if link.handle %}{{link.handle | json}}{%else%}{{link.title | handleize | json}}{%endif%},
                                 "object":{% if link.type == "collection_link" or link.type == "product_link" or link.type == "page_link" or link.type == "blog_link" %}{{link.object | json}}{% else %}{{null | json}}{%endif%},
                                 "id":{% if link.type == "collection_link" or link.type == "product_link" or link.type == "page_link" or link.type == "blog_link" %}{{link.object.id | json}}{% else %}{{null | json}}{%endif%},
                                 "obj-handle":{% if link.type == "collection_link" or link.type == "product_link" or link.type == "page_link" or link.type == "blog_link" %}{{link.object.handle | json}}{% else %}{{null | json}}{%endif%},
@@ -28,7 +28,7 @@
                                             {
                                                 "url": {{ childlink.url | json}},
                                                 "title":{{ childlink.title | json }},
-                                                "handle":{%if childlink.handle!="" %}{{childlink.handle | json}}{%else%}{{childlink.title | handleize | json}}{%endif%},
+                                                "handle":{% if childlink.handle %}{{childlink.handle | json}}{%else%}{{childlink.title | handleize | json}}{%endif%},
                                                 "object":{% if childlink.type == "collection_link" or childlink.type == "product_link" or childlink.type == "page_link" or childlink.type == "blog_link" %}{{childlink.object | json}}{% else %}{{null | json}}{%endif%},
                                                 "id":{% if childlink.type == "collection_link" or childlink.type == "product_link" or childlink.type == "page_link" or childlink.type == "blog_link" %}{{childlink.object.id | json}}{% else %}{{null | json}}{%endif%},
                                                 "obj-handle":{% if childlink.type == "collection_link" or childlink.type == "product_link" or childlink.type == "page_link" or childlink.type == "blog_link" %}{{childlink.object.handle | json}}{% else %}{{null | json}}{%endif%},
@@ -41,7 +41,7 @@
                                                             {
                                                             "url": {{ grandchildlink.url | json}},
                                                             "title":{{ grandchildlink.title | json }},
-                                                            "handle":{%if grandchildlink.handle!="" %}{{grandchildlink.handle | json}}{%else%}{{grandchildlink.title | handleize | json}}{%endif%},
+                                                            "handle":{% if grandchildlink.handle %}{{grandchildlink.handle | json}}{%else%}{{grandchildlink.title | handleize | json}}{%endif%},
                                                             "object":{% if grandchildlink.type == "collection_link" or grandchildlink.type == "product_link" or grandchildlink.type == "page_link" or grandchildlink.type == "blog_link" %}{{grandchildlink.object | json}}{% else %}{{null | json}}{%endif%},
                                                             "id":{% if grandchildlink.type == "collection_link" or grandchildlink.type == "product_link" or grandchildlink.type == "page_link" or grandchildlink.type == "blog_link" %}{{grandchildlink.object.id | json}}{% else %}{{null | json}}{%endif%},
                                                             "obj-handle":{% if grandchildlink.type == "collection_link" or grandchildlink.type == "product_link" or grandchildlink.type == "page_link" or grandchildlink.type == "blog_link" %}{{grandchildlink.object.handle | json}}{% else %}{{null | json}}{%endif%},
@@ -64,4 +64,19 @@
 
                         {
                             "results": [{{ results }}]
-                        }
+                        }{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: '{%if link.handle!="" %}'
+  to: "{% if link.handle %}"
+  position: 1237..1257
+- from: '{%if childlink.handle!="" %}'
+  to: "{% if childlink.handle %}"
+  position: 2886..2911
+- from: '{%if grandchildlink.handle!="" %}'
+  to: "{% if grandchildlink.handle %}"
+  position: 4902..4932
+{%- endcomment -%}
